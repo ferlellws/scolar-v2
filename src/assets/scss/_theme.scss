@@ -1,0 +1,59 @@
+@import '~@angular/material/theming';
+// @use "sass:map";
+@include mat-core();
+// @use 'sass:map';
+
+$theme-colors: (
+  "red": mat-color($mat-red, 500),
+  "pink": mat-color($mat-pink, 500),
+  "purple": mat-color($mat-purple, 500),
+  "deep-purple": mat-color($mat-deep-purple, 500),
+  "indigo": mat-color($mat-indigo, 500),
+  "blue": mat-color($mat-blue, 500),
+  "light-blue": mat-color($mat-light-blue, 500),
+  "cyan": mat-color($mat-cyan, 500),
+  "teal": mat-color($mat-teal, 500),
+  "green": mat-color($mat-green, 500),
+  "light-green": mat-color($mat-light-green, 500),
+  "lime": mat-color($mat-lime, 500),
+  "yellow": mat-color($mat-yellow, 500),
+  "amber": mat-color($mat-amber, 500),
+  "orange": mat-color($mat-orange, 500),
+  "deep-orange": mat-color($mat-deep-orange, 500),
+  "brown": mat-color($mat-brown, 500),
+  "grey": mat-color($mat-grey, 500),
+  "blue-grey": mat-color($mat-blue-grey, 500),
+  "white": #fff,
+  "black": #000
+);
+
+$colors: "red", "pink", "purple", "deep-purple", "indigo", "blue", "light-blue", "cyan", "teal", "green", "light-green", "lime", "yellow", "amber", "orange", "deep-orange", "brown", "grey", "blue-grey", "white", "black";
+
+// $candy-app-theme:   mat-light-theme((
+//   color: (
+//     title: $color-title,
+//   )
+// ));
+
+// @include angular-material-theme($candy-app-theme);
+
+.mat-title {
+  color: map_get($theme-colors, "grey") !important;
+}
+
+.caption-card {
+  color: #ffffff;
+}
+
+@each $color in $colors {
+  .bg-#{$color} {
+    background-color: map_get($theme-colors, $color) !important;
+  }
+}
+
+@each $color in $colors {
+  .txt-#{$color} {
+    color: map_get($theme-colors, $color) !important;
+  }
+}
+

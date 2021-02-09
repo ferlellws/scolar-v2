@@ -1,0 +1,21 @@
+.card {
+  cursor: pointer;
+  a {
+    text-decoration: none;
+    &:focus {
+      outline: #4CAF50 solid 10px;
+    }
+  }
+}
+
+.card-link {
+  & .mat-card-content {
+    &:focus {
+      outline: transparent solid 10px;
+    }
+    &:hover {
+      // background: lighten(#000, 90%)
+      opacity: 0.7;
+    }
+  }
+}
