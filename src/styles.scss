@@ -2,53 +2,54 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @import '~@angular/material/theming';
-@import './assets/scss/theming_tecno.scss';
-@import './assets/scss/grid.scss';
-@import './assets/scss/buttons.scss';
-@import './assets/scss/cards.scss';
+@import './assets/scss/theming_tecno';
+@import './assets/scss/grid';
+@import './assets/scss/buttons';
+@import './assets/scss/cards';
 @import '~animate.css/animate.min.css';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-// @include mat-core();
+@include mat-core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-// $tecno-project-portfolio-primary: mat-palette($mat-indigo);
-// $tecno-project-portfolio-accent: mat-palette($mat-pink, A200, A100, A400);
+$tecno-project-portfolio-primary: mat-palette($mat-indigo);
+$tecno-project-portfolio-accent: mat-palette($mat-pink, A200, A100, A400);
 
-// // The warn palette is optional (defaults to red).
-// $tecno-project-portfolio-warn: mat-palette($mat-red);
+// The warn palette is optional (defaults to red).
+$tecno-project-portfolio-warn: mat-palette($mat-red);
 
-// // Create the theme object. A theme consists of configurations for individual
-// // theming systems such as "color" or "typography".
-// $tecno-project-portfolio-theme: mat-light-theme((
-//   color: (
-//     primary: $tecno-project-portfolio-primary,
-//     accent: $tecno-project-portfolio-accent,
-//     warn: $tecno-project-portfolio-warn,
-//   )
-// ));
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$tecno-project-portfolio-theme: mat-light-theme((
+  color: (
+    primary: $tecno-project-portfolio-primary,
+    accent: $tecno-project-portfolio-accent,
+    warn: $tecno-project-portfolio-warn,
+  )
+));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-// @include angular-material-theme($tecno-project-portfolio-theme);
+@include angular-material-theme($tecno-project-portfolio-theme);
 
 /* You can add global styles to this file, and also import other style files */
+@import './assets/scss/menu';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; letter-spacing: .25px !important; }
 
 $sizes: 5, 10, 15, 20;
 $directions: '', 't', 'r', 'b', 'l';
 $margins: 'm', 'p';
 $margin_text: '';
 $direction_text: '';
-@for $size from 1 through 100 {
+@for $size from 0 through 100 {
   @each $margin in $margins {
     @each $direction in $directions {
       @if $margin == 'm' {
@@ -189,4 +190,8 @@ $direction_text: '';
 
 .content-center {
   margin: auto;
+}
+
+.icon-input {
+  color: rgba(0, 0, 0, 0.4);
 }

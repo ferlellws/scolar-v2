@@ -1,0 +1,16 @@
+<mat-card class="debug-container mt-20" *ngIf="flagShowDebug">
+  <h2 class="mat-title">Debug Formulario</h2>
+
+  <p>
+    <b>Formulario válido:</b>
+    <br>
+    <mat-icon [class]="form.valid ? 'form-active' : 'form-inactive'">{{ form.valid ? "toggle_on" : "toggle_off" }}</mat-icon>
+  </p>
+
+  <!-- <p>
+    <b>Formulario enviado:</b> {{ form.submitted }}
+  </p> -->
+
+  <b>Valores: </b>
+  <pre>{{ form.value | json }}</pre>
+</mat-card>

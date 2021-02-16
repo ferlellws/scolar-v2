@@ -30,37 +30,37 @@ $height-profile-container: 157px;
 }
 
 .profile-container {
+  width: 100%;
+  height: $height-profile-container;
+  background-color: #efefef;
+  position: relative;
+  background: url(../assets/images/doodle.jpg) no-repeat;
+
+  & .btn-profile {
+    position: absolute;
     width: 100%;
-    height: $height-profile-container;
-    background-color: #efefef;
-    position: relative;
-    background: url(../assets/images/doodle.jpg) no-repeat;
+    bottom: 0;
+    line-height: 30px;
+    padding: 2px 30px;
+    color: #fff;
+    background: rgba(0,0,0,.5);
+    box-sizing: border-box;
+    cursor: pointer;
 
-    & .btn-profile {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-        line-height: 30px;
-        padding: 2px 30px;
-        color: #fff;
-        background: rgba(0,0,0,.5);
-        box-sizing: border-box;
-        cursor: pointer;
-
-        &::after {
-            content: "";
-            display: inline-block;
-            margin-left: .255em;
-            vertical-align: .255em;
-            border-top: .3em solid;
-            border-right: .3em solid transparent;
-            border-bottom: 0;
-            border-left: .3em solid transparent;
-            position: absolute;
-            right: 20px;
-            top: 15px;
-        }
+    &::after {
+      content: "";
+      display: inline-block;
+      margin-left: .255em;
+      vertical-align: .255em;
+      border-top: .3em solid;
+      border-right: .3em solid transparent;
+      border-bottom: 0;
+      border-left: .3em solid transparent;
+      position: absolute;
+      right: 20px;
+      top: 15px;
     }
+  }
 }
 
 .menu-container {

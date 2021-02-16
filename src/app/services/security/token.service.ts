@@ -12,9 +12,12 @@ export class TokenService {
 
   private readonly API = `${environment.API}/sysuser_token`;
 
-  constructor(private http: HttpClient, private _usersService: UserService) { }
+  constructor(
+    private http: HttpClient,
+    private _usersService: UserService
+  ) { }
 
-  async getToken(credentials: any): Promise<boolean>{
+  async getToken(credentials: any): Promise<boolean> {
     const t = await this.http.post<any>(this.API, credentials,{observe: 'response'})
     .pipe(
       // catchError(this.handleError)

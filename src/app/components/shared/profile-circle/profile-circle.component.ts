@@ -26,10 +26,10 @@ export class ProfileCircleComponent implements OnInit {
     this.colors = this._colorsService.getColors();
   }
 
-  getIniciales(){
-    if(this.user != null){
+  getIniciales() {
+    if (this.user != null) {
       return `${this.user.firstname[0].toUpperCase()}${this.user.lastname[0].toUpperCase()}`;
-    }else{
+    } else {
       return "";
     }
   }

@@ -1,8 +1,8 @@
-<!-- iuoiuo<div *ngIf="getRoute() =='/'" style="height: 100%">
+<!-- <div *ngIf="getRoute() =='/'" style="height: 100%">
   <router-outlet></router-outlet>
 </div> -->
 <!-- <div *ngIf="(getRoute() != '/' || true)" style="height: 100%;"> -->
-<div class="main-container">
+<div class="main-container animate__animated animate__fadeIn" *ngIf="showToolbarSidenav; else elseBlock">
   <mat-toolbar color="primary">
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
@@ -33,31 +33,35 @@
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="side" class="menu-container" opened>
       <div class="profile-container">
-        <div class="avatar">
-          <!-- <tecno-profile-circle [user]="user" [size]="110" class="avatar"></tecno-profile-circle> -->
-        </div>
-        <!-- <div class="btn-profile" [matMenuTriggerFor]="afterMenu">
-          {{firstname}} {{lastname}}
+        <tecno-profile-circle [user]="user" [size]="110" class="avatar"></tecno-profile-circle>
+        <div class="btn-profile" [matMenuTriggerFor]="afterMenu">
+          {{ firstname }} {{ lastname }}
         </div>
         <mat-menu #afterMenu="matMenu" xPosition="after">
           <button mat-menu-item>Item 1</button>
           <button mat-menu-item>Item 2</button>
-        </mat-menu> -->
+        </mat-menu>
       </div>
       <!-- INICIO MENU -->
-      {{menu}}
-      <!-- <tecno-menu [menu]="menu" ></tecno-menu> -->
+      <!-- --{{ menu }}-- -->
+      <tecno-menu ></tecno-menu>
       <!-- FIN MENU -->
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="page-container">
+        <!-- <button routerLink="/prueba2">Prueba2</button>
+        <button routerLink="/prueba">Prueba</button>
+        <button routerLink="/home">Home</button>
+        <button routerLink="/malu">Malu</button> -->
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
 
-
+<ng-template #elseBlock>
+  <router-outlet></router-outlet>
+</ng-template>
 
 
 

@@ -1,0 +1,32 @@
+<div class="menu-container">
+  <mat-accordion *ngIf="menu.length">
+    <mat-expansion-panel *ngFor="let m of menu; let i = index" [expanded]="i === 0"
+      (opened)="onOpenOption(i)"
+      (closed)="onCloseOption(i)"
+      [class.bg-selected-module]="panelOpenState[i]">
+      <mat-expansion-panel-header
+        [class.pt-10]="!panelOpenState[i]"
+        [class.pb-5]="!panelOpenState[i]"
+        [class.without-height]="!panelOpenState[i]">
+        <mat-panel-title>
+          <!-- <mat-icon>{{ getIcon(m.module.icon_id) }}</mat-icon> -->
+          <!-- <mat-icon>dashboard</mat-icon> -->
+          <span>{{m.module.title}}</span>
+          <p *ngIf="!panelOpenState[i]" class="text-options">
+            <span *ngFor="let option of m.pages; let j = index" >{{ option.title }}{{ j === (m.pages.length - 1) ? '' : ', ' }}</span>
+          </p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-selection-list [multiple]="false">
+        <mat-list-option *ngFor="let page of m.pages"
+          [routerLink]="[page.route]"
+          class="cursor-pointer"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [selected]="rla.isActive">
+          <mat-icon>group</mat-icon> <span>{{ page.title }}</span>
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

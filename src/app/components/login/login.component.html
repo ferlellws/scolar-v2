@@ -1,0 +1,58 @@
+<div class="general-container">
+  <div class="cards-container animate__animated animate__fadeIn">
+    <div class="left-card-container bg-primary">
+      <img src="../../../assets/images/login-photo.jpg" height="100%" alt="Photo of a Shiba Inu">
+    </div>
+    <div class="right-card-container">
+      <div class="text-center">
+        <img src="../../../assets/images/logo_tecno_project.png" height="100" alt="tecnoproject">
+      </div>
+      <div class="body-right-card-container">
+        <!-- FORMULARIO DE LOGIN -->
+        <form class="form" [formGroup]="logInGroup" (ngSubmit)="onLogin()">
+
+          <!-- EMAIL -->
+          <mat-form-field class="form-item">
+            <mat-label >Correo</mat-label>
+            <input matInput formControlName="email" type="email" email="true">
+            <mat-hint >Direccion de Correo</mat-hint>
+          </mat-form-field>
+
+          <!-- PASSWORD -->
+          <mat-form-field class="form-item" >
+            <mat-label >Contraseña</mat-label>
+            <input matInput  formControlName="password" [type]="flagShowPass ? 'text' : 'password'">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="flagShowPass = !flagShowPass">
+              <mat-icon class="icon-input">{{ flagShowPass ? "visibility_off" : "visibility"}}</mat-icon>
+            </button>
+            <mat-hint>Contraseña</mat-hint>
+          </mat-form-field>
+
+          <!-- REMEMBER CHECK -->
+          <mat-checkbox formControlName="checkRemember">Recuerdame!</mat-checkbox>
+
+          <!-- BUTTON SUBMIT -->
+          <div class="footer-right-card-container">
+              <button mat-flat-button
+              class="button mt-20 mb-20"
+              color="accent"
+              [disabled]="disabledButton">
+                  Entrar
+              </button>
+
+              <!-- LINKS -->
+              <div class="links">
+                  <span>Olvidé mi contraseña</span>
+                  <span>Registrarme</span>
+              </div>
+          </div>
+        </form>
+        <!-- FIN FORMULARIO DE LOGIN -->
+        <span *ngIf="errorFlag == true" style="color: #F44336;">Usuario y/o contraseña incorrecta</span>
+      </div>
+
+    </div>
+  </div>
+
+  <tecno-form-debug [form]="logInGroup"></tecno-form-debug>
+</div>

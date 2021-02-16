@@ -1,3 +1,5 @@
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthGuard } from './guards/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -45,6 +47,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { LoginComponent } from './components/login/login.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const MATERIALMODULES = [
   MatSortModule,
@@ -81,25 +85,30 @@ const MATERIALMODULES = [
 @NgModule({
   declarations: [
     AppComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    // SharedModule,
+    SharedModule,
     // MATERIAL
     MATERIALMODULES,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
   exports: [
     // MATERIAL
     MATERIALMODULES,
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

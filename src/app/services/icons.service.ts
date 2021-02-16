@@ -22,11 +22,11 @@ export class IconsService {
     };
 
     return this.http.get<Icon[]>(this.API, httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap(console.log)
-    );
-    // return this._projects;
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+      // return this._projects;
   }
 
 }

@@ -76,7 +76,7 @@ export class UserService {
   async getMenu(): Promise<Menu[]> {
 
     if (sessionStorage.id == null) {
-      return null;
+      return [];
     } else {
       this.httpOptions = {
         headers: new HttpHeaders({

@@ -1,20 +1,58 @@
 import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MenuComponent } from './menu/menu.component';
+
+// MATERIAL
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MessageComponent } from './message/message.component';
+import { FormDebugComponent } from './form-debug/form-debug.component';
+import { MatCardModule } from '@angular/material/card';
+import { RouterModule } from '@angular/router';
 
 const COMPONENTS = [
-  ProfileCircleComponent
+  MenuComponent,
+  ProfileCircleComponent,
+  FormDebugComponent,
+];
+
+const materialModules = [
+  MatToolbarModule,
+  MatIconModule,
+  MatSidenavModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatListModule,
+  MatExpansionModule,
+  MatTableModule,
+  MatDatepickerModule,
+  MatTableModule,
+  MatFormFieldModule,
+  MatCardModule
 ];
 
 @NgModule({
   declarations: [
-    COMPONENTS
+    COMPONENTS,
+    MessageComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    materialModules,
+    RouterModule
   ],
   exports: [
-    COMPONENTS
+    COMPONENTS,
+    materialModules
   ]
 })
 export class SharedModule { }
