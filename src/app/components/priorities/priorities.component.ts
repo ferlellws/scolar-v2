@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'tecno-priorities',
+  templateUrl: './priorities.component.html',
+  styleUrls: ['./priorities.component.scss']
+})
+export class PrioritiesComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
