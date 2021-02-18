@@ -1,6 +1,6 @@
 import { User } from "./user";
 
-export class State {
+export class Phase {
     id?: number;
     title: string;
     description: string;
