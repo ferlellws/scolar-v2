@@ -12,7 +12,10 @@
         <div [ngSwitch]="column">
           <div *ngSwitchCase="'checkOption'">
             <td mat-cell *matCellDef="let element">
-              <mat-slide-toggle [checked]="element[column]">{{ element[column] ? 'Activo' : 'Inactiva' }}</mat-slide-toggle>
+              <mat-slide-toggle [checked]="element[column]"
+                (click)="onClickStatus(!element[column], element['idForOptions'])">
+                  {{ element[column] ? 'Activo' : 'Inactiva' }}
+                </mat-slide-toggle>
             </td>
           </div>
           <div *ngSwitchCase="'idForOptions'">
