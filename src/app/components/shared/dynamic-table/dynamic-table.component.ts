@@ -1,7 +1,8 @@
 import { environment } from 'src/environments/environment';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableData } from 'src/app/models/table-data';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'tecno-dynamic-table',
@@ -11,12 +12,13 @@ import { TableData } from 'src/app/models/table-data';
 })
 export class DynamicTableComponent implements OnInit {
 
-  @Input() objectsData!: TableData;
-  @Input() headerClass!: string;
-  @Input() footerClass!: string;
-  @Input() headerTextColor!: string;
-  @Input() footerTextColor!: string;
-  @Input() customId!: string;
+  @Input()  objectsData!: TableData;
+  @Input()  headerClass: string = 'bg-primary';
+  @Input()  footerClass: string = 'bg-primary';
+  @Input()  headerTextColor: string = 'white';
+  @Input()  footerTextColor: string = 'white';
+  @Input()  customId: string = 'dynamic_table';
+  @Input()  maxHeight: string = '1000px';
 
   @Output() emittEdit: EventEmitter<boolean> = new EventEmitter();
 
@@ -27,40 +29,36 @@ export class DynamicTableComponent implements OnInit {
   displayedColumns!: string [];
   dataSource =  new MatTableDataSource<any>();
   footer: any;
-  constructor(cdRef: ChangeDetectorRef,) {
+  constructor() {
 
    }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
+    console.log("ObjData Dynamic",this.objectsData);
+    this.updateTable();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.objectsData = changes.objectsData.currentValue;
+    this.updateTable();
+    environment.consoleMessage("on change", "");
+  }
+
+  updateTable() {
     this.displayedColumns = Object.keys(this.objectsData.dataTable[0]);
     this.dataSource.data = this.objectsData.dataTable;
     this.footer = this.objectsData.footer;
     this.showFooter = this.footer != null;
-
-    if(this.headerClass == null || this.headerClass == ''){
-      this.headerClass = 'bg-primary';
-    }
-    if(this.footerClass == null || this.footerClass == ''){
-      this.footerClass = 'bg-primary';
-    }
-    if(this.footerTextColor == null || this.footerTextColor == ''){
-      this.footerTextColor = 'white';
-    }
-    if(this.headerTextColor == null || this.headerTextColor == ''){
-      this.headerTextColor = 'white';
-    }
-    if(this.customId == null || this.customId == ''){
-      this.customId = 'dynamic_table';
-    }
   }
 
   onEdit() {
     this.emittEdit.emit(true);
   }
 
-  onClickStatus(value: boolean, id: number) {
-    environment.consoleMessage(value, "value: ");
-    environment.consoleMessage(id, "id: ");
+  onClickStatus($event: MatSlideToggleChange, id: number) {
+    // environment.consoleMessage(value, "value: ");
+    // environment.consoleMessage(id, "id: ");
+    let value: boolean = $event.checked;
     this.fCheckOption = value;
     this.changeCheckInDataTable(value, id);
   }
@@ -74,8 +72,8 @@ export class DynamicTableComponent implements OnInit {
         }
       }
     );
-    this.cdRef.detectChanges;
-    console.log(this.objectsData.dataTable[i]);
+    //this.cdRef.detectChanges;
+    //console.log(this.objectsData.dataTable[i]);
     return value;
   }
 
