@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   API: 'http://localhost:5000',
-  consoleMessage(dataShow: string, strLabel: string = "") {
+  consoleMessage(dataShow: any, strLabel: string = "") {
     if (strLabel != "") {
       console.log(strLabel, dataShow);
     } else {
