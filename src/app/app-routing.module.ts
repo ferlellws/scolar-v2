@@ -25,6 +25,13 @@ const routes: Routes = [
   { path: 'company-types', loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule) },
   { path: 'states-by-phases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
   { path: 'companies', loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule) },
+  { path: 'strategic-acpproachs', loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule) },
+  { path: 'programs', loadChildren: () => import('./components/programs/programs.module').then(m => m.ProgramsModule) },
+  { path: 'priorities', loadChildren: () => import('./components/priorities/priorities.module').then(m => m.PrioritiesModule) },
+  { path: 'typifications', loadChildren: () => import('./components/typifications/typifications.module').then(m => m.TypificationsModule) },
+  { path: 'managements', loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule) },
+  { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
+  { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 
