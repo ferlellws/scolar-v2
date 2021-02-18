@@ -51,7 +51,7 @@ export class PhasesService {
     );
   }
 
-  addPhases(state: Phase) {
+  addPhases(phase: Phase) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,7 +63,7 @@ export class PhasesService {
       params: inputParams
     };
 
-    return this.http.post<Phase>(this.API, state, httpOptions)
+    return this.http.post<Phase>(this.API, phase, httpOptions)
     .subscribe((data: Phase) => {
       this.emitAdd.emit(data);
     });
@@ -85,7 +85,7 @@ export class PhasesService {
     });
   }
 
-  updatePhasesId(state: Phase, id: number) {
+  updatePhasesId(phase: Phase, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,7 +97,7 @@ export class PhasesService {
       params: inputParams
     };
 
-    return this.http.put<Phase>(`${this.API}/${id}`, state, httpOptions)
+    return this.http.put<Phase>(`${this.API}/${id}`, phase, httpOptions)
       .subscribe((data: Phase) => {
         this.emitModify.emit(data);
       });

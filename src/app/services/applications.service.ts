@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { State } from '../models/state';
+import { Application } from '../models/application';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class ApplicationsService {
       params: inputParams
     };
 
-    return this.http.get<State[]>(this.API, httpOptions)
+    return this.http.get<Application[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -44,14 +44,14 @@ export class ApplicationsService {
       params: inputParams
     };
 
-    return this.http.get<State>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<Application>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addApplications(state: State) {
+  addApplications(application: Application) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,8 +63,8 @@ export class ApplicationsService {
       params: inputParams
     };
 
-    return this.http.post<State>(this.API, state, httpOptions)
-    .subscribe((data: State) => {
+    return this.http.post<Application>(this.API, application, httpOptions)
+    .subscribe((data: Application) => {
       this.emitAdd.emit(data);
     });
   }
@@ -79,13 +79,13 @@ export class ApplicationsService {
       params: inputParams
     };
 
-    return this.http.delete<State>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: State) => {
+    return this.http.delete<Application>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: Application) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateApplicationsId(state: State, id: number) {
+  updateApplicationsId(application: Application, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class ApplicationsService {
       params: inputParams
     };
 
-    return this.http.put<State>(`${this.API}/${id}`, state, httpOptions)
-      .subscribe((data: State) => {
+    return this.http.put<Application>(`${this.API}/${id}`, application, httpOptions)
+      .subscribe((data: Application) => {
         this.emitModify.emit(data);
       });
   }
