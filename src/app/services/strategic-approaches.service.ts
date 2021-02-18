@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Stage } from '../models/stage';
+import { StrategicApproach } from '../models/strategic-approach';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StagesService {
+export class StrategicApproachesService {
 
-  private readonly API = `${environment.API}/stages`;
+  private readonly API = `${environment.API}/strategic_approaches`;
 
   emitModify = new EventEmitter<any>();
   emitDelete = new EventEmitter<any>();
@@ -17,7 +17,7 @@ export class StagesService {
   
   constructor(private http: HttpClient) { }
 
-  getStagesAll() {
+  getStrategicApproachesAll() {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -27,14 +27,14 @@ export class StagesService {
       params: inputParams
     };
 
-    return this.http.get<Stage[]>(this.API, httpOptions)
+    return this.http.get<StrategicApproach[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  getStagesId(id: number) {
+  getStrategicApproachesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -44,14 +44,14 @@ export class StagesService {
       params: inputParams
     };
 
-    return this.http.get<Stage>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<StrategicApproach>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addStages(stage: Stage) {
+  addStrategicApproaches(strategicApproach: StrategicApproach) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,13 +63,13 @@ export class StagesService {
       params: inputParams
     };
 
-    return this.http.post<Stage>(this.API, stage, httpOptions)
-    .subscribe((data: Stage) => {
+    return this.http.post<StrategicApproach>(this.API, strategicApproach, httpOptions)
+    .subscribe((data: StrategicApproach) => {
       this.emitAdd.emit(data);
     });
   }
 
-  deleteStagesId(id: number) {
+  deleteStrategicApproachesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -79,13 +79,13 @@ export class StagesService {
       params: inputParams
     };
 
-    return this.http.delete<Stage>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Stage) => {
+    return this.http.delete<StrategicApproach>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: StrategicApproach) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateStagesId(stage: Stage, id: number) {
+  updateStrategicApproachesId(strategicApproach: StrategicApproach, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class StagesService {
       params: inputParams
     };
 
-    return this.http.put<Stage>(`${this.API}/${id}`, stage, httpOptions)
-      .subscribe((data: Stage) => {
+    return this.http.put<StrategicApproach>(`${this.API}/${id}`, strategicApproach, httpOptions)
+      .subscribe((data: StrategicApproach) => {
         this.emitModify.emit(data);
       });
   }
