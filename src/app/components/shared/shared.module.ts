@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from './menu/menu.component';
+import { RouterModule } from '@angular/router';
 
 // MATERIAL
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -13,14 +13,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MessageComponent } from './message/message.component';
-import { FormDebugComponent } from './form-debug/form-debug.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
-import { RouterModule } from '@angular/router';
 
 // COMPONENTS
 import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
+import { FormDebugComponent } from './form-debug/form-debug.component';
 import { InfoPageComponent } from './info-page/info-page.component';
+import { MenuComponent } from './menu/menu.component';
+import { MessageComponent } from './message/message.component';
 import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
 
 const COMPONENTS = [
@@ -43,7 +44,8 @@ const materialModules = [
   MatDatepickerModule,
   MatTableModule,
   MatFormFieldModule,
-  MatCardModule
+  MatCardModule,
+  MatSlideToggleModule
 ];
 
 @NgModule({
