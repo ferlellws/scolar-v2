@@ -19,13 +19,13 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'strategicApproachs', loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule) },
+  { path: 'strategic-acpproachs', loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule) },
   { path: 'programs', loadChildren: () => import('./components/programs/programs.module').then(m => m.ProgramsModule) },
   { path: 'priorities', loadChildren: () => import('./components/priorities/priorities.module').then(m => m.PrioritiesModule) },
   { path: 'typifications', loadChildren: () => import('./components/typifications/typifications.module').then(m => m.TypificationsModule) },
   { path: 'managements', loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule) },
   { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
-  { path: 'riskLevels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
+  { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 
