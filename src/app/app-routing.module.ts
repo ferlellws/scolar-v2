@@ -22,8 +22,8 @@ const routes: Routes = [
   { path: 'states', loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule) },
   { path: 'phases', loadChildren: () => import('./components/phases/phases.module').then(m => m.PhasesModule) },
   { path: 'applications', loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule) },
-  { path: 'companyTypes', loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule) },
-  { path: 'statesByPhases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
+  { path: 'company-types', loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule) },
+  { path: 'states-by-phases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
   { path: 'companies', loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
