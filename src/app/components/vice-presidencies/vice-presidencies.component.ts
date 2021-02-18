@@ -12,14 +12,15 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./vice-presidencies.component.scss']
 })
 export class VicePresidenciesComponent implements OnInit {
-  dataPrueba: TableData ={
-    headers: ['App', 'Junio', 'Julio', 'Total', 'options'],
+  dataPrueba: TableData = {
+    headers: ['App', 'Junio', 'Julio', 'Total', 'Estado', 'options'],
     dataTable: [
       {
         app_title: 'Niif 16',
         mes1: 15,
         mes2: 10,
         totalMes: 25,
+        checkOption: false,
         idForOptions: 1
       },
       {
@@ -27,6 +28,7 @@ export class VicePresidenciesComponent implements OnInit {
         mes1: 23,
         mes2: 22,
         totalMes: 45,
+        checkOption: true,
         idForOptions: 2
       }
     ],
