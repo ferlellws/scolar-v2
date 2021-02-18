@@ -49,6 +49,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const MATERIALMODULES = [
   MatSortModule,
@@ -79,6 +80,7 @@ const MATERIALMODULES = [
   MatCardModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
+  MatProgressBarModule,
   DragDropModule
 ];
 

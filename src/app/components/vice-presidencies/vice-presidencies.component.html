@@ -1,1 +1,10 @@
-<h1 class="mat-headline"></h1>
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="dataPrueba"
+  (emittEdit)="openDialog($event)">
+</tecno-dynamic-table>
+
+
+<button mat-fab color="accent" aria-label="Nuevo registro" (click)="openDialog(true)" class="btn-new mat-elevation-z2">
+  <mat-icon>add</mat-icon>
+</button>

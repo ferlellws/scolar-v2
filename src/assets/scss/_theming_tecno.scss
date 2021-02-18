@@ -9,7 +9,7 @@
 
 // Fonts
 @import 'https://fonts.googleapis.com/css?family=Material+Icons';
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+// @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
 $fontConfig: (
   display-4: mat-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
@@ -243,11 +243,4 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   .mat-badge-content {
     font-family: 'Roboto';
   }
-}
-.bg-primary {
-  background-color: map_get($mat-primary, "main") !important;
-}
-
-.bg-accent {
-  background-color: map_get($mat-accent, "main") !important;
 }

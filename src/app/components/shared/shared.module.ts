@@ -1,4 +1,3 @@
-import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from './menu/menu.component';
@@ -19,10 +18,17 @@ import { FormDebugComponent } from './form-debug/form-debug.component';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 
+// COMPONENTS
+import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
+import { InfoPageComponent } from './info-page/info-page.component';
+import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
+
 const COMPONENTS = [
   MenuComponent,
   ProfileCircleComponent,
   FormDebugComponent,
+  InfoPageComponent,
+  DynamicTableComponent
 ];
 
 const materialModules = [

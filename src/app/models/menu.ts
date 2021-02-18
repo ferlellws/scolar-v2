@@ -16,6 +16,7 @@ export class Menu {
       route: string;
       order_menu: number;
       is_active: boolean;
+      bg_color: string;
       created_at: string;
       updated_at: string;
     } []
@@ -39,6 +40,7 @@ export class Menu {
       route: "",
       order_menu: 0,
       is_active: false,
+      bg_color: "",
       created_at: "",
       updated_at: ""
     }]

@@ -3,8 +3,24 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  API: 'http://localhost:5000',
+  consoleMessage(dataShow: string, strLabel: string = "") {
+    if (strLabel != "") {
+      console.log(strLabel, dataShow);
+    } else {
+      console.log({dataShow});
+    }
+  }
 };
+
+// export function consoleMessage(dataShow: string, strLabel: string = "") {
+//   if (strLabel != "") {
+//     console.log(strLabel, dataShow);
+//   } else {
+//     console.log({dataShow});
+//   }
+// }
 
 /*
  * For easier debugging in development mode, you can import the following file

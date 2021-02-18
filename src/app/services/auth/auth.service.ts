@@ -36,7 +36,7 @@ export class AuthService {
       .pipe(
       //   // catchError(this.handleError)
         tap((res: any) => {
-          console.log(">>>>>", res);
+          console.log(">>", res);
           this.userAuthenticated(res.is_success);
           this.router.navigate(['/home']);
           this.saveToken(res.data.user.authentication_token);
@@ -77,12 +77,10 @@ export class AuthService {
 
   getToken() {
     if (localStorage.getItem('userToken')) {
-      console.log(">>>>>>1");
 
       this.userToken = localStorage.getItem('userToken') || "";
       this.userAuthenticated(true);
     } else {
-      console.log(">>>>>>2");
       this.userToken = "";
       this.userAuthenticated(false);
     }

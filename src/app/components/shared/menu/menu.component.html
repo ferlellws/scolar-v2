@@ -23,7 +23,8 @@
           class="cursor-pointer"
           routerLinkActive
           #rla="routerLinkActive"
-          [selected]="rla.isActive">
+          [selected]="rla.isActive"
+          (click)="onLink(page.route)" >
           <mat-icon>group</mat-icon> <span>{{ page.title }}</span>
         </mat-list-option>
       </mat-selection-list>

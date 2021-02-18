@@ -1,0 +1,17 @@
+<!-- <mat-toolbar color="primary" style="border-top-left-radius: 5px; border-top-right-radius: 5px;" class="mat-elevation-z4" *ngIf="project" > -->
+  <mat-toolbar color="primary" style="border-top-left-radius: 5px; border-top-right-radius: 5px;" class="mat-elevation-z4">
+  <!-- <h1 class="mat-headline">{{ labelAction }} Requerimiento {{project.title}}</h1> -->
+  <span class="example-spacer"></span>
+  <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+  <!-- <button mat-mini-fab mat-button mat-dialog-closen aria-label="Cerrar modal"> -->
+
+  <!-- </button> -->
+  <button mat-icon-button mat-dialog-close *ngIf="showBtnClose">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<!-- <div class="example-container bg-color-white mat-elevation-z4" *ngIf="project"> -->
+<div class="example-container bg-color-white mat-elevation-z4">
+
+</div>

@@ -30,7 +30,7 @@ $tecno-project-portfolio-theme: mat-light-theme((
     primary: $tecno-project-portfolio-primary,
     accent: $tecno-project-portfolio-accent,
     warn: $tecno-project-portfolio-warn,
-  )
+    )
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -40,9 +40,11 @@ $tecno-project-portfolio-theme: mat-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 @import './assets/scss/menu';
+@import './assets/scss/info-page';
+@import './assets/scss/profile-circle';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; letter-spacing: .25px !important; }
+body { margin: 0; font-family: 'Jura', Roboto, "Helvetica Neue", sans-serif; letter-spacing: .25px !important; }
 
 $sizes: 5, 10, 15, 20;
 $directions: '', 't', 'r', 'b', 'l';
@@ -144,6 +146,10 @@ $direction_text: '';
   float: left;
 }
 
+.float-right {
+  float: right;
+}
+
 .txt-center {
   text-align: center;
 }
@@ -175,7 +181,7 @@ $direction_text: '';
 }
 
 .mat-table-sticky, .mat-header-cell {
-  background: #a2195b;
+  background: mat-color($tecno-project-portfolio-primary, 500);
   color: #fff;
 }
 
@@ -194,4 +200,48 @@ $direction_text: '';
 
 .icon-input {
   color: rgba(0, 0, 0, 0.4);
+}
+
+.txt-color-white {
+  color: #fff;
+}
+
+.toolbar {
+  position: relative;
+  z-index: 100;
+}
+
+.bg-primary {
+  background-color: mat-color($tecno-project-portfolio-primary, 500) !important;
+}
+
+.bg-accent {
+  background-color: map_get($tecno-project-portfolio-accent, 500) !important;
+}
+
+.mat-dialog-container {
+  padding: 0!important;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 51px;
+  line-height: 51px;
+  background-color: #fff;
+  & span {
+    color: #BDBDBD;
+  }
+  & a {
+    color: #9E9E9E;
+    text-decoration: none;
+    &:hover {
+      color: mat-color($tecno-project-portfolio-accent, 500);
+    }
+  }
+}
+
+.text-center {
+  text-align: center;
 }

@@ -3,11 +3,12 @@
 </div> -->
 <!-- <div *ngIf="(getRoute() != '/' || true)" style="height: 100%;"> -->
 <div class="main-container animate__animated animate__fadeIn" *ngIf="showToolbarSidenav; else elseBlock">
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" class="toolbar mat-elevation-z6">
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <div routerLink="/home">
+    <div routerLink="/home"
+      (click)="onLink('/home')" >
       KOBA<span style="font-weight: 100;">Project </span>
     </div>
     <!-- <img src="../assets/images/logo_tecno_project_oscuros.png" alt="tecno_project"
@@ -19,7 +20,8 @@
       class="example-icon"
       aria-label="Example icon-button with share icon"
       routerLink="/home"
-      routerLinkActive="Active">
+      routerLinkActive="Active"
+      (click)="onLink('/home')" >
       <mat-icon>home</mat-icon>
     </button>
     <button mat-icon-button
@@ -45,22 +47,34 @@
       <!-- INICIO MENU -->
       <!-- --{{ menu }}-- -->
       <tecno-menu ></tecno-menu>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <mat-divider></mat-divider>
+        <div class="footer-copyright text-center py-3">
+          <span>© {{ currentYear }} Copyright:</span>
+          <a href="http://tecno.co" target="_blank"> tecno.co</a>
+        </div>
+      </footer>
       <!-- FIN MENU -->
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="page-container">
-        <!-- <button routerLink="/prueba2">Prueba2</button>
-        <button routerLink="/prueba">Prueba</button>
-        <button routerLink="/home">Home</button>
-        <button routerLink="/malu">Malu</button> -->
-        <router-outlet></router-outlet>
+        <!-- header de titulo, descripcion y botones -->
+        <tecno-info-page class="info-page"></tecno-info-page>
+
+        <router-outlet>
+          <!-- <mat-progress-bar mode="query" class="loading" *ngIf="loading" ></mat-progress-bar> -->
+        </router-outlet>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
 
 <ng-template #elseBlock>
-  <router-outlet></router-outlet>
+  <router-outlet>
+    <!-- <mat-progress-bar mode="query" class="loading" *ngIf="loading" ></mat-progress-bar> -->
+  </router-outlet>
 </ng-template>
 
 
