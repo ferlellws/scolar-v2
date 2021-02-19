@@ -1,10 +1,10 @@
 <div class="container-general">
-  <div  class="container-list" style="color: white;">
-    <table mat-table id="{{customId}}" [dataSource]="dataSource" class="mat-elevation-z8">
+  <div  class="container-list" [ngStyle]="{'max-height': maxHeight}">
+    <table mat-table id="{{customId}}" [dataSource]="dataSource" class="mat-elevation-z8" >
 
       <ng-container *ngFor="let column of displayedColumns; index as i" matColumnDef="{{column}}">
         <!-- HEADERS -->
-        <th mat-header-cell *matHeaderCellDef style="color: {{headerTextColor}};">
+        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'color': headerTextColor}">
           {{ objectsData.headers[i] !== 'options' ? objectsData.headers[i] : '' }}
         </th>
 
@@ -12,25 +12,28 @@
         <div [ngSwitch]="column">
           <div *ngSwitchCase="'checkOption'">
             <td mat-cell *matCellDef="let element">
-              <mat-slide-toggle [checked]="element[column]">{{ element[column] ? 'Activo' : 'Inactiva' }}</mat-slide-toggle>
+              <mat-slide-toggle [checked]="element[column]"
+                (change)="onClickStatus($event, element['idForOptions'])">
+                  {{ element[column] ? 'Activo' : 'Inactiva' }}
+                </mat-slide-toggle>
             </td>
           </div>
-          <div *ngSwitchCase="'idForOptions'">
-            <td mat-cell *matCellDef>
+          <div *ngSwitchCase="'idForOptions'" >
+            <td mat-cell *matCellDef="let element">
               <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Boton de opciones" class="float-right">
                 <mat-icon>more_vert</mat-icon>
               </button>
 
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="onEdit()" >
+                <button mat-menu-item (click)="onEdit(element['idForOptions'])">
                   <mat-icon>edit</mat-icon>
                   <span>Editar</span>
                 </button>
-                <button mat-menu-item>
-                  <mat-icon>delete</mat-icon>
-                  <span>Enviar a papelera</span>
+                <button mat-menu-item (click)="onDeleteLogic(element['idForOptions'])">
+                  <mat-icon>{{ deleteIcon }}</mat-icon>
+                  <span>{{ labelDelete }}</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="onDelete(element['idForOptions'])" *ngIf="!isUserProfile">
                   <mat-icon>delete_forever</mat-icon>
                   <span>Eliminar definitivamente</span>
                 </button>

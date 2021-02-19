@@ -53,7 +53,7 @@ export class InfoPageComponent implements OnInit {
       });
 
     this.menuService.emitOption.subscribe(option => {
-      console.log(option);
+      //console.log(option);
 
       this.oInfoPage = option;
 

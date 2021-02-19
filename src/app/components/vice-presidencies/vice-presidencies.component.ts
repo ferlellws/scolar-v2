@@ -41,8 +41,8 @@ export class VicePresidenciesComponent implements OnInit {
 
   }
 
-  openDialog(e: boolean) {
-    environment.consoleMessage("Se abre el form 2");
+  openDialog(data: number) {
+    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(VicePresidenciesFormComponent, {
       width: '80%',
       disableClose: true
@@ -57,6 +57,23 @@ export class VicePresidenciesComponent implements OnInit {
     // dialogRef.afterClosed().subscribe(result => {
     //   console.log(`Dialog result: ${result}`);
     // });
+  }
+
+  onEdit() { 
+    environment.consoleMessage("onEdit", ">>>>>>>>>>>>>>>>> onEdit: ");
+  }
+
+  onDelete(data: number) {
+
+    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+  }
+
+  onDeleteLogic(data: number) {
+    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+  }
+
+  onStatusChange(data: any) {
+    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
   }
 
 }

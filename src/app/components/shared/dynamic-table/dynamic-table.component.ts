@@ -1,54 +1,103 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableData } from 'src/app/models/table-data';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'tecno-dynamic-table',
   templateUrl: './dynamic-table.component.html',
-  styleUrls: ['./dynamic-table.component.scss']
+  styleUrls: ['./dynamic-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicTableComponent implements OnInit {
 
-  @Input() objectsData!: TableData;
-  @Input() headerClass!: string;
-  @Input() footerClass!: string;
-  @Input() headerTextColor!: string;
-  @Input() footerTextColor!: string;
-  @Input() customId!: string;
+  @Input()  objectsData!: TableData;
+  @Input()  headerClass: string = 'bg-primary';
+  @Input()  footerClass: string = 'bg-primary';
+  @Input()  headerTextColor: string = 'white';
+  @Input()  footerTextColor: string = 'white';
+  @Input()  customId: string = 'dynamic_table';
+  @Input()  maxHeight: string = '1000px';
+  @Input()  isUserProfile: boolean = false;
 
-  @Output() emittEdit: EventEmitter<boolean> = new EventEmitter();
+  labelDelete: string = "Enviar a papelera 2";
+  deleteIcon: string = "delete"
+
+  @Output() emitEdit: EventEmitter<number> = new EventEmitter();
+  @Output() emitStatusChange: EventEmitter<any> = new EventEmitter();
+  @Output() emitDelete: EventEmitter<any> = new EventEmitter();
+  @Output() emitDeleteLogic: EventEmitter<any> = new EventEmitter();
+
+  fCheckOption: boolean = false;
+  public cdRef!: ChangeDetectorRef;
 
   showFooter!: boolean;
   displayedColumns!: string [];
   dataSource =  new MatTableDataSource<any>();
   footer: any;
-  constructor() { }
+  constructor() {
 
-  ngOnInit(): void {
+   }
+
+   ngOnInit(): void {
+    console.log("ObjData Dynamic",this.objectsData);
+    this.updateTable();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.objectsData = changes.objectsData.currentValue;
+    this.updateTable();
+    environment.consoleMessage("on change", "");
+  }
+
+  updateTable() {
+    environment.consoleMessage(`${this.isUserProfile}`)
+    if (this.isUserProfile) {
+      this.labelDelete = "Eliminar definitivamente";
+      this.deleteIcon = "delete_forever";
+    } else {
+      this.labelDelete = "Enviar a papelera";
+      this.deleteIcon = "delete";
+    }
     this.displayedColumns = Object.keys(this.objectsData.dataTable[0]);
     this.dataSource.data = this.objectsData.dataTable;
     this.footer = this.objectsData.footer;
     this.showFooter = this.footer != null;
-
-    if(this.headerClass == null || this.headerClass == ''){
-      this.headerClass = 'bg-primary';
-    }
-    if(this.footerClass == null || this.footerClass == ''){
-      this.footerClass = 'bg-primary';
-    }
-    if(this.footerTextColor == null || this.footerTextColor == ''){
-      this.footerTextColor = 'white';
-    }
-    if(this.headerTextColor == null || this.headerTextColor == ''){
-      this.headerTextColor = 'white';
-    }
-    if(this.customId == null || this.customId == ''){
-      this.customId = 'dynamic_table';
-    }
   }
 
-  onEdit() {
-    this.emittEdit.emit(true);
+  onEdit(id: number) {
+    this.emitEdit.emit(id);
+  }
+
+  onDelete(id: number) {
+    this.emitDelete.emit(id);
+  }
+
+  onDeleteLogic(id: number) {
+    this.emitDeleteLogic.emit(id);
+  }
+
+  onClickStatus($event: MatSlideToggleChange, id: number) {
+    // environment.consoleMessage(value, "value: ");
+    // environment.consoleMessage(id, "id: ");
+    let value: boolean = $event.checked;
+    this.fCheckOption = value;
+    this.changeCheckInDataTable(value, id);
+  }
+
+  changeCheckInDataTable(value: boolean, id: number) {
+    this.objectsData.dataTable.find((e, index) => {
+        if (e.idForOptions === id) {
+          this.objectsData.dataTable[index].checkOption = value;
+        }
+      }
+    );
+
+    this.emitStatusChange.emit({
+      id: id,
+      value: value
+    });
   }
 
 }
