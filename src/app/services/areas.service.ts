@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Company } from '../models/company';
+import { Area } from '../models/area';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompaniesService {
+export class AreasService {
 
-  private readonly API = `${environment.API}/companies`;
+  private readonly API = `${environment.API}/areas`;
 
   emitModify = new EventEmitter<any>();
   emitDelete = new EventEmitter<any>();
@@ -17,7 +17,7 @@ export class CompaniesService {
   
   constructor(private http: HttpClient) { }
 
-  getCompaniesAll() {
+  getAreasAll() {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -27,14 +27,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company[]>(this.API, httpOptions)
+    return this.http.get<Area[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  getCompaniesId(id: number) {
+  getAreasId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -44,14 +44,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<Area>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addCompanies(company: Company) {
+  addAreas(area: Area) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,13 +63,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.post<Company>(this.API, company, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.post<Area>(this.API, area, httpOptions)
+    .subscribe((data: Area) => {
       this.emitAdd.emit(data);
     });
   }
 
-  deleteCompaniesId(id: number) {
+  deleteAreasId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -79,13 +79,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.delete<Company>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.delete<Area>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: Area) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateCompaniesId(company: Company, id: number) {
+  updateAreasId(area: Area, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.put<Company>(`${this.API}/${id}`, company, httpOptions)
-      .subscribe((data: Company) => {
+    return this.http.put<Area>(`${this.API}/${id}`, area, httpOptions)
+      .subscribe((data: Area) => {
         this.emitModify.emit(data);
       });
   }

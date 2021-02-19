@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Company } from '../models/company';
+import { CompanyType } from '../models/company-type';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompaniesService {
+export class CompanyTypesService {
 
-  private readonly API = `${environment.API}/companies`;
+  private readonly API = `${environment.API}/company_types`;
 
   emitModify = new EventEmitter<any>();
   emitDelete = new EventEmitter<any>();
@@ -17,7 +17,7 @@ export class CompaniesService {
   
   constructor(private http: HttpClient) { }
 
-  getCompaniesAll() {
+  getCompanyTypesAll() {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -27,14 +27,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company[]>(this.API, httpOptions)
+    return this.http.get<CompanyType[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  getCompaniesId(id: number) {
+  getCompanyTypesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -44,14 +44,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<CompanyType>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addCompanies(company: Company) {
+  addCompanyTypes(companyTpe: CompanyType) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,13 +63,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.post<Company>(this.API, company, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.post<CompanyType>(this.API, companyTpe, httpOptions)
+    .subscribe((data: CompanyType) => {
       this.emitAdd.emit(data);
     });
   }
 
-  deleteCompaniesId(id: number) {
+  deleteCompanyTypesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -79,13 +79,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.delete<Company>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.delete<CompanyType>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: CompanyType) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateCompaniesId(company: Company, id: number) {
+  updateCompanyTypesId(companyTpe: CompanyType, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.put<Company>(`${this.API}/${id}`, company, httpOptions)
-      .subscribe((data: Company) => {
+    return this.http.put<CompanyType>(`${this.API}/${id}`, companyTpe, httpOptions)
+      .subscribe((data: CompanyType) => {
         this.emitModify.emit(data);
       });
   }

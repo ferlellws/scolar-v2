@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Company } from '../models/company';
+import { StateByPhase } from '../models/state-by-phase';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompaniesService {
+export class StateByPhasesService {
 
-  private readonly API = `${environment.API}/companies`;
+  private readonly API = `${environment.API}/state_by_phases`;
 
   emitModify = new EventEmitter<any>();
   emitDelete = new EventEmitter<any>();
@@ -17,7 +17,7 @@ export class CompaniesService {
   
   constructor(private http: HttpClient) { }
 
-  getCompaniesAll() {
+  getStateByPhasesAll() {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -27,14 +27,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company[]>(this.API, httpOptions)
+    return this.http.get<StateByPhase[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  getCompaniesId(id: number) {
+  getStateByPhasesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -44,14 +44,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<StateByPhase>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addCompanies(company: Company) {
+  addStateByPhases(stateByPhase: StateByPhase) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,13 +63,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.post<Company>(this.API, company, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.post<StateByPhase>(this.API, stateByPhase, httpOptions)
+    .subscribe((data: StateByPhase) => {
       this.emitAdd.emit(data);
     });
   }
 
-  deleteCompaniesId(id: number) {
+  deleteStateByPhasesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -79,13 +79,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.delete<Company>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.delete<StateByPhase>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: StateByPhase) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateCompaniesId(company: Company, id: number) {
+  updateStateByPhasesId(stateByPhase: StateByPhase, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.put<Company>(`${this.API}/${id}`, company, httpOptions)
-      .subscribe((data: Company) => {
+    return this.http.put<StateByPhase>(`${this.API}/${id}`, stateByPhase, httpOptions)
+      .subscribe((data: StateByPhase) => {
         this.emitModify.emit(data);
       });
   }

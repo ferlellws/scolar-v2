@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Company } from '../models/company';
+import { RiskLevel } from '../models/risk-level';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompaniesService {
+export class RiskLevelsService {
 
-  private readonly API = `${environment.API}/companies`;
+  private readonly API = `${environment.API}/risk_levels`;
 
   emitModify = new EventEmitter<any>();
   emitDelete = new EventEmitter<any>();
@@ -17,7 +17,7 @@ export class CompaniesService {
   
   constructor(private http: HttpClient) { }
 
-  getCompaniesAll() {
+  getRiskLevelsAll() {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -27,14 +27,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company[]>(this.API, httpOptions)
+    return this.http.get<RiskLevel[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  getCompaniesId(id: number) {
+  getRiskLevelsId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -44,14 +44,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<RiskLevel>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addCompanies(company: Company) {
+  addRiskLevels(riskLevel: RiskLevel) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,13 +63,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.post<Company>(this.API, company, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.post<RiskLevel>(this.API, riskLevel, httpOptions)
+    .subscribe((data: RiskLevel) => {
       this.emitAdd.emit(data);
     });
   }
 
-  deleteCompaniesId(id: number) {
+  deleteRiskLevelsId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -79,13 +79,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.delete<Company>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.delete<RiskLevel>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: RiskLevel) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateCompaniesId(company: Company, id: number) {
+  updateRiskLevelsId(riskLevel: RiskLevel, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.put<Company>(`${this.API}/${id}`, company, httpOptions)
-      .subscribe((data: Company) => {
+    return this.http.put<RiskLevel>(`${this.API}/${id}`, riskLevel, httpOptions)
+      .subscribe((data: RiskLevel) => {
         this.emitModify.emit(data);
       });
   }

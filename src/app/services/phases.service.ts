@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Company } from '../models/company';
+import { Phase } from '../models/phase';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompaniesService {
+export class PhasesService {
 
-  private readonly API = `${environment.API}/companies`;
+  private readonly API = `${environment.API}/phases`;
 
   emitModify = new EventEmitter<any>();
   emitDelete = new EventEmitter<any>();
@@ -17,7 +17,7 @@ export class CompaniesService {
   
   constructor(private http: HttpClient) { }
 
-  getCompaniesAll() {
+  getPhasesAll() {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -27,14 +27,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company[]>(this.API, httpOptions)
+    return this.http.get<Phase[]>(this.API, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  getCompaniesId(id: number) {
+  getPhasesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -44,14 +44,14 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.get<Company>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<Phase>(`${this.API}/${id}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addCompanies(company: Company) {
+  addPhases(phase: Phase) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -63,13 +63,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.post<Company>(this.API, company, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.post<Phase>(this.API, phase, httpOptions)
+    .subscribe((data: Phase) => {
       this.emitAdd.emit(data);
     });
   }
 
-  deleteCompaniesId(id: number) {
+  deletePhasesId(id: number) {
     var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
@@ -79,13 +79,13 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.delete<Company>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Company) => {
+    return this.http.delete<Phase>(`${this.API}/${id}`, httpOptions)
+    .subscribe((data: Phase) => {
       this.emitDelete.emit(data);
     });
   }
 
-  updateCompaniesId(company: Company, id: number) {
+  updatePhasesId(phase: Phase, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
@@ -97,8 +97,8 @@ export class CompaniesService {
       params: inputParams
     };
 
-    return this.http.put<Company>(`${this.API}/${id}`, company, httpOptions)
-      .subscribe((data: Company) => {
+    return this.http.put<Phase>(`${this.API}/${id}`, phase, httpOptions)
+      .subscribe((data: Phase) => {
         this.emitModify.emit(data);
       });
   }
