@@ -19,8 +19,15 @@ export class DynamicTableComponent implements OnInit {
   @Input()  footerTextColor: string = 'white';
   @Input()  customId: string = 'dynamic_table';
   @Input()  maxHeight: string = '1000px';
+  @Input()  isUserProfile: boolean = false;
 
-  @Output() emittEdit: EventEmitter<boolean> = new EventEmitter();
+  labelDelete: string = "Enviar a papelera 2";
+  deleteIcon: string = "delete"
+
+  @Output() emitEdit: EventEmitter<number> = new EventEmitter();
+  @Output() emitStatusChange: EventEmitter<any> = new EventEmitter();
+  @Output() emitDelete: EventEmitter<any> = new EventEmitter();
+  @Output() emitDeleteLogic: EventEmitter<any> = new EventEmitter();
 
   fCheckOption: boolean = false;
   public cdRef!: ChangeDetectorRef;
@@ -45,14 +52,30 @@ export class DynamicTableComponent implements OnInit {
   }
 
   updateTable() {
+    environment.consoleMessage(`${this.isUserProfile}`)
+    if (this.isUserProfile) {
+      this.labelDelete = "Eliminar definitivamente";
+      this.deleteIcon = "delete_forever";
+    } else {
+      this.labelDelete = "Enviar a papelera";
+      this.deleteIcon = "delete";
+    }
     this.displayedColumns = Object.keys(this.objectsData.dataTable[0]);
     this.dataSource.data = this.objectsData.dataTable;
     this.footer = this.objectsData.footer;
     this.showFooter = this.footer != null;
   }
 
-  onEdit() {
-    this.emittEdit.emit(true);
+  onEdit(id: number) {
+    this.emitEdit.emit(id);
+  }
+
+  onDelete(id: number) {
+    this.emitDelete.emit(id);
+  }
+
+  onDeleteLogic(id: number) {
+    this.emitDeleteLogic.emit(id);
   }
 
   onClickStatus($event: MatSlideToggleChange, id: number) {
@@ -64,17 +87,17 @@ export class DynamicTableComponent implements OnInit {
   }
 
   changeCheckInDataTable(value: boolean, id: number) {
-    let i = 0;
     this.objectsData.dataTable.find((e, index) => {
         if (e.idForOptions === id) {
           this.objectsData.dataTable[index].checkOption = value;
-          i = index;
         }
       }
     );
-    //this.cdRef.detectChanges;
-    //console.log(this.objectsData.dataTable[i]);
-    return value;
+
+    this.emitStatusChange.emit({
+      id: id,
+      value: value
+    });
   }
 
 }
