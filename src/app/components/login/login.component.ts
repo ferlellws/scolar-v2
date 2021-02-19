@@ -118,6 +118,7 @@ export class LoginComponent implements OnInit {
         this.logInGroup.reset();
       }, (err) => {
         this.disabledButton = false;
+        this.openSnackBar(false, err.error.messages, "");
         console.error(err);
       });
   }
