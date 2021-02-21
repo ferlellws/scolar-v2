@@ -1,8 +1,8 @@
 export class User {
-  // id: number;
+   id: number;
   // login_name: string;
-  // firstname: string;
-  // lastname: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   // password_digest: string;
@@ -12,10 +12,10 @@ export class User {
   // user_updates: string;
 
   constructor() {
-    // this.id = 0;
+     this.id = 0;
     // this.login_name = "";
-    // this.firstname = "";
-    // this.lastname = "";
+    this.firstname = "";
+    this.lastname = "";
     this.email = "";
     this.password = "";
     // this.password_digest = "";

@@ -109,6 +109,18 @@ export class MenuService {
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
           updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 7,
+          title: "Proyectos",
+          description: "Pagina en la que se pueden visualizar, crear y administrar oriyectos",
+          sysmodule_id: 1,
+          route: "/projects",
+          order_menu: 7,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
         }
       ]
     },

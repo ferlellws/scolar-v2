@@ -21,17 +21,56 @@ export class UserService {
 
   getUsers() {
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${sessionStorage.token}`
-      })
-    };
+    var usuarios: User[] = [
+      {
+        id: 2,
+        email: "david.guerrero@tecno.co",
+        password: "asdawdad",
+        firstname: "David Fernando",
+        lastname: "Guerrero Álvarez"
+      },
+      {
+        id: 1,
+        email: "denis.rodriguez@tecno.co",
+        password: "asdawdad",
+        firstname: "Denis Alexander",
+        lastname: "Rodriguez"
+      },
+      {
+        id: 3,
+        email: "estevan.vargas@tecno.co",
+        password: "asdawdad",
+        firstname: "Brajam Estevan",
+        lastname: "Vargas"
+      },
+      {
+        id: 4,
+        email: "ferley.leon@tecno.co",
+        password: "asdawdad",
+        firstname: "Ferley Alexander",
+        lastname: "Leon"
+      },
+      {
+        id: 5,
+        email: "roberto.zapata@tecno.co",
+        password: "asdawdad",
+        firstname: "Roberto Carlos",
+        lastname: "Zapata"
+      },
+    ]
 
-    return this.http.get<User[]>(this.API, httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap(console.log)
-    );
+    return usuarios;
+
+    // var httpOptions = {
+    //   headers: new HttpHeaders({
+    //     Authorization: `Bareer ${sessionStorage.token}`
+    //   })
+    // };
+
+    // return this.http.get<User[]>(this.API, httpOptions)
+    // .pipe(
+    //   tap(console.log)
+    // );
   }
 
   getUser(id: number){

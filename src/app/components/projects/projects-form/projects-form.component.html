@@ -1,0 +1,578 @@
+<mat-toolbar color="primary" style="border-top-left-radius: 5px; border-top-right-radius: 5px;" class="mat-elevation-z4">
+    <span class="example-spacer"></span>
+    <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="general" [editable]="true">
+        <form [formGroup]="general" style="width: 100%;">
+            <ng-template matStepLabel>General</ng-template>
+            <mat-grid-list cols="6" rowHeight="100px">
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput placeholder="Nombre del Proyecto" formControlName="titleControl" required>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openVicePresidencies($event)" formControlName="vicePresidenciesControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let vicePresidency of vicePresidencies" [value]="vicePresidency.id" >{{vicePresidency.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Vicepresidencias</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openAreas($event)" formControlName="areasControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let area of areas" [value]="area.id" >{{area.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Areas</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+        
+                <mat-grid-tile
+                  class="txt-right"
+                  [colspan]="2"
+                  [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-label>Fecha de recepción</mat-label>
+                            <input matInput required [matDatepicker]="picker" formControlName="receptionDateControl">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+        
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full ml-5 mr-5">
+                            <mat-select (openedChange)="_openPrograms($event)" formControlName="programsControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let program of programs" [value]="program.id" >{{program.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Programa</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+        
+            </mat-grid-list>
+        </form>
+        <div class="step-footer">
+            <button mat-mini-fab matStepperNext><mat-icon>navigate_next</mat-icon></button>
+        </div>
+    </mat-step>
+
+    <mat-step [stepControl]="descripcion" [editable]="true">
+        <form [formGroup]="descripcion" class="step-scroll">
+            <ng-template matStepLabel>Descripción Proyecto</ng-template>
+            <mat-grid-list cols="6" rowHeight="100px" >
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openPriorities($event)" formControlName="prioritiesControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let priority of priorities" [value]="priority.id">{{priority.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Prioridad</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="4"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openTypifications($event)" formControlName="typificationsControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let typification of typifications" [value]="typification.id">{{typification.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Tipificación</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="2">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field [floatLabel]="floatLabelControl.value" class="field-full" >
+                            <mat-label>Ingrese una descripción del proyecto</mat-label>
+                            <textarea matInput
+                                formControlName="projectDescriptionControl"
+                                placeholder="Descripción"
+                            required></textarea>
+                        </mat-form-field>
+                    </div>        
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para beneficios</h3>
+                </mat-grid-tile>
+        
+                <mat-grid-tile
+                [colspan]="4"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openLeads($event)" formControlName="leadsControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let lead of leads" [value]="lead.id">{{lead.firstname}} {{lead.lastname}}</mat-option>
+                            </mat-select>
+                            <mat-label>Lider Funcional</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openManagements($event)" formControlName="managementsControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let management of managements" [value]="management.id">{{management.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Gestión</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openPMOS($event)" formControlName="pmosControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let pmo of pmos" [value]="pmo.id">{{pmo.firstname}} {{pmo.lastname}}</mat-option>
+                            </mat-select>
+                            <mat-label>PMO asignado</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="3"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput [min]="0" [max]="40" type="number" placeholder="Horas Semanales PMO" formControlName="pmoHoursControl" required>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="3"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput [min]="0" [max]="59" type="number" placeholder="Minutos Semanales PMO" formControlName="pmoMinutesControl" required>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="4"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select  
+                            (openedChange)="_openPMOAssists($event)" 
+                            formControlName="pmoAssistsControl">
+                            <!-- cambio  -->
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let pmoAssist of pmoAssists" [value]="pmoAssist.id">{{pmoAssist.firstname}} {{pmoAssist.lastname}}</mat-option>
+                            </mat-select>
+                            <mat-label>PMO  de apoyo asignado</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select  
+                            (openedChange)="_openStages($event)" 
+                            formControlName="stagesControl" 
+                            required >
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let stage of stages" [value]="stage.id">{{stage.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Etapa de Apoyo</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="3"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput 
+                            [min]="0" [max]="40" type="number" 
+                            placeholder="Horas Semanales PMO de apoyo" 
+                            formControlName="pmoAssistHoursControl" 
+                            required >
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="3"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput 
+                            [min]="0" [max]="59" type="number" 
+                            placeholder="Minutos Semanales PMO de apoyo" 
+                            formControlName="pmoAssistMinutesControl" 
+                            required >
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput 
+                            (change)="changeBudget()"
+                            type="number" 
+                            placeholder="Presupuesto Aprobado" 
+                            formControlName="budgetApprovedControl" 
+                            required >
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput 
+                            (change)="changeBudget()"
+                             type="number" 
+                            placeholder="Presupuesto Ejecutado" 
+                            formControlName="budgetExecutedControl" 
+                            required >
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput 
+                            placeholder="Saldo" 
+                            formControlName="balanceControl" 
+                            required >
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+            </mat-grid-list>
+        </form>
+        <div class="step-footer">
+            <button mat-mini-fab matStepperNext><mat-icon>navigate_next</mat-icon></button>
+        </div>
+    </mat-step>
+
+    <mat-step [stepControl]="seguimiento" [editable]="true">
+        <form [formGroup]="seguimiento" class="step-scroll" style="width: 100%;">
+            <ng-template matStepLabel>Seguimiento</ng-template>
+            <mat-grid-list cols="6" rowHeight="100px">
+
+                <mat-grid-tile
+                  class="txt-right"
+                  [colspan]="2"
+                  [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-label>Fecha de Inicio</mat-label>
+                            <input matInput  [matDatepicker]="pickerInicio" formControlName="startDateControl">
+                            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerInicio></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                  class="txt-right"
+                  [colspan]="2"
+                  [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-label>Fecha Final Estimada</mat-label>
+                            <input matInput  [matDatepicker]="pickerFin" formControlName="dueDateControl">
+                            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerFin></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                  class="txt-right"
+                  [colspan]="2"
+                  [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-label>Fecha control de cambios</mat-label>
+                            <input matInput  [matDatepicker]="pickerControl" formControlName="realDueDateControl">
+                            <mat-datepicker-toggle matSuffix [for]="pickerControl"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerControl></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openStates($event)" formControlName="statesControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let state of states" [value]="state.id" >{{state.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Estado</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full ml-5 mr-5">
+                            <mat-select required (openedChange)="_openPhases($event)" formControlName="phasesControl">
+                                <mat-option>-- None --</mat-option>
+                                <mat-option *ngFor="let phase of phases" [value]="phase.id" >{{phase.title}}</mat-option>
+                            </mat-select>
+                            <mat-label>Fase</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
+                        <mat-form-field
+                            [hideRequiredMarker]="hideRequiredControl.value"
+                            [floatLabel]="floatLabelControl.value"
+                            class="field-full pl-5"
+                            style="width: 100%;">
+                            <input matInput 
+                            type="number" 
+                            placeholder="Sprint" 
+                            formControlName="sprintControl" 
+                            required >
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para Hitos</h3>
+                </mat-grid-tile>
+        
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para Riesgos</h3>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para Eventos de riesgo</h3>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para Aplicaciones inpactadas</h3>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para KPIs</h3>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para areas participantes</h3>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="2">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field [floatLabel]="floatLabelControl.value" class="field-full" >
+                            <mat-label>¿Como se evaluó la selección de proveedores si aplica?</mat-label>
+                            <textarea matInput
+                                formControlName="evaluationControl"
+                                placeholder="Evaluación de proveedor">
+                            </textarea>
+                        </mat-form-field>
+                    </div>        
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para proveedores</h3>
+                </mat-grid-tile>
+
+                <mat-grid-tile [colspan]="2" [rowspan]="1"></mat-grid-tile>
+                <mat-grid-tile
+                [colspan]="2"
+                [rowspan]="1">
+                    <div class="example-container bg-color-white " style="width: 100%;">
+                        <mat-form-field
+                        [hideRequiredMarker]="hideRequiredControl.value"
+                        [floatLabel]="floatLabelControl.value"
+                        class="field-full ml-5 mr-5">
+                            <mat-select  
+                            formControlName="testLogControl" 
+                            required >
+                                <mat-option>-- None --</mat-option>
+                                <mat-option [value]="0">No</mat-option>
+                                <mat-option [value]="1">Sí</mat-option>
+                            </mat-select>
+                            <mat-label>Bitacora de Pruebas</mat-label>
+                        </mat-form-field>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="2" [rowspan]="1"></mat-grid-tile>
+
+                <mat-grid-tile
+                [colspan]="6"
+                [rowspan]="1">
+                    <h3 class="mat-title">Espacio para recursos funcionales, pruebas</h3>
+                </mat-grid-tile>
+
+            </mat-grid-list>
+        </form>
+        <div class="step-footer">
+            <button mat-mini-fab matStepperNext><mat-icon>navigate_next</mat-icon></button>
+        </div>
+    </mat-step>
+
+</mat-horizontal-stepper>
+
+
+
+      
