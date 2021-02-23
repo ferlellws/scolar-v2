@@ -3,7 +3,7 @@ import { CompanyType } from "./company-type";
 
 export class Company {
     id?: number;
-    company_type_id: CompanyType | number;
+    company_type_id!: CompanyType | number;
     title: string;
     description: string;
     is_active: boolean;
@@ -16,7 +16,7 @@ export class Company {
     deleted_at?: string;
 
     constructor(){
-        this.company_type_id = new CompanyType;
+        //this.company_type_id = new CompanyType;
         this.title = "";
         this.description = "";
         this.is_active = true;
