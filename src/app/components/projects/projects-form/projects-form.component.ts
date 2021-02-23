@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import {VicePresidenciesService} from '../../../services/vice-presidencies.service'
@@ -25,6 +25,9 @@ import { StatesService } from 'src/app/services/states.service';
 import { PhasesService } from 'src/app/services/phases.service';
 import { StateByPhasesService } from 'src/app/services/state-by-phases.service';
 import { StateByPhase } from 'src/app/models/state-by-phase';
+import { MatStepper } from '@angular/material/stepper';
+import { StrategicApproachesService } from 'src/app/services/strategic-approaches.service';
+import { StrategicApproach } from 'src/app/models/strategic-approach';
 @Component({
   selector: 'tecno-projects-form',
   templateUrl: './projects-form.component.html',
@@ -32,37 +35,41 @@ import { StateByPhase } from 'src/app/models/state-by-phase';
 })
 export class ProjectsFormComponent implements OnInit {
 
-  title:string = "Hola";
-  vicePresidency: number = 0;
-  area: number = 0;
-  program: number = 0;
+  @ViewChild('stepper') stepper!: MatStepper;
 
-  lead_id: number = 0;
-  priority: number = 0;
-  typification: number = 0;
-  projectDescription = "";
-  management: number = 0;
-  pmo_id: number = 0;
-  pmoHours: number = 0;
-  pmoMinutes: number = 0;
-  pmoAssist_id: number = 0;
-  stage: number = 0;
-  pmoAssistHours: number = 0;
-  pmoAssistMinutes: number = 0;
-  budgetApproved: number = 0;
-  budgetExecuted: number = 0;
+  title!:string;
+  vicePresidency!: number;
+  area!: number;
+  strategicApproach!: number;
+  program!: number;
+
+  lead_id!: number;
+  priority!: number;
+  typification!: number;
+  projectDescription!: string;
+  management!: number;
+  pmo_id!: number;
+  pmoHours!: number;
+  pmoMinutes!: number;
+  pmoAssist_id!: number;
+  stage!: number;
+  pmoAssistHours!: number;
+  pmoAssistMinutes!: number;
+  budgetApproved!: number;
+  budgetExecuted!: number;
   balance: number = this.budgetApproved - this.budgetExecuted;
 
-  state: number = 0;
-  phase: number = 0;
-  sprint: number = 0;
-  evaluation: string = "";
-  testLog:number = 0;
+  state!: number;
+  phase!: number;
+  sprint!: number;
+  evaluation!: string;
+  testLog!:number;
 
-  
+  labels:any;
 
   vicePresidencies: VicePresidency[] = [];
   areas: Area[] = [];
+  strategicApproaches: StrategicApproach[] = [];
   programs: Program[] = [];
 
   leads: User[] = [];
@@ -81,13 +88,11 @@ export class ProjectsFormComponent implements OnInit {
   descripcion: FormGroup;
   seguimiento: FormGroup;
 
-  hideRequiredControl = new FormControl(false);
-  floatLabelControl = new FormControl('auto');
-
   deshabilitarAssist: boolean = true;
 
   constructor(
     private _fbG: FormBuilder,
+    private _strategicApproachesService: StrategicApproachesService,
     private _vicePresidenciesService: VicePresidenciesService,
     private _areasService: AreasService,
     private _programsService: ProgramsService,
@@ -102,18 +107,15 @@ export class ProjectsFormComponent implements OnInit {
 
     ) { 
       this.general = this._fbG.group({
-        hideRequired: this.hideRequiredControl,
-        floatLabel: this.floatLabelControl,
         'titleControl': [this.title, [Validators.required]],
         'vicePresidenciesControl': [this.vicePresidency, [Validators.required]],
         'areasControl': [this.area, [Validators.required]],
+        'strategicApproachesControl': [this.strategicApproach, [Validators.required]],
         'receptionDateControl': [new Date, [Validators.required]],
         'programsControl': [this.program],
       });
 
       this.descripcion = this._fbG.group({
-        hideRequired: this.hideRequiredControl,
-        floatLabel: this.floatLabelControl,
         'projectDescriptionControl': [this.projectDescription, [Validators.required]],
         'leadsControl': [this.lead_id, [Validators.required]],
         'prioritiesControl': [this.priority, [Validators.required]],
@@ -132,8 +134,6 @@ export class ProjectsFormComponent implements OnInit {
       });
 
       this.seguimiento = this._fbG.group({
-        hideRequired: this.hideRequiredControl,
-        floatLabel: this.floatLabelControl,
         'startDateControl': [],
         'dueDateControl': [],
         'realDueDateControl': [],
@@ -144,10 +144,46 @@ export class ProjectsFormComponent implements OnInit {
         'testLogControl': [this.testLog],
       });
 
+
+      this.labels = {
+        titleControl: `Nombre del Proyecto`,
+        vicePresidenciesControl: `Vicepresidencias`,
+        areasControl: `Areas`,
+        strategicApproachesControl: 'Enfoque estrategico',
+        receptionDateControl: `Fecha de recepción`,
+        programsControl: `Programa`,
+  
+        prioritiesControl: `Prioridad`,
+        typificationsControl: `Tipificación`,
+        projectDescriptionControl: `Descripción`,
+        leadsControl: `Lider Funcional`,
+        managementsControl: `Gestión`,
+        pmosControl: `PMO asignado`,
+        pmoHoursControl: `Horas Semanales PMO`,
+        pmoMinutesControl: `Minutos Semanales PMO`,
+        pmoAssistsControl: `PMO  de apoyo asignado`,
+        stagesControl: `Etapa de Apoyo`,
+        pmoAssistHoursControl: `Horas Semanales PMO de apoyo`,
+        pmoAssistMinutesControl: `Minutos Semanales PMO de apoyo`,
+        budgetApprovedControl: `Presupuesto Aprobado`,
+        budgetExecutedControl: `Presupuesto Ejecutado`,
+        balanceControl: `Saldo`,
+  
+        startDateControl: `Fecha de Inicio`,
+        dueDateControl: `Fecha Final Estimada`,
+        realDueDateControl: `Fecha control de cambios`,
+        statesControl: `Estado`,
+        phasesControl: `Fase`,
+        sprintControl: `Sprint`,
+        evaluationControl: `¿Como se evaluó la selección de proveedores si aplica?`,
+        testLogControl: `Bitacora de Pruebas`,
+      }
+
     }
 
   ngOnInit(): void {
     this.validateAssist ();
+    this.validateFormGroup(this.general)
   }
 
   validateAssist () {
@@ -190,6 +226,13 @@ export class ProjectsFormComponent implements OnInit {
       var vice: number = this.general.get('vicePresidenciesControl')!.value;
       this._areasService.getAreasAll()
         .subscribe((areas: Area[]) => this.areas = areas.filter(area => area.vice_presidency_id == vice));
+    }
+  }
+
+  _openStrategicApproaches(ev: boolean) {
+    if (ev) {
+      this._strategicApproachesService.getStrategicApproachesAll()
+        .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
     }
   }
 
@@ -290,6 +333,43 @@ export class ProjectsFormComponent implements OnInit {
           })
         });
     }
+  }
+
+
+  nextSpecific(stepper: MatStepper, formGroup: FormGroup){
+    var message = this.validateFormGroup(formGroup);
+
+    if (message != ""){
+      console.log(message);
+    } else {
+      stepper.next();
+    }
+  }
+
+  back(stepper: MatStepper){
+    stepper.previous();
+  }
+
+  validateFormGroup(formGroup: FormGroup){
+    var keys = Object.keys(formGroup.controls);
+    var message = "";
+
+    for (let index = 0; index < keys.length; index++) {
+      if(formGroup.get(keys[index])!.errors != null){
+        if (formGroup.get(keys[index])!.errors!.required) {
+          if (message != '') {
+            message += ', ';
+          }
+          message += this.labels[`${keys[index]}`];
+        }
+      }
+    }
+
+    if (message != ""){
+      message += ' vacio';
+    }
+
+    return message;
   }
 
 }
