@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import {VicePresidenciesService} from '../../../services/vice-presidencies.service'
@@ -28,6 +28,10 @@ import { StateByPhase } from 'src/app/models/state-by-phase';
 import { MatStepper } from '@angular/material/stepper';
 import { StrategicApproachesService } from 'src/app/services/strategic-approaches.service';
 import { StrategicApproach } from 'src/app/models/strategic-approach';
+import { DatePipe } from '@angular/common';
+import { Project } from 'src/app/models/project';
+import { ProjectsService } from 'src/app/services/projects.service'
+
 @Component({
   selector: 'tecno-projects-form',
   templateUrl: './projects-form.component.html',
@@ -36,6 +40,9 @@ import { StrategicApproach } from 'src/app/models/strategic-approach';
 export class ProjectsFormComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
+  @Output() emitClose: EventEmitter<string> = new EventEmitter();
+
+  message: string = "";
 
   title!:string;
   vicePresidency!: number;
@@ -104,6 +111,8 @@ export class ProjectsFormComponent implements OnInit {
     private _statesService: StatesService,
     private _phasesService: PhasesService,
     private _statesByPhasesService: StateByPhasesService,
+    private _projectsService: ProjectsService,
+    public datepipe: DatePipe,
 
     ) { 
       this.general = this._fbG.group({
@@ -198,6 +207,7 @@ export class ProjectsFormComponent implements OnInit {
     } else {
       this.deshabilitarAssist = true;
       this.descripcion.get('stagesControl')!.disable();
+      this.descripcion.get('stagesControl')!.setValue(null);
       this.descripcion.get('pmoAssistHoursControl')!.disable();
       this.descripcion.get('pmoAssistMinutesControl')!.disable();
     }
@@ -340,8 +350,9 @@ export class ProjectsFormComponent implements OnInit {
     var message = this.validateFormGroup(formGroup);
 
     if (message != ""){
-      console.log(message);
+      this.message = message;
     } else {
+      this.message = "";
       stepper.next();
     }
   }
@@ -364,14 +375,23 @@ export class ProjectsFormComponent implements OnInit {
     }
 
     if (message != ""){
-      console.log(message);
+      this.message = message;
     } else {
+      this.message = "";
       if (valido){
-        var project: any ={
+        
+        var stateByPhases: any[] = 
+        this.stateByPhases.
+        filter(
+          stateByPhase => (
+            stateByPhase.state_id == this.seguimiento.get('statesControl')!.value) 
+            && (stateByPhase.phase_id == this.seguimiento.get('phasesControl')!.value));
+        var stateByPhase: number = stateByPhases[0].id;  
+        var project: Project = {
           title: this.general.get('titleControl')!.value,
           area_id: this.general.get('areasControl')!.value,
           strategic_approach_id: this.general.get('strategicApproachesControl')!.value,
-          reception_date: this.general.get('receptionDateControl')!.value,
+          reception_date: this.parseDate(this.general.get('receptionDateControl')!.value),
           program_id: this.general.get('programsControl')!.value,
 
           description: this.descripcion.get('projectDescriptionControl')!.value,
@@ -389,21 +409,24 @@ export class ProjectsFormComponent implements OnInit {
           budget_approved: this.descripcion.get('budgetApprovedControl')!.value,
           budget_executed: this.descripcion.get('budgetExecutedControl')!.value,
 
-          start_date: this.seguimiento.get('startDateControl')!.value,
-          due_date: this.seguimiento.get('dueDateControl')!.value,
-          control_date: this.seguimiento.get('controlDateControl')!.value,
-          states_by_phase_id: this.stateByPhases.
-            filter(
-              stateByPhase => (
-                stateByPhase.state_id == this.seguimiento.get('statesControl')!.value) 
-                && (stateByPhase.phase_id == this.seguimiento.get('phasesControl')!.value))
-                [0].id,
+          start_date: this.parseDate(this.seguimiento.get('startDateControl')!.value),
+          due_date: this.parseDate(this.seguimiento.get('dueDateControl')!.value),
+          control_date: this.parseDate(this.seguimiento.get('controlDateControl')!.value),
+          states_by_phase_id: stateByPhase,
           sprint: this.seguimiento.get('sprintControl')!.value,
           evaluation: this.seguimiento.get('evaluationControl')!.value,
           test_log: this.seguimiento.get('testLogControl')!.value,
-        }//cambio
-        console.log(project);
+
+          is_active: true,
+          is_delete: false
+
+        }
         
+        
+        
+        this._projectsService.addProjects(project);
+        this.emitClose.emit('close');
+
       }else{
         console.log("no guardar");
       }
@@ -412,6 +435,24 @@ export class ProjectsFormComponent implements OnInit {
 
   back(stepper: MatStepper){
     stepper.previous();
+  }
+
+  parseDate(date: any): string {
+    if (date == '' || date == undefined || date == null){
+      return '';
+    }
+    if (date + "" != "Invalid Date" ){
+      let d!: Date;
+      try {
+        d = new Date(date);
+      } catch {
+        d = new Date();
+      } finally {
+          return `${this.datepipe.transform( d, 'yyyy-MM-dd')}`;
+      }
+    } else {
+      return "";
+    }
   }
 
   validateFormGroup(formGroup: FormGroup){

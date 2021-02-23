@@ -98,6 +98,7 @@
             </mat-grid-list>
         </form>
         <div class="step-footer">
+            <h3 style="color: red;" *ngIf="message != ''">{{message}}</h3>
             <button mat-button color="primary">Cerrar</button>
             <button mat-button color="accent" (click)="nextSpecific(stepper, general)">Siguiente</button>
         </div>
@@ -347,6 +348,7 @@
             </mat-grid-list>
         </form>
         <div class="step-footer">
+            <h3 style="color: red;" *ngIf="message != ''">{{message}}</h3>
             <button mat-button color="primary" (click)="back(stepper)">Atras</button>
             <button mat-button color="accent" (click)="nextSpecific(stepper, descripcion)">Siguiente</button>
         </div>
@@ -532,6 +534,7 @@
             </mat-grid-list>
         </form>
         <div class="step-footer">
+            <h3 style="color: red;" *ngIf="message != ''">{{message}}</h3>
             <button mat-button color="primary" (click)="back(stepper)">Atras</button>
             <button mat-button color="accent" (click)="create()">Guardar</button>
         </div>

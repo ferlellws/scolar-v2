@@ -35,6 +35,13 @@ export class ProjectsComponent implements OnInit {
       width: '80%',
       disableClose: true
     });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data = 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
   onEdit() { 

@@ -18,7 +18,9 @@ export class ProjectsService {
   constructor(private http: HttpClient) { }
 
   getProjectsAll() {
-    var inputParams: any = {user_id: localStorage.id};
+    var inputParams: any = {
+     // user_id: localStorage.id
+    };
 
     var httpOptions = {
       headers: new HttpHeaders({
