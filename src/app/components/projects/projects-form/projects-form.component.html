@@ -394,8 +394,8 @@
                     <div class="example-container bg-color-white mat-elevation-z4" style="width: 100%;">
                         <mat-form-field
                         class="field-full ml-5 mr-5">
-                            <mat-label>{{labels.realDueDateControl}}</mat-label>
-                            <input matInput  [matDatepicker]="pickerControl" formControlName="realDueDateControl">
+                            <mat-label>{{labels.controlDateControl}}</mat-label>
+                            <input matInput  [matDatepicker]="pickerControl" formControlName="controlDateControl">
                             <mat-datepicker-toggle matSuffix [for]="pickerControl"></mat-datepicker-toggle>
                             <mat-datepicker #pickerControl></mat-datepicker>
                         </mat-form-field>
@@ -533,7 +533,7 @@
         </form>
         <div class="step-footer">
             <button mat-button color="primary" (click)="back(stepper)">Atras</button>
-            <button mat-button color="accent" (click)="nextSpecific(stepper, seguimiento)">Guardar</button>
+            <button mat-button color="accent" (click)="create()">Guardar</button>
         </div>
     </mat-step>
 

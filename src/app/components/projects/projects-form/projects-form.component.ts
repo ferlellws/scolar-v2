@@ -136,7 +136,7 @@ export class ProjectsFormComponent implements OnInit {
       this.seguimiento = this._fbG.group({
         'startDateControl': [],
         'dueDateControl': [],
-        'realDueDateControl': [],
+        'controlDateControl': [],
         'statesControl': [this.state, [Validators.required]],
         'phasesControl': [this.phase, [Validators.required]],
         'sprintControl': [this.phase, [Validators.required]],
@@ -171,7 +171,7 @@ export class ProjectsFormComponent implements OnInit {
   
         startDateControl: `Fecha de Inicio`,
         dueDateControl: `Fecha Final Estimada`,
-        realDueDateControl: `Fecha control de cambios`,
+        controlDateControl: `Fecha control de cambios`,
         statesControl: `Estado`,
         phasesControl: `Fase`,
         sprintControl: `Sprint`,
@@ -343,6 +343,70 @@ export class ProjectsFormComponent implements OnInit {
       console.log(message);
     } else {
       stepper.next();
+    }
+  }
+
+  create(){
+    var valido = true;
+    var message = this.validateFormGroup(this.general);
+    if (message != ""){
+      valido = false;
+    }
+
+    message = this.validateFormGroup(this.descripcion);
+    if (message != ""){
+      valido = false;
+    }
+
+    message = this.validateFormGroup(this.seguimiento);
+    if (message != ""){
+      valido = false;
+    }
+
+    if (message != ""){
+      console.log(message);
+    } else {
+      if (valido){
+        var project: any ={
+          title: this.general.get('titleControl')!.value,
+          area_id: this.general.get('areasControl')!.value,
+          strategic_approach_id: this.general.get('strategicApproachesControl')!.value,
+          reception_date: this.general.get('receptionDateControl')!.value,
+          program_id: this.general.get('programsControl')!.value,
+
+          description: this.descripcion.get('projectDescriptionControl')!.value,
+          functional_lead_id: this.descripcion.get('leadsControl')!.value,
+          priority_id: this.descripcion.get('prioritiesControl')!.value,
+          typification_id: this.descripcion.get('typificationsControl')!.value,
+          management_id: this.descripcion.get('managementsControl')!.value,
+          pmo_id: this.descripcion.get('pmosControl')!.value,
+          pmo_hours: this.descripcion.get('pmoHoursControl')!.value,
+          pmo_minutes: this.descripcion.get('pmoMinutesControl')!.value,
+          pmo_assitant_id: this.descripcion.get('pmoAssistsControl')!.value,
+          pmo_assitant_stage_id: this.descripcion.get('stagesControl')!.value,
+          pmo_assistant_hours: this.descripcion.get('pmoAssistHoursControl')!.value,
+          pmo_assistant_minutes: this.descripcion.get('pmoAssistMinutesControl')!.value,
+          budget_approved: this.descripcion.get('budgetApprovedControl')!.value,
+          budget_executed: this.descripcion.get('budgetExecutedControl')!.value,
+
+          start_date: this.seguimiento.get('startDateControl')!.value,
+          due_date: this.seguimiento.get('dueDateControl')!.value,
+          control_date: this.seguimiento.get('controlDateControl')!.value,
+          states_by_phase_id: this.stateByPhases.
+            filter(
+              stateByPhase => (
+                stateByPhase.state_id == this.seguimiento.get('statesControl')!.value) 
+                && (stateByPhase.phase_id == this.seguimiento.get('phasesControl')!.value))
+                [0].id,
+          sprint: this.seguimiento.get('sprintControl')!.value,
+          evaluation: this.seguimiento.get('evaluationControl')!.value,
+          test_log: this.seguimiento.get('testLogControl')!.value,
+        }//cambio
+        console.log(project);
+        
+      }else{
+        console.log("no guardar");
+      }
     }
   }
 
