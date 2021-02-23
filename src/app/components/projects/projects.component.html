@@ -1,8 +1,7 @@
-<div class="cont-table">
+<div class="cont-table mat-elevation-z5">
   <tecno-dynamic-table
-    style="width: 200cm !important; max-width: 200cm !important; min-width: 200cm !important;"
     [objectsData]="table"
-    (emitEdit)="openDialog($event)"
+    (emitEdit)="onEdit($event)"
     (emitStatusChange)="onStatusChange($event)"
     (emitDelete)="onDelete($event)"
     (emitDeleteLogic)="onDeleteLogic($event)"

@@ -87,7 +87,7 @@ export class ProjectsService {
     });
   }
 
-  updateProjectsId(project: Project, id: number) {
+  updateProjectsId(project: any, id: number) {
     var inputParams: any = {
       //user_id: localStorage.id
     };
