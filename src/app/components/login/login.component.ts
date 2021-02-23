@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   flagShowPass: boolean = false;
   disabledButton: boolean = false;
 
-  user: User = new User();
+  user!: User;
   emailToRemember: string = "";
 
   constructor(
@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
 
     // Se borra userToken del local storage
     localStorage.removeItem("userToken");
+    localStorage.removeItem("user");
     // Se verifica si existe sesion abierta
     this.authService.getToken();
 
@@ -117,8 +118,17 @@ export class LoginComponent implements OnInit {
         this.disabledButton = false;
         this.logInGroup.reset();
       }, (err) => {
+        // SI HAY UN ERROR
+        let message: string = "";
+
         this.disabledButton = false;
-        this.openSnackBar(false, err.error.messages, "");
+
+        if (err.error.messages) {
+          message = err.error.messages;
+        } else {
+          message = err.message;
+        }
+        this.openSnackBar(false, message, "");
         console.error(err);
       });
   }
