@@ -41,7 +41,7 @@ export class MenuService {
         {
           id: 1,
           title: "Vicepresidencias",
-          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi qui praesentium suscipit earum! Ullam possimus, quaerat nobis totam minus distinctio commodi perspiciatis sit, quis architecto quo nostrum ducimus aliquam delectus",
+          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi qui praesentium suscipit earum! Ullam possimus",
           sysmodule_id: 1,
           route: "/vice-presidencies",
           order_menu: 1,

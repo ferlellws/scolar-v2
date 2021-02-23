@@ -64,7 +64,13 @@
     <mat-sidenav-content>
       <div class="page-container">
         <!-- header de titulo, descripcion y botones -->
-        <tecno-info-page class="info-page"></tecno-info-page>
+        <tecno-info-page class="info-page" [fShowLoading]="fShowLoading"></tecno-info-page>
+        <mat-progress-bar
+          mode="indeterminate"
+          color="accent"
+          class="loading"
+          *ngIf="fShowLoading">
+        </mat-progress-bar>
 
         <router-outlet>
           <!-- <mat-progress-bar mode="query" class="loading" *ngIf="loading" ></mat-progress-bar> -->
@@ -76,7 +82,12 @@
 
 <ng-template #elseBlock>
   <router-outlet>
-    <!-- <mat-progress-bar mode="query" class="loading" *ngIf="loading" ></mat-progress-bar> -->
+    <mat-progress-bar
+      mode="indeterminate"
+      color="accent"
+      class="loading"
+      *ngIf="fShowLoading">
+    </mat-progress-bar>
   </router-outlet>
 </ng-template>
 

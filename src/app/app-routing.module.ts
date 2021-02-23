@@ -1,3 +1,4 @@
+import { VicePresidenciesResolver } from './components/vice-presidencies/guards/vice-presidencies.resolver';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
@@ -16,7 +17,10 @@ const routes: Routes = [
     path: 'vice-presidencies',
     loadChildren: () => import('./components/vice-presidencies/vice-presidencies.module').then(m => m.VicePresidenciesModule),
     canActivate: [AuthGuard],
-    canLoad: [AuthGuard]
+    canLoad: [AuthGuard],
+    resolve: {
+      vicePresidencies: VicePresidenciesResolver
+    }
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'states', loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule) },

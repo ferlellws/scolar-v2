@@ -1,4 +1,5 @@
-import { environment } from 'src/environments/environment';
+import { MainService } from './services/main.service';
+import { environment } from './../environments/environment';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Menu } from './models/menu';
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
   showFiller: boolean = true;
   title: string = 'tecno-project-front';
   authorized: boolean = false;
-  // loading: boolean = true;
+  fShowLoading: boolean = true;
 
   lastname = 'Usuario';
   firstname = 'Tecno';
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private menuService: MenuService,
+    private mainService: MainService
     // private _usersService: UserService
   ) { }
 
@@ -84,6 +86,9 @@ export class AppComponent implements OnInit {
 
     // SE REVISA EL USUARIO DESDE EL AUTH A TRAVES DE UN EMIT
     this.authService.emitUser.subscribe(user => this.user = new User(user));
+
+    // SUBSCRIPCION A EMISOR DEL LOADING
+    this.mainService.emitShowLoading.subscribe(fLoading => this.fShowLoading = fLoading);
   }
 
   getRoute() {
@@ -119,5 +124,9 @@ export class AppComponent implements OnInit {
     console.log({route});
 
     this.menuService.getOptionByRoute(route);
+  }
+
+  onLoading(value: boolean) {
+    environment.consoleMessage(value, ">>>>>>>>>>>>>");
   }
 }

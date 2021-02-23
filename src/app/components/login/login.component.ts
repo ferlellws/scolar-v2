@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { MainService } from 'src/app/services/main.service';
 import { TokenService } from 'src/app/services/security/token.service';
 
 @Component({
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private mainService: MainService
   ) {
     // this.logInGroup = this.fb.group({
     //   hideRequired: this.hideRequiredControl,
@@ -61,7 +63,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.mainService.hideLoading();
 
 
 
@@ -106,9 +108,11 @@ export class LoginComponent implements OnInit {
     this.user = this.logInGroup.value;
     this.flagRememberUser = this.logInGroup.value.checkRemember;
     console.log(this.user);
+    this.mainService.showLoading();
     this.authService.onLogin(this.user)
       .subscribe((res: any) => {
         console.log({res});
+        this.mainService.hideLoading();
         this.openSnackBar(true, res.messages, "");
         console.log(this.flagRememberUser);
 
