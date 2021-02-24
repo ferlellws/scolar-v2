@@ -23,6 +23,7 @@ export interface Page {
 })
 export class InfoPageComponent implements OnInit {
   @Input() oInfoPage!: Page;
+  @Input() fShowLoading!: boolean;
 
   flagFavorite: boolean = false;
   title: string = "Home";

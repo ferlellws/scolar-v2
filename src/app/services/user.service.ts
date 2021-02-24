@@ -14,63 +14,42 @@ import { Menu } from '../models/menu';
 export class UserService {
 
   httpOptions = {};
+  inputParams: any = {};
 
-  private readonly API = `${environment.API}/sysusers`;
+  private readonly API = `${environment.API}/users`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${sessionStorage.token}`
+      }),
+      params: this.inputParams
+    };
+  }
 
   getUsers() {
+    return this.http.get<User[]>(this.API, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
 
-    var usuarios: User[] = [
-      {
-        id: 2,
-        email: "david.guerrero@tecno.co",
-        password: "asdawdad",
-        firstname: "David Fernando",
-        lastname: "Guerrero Álvarez"
-      },
-      {
-        id: 1,
-        email: "denis.rodriguez@tecno.co",
-        password: "asdawdad",
-        firstname: "Denis Alexander",
-        lastname: "Rodriguez"
-      },
-      {
-        id: 3,
-        email: "estevan.vargas@tecno.co",
-        password: "asdawdad",
-        firstname: "Brajam Estevan",
-        lastname: "Vargas"
-      },
-      {
-        id: 4,
-        email: "ferley.leon@tecno.co",
-        password: "asdawdad",
-        firstname: "Ferley Alexander",
-        lastname: "Leon"
-      },
-      {
-        id: 5,
-        email: "roberto.zapata@tecno.co",
-        password: "asdawdad",
-        firstname: "Roberto Carlos",
-        lastname: "Zapata"
-      },
-    ]
+  getManagers() {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
 
-    return usuarios;
-
-    // var httpOptions = {
-    //   headers: new HttpHeaders({
-    //     Authorization: `Bareer ${sessionStorage.token}`
-    //   })
-    // };
-
-    // return this.http.get<User[]>(this.API, httpOptions)
-    // .pipe(
-    //   tap(console.log)
-    // );
+    this.httpOptions = {
+      params: this.inputParams
+    }
+    return this.http.get<User[]>(`${this.API}/managers`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
   }
 
   getUser(id: number){

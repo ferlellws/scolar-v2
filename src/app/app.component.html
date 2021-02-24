@@ -35,9 +35,12 @@
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="side" class="menu-container" opened>
       <div class="profile-container">
+        <!-- AVATAR -->
         <tecno-profile-circle [user]="user" [size]="110" class="avatar"></tecno-profile-circle>
+
+        <!-- MENU PERFIL NOMBRE -->
         <div class="btn-profile" [matMenuTriggerFor]="afterMenu">
-          {{ firstname }} {{ lastname }}
+          {{ user.getPartialName() }}
         </div>
         <mat-menu #afterMenu="matMenu" xPosition="after">
           <button mat-menu-item>Item 1</button>
@@ -61,7 +64,13 @@
     <mat-sidenav-content>
       <div class="page-container">
         <!-- header de titulo, descripcion y botones -->
-        <tecno-info-page class="info-page"></tecno-info-page>
+        <tecno-info-page class="info-page" [fShowLoading]="fShowLoading"></tecno-info-page>
+        <mat-progress-bar
+          mode="indeterminate"
+          color="accent"
+          class="loading"
+          *ngIf="fShowLoading">
+        </mat-progress-bar>
 
         <router-outlet>
           <!-- <mat-progress-bar mode="query" class="loading" *ngIf="loading" ></mat-progress-bar> -->
@@ -73,7 +82,12 @@
 
 <ng-template #elseBlock>
   <router-outlet>
-    <!-- <mat-progress-bar mode="query" class="loading" *ngIf="loading" ></mat-progress-bar> -->
+    <mat-progress-bar
+      mode="indeterminate"
+      color="accent"
+      class="loading"
+      *ngIf="fShowLoading">
+    </mat-progress-bar>
   </router-outlet>
 </ng-template>
 

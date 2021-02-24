@@ -1,6 +1,9 @@
+import { MainService } from './services/main.service';
+import { environment } from './../environments/environment';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Menu } from './models/menu';
+import { User } from './models/user';
 import { AuthService } from './services/auth/auth.service';
 import { MenuService } from './services/menu.service';
 
@@ -25,16 +28,12 @@ export class AppComponent implements OnInit {
   showFiller: boolean = true;
   title: string = 'tecno-project-front';
   authorized: boolean = false;
-  // loading: boolean = true;
+  fShowLoading: boolean = true;
 
   lastname = 'Usuario';
   firstname = 'Tecno';
   menu: Menu [] = [];
-  user: any = {
-    id: 1,
-    firstname: 'Ferley',
-    lastname: 'León'
-  };
+  user!: User;
 
   showToolbarSidenav: boolean = false;
   entrySub: any;
@@ -47,6 +46,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private menuService: MenuService,
+    private mainService: MainService
     // private _usersService: UserService
   ) { }
 
@@ -79,25 +79,35 @@ export class AppComponent implements OnInit {
     });
 
     // this.loading = false;
+
+    if (localStorage.user) {
+      this.user = new User(JSON.parse(localStorage.user));
+    }
+
+    // SE REVISA EL USUARIO DESDE EL AUTH A TRAVES DE UN EMIT
+    this.authService.emitUser.subscribe(user => this.user = new User(user));
+
+    // SUBSCRIPCION A EMISOR DEL LOADING
+    this.mainService.emitShowLoading.subscribe(fLoading => this.fShowLoading = fLoading);
   }
 
   getRoute() {
     if (sessionStorage != null) {
       this.firstname = `${sessionStorage.firstname}`.split(" ")[0] || 'Usuario';
       this.lastname = `${sessionStorage.lastname}`.split(" ")[0] || 'Tecno';
-      this.user = {
-        id: sessionStorage.id,
-        firstname: this.firstname,
-        lastname:this.lastname
-      }
+      // this.user = {
+      //   id: sessionStorage.id,
+      //   firstname: this.firstname,
+      //   lastname:this.lastname
+      // }
     } else {
       this.firstname = 'Usuario';
       this.lastname = 'Tecno';
-      this.user = {
-        id: 1,
-        firstname: 'Ferley',
-        lastname: 'León'
-      }
+      // this.user = {
+      //   id: 1,
+      //   firstname: 'Ferley',
+      //   lastname: 'León'
+      // }
     }
     return this.router.url;
   }
@@ -114,5 +124,9 @@ export class AppComponent implements OnInit {
     console.log({route});
 
     this.menuService.getOptionByRoute(route);
+  }
+
+  onLoading(value: boolean) {
+    environment.consoleMessage(value, ">>>>>>>>>>>>>");
   }
 }
