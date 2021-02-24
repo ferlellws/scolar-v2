@@ -12,12 +12,11 @@ export class VicePresidenciesService {
 
   private readonly API = `${environment.API}/vice_presidencies`;
 
-  emitModify = new EventEmitter<any>();
-  emitDelete = new EventEmitter<any>();
-  emitAdd = new EventEmitter<any>();
+  emitDataTable = new EventEmitter<any>();
 
   inputParams: any = {
-    user_id: localStorage.id
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
   };
 
   httpOptions!: any;
@@ -47,32 +46,62 @@ export class VicePresidenciesService {
     return this.http.get<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
-      tap(console.log)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
     );
   }
 
-  // addVicePresidencies(vicePresidency: VicePresidency) {
+  addVicePresidency(vicePresidency: VicePresidency) {
 
-  //   return this.http.post<VicePresidency>(this.API, vicePresidency, this.httpOptions)
-  //   .subscribe((data: VicePresidency) => {
-  //     this.emitAdd.emit(data);
-  //   });
-  // }
+    return this.http.post<VicePresidency>(this.API, { vice_presidency: vicePresidency }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-  // deleteVicePresidenciesId(id: number) {
+  updateVicePresidencyId(vicePresidency: VicePresidency, id: number) {
 
-  //   return this.http.delete<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
-  //   .subscribe((data: VicePresidency) => {
-  //     this.emitDelete.emit(data);
-  //   });
-  // }
+    return this.http.put<VicePresidency>(`${this.API}/${id}`, vicePresidency, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-  // updateVicePresidenciesId(vicePresidency: VicePresidency, id: number) {
+  updateStatusVicePresidency(is_active: number, id: number) {
 
-  //   return this.http.put<VicePresidency>(`${this.API}/${id}`, vicePresidency, this.httpOptions)
-  //     .subscribe((data: VicePresidency) => {
-  //       this.emitModify.emit(data);
-  //     });
-  // }
+    return this.http.put<VicePresidency>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  logicalDeleteVicePresidency(id: number) {
+
+    return this.http.put<VicePresidency>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteVicePresidency(id: number) {
+
+    return this.http.delete<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
 }

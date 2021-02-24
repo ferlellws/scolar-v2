@@ -7,6 +7,21 @@
 @import './assets/scss/buttons';
 @import './assets/scss/cards';
 @import '~animate.css/animate.min.css';
+
+// BOOTSTRAP
+// Required
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+// GRID BOOTSTRAP
+// @import "../node_modules/bootstrap/scss/grid";
+// @import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/reboot";
+// @import "../node_modules/bootstrap/scss/type";
+// @import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/bootstrap-grid.scss";
+
+
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -250,4 +265,8 @@ $direction_text: '';
   position: absolute !important;
   top: 0;
   left: 0;
+}
+
+.full-width {
+  width: 100%;
 }

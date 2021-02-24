@@ -1,5 +1,4 @@
 import { User } from "./user";
-
 export class VicePresidency {
     id?: number;
     manager_id!: User;

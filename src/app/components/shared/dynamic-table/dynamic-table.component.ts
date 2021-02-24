@@ -48,7 +48,7 @@ export class DynamicTableComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     this.objectsData = changes.objectsData.currentValue;
     this.updateTable();
-    environment.consoleMessage("on change", "");
+    environment.consoleMessage(this.objectsData, "On change");
   }
 
   updateTable() {
@@ -84,6 +84,14 @@ export class DynamicTableComponent implements OnInit {
     let value: boolean = $event.checked;
     this.fCheckOption = value;
     this.changeCheckInDataTable(value, id);
+
+    // this.objectsData.dataTable.find((row, index) => {
+    //             if (row.idForOptions === id) {
+    //               this.objectsData.dataTable[index].checkOption = value;
+    //             }
+    //           });
+    // environment.consoleMessage(this.objectsData, "onClickStatus: ");
+
   }
 
   changeCheckInDataTable(value: boolean, id: number) {

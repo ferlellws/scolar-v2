@@ -24,13 +24,16 @@ import { InfoPageComponent } from './info-page/info-page.component';
 import { MenuComponent } from './menu/menu.component';
 import { MessageComponent } from './message/message.component';
 import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
+import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const COMPONENTS = [
   MenuComponent,
   ProfileCircleComponent,
   FormDebugComponent,
   InfoPageComponent,
-  DynamicTableComponent
+  DynamicTableComponent,
+  AlertDialogComponent
 ];
 
 const materialModules = [
@@ -47,7 +50,8 @@ const materialModules = [
   MatFormFieldModule,
   MatCardModule,
   MatSlideToggleModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatDialogModule
 ];
 
 @NgModule({

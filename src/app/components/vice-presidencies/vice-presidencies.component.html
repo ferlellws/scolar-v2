@@ -1,7 +1,11 @@
+<!-- <tecno-vice-presidencies-form></tecno-vice-presidencies-form>
+
+<br><br> -->
+
 <tecno-dynamic-table
   style="width: 100%;"
   [objectsData]="dataTable"
-  (emitEdit)="openDialog($event)"
+  (emitEdit)="onEdit($event)"
   (emitStatusChange)="onStatusChange($event)"
   (emitDelete)="onDelete($event)"
   (emitDeleteLogic)="onDeleteLogic($event)"
@@ -10,6 +14,6 @@
 </tecno-dynamic-table>
 
 
-<button mat-fab color="accent" aria-label="Nuevo registro" (click)="openDialog(0)" class="btn-new mat-elevation-z2">
+<button mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
   <mat-icon>add</mat-icon>
 </button>

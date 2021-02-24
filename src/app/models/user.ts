@@ -11,6 +11,7 @@ export class User {
   user_creates: string;
   user_updates: string;
   authentication_token: string;
+  full_name!: string;
 
   constructor(user: User) {
     this.id = 0 || user.id;

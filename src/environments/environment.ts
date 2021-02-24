@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  widthFormsModal: '80%',
   API: 'http://localhost:5000',
   // API: 'http://localhost:3000',
   consoleMessage(dataShow: any, strLabel: string = "") {
