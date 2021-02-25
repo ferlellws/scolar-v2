@@ -41,7 +41,7 @@ export class ProjectsComponent implements OnInit {
       })
   }
 
-  openCreate() {
+  onCreate() {
     environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(ProjectsFormComponent, {
       width: environment.widthFormsModal,

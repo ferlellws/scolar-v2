@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
+import { CompaniesResolver } from './components/companies/guards-companies/companies.resolver';
 
 const routes: Routes = [
   {
@@ -29,7 +30,14 @@ const routes: Routes = [
   { path: 'applications', loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule) },
   { path: 'company-types', loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule) },
   { path: 'states-by-phases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
-  { path: 'companies', loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule) },
+  { path: 'companies',
+    loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      companies: CompaniesResolver
+    }
+  },
   { path: 'strategic-acpproachs', loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule) },
   { path: 'programs', loadChildren: () => import('./components/programs/programs.module').then(m => m.ProgramsModule) },
   { path: 'priorities', loadChildren: () => import('./components/priorities/priorities.module').then(m => m.PrioritiesModule) },

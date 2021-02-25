@@ -1,9 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Company } from 'src/app/models/company';
 import { CompanyType } from 'src/app/models/company-type';
+import { CompaniesService } from 'src/app/services/companies.service';
 import { CompanyTypesService } from 'src/app/services/company-types.service';
 import { environment } from 'src/environments/environment';
+
+export interface DialogData {
+  id: number;
+  mode: string;
+  labelAction: string;
+}
 
 @Component({
   selector: 'tecno-companies-form',
@@ -13,54 +22,146 @@ import { environment } from 'src/environments/environment';
 export class CompaniesFormComponent implements OnInit {
   showBtnClose: boolean = true;
   
-  companyFormGroup: FormGroup;
-  hideRequiredControl = new FormControl(false);
-  floatLabelControl = new FormControl('auto');
+  companiesGroup!: FormGroup;
+  pluralOption: string = "comañias";
+  singularOption: string = "compania";
+  isButtonReset: boolean = false;
 
-  companyTypes: CompanyType[] = [];
-  company: Company = new Company;
+  selectCompanyType!: CompanyType [];
+  fButtonDisabled: boolean = false;
+
+  company!: Company;
 
   constructor(
-  private _companyType: CompanyTypesService,
-  private fcB: FormBuilder
-  ) { 
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private comapniesService: CompaniesService,
+    private companyTypesService: CompanyTypesService,
+    private snackBar: MatSnackBar,
+  ) { }
 
-  this.companyFormGroup = this.fcB.group({
-    hideRequired: this.hideRequiredControl,
-    floatLabel: this.floatLabelControl,
-    'companyTypesControl': [this.company.company_type_id, [Validators.required]],
-    'titleCompanyControl': [this.company.title, [Validators.required]],
-    'companyDescriptionControl': [this.company.description, [Validators.required]],
-  });
+  async ngOnInit(): Promise<void> {
+    environment.consoleMessage(this.data, "++++++++++");
+    this.companiesGroup = this.fb.group({
+      title: [null, Validators.required],
+      description: null,
+      company_type_id: [null, Validators.required],
+      is_active: true
+    });
 
-  this.company.company_type_id = 0;
+    await this.getSelectCompanyTypes();
+    if (this.data.mode == 'edit') {
 
+      this.comapniesService.getCompaniesId(this.data.id)
+        .subscribe((res: Company) => {
+          this.company = res;
+          this.companiesGroup.patchValue({
+            title: this.company.title,
+            description: this.company.description,
+            company_type_id: this.company.company_type_id,
+            is_active: this.company.is_active
+          });
+        });
+    }
   }
-
-  ngOnInit(): void {
-  }
-
-  _openCompanyType(ev: boolean) {
-    if (ev) {
-      this._companyType.getCompanyTypesAll()
-        .subscribe(_companyType => this.companyTypes = _companyType);
+  
+  onSubmit() {
+    environment.consoleMessage(this.companiesGroup, "OnSubmit compañias: ");
+    if (!this.isButtonReset) {
+      this.fButtonDisabled = true;
+      if (this.data.mode == 'create') {
+        this.createRegister();
+      } else {
+        this.updateRegister();
+      }
     }
   }
 
-  guardar() {
-    
-    if (
-      (this.companyFormGroup.get('companyTypesControl')!.value) == 0 ||
-      (this.companyFormGroup.get('titleCompanyControl')!.value) == "" ||
-      (this.companyFormGroup.get('companyDescriptionControl')!.value) == ""
-    ){
-
-    } else {
-      this.company.company_type_id = this.companyFormGroup.get('companyTypesControl')!.value;
-      this.company.title = this.companyFormGroup.get('titleCompanyControl')!.value;
-      this.company.description = this.companyFormGroup.get('companyDescriptionControl')!.value;
-    }
-    
-    environment.consoleMessage(this.company);
+  onReset() {
+    this.isButtonReset = true;
+    this.companiesGroup.patchValue({
+      title: null,
+      description: null,
+      company_type_id: null,
+      is_active: true
+    });
   }
+
+  createRegister() {
+    environment.consoleMessage(this.companiesGroup.value, "createRegister: ");
+    this.comapniesService.addCompanies(this.companiesGroup.value)
+      .subscribe((res) => {
+        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        this.fButtonDisabled = false;
+        if (res.status == 'created') {
+          this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+        }
+      }, (err) => {
+        this.fButtonDisabled = false;
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+          environment.consoleMessage(err, "Error: ");
+        })
+
+        this.openSnackBar(false, sErrors, "");
+      });
+  }
+
+  updateRegister() {
+    environment.consoleMessage(this.companiesGroup, `updateRegister para registro con id ${this.data.id}: `);
+
+    this.comapniesService.updateCompaniesId(
+      this.companiesGroup.value,
+      this.data.id
+    )
+      .subscribe((res) => {
+        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        this.fButtonDisabled = false;
+        if (res.status == 'updated') {
+          this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        }
+      }, (err) => {
+        this.fButtonDisabled = false;
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+          environment.consoleMessage(err, "Error: ");
+        })
+
+        this.openSnackBar(false, sErrors, "");
+      });
+  }
+
+  onClickSelectCompanyType() {
+    environment.consoleMessage("", "Cargar info de managers");
+    this.getSelectCompanyTypes();
+  }
+
+  getSelectCompanyTypes() {
+    this.companyTypesService.getCompanyTypesAll()
+      .subscribe((res: CompanyType []) => this.selectCompanyType = res);
+  }
+
+  openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
+    var panelClass = "succes-snack-bar";
+    if(!succes){
+      panelClass  = "error-snack-bar";
+    }
+    this.snackBar.open(message, action, {
+      duration: duration,
+      panelClass: panelClass
+    });
+  }
+
 }
