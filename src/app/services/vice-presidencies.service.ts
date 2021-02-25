@@ -41,7 +41,7 @@ export class VicePresidenciesService {
     );
   }
 
-  getVicePresidenciesId(id: number) {
+  getVicePresidency(id: number) {
 
     return this.http.get<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
@@ -62,7 +62,7 @@ export class VicePresidenciesService {
       );
   }
 
-  updateVicePresidencyId(vicePresidency: VicePresidency, id: number) {
+  updateVicePresidency(vicePresidency: VicePresidency, id: number) {
 
     return this.http.put<VicePresidency>(`${this.API}/${id}`, vicePresidency, this.httpOptions)
       .pipe(

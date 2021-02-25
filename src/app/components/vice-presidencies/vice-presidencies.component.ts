@@ -81,7 +81,7 @@ export class VicePresidenciesComponent implements OnInit {
 
   onDelete(data: number) {
     environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
-    this.vicePresidenciesService.getVicePresidenciesId(data)
+    this.vicePresidenciesService.getVicePresidency(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
           width: '250px',
@@ -117,7 +117,7 @@ export class VicePresidenciesComponent implements OnInit {
     environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
-    this.vicePresidenciesService.getVicePresidenciesId(data)
+    this.vicePresidenciesService.getVicePresidency(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
           width: '250px',
@@ -153,7 +153,7 @@ export class VicePresidenciesComponent implements OnInit {
     environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
-    this.vicePresidenciesService.getVicePresidenciesId(data.id)
+    this.vicePresidenciesService.getVicePresidency(data.id)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
           width: '250px',
