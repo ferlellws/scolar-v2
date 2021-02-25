@@ -2,20 +2,22 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { Project } from "src/app/models/project";
+import { TableData } from "src/app/models/table-data";
 import { ProjectsService } from "src/app/services/projects.service";
 
-@Injectable()
-export class ProjectsResolver implements Resolve<Project> {
+@Injectable({
+  providedIn: 'root'
+})
+export class ProjectsResolver implements Resolve<TableData> {
 
   constructor(
-    private _projectService: ProjectsService
+    private projectService: ProjectsService
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-    ): Observable<any>|Promise<any>|any {
-      return this._projectService.getProjectsAll();
-      // return this.backend.fetchTeam(route.params.id);
+    ): Observable<TableData> |Promise<any>|any{
+      return this.projectService.getProjectsAll();
   }
 }

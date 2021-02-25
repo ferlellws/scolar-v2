@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
 
 const routes: Routes = [
   {
@@ -36,7 +37,14 @@ const routes: Routes = [
   { path: 'managements', loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule) },
   { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
   { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
-  { path: 'projects', loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule) },
+  { path: 'projects', 
+  loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule),
+  canActivate: [AuthGuard],
+  canLoad: [AuthGuard],
+  resolve: {
+    projects: ProjectsResolver
+  }
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

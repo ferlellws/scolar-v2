@@ -6,7 +6,7 @@ import {VicePresidenciesService} from '../../../services/vice-presidencies.servi
 import { AreasService } from '../../../services/areas.service'
 import { Area } from 'src/app/models/area';
 import { Program } from 'src/app/models/program';
-import { ProgramsService } from 'src/app/services/progrmas.service';
+import { ProgramsService } from 'src/app/services/programs.service';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import { Priority } from 'src/app/models/priority';
@@ -245,7 +245,8 @@ export class ProjectsFormComponent implements OnInit {
 
   _openLeads(ev: boolean) {
     if (ev) {
-      this.leads = this._usersService.getUsers()
+      this._usersService.getUsers()
+        .subscribe((leads: User[]) => this.leads = leads);
     }
   }
 
@@ -272,13 +273,15 @@ export class ProjectsFormComponent implements OnInit {
 
   _openPMOS(ev: boolean) {
     if (ev) {
-      this.pmos = this._usersService.getUsers()
+      this._usersService.getUsers()
+        .subscribe((pmos: User[]) => this.pmos = pmos);
     }
   }
 
   _openPMOAssists(ev: boolean) {
     if (ev) {
-      this.pmoAssists = this._usersService.getUsers()
+      this._usersService.getUsers()
+        .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
     }else{
       this.validateAssist();
     }
