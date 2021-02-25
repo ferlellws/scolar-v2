@@ -16,6 +16,7 @@
 
 .example-container {
   padding: 24px;
+  max-height: calc(100vh - 96px);
 }
 
 .error-message{

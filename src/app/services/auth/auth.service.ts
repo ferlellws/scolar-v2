@@ -14,6 +14,7 @@ export class AuthService {
   private authenticatedUser: boolean = false;
   private readonly urlApi = environment.API;
   showToolbarSidenav = new EventEmitter<boolean>();
+  emitUser = new EventEmitter<User>();
 
   userToken: string = "";
 
@@ -29,6 +30,10 @@ export class AuthService {
   ) {
     console.log("OnInit AuthService");
     this.getToken();
+
+    if (localStorage.user) {
+      this.emitUser.emit(JSON.parse(localStorage.user));
+    }
   }
 
   onLogin(user: User) {
@@ -38,7 +43,9 @@ export class AuthService {
         tap((res: any) => {
           console.log(">>", res);
           this.userAuthenticated(res.is_success);
+          this.emitUser.emit(res.data.user);
           this.router.navigate(['/home']);
+          localStorage.user = JSON.stringify(res.data.user);
           this.saveToken(res.data.user.authentication_token);
         })
       );

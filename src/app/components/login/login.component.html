@@ -15,17 +15,23 @@
           <mat-form-field class="form-item">
             <mat-label >Correo</mat-label>
             <input matInput formControlName="email" type="email" email="true">
-            <mat-hint >Direccion de Correo</mat-hint>
+            <mat-error *ngIf="this.logInGroup.get('email')?.invalid">
+              {{ getMessageError('email', "correo") }}
+            </mat-error>
           </mat-form-field>
 
           <!-- PASSWORD -->
           <mat-form-field class="form-item" >
             <mat-label >Contraseña</mat-label>
             <input matInput  formControlName="password" [type]="flagShowPass ? 'text' : 'password'">
-            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="flagShowPass = !flagShowPass">
+            <mat-error *ngIf="this.logInGroup.get('password')?.invalid">
+              {{ getMessageError('password', "contraseña") }}
+            </mat-error>
+            <button mat-button matSuffix mat-icon-button
+              aria-label="Clear"
+              (click)="flagShowPass = !flagShowPass">
               <mat-icon class="icon-input">{{ flagShowPass ? "visibility_off" : "visibility"}}</mat-icon>
             </button>
-            <mat-hint>Contraseña</mat-hint>
           </mat-form-field>
 
           <!-- REMEMBER CHECK -->
@@ -34,9 +40,9 @@
           <!-- BUTTON SUBMIT -->
           <div class="footer-right-card-container">
               <button mat-flat-button
-              class="button mt-20 mb-20"
-              color="accent"
-              [disabled]="disabledButton">
+                class="button mt-20 mb-20"
+                color="accent"
+                [disabled]="disabledButton || this.logInGroup.invalid">
                   Entrar
               </button>
 

@@ -14,24 +14,42 @@ import { Menu } from '../models/menu';
 export class UserService {
 
   httpOptions = {};
+  inputParams: any = {};
 
-  private readonly API = `${environment.API}/sysusers`;
+  private readonly API = `${environment.API}/users`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
 
-  getUsers() {
-
-    var httpOptions = {
+    this.httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${sessionStorage.token}`
-      })
+      }),
+      params: this.inputParams
+    };
+  }
+
+  getUsers() {
+    return this.http.get<User[]>(this.API, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getManagers() {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
     };
 
-    return this.http.get<User[]>(this.API, httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap(console.log)
-    );
+    this.httpOptions = {
+      params: this.inputParams
+    }
+    return this.http.get<User[]>(`${this.API}/managers`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
   }
 
   getUser(id: number){

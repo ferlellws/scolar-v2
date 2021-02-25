@@ -1,0 +1,8 @@
+.cont-table {
+    position: relative;
+    overflow: auto;
+}
+
+::ng-deep .mat-header-cell {
+    min-width: 230px;
+}

@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  //API: 'http://localhost:5000',
+  // API: 'http://localhost:5000',
   API: 'http://localhost:3000',
+  widthFormsModal: '80%',
+  // API: 'http://localhost:3000',
   consoleMessage(dataShow: any, strLabel: string = "") {
     if (strLabel != "") {
       console.log(strLabel, dataShow);
@@ -13,7 +15,7 @@ export const environment = {
       console.log({dataShow});
     }
   }
-  
+
 };
 
 // export function consoleMessage(dataShow: string, strLabel: string = "") {
