@@ -76,6 +76,18 @@ export class MenuService {
         },
         {
           id: 4,
+          title: "Fases",
+          description: "Tipo de compañias",
+          sysmodule_id: 1,
+          route: "/phases",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 5,
           title: "Proyectos",
           description: "Pagina en la que se pueden visualizar, crear y administrar proyectos",
           sysmodule_id: 1,

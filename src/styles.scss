@@ -263,25 +263,7 @@ $width-field-1: 220px;
   text-align: center;
 }
 
-.example-container .mat-form-field {
-  width: $width-field-1;
-  &.field-1 {
-    width: $width-field-1;
-  }
 
-  &.field-2 {
-    width: $width-field-1 * 2;
-  }
-
-  &.field-3 {
-    width: $width-field-1 * 3 + 40px !important;
-  }
-
-  &.field-full {
-    width: 100%;
-    box-sizing: border-box;
-  }
-}
 
 .loading {
   position: absolute !important;
