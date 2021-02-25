@@ -7,6 +7,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { AuthGuard } from './guards/auth.guard';
 import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
 import { CompaniesResolver } from './components/companies/guards-companies/companies.resolver';
+import { CompanyType } from './models/company-type';
+import { CompanyTypesResolver } from './components/company-types/guards-company-types/company-types.resolver';
 
 const routes: Routes = [
   {
@@ -28,7 +30,14 @@ const routes: Routes = [
   { path: 'states', loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule) },
   { path: 'phases', loadChildren: () => import('./components/phases/phases.module').then(m => m.PhasesModule) },
   { path: 'applications', loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule) },
-  { path: 'company-types', loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule) },
+  { path: 'company-types',
+    loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      companyTypes: CompanyTypesResolver
+    }
+  },
   { path: 'states-by-phases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
   { path: 'companies',
     loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule),

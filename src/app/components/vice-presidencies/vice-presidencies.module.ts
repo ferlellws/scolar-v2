@@ -10,11 +10,11 @@ import { MatSelectModule } from '@angular/material/select';
 
 // COMPONENTS
 import { VicePresidenciesComponent } from './vice-presidencies.component';
+import { VicePresidenciesFormComponent } from './vice-presidencies-form/vice-presidencies-form.component';
 
 // MODULES
 import { SharedModule } from '../shared/shared.module';
 import { VicePresidenciesRoutingModule } from './vice-presidencies-routing.module';
-import { VicePresidenciesFormComponent } from './vice-presidencies-form/vice-presidencies-form.component';
 import { VicePresidenciesResolver } from './guards/vice-presidencies.resolver';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 

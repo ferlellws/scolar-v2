@@ -23,8 +23,8 @@ export class CompaniesFormComponent implements OnInit {
   showBtnClose: boolean = true;
   
   companiesGroup!: FormGroup;
-  pluralOption: string = "comañias";
-  singularOption: string = "compania";
+  pluralOption: string = "Compañías";
+  singularOption: string = "Compañía";
   isButtonReset: boolean = false;
 
   selectCompanyType!: CompanyType [];
@@ -35,7 +35,7 @@ export class CompaniesFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private comapniesService: CompaniesService,
+    private companiesService: CompaniesService,
     private companyTypesService: CompanyTypesService,
     private snackBar: MatSnackBar,
   ) { }
@@ -52,7 +52,7 @@ export class CompaniesFormComponent implements OnInit {
     await this.getSelectCompanyTypes();
     if (this.data.mode == 'edit') {
 
-      this.comapniesService.getCompaniesId(this.data.id)
+      this.companiesService.getCompaniesId(this.data.id)
         .subscribe((res: Company) => {
           this.company = res;
           this.companiesGroup.patchValue({
@@ -89,7 +89,7 @@ export class CompaniesFormComponent implements OnInit {
 
   createRegister() {
     environment.consoleMessage(this.companiesGroup.value, "createRegister: ");
-    this.comapniesService.addCompanies(this.companiesGroup.value)
+    this.companiesService.addCompanies(this.companiesGroup.value)
       .subscribe((res) => {
         environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
@@ -116,7 +116,7 @@ export class CompaniesFormComponent implements OnInit {
   updateRegister() {
     environment.consoleMessage(this.companiesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
-    this.comapniesService.updateCompaniesId(
+    this.companiesService.updateCompaniesId(
       this.companiesGroup.value,
       this.data.id
     )
@@ -149,7 +149,7 @@ export class CompaniesFormComponent implements OnInit {
   }
 
   getSelectCompanyTypes() {
-    this.companyTypesService.getCompanyTypesAll()
+    this.companyTypesService.getCompaniesSelect()
       .subscribe((res: CompanyType []) => this.selectCompanyType = res);
   }
 
@@ -162,6 +162,16 @@ export class CompaniesFormComponent implements OnInit {
       duration: duration,
       panelClass: panelClass
     });
+  }
+
+  getMessageError(field: string, labelField: string): string {
+    let message!: string;
+
+    if (this.companiesGroup.get(field)?.errors?.required) {
+      message = `Campo ${labelField} es requerido`
+    }
+
+    return message;
   }
 
 }

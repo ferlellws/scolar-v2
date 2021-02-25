@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CompaniesResolver } from './companies.resolver';
+import { CompanyTypesResolver } from './company-types.resolver';
 
-describe('CompaniesResolver', () => {
-  let resolver: CompaniesResolver;
+describe('CompanyTypesResolver', () => {
+  let resolver: CompanyTypesResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    resolver = TestBed.inject(CompaniesResolver);
+    resolver = TestBed.inject(CompanyTypesResolver);
   });
 
   it('should be created', () => {

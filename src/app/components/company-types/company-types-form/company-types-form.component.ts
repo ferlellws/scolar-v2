@@ -1,12 +1,10 @@
-import { VicePresidency } from './../../../models/vice-presidency';
-import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CompanyType } from 'src/app/models/company-type';
+import { CompanyTypesService } from 'src/app/services/company-types.service';
+import { environment } from 'src/environments/environment';
 
 export interface DialogData {
   id: number;
@@ -15,57 +13,51 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'tecno-vice-presidencies-form',
-  templateUrl: './vice-presidencies-form.component.html',
-  styleUrls: ['./vice-presidencies-form.component.scss']
+  selector: 'tecno-company-types-form',
+  templateUrl: './company-types-form.component.html',
+  styleUrls: ['./company-types-form.component.scss']
 })
-export class VicePresidenciesFormComponent implements OnInit {
+export class CompanyTypesFormComponent implements OnInit {
   showBtnClose: boolean = true;
-  vicePresidenciesGroup!: FormGroup;
-  pluralOption: string = "vicepresidencias";
-  singularOption: string = "vicepresidencia";
+  companyTypesGroup!: FormGroup;
+  pluralOption: string = "Tipos de Compañía";
+  singularOption: string = "Tipo de Compañía";
   isButtonReset: boolean = false;
 
-  selectManagers!: User [];
   fButtonDisabled: boolean = false;
 
-  vicePresidency!: VicePresidency;
+  companyType!: CompanyType;
 
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private vicePresidenciesService: VicePresidenciesService,
-    private usersService: UserService,
+    private companyTypesService: CompanyTypesService,
     private snackBar: MatSnackBar,
   ) { }
 
   async ngOnInit(): Promise<void> {
     environment.consoleMessage(this.data, "++++++++++");
-    this.vicePresidenciesGroup = this.fb.group({
+    this.companyTypesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
-      manager_id: [null, Validators.required],
       is_active: true
     });
-
-    await this.getSelectManagers();
     if (this.data.mode == 'edit') {
 
-      this.vicePresidenciesService.getVicePresidenciesId(this.data.id)
-        .subscribe((res: VicePresidency) => {
-          this.vicePresidency = res;
-          this.vicePresidenciesGroup.patchValue({
-            title: this.vicePresidency.title,
-            description: this.vicePresidency.description,
-            manager_id: this.vicePresidency.manager_id,
-            is_active: this.vicePresidency.is_active
+      this.companyTypesService.getCompanyTypesId(this.data.id)
+        .subscribe((res: CompanyType) => {
+          this.companyType = res;
+          this.companyTypesGroup.patchValue({
+            title: this.companyType.title,
+            description: this.companyType.description,            
+            is_active: this.companyType.is_active
           });
         });
     }
   }
-
+  
   onSubmit() {
-    environment.consoleMessage(this.vicePresidenciesGroup, "OnSubmit vicepresidencias: ");
+    environment.consoleMessage(this.companyTypesGroup, "OnSubmit tipo de compañias: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -78,17 +70,17 @@ export class VicePresidenciesFormComponent implements OnInit {
 
   onReset() {
     this.isButtonReset = true;
-    this.vicePresidenciesGroup.patchValue({
+    this.companyTypesGroup.patchValue({
       title: null,
       description: null,
-      manager_id: null,
+
       is_active: true
     });
   }
 
   createRegister() {
-    environment.consoleMessage(this.vicePresidenciesGroup.value, "createRegister: ");
-    this.vicePresidenciesService.addVicePresidency(this.vicePresidenciesGroup.value)
+    environment.consoleMessage(this.companyTypesGroup.value, "createRegister: ");
+    this.companyTypesService.addCompanyTypes(this.companyTypesGroup.value)
       .subscribe((res) => {
         environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
@@ -113,10 +105,10 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.vicePresidenciesGroup, `updateRegister para registro con id ${this.data.id}: `);
-    
-    this.vicePresidenciesService.updateVicePresidencyId(
-      this.vicePresidenciesGroup.value,
+    environment.consoleMessage(this.companyTypesGroup, `updateRegister para registro con id ${this.data.id}: `);
+
+    this.companyTypesService.updateCompanyTypeId(
+      this.companyTypesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
@@ -142,16 +134,6 @@ export class VicePresidenciesFormComponent implements OnInit {
       });
   }
 
-  onClickSelectManager() {
-    environment.consoleMessage("", "Cargar info de managers");
-    this.getSelectManagers();
-  }
-
-  getSelectManagers() {
-    this.usersService.getManagers()
-      .subscribe((res: User []) => this.selectManagers = res);
-  }
-
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
     var panelClass = "succes-snack-bar";
     if(!succes){
@@ -161,6 +143,16 @@ export class VicePresidenciesFormComponent implements OnInit {
       duration: duration,
       panelClass: panelClass
     });
+  }
+
+  getMessageError(field: string, labelField: string): string {
+    let message!: string;
+
+    if (this.companyTypesGroup.get(field)?.errors?.required) {
+      message = `Campo ${labelField} es requerido`
+    }
+
+    return message;
   }
 
 }
