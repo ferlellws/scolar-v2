@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ProjectsRoutingModule } from './projects-routing.module';
 import { ProjectsComponent } from './projects.component';
@@ -76,9 +76,10 @@ const materialModels = [
   ],
   exports: [
     materialModels
-  ],
+  ], 
   providers: [
     ProjectsResolver,
+    DatePipe,
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }
   ]

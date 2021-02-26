@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import {VicePresidenciesService} from '../../../services/vice-presidencies.service'
@@ -28,6 +28,10 @@ import { StateByPhase } from 'src/app/models/state-by-phase';
 import { MatStepper } from '@angular/material/stepper';
 import { StrategicApproachesService } from 'src/app/services/strategic-approaches.service';
 import { StrategicApproach } from 'src/app/models/strategic-approach';
+import { DatePipe } from '@angular/common';
+import { Project } from 'src/app/models/project';
+import { ProjectsService } from 'src/app/services/projects.service'
+
 @Component({
   selector: 'tecno-projects-form',
   templateUrl: './projects-form.component.html',
@@ -36,6 +40,9 @@ import { StrategicApproach } from 'src/app/models/strategic-approach';
 export class ProjectsFormComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
+  @Output() emitClose: EventEmitter<string> = new EventEmitter();
+
+  message: string = "";
 
   title!:string;
   vicePresidency!: number;
@@ -104,6 +111,8 @@ export class ProjectsFormComponent implements OnInit {
     private _statesService: StatesService,
     private _phasesService: PhasesService,
     private _statesByPhasesService: StateByPhasesService,
+    private _projectsService: ProjectsService,
+    public datepipe: DatePipe,
 
     ) { 
       this.general = this._fbG.group({
@@ -136,7 +145,7 @@ export class ProjectsFormComponent implements OnInit {
       this.seguimiento = this._fbG.group({
         'startDateControl': [],
         'dueDateControl': [],
-        'realDueDateControl': [],
+        'controlDateControl': [],
         'statesControl': [this.state, [Validators.required]],
         'phasesControl': [this.phase, [Validators.required]],
         'sprintControl': [this.phase, [Validators.required]],
@@ -171,7 +180,7 @@ export class ProjectsFormComponent implements OnInit {
   
         startDateControl: `Fecha de Inicio`,
         dueDateControl: `Fecha Final Estimada`,
-        realDueDateControl: `Fecha control de cambios`,
+        controlDateControl: `Fecha control de cambios`,
         statesControl: `Estado`,
         phasesControl: `Fase`,
         sprintControl: `Sprint`,
@@ -198,6 +207,7 @@ export class ProjectsFormComponent implements OnInit {
     } else {
       this.deshabilitarAssist = true;
       this.descripcion.get('stagesControl')!.disable();
+      this.descripcion.get('stagesControl')!.setValue(null);
       this.descripcion.get('pmoAssistHoursControl')!.disable();
       this.descripcion.get('pmoAssistMinutesControl')!.disable();
     }
@@ -216,7 +226,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openVicePresidencies(ev: boolean) {
     if (ev) {
-      this._vicePresidenciesService.getVicePresidenciesAll()
+      this._vicePresidenciesService.getVicePresidenciesSelect()
         .subscribe(data => this.vicePresidencies = data);
     }
   }
@@ -224,63 +234,63 @@ export class ProjectsFormComponent implements OnInit {
   _openAreas(ev: boolean) {
     if (ev) {
       var vice: number = this.general.get('vicePresidenciesControl')!.value;
-      this._areasService.getAreasAll()
+      this._areasService.getAreasSelect()
         .subscribe((areas: Area[]) => this.areas = areas.filter(area => area.vice_presidency_id == vice));
     }
   }
 
   _openStrategicApproaches(ev: boolean) {
     if (ev) {
-      this._strategicApproachesService.getStrategicApproachesAll()
+      this._strategicApproachesService.getStrategicApproachesSelect()
         .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
     }
   }
 
   _openPrograms(ev: boolean) {
     if (ev) {
-      this._programsService.getProgramsAll()
+      this._programsService.getProgramsSelect()
         .subscribe((programs: Program[]) => this.programs = programs);
     }
   }
 
   _openLeads(ev: boolean) {
     if (ev) {
-      this._usersService.getUsers()
+      this._usersService.getManagers()
         .subscribe((leads: User[]) => this.leads = leads);
     }
   }
 
   _openPriorities(ev: boolean) {
     if (ev) {
-      this._prioritiesService.getPrioritiesAll()
+      this._prioritiesService.getPrioritiesSelect()
         .subscribe((priorities: Priority[]) => this.priorities = priorities);
     }
   }
 
   _openTypifications(ev: boolean) {
     if (ev) {
-      this._typificationsService.getTypificationsAll()
+      this._typificationsService.getTypificationsSelect()
         .subscribe((typifications: Typification[]) => this.typifications = typifications);
     }
   }
 
   _openManagements(ev: boolean) {
     if (ev) {
-      this._managementsService.getManagementsAll()
+      this._managementsService.getManagementsSelect()
         .subscribe((managements: Management[]) => this.managements = managements);
     }
   }
 
   _openPMOS(ev: boolean) {
     if (ev) {
-      this._usersService.getUsers()
+      this._usersService.getManagers()
         .subscribe((pmos: User[]) => this.pmos = pmos);
     }
   }
 
   _openPMOAssists(ev: boolean) {
     if (ev) {
-      this._usersService.getUsers()
+      this._usersService.getManagers()
         .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
     }else{
       this.validateAssist();
@@ -289,20 +299,20 @@ export class ProjectsFormComponent implements OnInit {
 
   _openStages(ev: boolean) {
     if (ev) {
-      this._stagesService.getStagesAll()
+      this._stagesService.getStagesSelect()
         .subscribe((stages: Stage[]) => this.stages = stages);
     }
   }
 
   _openStates(ev: boolean){
     if (ev) {
-      this._statesService.getStatesAll()
+      this._statesService.getStatesSelect()
         .subscribe((states: State[]) => this.states = states);
     }else{
-      this._phasesService.getPhasesAll()
+      this._phasesService.getPhasesSelect()
         .subscribe((phases: Phase[]) => 
         {
-          this._statesByPhasesService.getStateByPhasesAll()
+          this._statesByPhasesService.getStateByPhasesSelect()
           .subscribe((stateByPhases: StateByPhase[]) =>
           {
             this.stateByPhases = [];
@@ -321,10 +331,10 @@ export class ProjectsFormComponent implements OnInit {
 
   _openPhases(ev: boolean){
     if (ev) {
-      this._phasesService.getPhasesAll()
+      this._phasesService.getPhasesSelect()
         .subscribe((phases: Phase[]) => 
         {
-          this._statesByPhasesService.getStateByPhasesAll()
+          this._statesByPhasesService.getStateByPhasesSelect()
           .subscribe((stateByPhases: StateByPhase[]) =>
           {
             this.stateByPhases = [];
@@ -343,14 +353,109 @@ export class ProjectsFormComponent implements OnInit {
     var message = this.validateFormGroup(formGroup);
 
     if (message != ""){
-      console.log(message);
+      this.message = message;
     } else {
+      this.message = "";
       stepper.next();
+    }
+  }
+
+  create(){
+    var valido = true;
+    var message = this.validateFormGroup(this.general);
+    if (message != ""){
+      valido = false;
+    }
+
+    message = this.validateFormGroup(this.descripcion);
+    if (message != ""){
+      valido = false;
+    }
+
+    message = this.validateFormGroup(this.seguimiento);
+    if (message != ""){
+      valido = false;
+    }
+
+    if (message != ""){
+      this.message = message;
+    } else {
+      this.message = "";
+      if (valido){
+        
+        var stateByPhases: any[] = 
+        this.stateByPhases.
+        filter(
+          stateByPhase => (
+            stateByPhase.state_id == this.seguimiento.get('statesControl')!.value) 
+            && (stateByPhase.phase_id == this.seguimiento.get('phasesControl')!.value));
+        var stateByPhase: number = stateByPhases[0].id;  
+        var project: Project = {
+          title: this.general.get('titleControl')!.value,
+          area_id: this.general.get('areasControl')!.value,
+          strategic_approach_id: this.general.get('strategicApproachesControl')!.value,
+          reception_date: this.parseDate(this.general.get('receptionDateControl')!.value),
+          program_id: this.general.get('programsControl')!.value,
+
+          description: this.descripcion.get('projectDescriptionControl')!.value,
+          functional_lead_id: this.descripcion.get('leadsControl')!.value,
+          priority_id: this.descripcion.get('prioritiesControl')!.value,
+          typification_id: this.descripcion.get('typificationsControl')!.value,
+          management_id: this.descripcion.get('managementsControl')!.value,
+          pmo_id: this.descripcion.get('pmosControl')!.value,
+          pmo_hours: this.descripcion.get('pmoHoursControl')!.value,
+          pmo_minutes: this.descripcion.get('pmoMinutesControl')!.value,
+          pmo_assitant_id: this.descripcion.get('pmoAssistsControl')!.value,
+          pmo_assitant_stage_id: this.descripcion.get('stagesControl')!.value,
+          pmo_assistant_hours: this.descripcion.get('pmoAssistHoursControl')!.value,
+          pmo_assistant_minutes: this.descripcion.get('pmoAssistMinutesControl')!.value,
+          budget_approved: this.descripcion.get('budgetApprovedControl')!.value,
+          budget_executed: this.descripcion.get('budgetExecutedControl')!.value,
+
+          start_date: this.parseDate(this.seguimiento.get('startDateControl')!.value),
+          due_date: this.parseDate(this.seguimiento.get('dueDateControl')!.value),
+          control_date: this.parseDate(this.seguimiento.get('controlDateControl')!.value),
+          states_by_phase_id: stateByPhase,
+          sprint: this.seguimiento.get('sprintControl')!.value,
+          evaluation: this.seguimiento.get('evaluationControl')!.value,
+          test_log: this.seguimiento.get('testLogControl')!.value,
+
+          is_active: true,
+          is_delete: false
+
+        }
+        
+        
+        
+        this._projectsService.addProjects(project);
+        this.emitClose.emit('close');
+
+      }else{
+        console.log("no guardar");
+      }
     }
   }
 
   back(stepper: MatStepper){
     stepper.previous();
+  }
+
+  parseDate(date: any): string {
+    if (date == '' || date == undefined || date == null){
+      return '';
+    }
+    if (date + "" != "Invalid Date" ){
+      let d!: Date;
+      try {
+        d = new Date(date);
+      } catch {
+        d = new Date();
+      } finally {
+          return `${this.datepipe.transform( d, 'yyyy-MM-dd')}`;
+      }
+    } else {
+      return "";
+    }
   }
 
   validateFormGroup(formGroup: FormGroup){

@@ -17,17 +17,37 @@ export class TypificationsService {
   
   constructor(private http: HttpClient) { }
 
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+
   getTypificationsAll() {
-    var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${localStorage.token}`
       }),
-      params: inputParams
+      params: this.inputParams
     };
 
-    return this.http.get<Typification[]>(this.API, httpOptions)
+    return this.http.get<Typification[]>(`${this.API}/list`, httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getTypificationsSelect() {
+
+    var httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${localStorage.token}`
+      }),
+      params: this.inputParams
+    };
+
+    return this.http.get<Typification[]>(`${this.API}/select`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

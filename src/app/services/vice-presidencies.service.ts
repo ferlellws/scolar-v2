@@ -32,6 +32,15 @@ export class VicePresidenciesService {
       };
   }
 
+  getVicePresidenciesSelect() {
+
+    return this.http.get<VicePresidency[]>(`${this.API}/select`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getVicePresidenciesAll() {
 
     return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)

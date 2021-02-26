@@ -38,7 +38,8 @@ export class ProjectsComponent implements OnInit {
         environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
-      })
+      });
+
   }
 
   onCreate() {
@@ -51,6 +52,13 @@ export class ProjectsComponent implements OnInit {
         labelAction: 'Crear'
       }
     });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data = 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
   onEdit(data: number) {
