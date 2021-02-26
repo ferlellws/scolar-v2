@@ -1,3 +1,4 @@
+import { TableData } from 'src/app/models/table-data';
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -11,23 +12,38 @@ export class VicePresidenciesService {
 
   private readonly API = `${environment.API}/vice_presidencies`;
 
-  emitModify = new EventEmitter<any>();
-  emitDelete = new EventEmitter<any>();
-  emitAdd = new EventEmitter<any>();
-  
-  constructor(private http: HttpClient) { }
+  emitDataTable = new EventEmitter<any>();
+
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+
+  httpOptions!: any;
+
+  constructor(
+    private http: HttpClient
+    ) {
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bareer ${localStorage.token}`
+        }),
+        params: this.inputParams
+      };
+  }
+
+  getVicePresidenciesSelect() {
+
+    return this.http.get<VicePresidency[]>(`${this.API}/select`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
 
   getVicePresidenciesAll() {
-    var inputParams: any = {user_id: localStorage.id};
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<VicePresidency[]>(this.API, httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -35,72 +51,66 @@ export class VicePresidenciesService {
   }
 
   getVicePresidenciesId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<VicePresidency>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
-      tap(console.log)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
     );
   }
 
-  addVicePresidencies(vicePresidency: VicePresidency) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
+  addVicePresidency(vicePresidency: VicePresidency) {
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.post<VicePresidency>(this.API, vicePresidency, httpOptions)
-    .subscribe((data: VicePresidency) => {
-      this.emitAdd.emit(data);
-    });
+    return this.http.post<VicePresidency>(this.API, { vice_presidency: vicePresidency }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
-  deleteVicePresidenciesId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
+  updateVicePresidencyId(vicePresidency: VicePresidency, id: number) {
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.delete<VicePresidency>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: VicePresidency) => {
-      this.emitDelete.emit(data);
-    });
+    return this.http.put<VicePresidency>(`${this.API}/${id}`, vicePresidency, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
-  updateVicePresidenciesId(vicePresidency: VicePresidency, id: number) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
+  updateStatusVicePresidency(is_active: number, id: number) {
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
+    return this.http.put<VicePresidency>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-    return this.http.put<VicePresidency>(`${this.API}/${id}`, vicePresidency, httpOptions)
-      .subscribe((data: VicePresidency) => {
-        this.emitModify.emit(data);
-      });
+  logicalDeleteVicePresidency(id: number) {
+
+    return this.http.put<VicePresidency>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteVicePresidency(id: number) {
+
+    return this.http.delete<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
 }

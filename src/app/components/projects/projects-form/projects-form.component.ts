@@ -6,7 +6,7 @@ import {VicePresidenciesService} from '../../../services/vice-presidencies.servi
 import { AreasService } from '../../../services/areas.service'
 import { Area } from 'src/app/models/area';
 import { Program } from 'src/app/models/program';
-import { ProgramsService } from 'src/app/services/progrmas.service';
+import { ProgramsService } from 'src/app/services/programs.service';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 import { Priority } from 'src/app/models/priority';
@@ -226,7 +226,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openVicePresidencies(ev: boolean) {
     if (ev) {
-      this._vicePresidenciesService.getVicePresidenciesAll()
+      this._vicePresidenciesService.getVicePresidenciesSelect()
         .subscribe(data => this.vicePresidencies = data);
     }
   }
@@ -234,61 +234,64 @@ export class ProjectsFormComponent implements OnInit {
   _openAreas(ev: boolean) {
     if (ev) {
       var vice: number = this.general.get('vicePresidenciesControl')!.value;
-      this._areasService.getAreasAll()
+      this._areasService.getAreasSelect()
         .subscribe((areas: Area[]) => this.areas = areas.filter(area => area.vice_presidency_id == vice));
     }
   }
 
   _openStrategicApproaches(ev: boolean) {
     if (ev) {
-      this._strategicApproachesService.getStrategicApproachesAll()
+      this._strategicApproachesService.getStrategicApproachesSelect()
         .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
     }
   }
 
   _openPrograms(ev: boolean) {
     if (ev) {
-      this._programsService.getProgramsAll()
+      this._programsService.getProgramsSelect()
         .subscribe((programs: Program[]) => this.programs = programs);
     }
   }
 
   _openLeads(ev: boolean) {
     if (ev) {
-      this.leads = this._usersService.getUsers()
+      this._usersService.getManagers()
+        .subscribe((leads: User[]) => this.leads = leads);
     }
   }
 
   _openPriorities(ev: boolean) {
     if (ev) {
-      this._prioritiesService.getPrioritiesAll()
+      this._prioritiesService.getPrioritiesSelect()
         .subscribe((priorities: Priority[]) => this.priorities = priorities);
     }
   }
 
   _openTypifications(ev: boolean) {
     if (ev) {
-      this._typificationsService.getTypificationsAll()
+      this._typificationsService.getTypificationsSelect()
         .subscribe((typifications: Typification[]) => this.typifications = typifications);
     }
   }
 
   _openManagements(ev: boolean) {
     if (ev) {
-      this._managementsService.getManagementsAll()
+      this._managementsService.getManagementsSelect()
         .subscribe((managements: Management[]) => this.managements = managements);
     }
   }
 
   _openPMOS(ev: boolean) {
     if (ev) {
-      this.pmos = this._usersService.getUsers()
+      this._usersService.getManagers()
+        .subscribe((pmos: User[]) => this.pmos = pmos);
     }
   }
 
   _openPMOAssists(ev: boolean) {
     if (ev) {
-      this.pmoAssists = this._usersService.getUsers()
+      this._usersService.getManagers()
+        .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
     }else{
       this.validateAssist();
     }
@@ -296,20 +299,20 @@ export class ProjectsFormComponent implements OnInit {
 
   _openStages(ev: boolean) {
     if (ev) {
-      this._stagesService.getStagesAll()
+      this._stagesService.getStagesSelect()
         .subscribe((stages: Stage[]) => this.stages = stages);
     }
   }
 
   _openStates(ev: boolean){
     if (ev) {
-      this._statesService.getStatesAll()
+      this._statesService.getStatesSelect()
         .subscribe((states: State[]) => this.states = states);
     }else{
-      this._phasesService.getPhasesAll()
+      this._phasesService.getPhasesSelect()
         .subscribe((phases: Phase[]) => 
         {
-          this._statesByPhasesService.getStateByPhasesAll()
+          this._statesByPhasesService.getStateByPhasesSelect()
           .subscribe((stateByPhases: StateByPhase[]) =>
           {
             this.stateByPhases = [];
@@ -328,10 +331,10 @@ export class ProjectsFormComponent implements OnInit {
 
   _openPhases(ev: boolean){
     if (ev) {
-      this._phasesService.getPhasesAll()
+      this._phasesService.getPhasesSelect()
         .subscribe((phases: Phase[]) => 
         {
-          this._statesByPhasesService.getStateByPhasesAll()
+          this._statesByPhasesService.getStateByPhasesSelect()
           .subscribe((stateByPhases: StateByPhase[]) =>
           {
             this.stateByPhases = [];

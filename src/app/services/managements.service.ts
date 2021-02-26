@@ -17,17 +17,35 @@ export class ManagementsService {
   
   constructor(private http: HttpClient) { }
 
-  getManagementsAll() {
-    var inputParams: any = {user_id: localStorage.id};
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
 
+  getManagementsAll() {
     var httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${localStorage.token}`
       }),
-      params: inputParams
+      params: this.inputParams
     };
 
-    return this.http.get<Management[]>(this.API, httpOptions)
+    return this.http.get<Management[]>(`${this.API}/list`, httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getManagementsSelect() {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${localStorage.token}`
+      }),
+      params: this.inputParams
+    };
+
+    return this.http.get<Management[]>(`${this.API}/select`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

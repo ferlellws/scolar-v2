@@ -17,17 +17,37 @@ export class PrioritiesService {
   
   constructor(private http: HttpClient) { }
 
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+
   getPrioritiesAll() {
-    var inputParams: any = {user_id: localStorage.id};
 
     var httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${localStorage.token}`
       }),
-      params: inputParams
+      params: this.inputParams
     };
 
-    return this.http.get<Priority[]>(this.API, httpOptions)
+    return this.http.get<Priority[]>(`${this.API}/list`, httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getPrioritiesSelect() {
+
+    var httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${localStorage.token}`
+      }),
+      params: this.inputParams
+    };
+
+    return this.http.get<Priority[]>(`${this.API}/select`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

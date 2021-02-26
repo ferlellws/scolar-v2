@@ -167,7 +167,7 @@
                         class="field-full ml-5 mr-5">
                             <mat-select required (openedChange)="_openLeads($event)" formControlName="leadsControl">
                                 <mat-option>-- None --</mat-option>
-                                <mat-option *ngFor="let lead of leads" [value]="lead.id">{{lead.firstname}} {{lead.lastname}}</mat-option>
+                                <mat-option *ngFor="let lead of leads" [value]="lead.id">{{lead.first_name}} {{lead.last_name}}</mat-option>
                             </mat-select>
                             <mat-label>{{labels.leadsControl}}</mat-label>
                         </mat-form-field>
@@ -197,7 +197,7 @@
                         class="field-full ml-5 mr-5">
                             <mat-select required (openedChange)="_openPMOS($event)" formControlName="pmosControl">
                                 <mat-option>-- None --</mat-option>
-                                <mat-option *ngFor="let pmo of pmos" [value]="pmo.id">{{pmo.firstname}} {{pmo.lastname}}</mat-option>
+                                <mat-option *ngFor="let pmo of pmos" [value]="pmo.id">{{pmo.first_name}} {{pmo.last_name}}</mat-option>
                             </mat-select>
                             <mat-label>{{labels.pmosControl}}</mat-label>
                         </mat-form-field>
@@ -239,7 +239,7 @@
                             formControlName="pmoAssistsControl">
                             <!-- cambio  -->
                                 <mat-option>-- None --</mat-option>
-                                <mat-option *ngFor="let pmoAssist of pmoAssists" [value]="pmoAssist.id">{{pmoAssist.firstname}} {{pmoAssist.lastname}}</mat-option>
+                                <mat-option *ngFor="let pmoAssist of pmoAssists" [value]="pmoAssist.id">{{pmoAssist.first_name}} {{pmoAssist.last_name}}</mat-option>
                             </mat-select>
                             <mat-label>{{labels.pmoAssistsControl}}</mat-label>
                         </mat-form-field>

@@ -4,12 +4,12 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ProjectsRoutingModule } from './projects-routing.module';
 import { ProjectsComponent } from './projects.component';
 import { ProjectsFormComponent } from './projects-form/projects-form.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from '../shared/shared.module';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatStepperModule } from '@angular/material/stepper';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -30,6 +30,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
+import { ProjectsResolver } from './guards-projects/projects.resolver';
 
 const materialModels = [
   MatSortModule,
@@ -61,11 +62,15 @@ const materialModels = [
 ];
 
 @NgModule({
-  declarations: [ProjectsComponent, ProjectsFormComponent],
+  declarations: [
+    ProjectsComponent,
+    ProjectsFormComponent
+  ],
   imports: [
     CommonModule,
     ProjectsRoutingModule,
     SharedModule,
+    FormsModule,
     materialModels,
     ReactiveFormsModule
   ],
@@ -73,7 +78,10 @@ const materialModels = [
     materialModels
   ], 
   providers: [
-    DatePipe
+    ProjectsResolver,
+    DatePipe,
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
   ]
 })
 export class ProjectsModule { }

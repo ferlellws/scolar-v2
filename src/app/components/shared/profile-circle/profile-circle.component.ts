@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Color } from 'src/app/models/color';
+import { User } from 'src/app/models/user';
 import { ColorsService } from 'src/app/services/colors.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class ProfileCircleComponent implements OnInit {
 
   colors: Color[] = []
 
-  @Input() user: any;
+  @Input() user!: User;
   @Input() size: number = 110;
 
   constructor(
@@ -24,14 +25,6 @@ export class ProfileCircleComponent implements OnInit {
     }
 
     this.colors = this._colorsService.getColors();
-  }
-
-  getIniciales() {
-    if (this.user != null) {
-      return `${this.user.firstname[0].toUpperCase()}${this.user.lastname[0].toUpperCase()}`;
-    } else {
-      return "";
-    }
   }
 
 }
