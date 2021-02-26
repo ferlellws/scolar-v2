@@ -38,6 +38,13 @@ export class ProjectsComponent implements OnInit {
         this.table = data;
       })
     })
+
+    this._projectService.emitAdd.subscribe(dtaa => {
+      this._projectService.getProjectsAll()
+      .subscribe(data => {
+        this.table = data;
+      })
+    })
   }
 
   openDialog(data: number) {
