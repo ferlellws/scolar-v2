@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Application } from '../models/application';
 import { tap } from 'rxjs/operators';
+import { TableData } from '../models/table-data';
 
 @Injectable({
   providedIn: 'root'
@@ -11,23 +12,36 @@ export class ApplicationsService {
 
   private readonly API = `${environment.API}/applications`;
 
-  emitModify = new EventEmitter<any>();
-  emitDelete = new EventEmitter<any>();
-  emitAdd = new EventEmitter<any>();
-  
-  constructor(private http: HttpClient) { }
+  emitDataTable = new EventEmitter<any>();
+
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+
+  httpOptions!: any;
+
+  constructor(
+    private http: HttpClient
+    ) {
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bareer ${localStorage.token}`
+        }),
+        params: this.inputParams
+      };
+  }
 
   getApplicationsAll() {
-    var inputParams: any = {user_id: localStorage.id};
+    return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<Application[]>(this.API, httpOptions)
+  getApplicationsSelect() {
+    return this.http.get<Application[]>(`${this.API}/select`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -35,72 +49,60 @@ export class ApplicationsService {
   }
 
   getApplicationsId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<Application>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<Application>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
-      tap(console.log)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
     );
   }
 
   addApplications(application: Application) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.post<Application>(this.API, application, httpOptions)
-    .subscribe((data: Application) => {
-      this.emitAdd.emit(data);
-    });
+    return this.http.post<Application>(this.API, { application: application }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
-  deleteApplicationsId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.delete<Application>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Application) => {
-      this.emitDelete.emit(data);
-    });
+  updateApplicationId(application: Application, id: number) {
+    return this.http.put<Application>(`${this.API}/${id}`, application, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
-  updateApplicationsId(application: Application, id: number) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
+  updateStatusApplication(is_active: number, id: number) {
+    return this.http.put<Application>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
+  logicalDeleteApplication(id: number) {
+    return this.http.put<Application>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-    return this.http.put<Application>(`${this.API}/${id}`, application, httpOptions)
-      .subscribe((data: Application) => {
-        this.emitModify.emit(data);
-      });
+  deleteApplication(id: number) {
+    return this.http.delete<Application>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
 }

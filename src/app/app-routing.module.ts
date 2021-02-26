@@ -9,6 +9,8 @@ import { ProjectsResolver } from './components/projects/guards-projects/projects
 import { CompaniesResolver } from './components/companies/guards-companies/companies.resolver';
 import { CompanyTypesResolver } from './components/company-types/guards-company-types/company-types.resolver';
 import { PhasesResolver } from './components/phases/guards-phases/phases.resolver';
+import { StatesResolver } from './components/states/guards-states/states.resolver';
+import { ApplicationsResolver } from './components/applications/guards-applications/applications.resolver';
 
 const routes: Routes = [
   {
@@ -27,7 +29,14 @@ const routes: Routes = [
     }
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'states', loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule) },
+  { path: 'states',
+    loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      states: StatesResolver
+    }
+  },
   { path: 'phases',
     loadChildren: () => import('./components/phases/phases.module').then(m => m.PhasesModule),
     canActivate: [AuthGuard],
@@ -36,7 +45,14 @@ const routes: Routes = [
       phases: PhasesResolver
     }
   },
-  { path: 'applications', loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule) },
+  { path: 'applications',
+    loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      applications: ApplicationsResolver
+    }
+  },
   { path: 'company-types',
     loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule),
     canActivate: [AuthGuard],

@@ -2,8 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Phase } from 'src/app/models/phase';
-import { PhasesService } from 'src/app/services/phases.service';
+import { State } from 'src/app/models/state';
+import { StatesService } from 'src/app/services/states.service';
 import { environment } from 'src/environments/environment';
 
 export interface DialogData {
@@ -13,31 +13,31 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'tecno-phases-form',
-  templateUrl: './phases-form.component.html',
-  styleUrls: ['./phases-form.component.scss']
+  selector: 'tecno-states-form',
+  templateUrl: './states-form.component.html',
+  styleUrls: ['./states-form.component.scss']
 })
-export class PhasesFormComponent implements OnInit {
+export class StatesFormComponent implements OnInit {
   showBtnClose: boolean = true;
-  phasesGroup!: FormGroup;
-  pluralOption: string = "Fases";
-  singularOption: string = "Fase";
+  statesGroup!: FormGroup;
+  pluralOption: string = "Estados";
+  singularOption: string = "Estado";
   isButtonReset: boolean = false;
 
   fButtonDisabled: boolean = false;
 
-  phase!: Phase;
+  state!: State;
 
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private phasesService: PhasesService,
+    private statesService: StatesService,
     private snackBar: MatSnackBar,
   ) { }
 
   async ngOnInit(): Promise<void> {
     environment.consoleMessage(this.data, "++++++++++");
-    this.phasesGroup = this.fb.group({
+    this.statesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
       is_active: true
@@ -45,20 +45,20 @@ export class PhasesFormComponent implements OnInit {
     
     if (this.data.mode == 'edit') {
 
-      this.phasesService.getPhasesId(this.data.id)
-        .subscribe((res: Phase) => {
-          this.phase = res;
-          this.phasesGroup.patchValue({
-            title: this.phase.title,
-            description: this.phase.description,            
-            is_active: this.phase.is_active
+      this.statesService.getStatesId(this.data.id)
+        .subscribe((res: State) => {
+          this.state = res;
+          this.statesGroup.patchValue({
+            title: this.state.title,
+            description: this.state.description,            
+            is_active: this.state.is_active
           });
         });
     }
   }
   
   onSubmit() {
-    environment.consoleMessage(this.phasesGroup, "OnSubmit fases: ");
+    environment.consoleMessage(this.statesGroup, "OnSubmit estados: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -71,7 +71,7 @@ export class PhasesFormComponent implements OnInit {
 
   onReset() {
     this.isButtonReset = true;
-    this.phasesGroup.patchValue({
+    this.statesGroup.patchValue({
       title: null,
       description: null,
 
@@ -80,8 +80,8 @@ export class PhasesFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.phasesGroup.value, "createRegister: ");
-    this.phasesService.addPhases(this.phasesGroup.value)
+    environment.consoleMessage(this.statesGroup.value, "createRegister: ");
+    this.statesService.addStates(this.statesGroup.value)
       .subscribe((res) => {
         environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
@@ -106,10 +106,10 @@ export class PhasesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.phasesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    environment.consoleMessage(this.statesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
-    this.phasesService.updatePhaseId(
-      this.phasesGroup.value,
+    this.statesService.updateStatesId(
+      this.statesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
@@ -149,7 +149,7 @@ export class PhasesFormComponent implements OnInit {
   getMessageError(field: string, labelField: string): string {
     let message!: string;
 
-    if (this.phasesGroup.get(field)?.errors?.required) {
+    if (this.statesGroup.get(field)?.errors?.required) {
       message = `Campo ${labelField} es requerido`
     }
 

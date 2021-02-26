@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PhasesResolver } from './phases.resolver';
+import { ApplicationsResolver } from './applications.resolver';
 
-describe('PhasesResolver', () => {
-  let resolver: PhasesResolver;
+describe('ApplicationsResolver', () => {
+  let resolver: ApplicationsResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    resolver = TestBed.inject(PhasesResolver);
+    resolver = TestBed.inject(ApplicationsResolver);
   });
 
   it('should be created', () => {
