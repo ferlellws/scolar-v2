@@ -163,4 +163,14 @@ export class VicePresidenciesFormComponent implements OnInit {
     });
   }
 
+  getMessageError(field: string, labelField: string): string {
+    let message!: string;
+
+    if (this.vicePresidenciesGroup.get(field)?.errors?.required) {
+      message = `Campo ${labelField} es requerido`
+    }
+
+    return message;
+  }
+
 }
