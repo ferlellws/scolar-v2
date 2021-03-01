@@ -40,6 +40,22 @@ export class CompaniesService {
     );
   }
 
+  getCompaniesSelect() {
+
+    var httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${localStorage.token}`
+      }),
+      params: this.inputParams
+    };
+
+    return this.http.get<Company[]>(`${this.API}/select`, httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getCompaniesId(id: number) {
     return this.http.get<Company>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

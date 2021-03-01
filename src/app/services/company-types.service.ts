@@ -68,7 +68,6 @@ export class CompanyTypesService {
   }
 
   updateCompanyTypeId(companyType: CompanyType, id: number) {
-
     return this.http.put<CompanyType>(`${this.API}/${id}`, companyType, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -78,7 +77,6 @@ export class CompanyTypesService {
   }
 
   updateStatusCompanyType(is_active: number, id: number) {
-
     return this.http.put<CompanyType>(`${this.API}/${id}/change_status`,
       {is_active: is_active},
       this.httpOptions)
@@ -90,7 +88,6 @@ export class CompanyTypesService {
   }
 
   logicalDeleteCompanyType(id: number) {
-
     return this.http.put<CompanyType>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -100,7 +97,6 @@ export class CompanyTypesService {
   }
 
   deleteCompanyType(id: number) {
-
     return this.http.delete<CompanyType>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {

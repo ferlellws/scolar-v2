@@ -9,13 +9,12 @@ import { TableData } from 'src/app/models/table-data';
 import { ApplicationsFormComponent } from './applications-form/applications-form.component';
 
 // SERVICES
-import { PhasesService } from 'src/app/services/phases.service';
+import { ApplicationsService } from 'src/app/services/applications.service';
 
 // MATERIAL
 import { MatDialog } from '@angular/material/dialog';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
-import { ApplicationsService } from 'src/app/services/applications.service';
 
 
 @Component({
@@ -53,7 +52,7 @@ export class ApplicationsComponent implements OnInit {
   onCreate() {
     environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(ApplicationsFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
@@ -65,7 +64,7 @@ export class ApplicationsComponent implements OnInit {
   onEdit(data: number) {
     environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(ApplicationsFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         id: data,

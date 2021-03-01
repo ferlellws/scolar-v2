@@ -52,7 +52,7 @@ export class PhasesComponent implements OnInit {
   onCreate() {
     environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(PhasesFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
@@ -64,7 +64,7 @@ export class PhasesComponent implements OnInit {
   onEdit(data: number) {
     environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(PhasesFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         id: data,
