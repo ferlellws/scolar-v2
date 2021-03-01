@@ -31,7 +31,7 @@ export class MenuService {
     {
       module: {
         id: 1,
-        title: "Maestros",
+        title: "Parametrización",
         icon_id: 32,
         is_active: true,
         created_at: "2020-12-04T09:24:24.000Z",
@@ -52,7 +52,7 @@ export class MenuService {
         },
         {
           id: 2,
-          title: "Compañias",
+          title: "Proveedores",
           description: "Registro de compañias",
           sysmodule_id: 1,
           route: "/companies",
@@ -64,7 +64,7 @@ export class MenuService {
         },
         {
           id: 3,
-          title: "Tipos de Compañia",
+          title: "Tipos de Proveedor",
           description: "Tipo de compañias",
           sysmodule_id: 1,
           route: "/company-types",
@@ -111,6 +111,102 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
+          id: 6,
+          title: "Áreas",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Gestión",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Prioridades",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Programas",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Niveles de Riesgo",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Etapas",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Enfoques Estratégicos",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 6,
+          title: "Tipificaciones",
+          description: "Tipo de estados",
+          sysmodule_id: 1,
+          route: "/applications",
+          order_menu: 2,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
           id: 7,
           title: "Proyectos",
           description: "Pagina en la que se pueden visualizar, crear y administrar proyectos",
@@ -126,7 +222,7 @@ export class MenuService {
     },
     {
       module: {
-        id: 1,
+        id: 2,
         title: "Proyectos",
         icon_id: 32,
         is_active: true,
@@ -135,11 +231,11 @@ export class MenuService {
       },
       pages: [
         {
-          id: 1,
-          title: "Proyectos",
+          id: 8,
+          title: "Nuevos Proyectos",
           description: "Pagina de Proyectos",
           sysmodule_id: 1,
-          route: "/projects",
+          route: "",
           order_menu: 1,
           is_active: true,
           bg_color: "#F44336",
@@ -147,11 +243,11 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 2,
-          title: "Tiempos",
+          id: 9,
+          title: "Seguimiento",
           description: "Visualizacion y descarga de tiempos",
           sysmodule_id: 1,
-          route: "/times",
+          route: "",
           order_menu: 2,
           is_active: true,
           bg_color: "#F44336",
@@ -159,11 +255,11 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 3,
-          title: "Statuses",
+          id: 10,
+          title: "Reportes Indicadores",
           description: "Visualizacion y descarga de historico statuses",
           sysmodule_id: 1,
-          route: "/statuses",
+          route: "",
           order_menu: 3,
           is_active: true,
           bg_color: "#F44336",
@@ -171,36 +267,36 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 4,
-          title: "Requerimientos",
-          description: "Visualizacion y descarga de Requerimientos",
+          id: 11,
+          title: "Reporte Riesgos",
+          description: "Visualizacion y descarga de historico statuses",
           sysmodule_id: 1,
-          route: "/items_table",
-          order_menu: 4,
+          route: "",
+          order_menu: 3,
           is_active: true,
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 5,
-          title: "Summary Report",
-          description: "Graficos y tabla resumen",
+          id: 12,
+          title: "Causales de Desviación",
+          description: "Visualizacion y descarga de historico statuses",
           sysmodule_id: 1,
-          route: "/summary_report",
-          order_menu: 5,
+          route: "",
+          order_menu: 3,
           is_active: true,
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 6,
-          title: "Reporte Indicadores",
-          description: "Indicadores",
+          id: 12,
+          title: "Interrelaciones",
+          description: "Visualizacion y descarga de historico statuses",
           sysmodule_id: 1,
-          route: "/indicators_report",
-          order_menu: 6,
+          route: "",
+          order_menu: 3,
           is_active: true,
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
@@ -210,8 +306,8 @@ export class MenuService {
     },
     {
       module: {
-        id: 1,
-        title: "Proyectos",
+        id: 3,
+        title: "Presupuestos",
         icon_id: 32,
         is_active: true,
         created_at: "2020-12-04T09:24:24.000Z",
@@ -219,11 +315,11 @@ export class MenuService {
       },
       pages: [
         {
-          id: 1,
-          title: "Proyectos",
-          description: "Pagina de Proyectos",
+          id: 13,
+          title: "Reportes",
+          description: "Registro de Vicepresidencias",
           sysmodule_id: 1,
-          route: "/projects",
+          route: "",
           order_menu: 1,
           is_active: true,
           bg_color: "#F44336",
@@ -231,11 +327,11 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 2,
-          title: "Tiempos",
-          description: "Visualizacion y descarga de tiempos",
+          id: 14,
+          title: "Creación Presupuesto",
+          description: "Registro de compañias",
           sysmodule_id: 1,
-          route: "/times",
+          route: "",
           order_menu: 2,
           is_active: true,
           bg_color: "#F44336",
@@ -243,55 +339,115 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 3,
-          title: "Statuses",
-          description: "Visualizacion y descarga de historico statuses",
+          id: 15,
+          title: "Seguimiento Presupuesto",
+          description: "Tipo de compañias",
           sysmodule_id: 1,
-          route: "/statuses",
-          order_menu: 3,
-          is_active: true,
-          bg_color: "#F44336",
-          created_at: "2020-12-04T09:24:24.000Z",
-          updated_at: "2020-12-04T09:24:24.000Z"
-        },
-        {
-          id: 4,
-          title: "Requerimientos",
-          description: "Visualizacion y descarga de Requerimientos",
-          sysmodule_id: 1,
-          route: "/items_table",
-          order_menu: 4,
-          is_active: true,
-          bg_color: "#F44336",
-          created_at: "2020-12-04T09:24:24.000Z",
-          updated_at: "2020-12-04T09:24:24.000Z"
-        },
-        {
-          id: 5,
-          title: "Summary Report",
-          description: "Graficos y tabla resumen",
-          sysmodule_id: 1,
-          route: "/summary_report",
-          order_menu: 5,
-          is_active: true,
-          bg_color: "#F44336",
-          created_at: "2020-12-04T09:24:24.000Z",
-          updated_at: "2020-12-04T09:24:24.000Z"
-        },
-        {
-          id: 6,
-          title: "Reporte Indicadores",
-          description: "Indicadores",
-          sysmodule_id: 1,
-          route: "/indicators_report",
-          order_menu: 6,
+          route: "",
+          order_menu: 2,
           is_active: true,
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
           updated_at: "2020-12-04T09:24:24.000Z"
         }
       ]
-    }
+    },
+    {
+      module: {
+        id: 4,
+        title: "Seguimiento Proveedores",
+        icon_id: 32,
+        is_active: true,
+        created_at: "2020-12-04T09:24:24.000Z",
+        updated_at: "2020-12-04T09:24:24.000Z"
+      },
+      pages: [
+        {
+          id: 16,
+          title: "Reportes",
+          description: "Registro de Vicepresidencias",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 1,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        }
+      ]
+    },
+    {
+      module: {
+        id: 5,
+        title: "Reportes Comités",
+        icon_id: 32,
+        is_active: true,
+        created_at: "2020-12-04T09:24:24.000Z",
+        updated_at: "2020-12-04T09:24:24.000Z"
+      },
+      pages: [
+        {
+          id: 17,
+          title: "Valorem",
+          description: "Registro de Vicepresidencias",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 1,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 18,
+          title: "Comité Directivo",
+          description: "Registro de Vicepresidencias",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 1,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 19,
+          title: "PMO",
+          description: "Registro de Vicepresidencias",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 1,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        }
+      ]
+    },    
+    {
+      module: {
+        id: 6,
+        title: "Procesos",
+        icon_id: 32,
+        is_active: true,
+        created_at: "2020-12-04T09:24:24.000Z",
+        updated_at: "2020-12-04T09:24:24.000Z"
+      },
+      pages: [
+        {
+          id: 20,
+          title: "Macro Proceso",
+          description: "Registro de Vicepresidencias",
+          sysmodule_id: 1,
+          route: "",
+          order_menu: 1,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        }
+      ]
+    },
   ];
 
   httpOptions: { headers: HttpHeaders; } = {

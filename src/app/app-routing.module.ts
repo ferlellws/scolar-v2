@@ -78,11 +78,11 @@ const routes: Routes = [
   { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
   { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
   { path: 'projects', 
-  loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule),
-  canActivate: [AuthGuard],
-  canLoad: [AuthGuard],
-  resolve: {
-    projects: ProjectsResolver
+    loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      projects: ProjectsResolver
   }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
