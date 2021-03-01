@@ -4,7 +4,6 @@
 
 .example-container form {
   margin-bottom: 20px;
-  width: 100%;
 }
 
 .example-container form > * {
@@ -16,7 +15,7 @@
 }
 
 .example-container {
-  padding: 24px;
+  padding: 10px;
 }
 
 .error-message{
@@ -34,14 +33,19 @@
 .example-spacer {
   flex: 1 1 auto;
 }
+
+.buttonForm {
+  //display: flex;
+  justify-content: flex-end;
+  margin: 20px;
+}
+
 .step-scroll {
   position: relative;
   overflow: auto;
   max-height: 50vh;
 }
-.step-footer {
-  padding-top: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+.row{
+  margin-bottom: 5px;
+  max-width: 100%;
 }

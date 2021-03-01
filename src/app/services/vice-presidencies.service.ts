@@ -61,6 +61,28 @@ export class VicePresidenciesService {
     );
   }
 
+  getProjectsByVicepresidency(id: number) {
+
+    return this.http.get<VicePresidency>(`${this.API}/${id}/projects_by_vice_presidency`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getProjectsDashboard() {
+
+    return this.http.get<VicePresidency>(`${this.API}/projects`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   addVicePresidency(vicePresidency: VicePresidency) {
 
     return this.http.post<VicePresidency>(this.API, { vice_presidency: vicePresidency }, this.httpOptions)

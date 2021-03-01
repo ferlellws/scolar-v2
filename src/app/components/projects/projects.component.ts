@@ -15,6 +15,10 @@ import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.compon
 export class ProjectsComponent implements OnInit {
 
   dataTable!: TableData;
+
+  mode: string = "dashboard";
+  dashboard: any[]= [];
+  
   
   constructor(
     public dialog: MatDialog,
@@ -29,6 +33,7 @@ export class ProjectsComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;
+      this.dashboard = data.dashboard
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
@@ -162,7 +167,11 @@ export class ProjectsComponent implements OnInit {
           }
         });
       })
+  }
 
+  changeMode(mode: string) {
+    environment.consoleMessage(mode);
+    this.mode = mode;
   }
 
 }

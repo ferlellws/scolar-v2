@@ -38,6 +38,14 @@ export class ProjectsService {
     );
   }
 
+  getProjectsSelect() {
+    return this.http.get<Project[]>(`${this.API}/select`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getProjectsId(id: number) {
     return this.http.get<Project>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
@@ -49,6 +57,7 @@ export class ProjectsService {
   }
 
   addProjects(project: Project) {
+    
     return this.http.post<Project>(this.API, { project: project }, this.httpOptions)
       .pipe(
         tap((data: any) => {

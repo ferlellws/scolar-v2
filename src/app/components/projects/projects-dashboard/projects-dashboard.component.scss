@@ -1,0 +1,30 @@
+.cards-container{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    overflow: auto;
+}
+mat-card{
+    min-width: 400px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    color: white !important;
+}
+
+div{
+    color: white;
+}
+.mat-subheader{
+    color: #e0e0e0;
+}
+mat-icon{
+    color: white;
+}
+.area{
+    width: 100%;
+    background-color: yellow;
+}
+mat-card-content{
+    width: 100%;
+}

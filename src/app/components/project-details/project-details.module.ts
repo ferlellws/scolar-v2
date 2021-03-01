@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
-import { ProjectsRoutingModule } from './projects-routing.module';
-import { ProjectsComponent } from './projects.component';
-import { ProjectsFormComponent } from './projects-form/projects-form.component';
+import { ProjectDetailsRoutingModule } from './project-details-routing.module';
+import { ProjectDetailsComponent } from './project-details.component';
+
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from '../shared/shared.module';
@@ -31,8 +31,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { ProjectsResolver } from './guards-projects/projects.resolver';
-import { ProjectsDashboardComponent } from './projects-dashboard/projects-dashboard.component';
+import { ProjectDetailsResolver } from './guards/project-details.resolver';
 
 const materialModels = [
   MatSortModule,
@@ -62,31 +61,25 @@ const materialModels = [
   MatChipsModule,
   MatInputModule,
   MatButtonToggleModule,
-  MatRippleModule
+  MatRippleModule,
+  MatMenuModule
 ];
 
 @NgModule({
-  declarations: [
-    ProjectsComponent,
-    ProjectsFormComponent,
-    ProjectsDashboardComponent,
-  ],
+  declarations: [ProjectDetailsComponent],
   imports: [
     CommonModule,
-    ProjectsRoutingModule,
+    ProjectDetailsRoutingModule,
     SharedModule,
     FormsModule,
     materialModels,
     ReactiveFormsModule
   ],
-  exports: [
-    materialModels
-  ], 
   providers: [
-    ProjectsResolver,
+    ProjectDetailsResolver,
     DatePipe,
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }
   ]
 })
-export class ProjectsModule { }
+export class ProjectDetailsModule { }

@@ -9,6 +9,9 @@ import { ProjectsResolver } from './components/projects/guards-projects/projects
 import { CompaniesResolver } from './components/companies/guards-companies/companies.resolver';
 import { CompanyTypesResolver } from './components/company-types/guards-company-types/company-types.resolver';
 import { PhasesResolver } from './components/phases/guards-phases/phases.resolver';
+import { DashboardProjectsResolver } from './components/projects/guards-projects/dashboard-projects.resolver';
+import { ProjectsByVicepresidencyResolver } from './components/projects-by-vicepresidency/guards/projects-by-vicepresidency.resolver';
+import { ProjectDetailsResolver } from './components/project-details/guards/project-details.resolver';
 
 const routes: Routes = [
   {
@@ -61,14 +64,36 @@ const routes: Routes = [
   { path: 'managements', loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule) },
   { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
   { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
-  { path: 'projects', 
-  loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule),
-  canActivate: [AuthGuard],
-  canLoad: [AuthGuard],
-  resolve: {
-    projects: ProjectsResolver
-  }
+  { 
+    path: 'projects', 
+    loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      // projects: ProjectsResolver,
+      dashboard: DashboardProjectsResolver,
+    }
   },
+  { 
+    path: 'projects-by-vicepresidency/:id', 
+    loadChildren: () => import('./components/projects-by-vicepresidency/projects-by-vicepresidency.module').then(m => m.ProjectsByVicepresidencyModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      // projects: ProjectsResolver,
+      projects: ProjectsByVicepresidencyResolver,
+    }
+  },
+  { 
+    path: 'project-details/:id', 
+    loadChildren: () => import('./components/project-details/project-details-routing.module').then(m => m.ProjectDetailsRoutingModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      project: ProjectDetailsResolver,
+    }
+  },
+  { path: 'project-details', loadChildren: () => import('./components/project-details/project-details.module').then(m => m.ProjectDetailsModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

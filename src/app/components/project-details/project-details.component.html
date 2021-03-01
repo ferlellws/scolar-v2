@@ -1,0 +1,159 @@
+<h1 class="mat-title">{{project.title}}</h1>
+
+<mat-list>
+    <div mat-subheader>Aspectos generales</div>
+    <mat-list-item>
+        <div mat-line>Número</div>
+        <div mat-line> {{project.id}} </div>
+      </mat-list-item>
+    <mat-list-item>
+      <div mat-line>Titulo</div>
+      <div mat-line> {{project.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Descripción</div>
+        <div mat-line> {{project.description}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Vicepresidencia</div>
+        <div mat-line> {{project.area.vice_presidency_id}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Área</div>
+        <div mat-line> {{project.area.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Enfoque estratégico</div>
+        <div mat-line> {{project.strategic_approach.id}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Fecha de recepción</div>
+        <div mat-line> {{project.reception_date}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Programa</div>
+        <div mat-line> {{project.program == null ? 'Proyecto':project.program.title}} </div>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+
+    <div mat-subheader>Descripción del Proyecto</div>
+    <mat-list-item>
+        <div mat-line>Descripción</div>
+        <div mat-line> {{project.description}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Lider funcional</div>
+        <div mat-line> {{project.functional_lead.first_name}} {{project.functional_lead.last_name}} </div>
+    </mat-list-item>
+    <mat-list-item>
+      <div mat-line>Prioridad</div>
+      <div mat-line> {{project.priority.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Tipificación</div>
+        <div mat-line> {{project.typification.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Gestión</div>
+        <div mat-line> {{project.management.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Gestión</div>
+        <div mat-line> {{project.management.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>PMO Asignado</div>
+        <div mat-line> {{project.pmo.first_name}} {{project.pmo.last_name}}  </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Horas semanales PMO asignado</div>
+        <div mat-line> {{project.pmo_hours}}  </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Minutos semanales PMO asignado</div>
+        <div mat-line> {{project.pmo_minutes}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>PMO de apoyo asignado</div>
+        <div mat-line *ngIf="project.pmo_assitant != null"> {{project.pmo_assitant.first_name}} {{project.pmo_assitant.last_name}}  </div>
+        <div mat-line *ngIf="project.pmo_assitant == null"> No se asignó</div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Etapa de apoyo</div>
+        <div mat-line> {{project.pmo_assitant_stage == null ? 'No se asignó' : project.pmo_assitant_stage.title}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Horas semanales PMO de apoyo asignado</div>
+        <div mat-line> {{project.pmo_assistant_hours}}  </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Minutos semanales PMO de apoyo asignado</div>
+        <div mat-line> {{project.pmo_assistant_minutes}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Presupuesto aprovado</div>
+        <div mat-line> {{project.budget_approved}} COP</div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Presupuesto ejecutado</div>
+        <div mat-line> {{project.budget_executed}} COP</div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Saldo</div>
+        <div mat-line> {{project.balance}} COP</div>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+
+    <div mat-subheader>Seguimiento</div>
+    <mat-list-item>
+        <div mat-line>Fecha de inicio</div>
+        <div mat-line> {{project.start_date}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Fecha de estimada de finalización</div>
+        <div mat-line> {{project.due_date}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Fecha de control</div>
+        <div mat-line> {{project.control_date}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Estado</div>
+        <div mat-line> {{project.states_by_phase.state_id}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Fase</div>
+        <div mat-line> {{project.states_by_phase.phase_id}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Sprint</div>
+        <div mat-line> {{project.sprint}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Evaluación de Proveedores</div>
+        <div mat-line> falta el merge no existe por ahora en esta rama </div>
+    </mat-list-item>
+    <mat-list-item>
+        <div mat-line>Bitacora de pruebas</div>
+        <div mat-line> {{project.test_log}} </div>
+    </mat-list-item>
+    
+  </mat-list>
+
+
+
+<button mat-fab color="accent" [matMenuTriggerFor]="menu" aria-label="Nuevo registro"  class="btn-new mat-elevation-z2">
+    <mat-icon>add</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onValorem()">
+      <mat-icon>addchart</mat-icon>
+      <span>Reporte VALOREM</span>
+    </button>
+    <button mat-menu-item (click)="onWeek()">
+      <mat-icon>insert_invitation</mat-icon>
+      <span>Seguimiento Semanal</span>
+    </button>
+</mat-menu>
+

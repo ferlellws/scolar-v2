@@ -1,0 +1,20 @@
+mat-card{
+    min-width: 300px;
+    margin: 10px;
+}
+
+mat-card-footer{
+    padding-left: 15px;
+    padding-bottom: 10px;
+}
+
+.cards-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+mat-divider{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

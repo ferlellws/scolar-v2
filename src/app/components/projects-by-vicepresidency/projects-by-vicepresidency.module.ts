@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import { ProjectsRoutingModule } from './projects-routing.module';
-import { ProjectsComponent } from './projects.component';
-import { ProjectsFormComponent } from './projects-form/projects-form.component';
+import { ProjectsByVicepresidencyRoutingModule } from './projects-by-vicepresidency-routing.module';
+import { ProjectsByVicepresidencyComponent } from './projects-by-vicepresidency.component';
+import { MatSortModule } from '@angular/material/sort';
+
+import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from '../shared/shared.module';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,8 +32,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { ProjectsResolver } from './guards-projects/projects.resolver';
-import { ProjectsDashboardComponent } from './projects-dashboard/projects-dashboard.component';
+
+
 
 const materialModels = [
   MatSortModule,
@@ -67,13 +68,11 @@ const materialModels = [
 
 @NgModule({
   declarations: [
-    ProjectsComponent,
-    ProjectsFormComponent,
-    ProjectsDashboardComponent,
+    ProjectsByVicepresidencyComponent
   ],
   imports: [
     CommonModule,
-    ProjectsRoutingModule,
+    ProjectsByVicepresidencyRoutingModule,
     SharedModule,
     FormsModule,
     materialModels,
@@ -82,11 +81,6 @@ const materialModels = [
   exports: [
     materialModels
   ], 
-  providers: [
-    ProjectsResolver,
-    DatePipe,
-    { provide: MAT_DIALOG_DATA, useValue: {} },
-    { provide: MatDialogRef, useValue: {} }
-  ]
 })
-export class ProjectsModule { }
+
+export class ProjectsByVicepresidencyModule { }

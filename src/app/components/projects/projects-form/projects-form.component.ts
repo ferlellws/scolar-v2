@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, Form, FormGroup, Validators } from '@angular/forms';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import {VicePresidenciesService} from '../../../services/vice-presidencies.service'
 import { AreasService } from '../../../services/areas.service'
@@ -31,6 +31,14 @@ import { StrategicApproach } from 'src/app/models/strategic-approach';
 import { DatePipe } from '@angular/common';
 import { Project } from 'src/app/models/project';
 import { ProjectsService } from 'src/app/services/projects.service'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+export interface DialogData {
+  id: number;
+  mode: string;
+  labelAction: string;
+}
 
 @Component({
   selector: 'tecno-projects-form',
@@ -97,8 +105,13 @@ export class ProjectsFormComponent implements OnInit {
 
   deshabilitarAssist: boolean = true;
 
+  isButtonReset: boolean = false;
+  fButtonDisabled: boolean = false;
+
+
   constructor(
     private _fbG: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private _strategicApproachesService: StrategicApproachesService,
     private _vicePresidenciesService: VicePresidenciesService,
     private _areasService: AreasService,
@@ -113,79 +126,80 @@ export class ProjectsFormComponent implements OnInit {
     private _statesByPhasesService: StateByPhasesService,
     private _projectsService: ProjectsService,
     public datepipe: DatePipe,
+    private snackBar: MatSnackBar,
 
     ) { 
       this.general = this._fbG.group({
-        'titleControl': [this.title, [Validators.required]],
-        'vicePresidenciesControl': [this.vicePresidency, [Validators.required]],
-        'areasControl': [this.area, [Validators.required]],
-        'strategicApproachesControl': [this.strategicApproach, [Validators.required]],
-        'receptionDateControl': [new Date, [Validators.required]],
-        'programsControl': [this.program],
+        'title': [this.title, [Validators.required]],
+        'vicePresidencies': [this.vicePresidency, [Validators.required]],
+        'areas': [this.area, [Validators.required]],
+        'strategicApproaches': [this.strategicApproach, [Validators.required]],
+        'receptionDate': [new Date, [Validators.required]],
+        'programs': [this.program],
       });
 
       this.descripcion = this._fbG.group({
-        'projectDescriptionControl': [this.projectDescription, [Validators.required]],
-        'leadsControl': [this.lead_id, [Validators.required]],
-        'prioritiesControl': [this.priority, [Validators.required]],
-        'typificationsControl': [this.typification, [Validators.required]],
-        'managementsControl': [this.management, [Validators.required]],
-        'pmosControl': [this.pmo_id, [Validators.required]],
-        'pmoHoursControl': [this.pmoHours, [Validators.required]],
-        'pmoMinutesControl': [this.pmoMinutes, [Validators.required]],
-        'pmoAssistsControl': [this.pmoAssist_id],
-        'stagesControl': [{value: this.stage, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistHoursControl': [{value: this.pmoAssistHours, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistMinutesControl': [{value: this.pmoAssistMinutes, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'budgetApprovedControl': [this.budgetApproved, [Validators.required]],
-        'budgetExecutedControl': [this.budgetExecuted, [Validators.required]],
-        'balanceControl': [{value: this.balance, disabled: true}, [Validators.required]],
+        'projectDescription': [this.projectDescription, [Validators.required]],
+        'leads': [this.lead_id, [Validators.required]],
+        'priorities': [this.priority, [Validators.required]],
+        'typifications': [this.typification, [Validators.required]],
+        'managements': [this.management, [Validators.required]],
+        'pmos': [this.pmo_id, [Validators.required]],
+        'pmoHours': [this.pmoHours, [Validators.required]],
+        'pmoMinutes': [this.pmoMinutes, [Validators.required]],
+        'pmoAssists': [this.pmoAssist_id],
+        'stages': [{value: this.stage, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'pmoAssistHours': [{value: this.pmoAssistHours, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'pmoAssistMinutes': [{value: this.pmoAssistMinutes, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'budgetApproved': [this.budgetApproved, [Validators.required]],
+        'budgetExecuted': [this.budgetExecuted, [Validators.required]],
+        'balance': [{value: this.balance, disabled: true}, [Validators.required]],
       });
 
       this.seguimiento = this._fbG.group({
-        'startDateControl': [],
-        'dueDateControl': [],
-        'controlDateControl': [],
-        'statesControl': [this.state, [Validators.required]],
-        'phasesControl': [this.phase, [Validators.required]],
-        'sprintControl': [this.phase, [Validators.required]],
-        'evaluationControl': [this.evaluation],
-        'testLogControl': [this.testLog],
+        'startDate': [],
+        'dueDate': [],
+        'controlDate': [],
+        'states': [this.state, [Validators.required]],
+        'phases': [this.phase, [Validators.required]],
+        'sprint': [this.phase, [Validators.required]],
+        'evaluation': [this.evaluation],
+        'testLog': [this.testLog],
       });
 
 
       this.labels = {
-        titleControl: `Nombre del Proyecto`,
-        vicePresidenciesControl: `Vicepresidencias`,
-        areasControl: `Areas`,
-        strategicApproachesControl: 'Enfoque estrategico',
-        receptionDateControl: `Fecha de recepción`,
-        programsControl: `Programa`,
+        title: `Nombre del Proyecto`,
+        vicePresidencies: `Vicepresidencias`,
+        areas: `Areas`,
+        strategicApproaches: 'Enfoque estrategico',
+        receptionDate: `Fecha de recepción`,
+        programs: `Programa`,
   
-        prioritiesControl: `Prioridad`,
-        typificationsControl: `Tipificación`,
-        projectDescriptionControl: `Descripción`,
-        leadsControl: `Lider Funcional`,
-        managementsControl: `Gestión`,
-        pmosControl: `PMO asignado`,
-        pmoHoursControl: `Horas Semanales PMO`,
-        pmoMinutesControl: `Minutos Semanales PMO`,
-        pmoAssistsControl: `PMO  de apoyo asignado`,
-        stagesControl: `Etapa de Apoyo`,
-        pmoAssistHoursControl: `Horas Semanales PMO de apoyo`,
-        pmoAssistMinutesControl: `Minutos Semanales PMO de apoyo`,
-        budgetApprovedControl: `Presupuesto Aprobado`,
-        budgetExecutedControl: `Presupuesto Ejecutado`,
-        balanceControl: `Saldo`,
+        priorities: `Prioridad`,
+        typifications: `Tipificación`,
+        projectDescription: `Descripción`,
+        leads: `Lider Funcional`,
+        managements: `Gestión`,
+        pmos: `PMO asignado`,
+        pmoHours: `Horas Semanales PMO`,
+        pmoMinutes: `Minutos Semanales PMO`,
+        pmoAssists: `PMO  de apoyo asignado`,
+        stages: `Etapa de Apoyo`,
+        pmoAssistHours: `Horas Semanales PMO de apoyo`,
+        pmoAssistMinutes: `Minutos Semanales PMO de apoyo`,
+        budgetApproved: `Presupuesto Aprobado`,
+        budgetExecuted: `Presupuesto Ejecutado`,
+        balance: `Saldo`,
   
-        startDateControl: `Fecha de Inicio`,
-        dueDateControl: `Fecha Final Estimada`,
-        controlDateControl: `Fecha control de cambios`,
-        statesControl: `Estado`,
-        phasesControl: `Fase`,
-        sprintControl: `Sprint`,
-        evaluationControl: `¿Como se evaluó la selección de proveedores si aplica?`,
-        testLogControl: `Bitacora de Pruebas`,
+        startDate: `Fecha de Inicio`,
+        dueDate: `Fecha Final Estimada`,
+        controlDate: `Fecha control de cambios`,
+        states: `Estado`,
+        phases: `Fase`,
+        sprint: `Sprint`,
+        evaluation: `¿Como se evaluó la selección de proveedores si aplica?`,
+        testLog: `Bitacora de Pruebas`,
       }
 
     }
@@ -197,29 +211,29 @@ export class ProjectsFormComponent implements OnInit {
 
   validateAssist () {
     environment.consoleMessage("entro validacion");
-    environment.consoleMessage(this.descripcion.get('pmoAssistsControl')!.value);
-    var valor = this.descripcion.get('pmoAssistsControl')!.value;
+    environment.consoleMessage(this.descripcion.get('pmoAssists')!.value);
+    var valor = this.descripcion.get('pmoAssists')!.value;
     if( valor != "" && valor != null && valor != 0 ){
       this.deshabilitarAssist = false;
-      this.descripcion.get('stagesControl')!.enable();
-      this.descripcion.get('pmoAssistHoursControl')!.enable();
-      this.descripcion.get('pmoAssistMinutesControl')!.enable();
+      this.descripcion.get('stages')!.enable();
+      this.descripcion.get('pmoAssistHours')!.enable();
+      this.descripcion.get('pmoAssistMinutes')!.enable();
     } else {
       this.deshabilitarAssist = true;
-      this.descripcion.get('stagesControl')!.disable();
-      this.descripcion.get('stagesControl')!.setValue(null);
-      this.descripcion.get('pmoAssistHoursControl')!.disable();
-      this.descripcion.get('pmoAssistMinutesControl')!.disable();
+      this.descripcion.get('stages')!.disable();
+      this.descripcion.get('stages')!.setValue(null);
+      this.descripcion.get('pmoAssistHours')!.disable();
+      this.descripcion.get('pmoAssistMinutes')!.disable();
     }
     return this.deshabilitarAssist
   }
 
 
   changeBudget(){
-    this.descripcion.get("balanceControl")!.
+    this.descripcion.get("balance")!.
     setValue(
       new Intl.NumberFormat('en-US').
-      format(this.descripcion.get("budgetApprovedControl")!.value - this.descripcion.get("budgetExecutedControl")!.value )
+      format(this.descripcion.get("budgetApproved")!.value - this.descripcion.get("budgetExecuted")!.value )
     );
     
   }
@@ -233,7 +247,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openAreas(ev: boolean) {
     if (ev) {
-      var vice: number = this.general.get('vicePresidenciesControl')!.value;
+      var vice: number = this.general.get('vicePresidencies')!.value;
       this._areasService.getAreasSelect()
         .subscribe((areas: Area[]) => this.areas = areas.filter(area => area.vice_presidency_id == vice));
     }
@@ -317,12 +331,12 @@ export class ProjectsFormComponent implements OnInit {
           {
             this.stateByPhases = [];
             this.phases = [];
-            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.seguimiento.get('statesControl')!.value);
+            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.seguimiento.get('states')!.value);
             for (let index = 0; index <  this.stateByPhases.length; index++) {
               this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase_id)[0]);
             }
-            if( this.phases.filter(phase => phase.id == this.seguimiento.get('phasesControl')!.value).length < 1){
-              this.seguimiento.get('phasesControl')!.setValue(0);
+            if( this.phases.filter(phase => phase.id == this.seguimiento.get('phases')!.value).length < 1){
+              this.seguimiento.get('phases')!.setValue(0);
             }
           })
         });
@@ -339,7 +353,7 @@ export class ProjectsFormComponent implements OnInit {
           {
             this.stateByPhases = [];
             this.phases = [];
-            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.seguimiento.get('statesControl')!.value);
+            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.seguimiento.get('states')!.value);
             for (let index = 0; index <  this.stateByPhases.length; index++) {
               this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase_id)[0]);
             }
@@ -361,6 +375,7 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   create(){
+    environment.consoleMessage("CREATE");
     var valido = true;
     var message = this.validateFormGroup(this.general);
     if (message != ""){
@@ -380,6 +395,7 @@ export class ProjectsFormComponent implements OnInit {
     if (message != ""){
       this.message = message;
     } else {
+      environment.consoleMessage(valido, "SIN ERROR: ");
       this.message = "";
       if (valido){
         
@@ -387,47 +403,68 @@ export class ProjectsFormComponent implements OnInit {
         this.stateByPhases.
         filter(
           stateByPhase => (
-            stateByPhase.state_id == this.seguimiento.get('statesControl')!.value) 
-            && (stateByPhase.phase_id == this.seguimiento.get('phasesControl')!.value));
+            stateByPhase.state_id == this.seguimiento.get('states')!.value) 
+            && (stateByPhase.phase_id == this.seguimiento.get('phases')!.value));
         var stateByPhase: number = stateByPhases[0].id;  
         var project: Project = {
-          title: this.general.get('titleControl')!.value,
-          area_id: this.general.get('areasControl')!.value,
-          strategic_approach_id: this.general.get('strategicApproachesControl')!.value,
-          reception_date: this.parseDate(this.general.get('receptionDateControl')!.value),
-          program_id: this.general.get('programsControl')!.value,
+          title: this.general.get('title')!.value,
+          area_id: this.general.get('areas')!.value,
+          strategic_approach_id: this.general.get('strategicApproaches')!.value,
+          reception_date: this.parseDate(this.general.get('receptionDate')!.value),
+          program_id: this.general.get('programs')!.value,
 
-          description: this.descripcion.get('projectDescriptionControl')!.value,
-          functional_lead_id: this.descripcion.get('leadsControl')!.value,
-          priority_id: this.descripcion.get('prioritiesControl')!.value,
-          typification_id: this.descripcion.get('typificationsControl')!.value,
-          management_id: this.descripcion.get('managementsControl')!.value,
-          pmo_id: this.descripcion.get('pmosControl')!.value,
-          pmo_hours: this.descripcion.get('pmoHoursControl')!.value,
-          pmo_minutes: this.descripcion.get('pmoMinutesControl')!.value,
-          pmo_assitant_id: this.descripcion.get('pmoAssistsControl')!.value,
-          pmo_assitant_stage_id: this.descripcion.get('stagesControl')!.value,
-          pmo_assistant_hours: this.descripcion.get('pmoAssistHoursControl')!.value,
-          pmo_assistant_minutes: this.descripcion.get('pmoAssistMinutesControl')!.value,
-          budget_approved: this.descripcion.get('budgetApprovedControl')!.value,
-          budget_executed: this.descripcion.get('budgetExecutedControl')!.value,
+          description: this.descripcion.get('projectDescription')!.value,
+          functional_lead_id: this.descripcion.get('leads')!.value,
+          priority_id: this.descripcion.get('priorities')!.value,
+          typification_id: this.descripcion.get('typifications')!.value,
+          management_id: this.descripcion.get('managements')!.value,
+          pmo_id: this.descripcion.get('pmos')!.value,
+          pmo_hours: this.descripcion.get('pmoHours')!.value,
+          pmo_minutes: this.descripcion.get('pmoMinutes')!.value,
+          pmo_assitant_id: this.descripcion.get('pmoAssists')!.value,
+          pmo_assitant_stage_id: this.descripcion.get('stages')!.value,
+          pmo_assistant_hours: this.descripcion.get('pmoAssistHours')!.value,
+          pmo_assistant_minutes: this.descripcion.get('pmoAssistMinutes')!.value,
+          budget_approved: this.descripcion.get('budgetApproved')!.value,
+          budget_executed: this.descripcion.get('budgetExecuted')!.value,
 
-          start_date: this.parseDate(this.seguimiento.get('startDateControl')!.value),
-          due_date: this.parseDate(this.seguimiento.get('dueDateControl')!.value),
-          control_date: this.parseDate(this.seguimiento.get('controlDateControl')!.value),
+          start_date: this.parseDate(this.seguimiento.get('startDate')!.value),
+          due_date: this.parseDate(this.seguimiento.get('dueDate')!.value),
+          control_date: this.parseDate(this.seguimiento.get('controlDate')!.value),
           states_by_phase_id: stateByPhase,
-          sprint: this.seguimiento.get('sprintControl')!.value,
-          evaluation: this.seguimiento.get('evaluationControl')!.value,
-          test_log: this.seguimiento.get('testLogControl')!.value,
+          sprint: this.seguimiento.get('sprint')!.value,
+          evaluation: this.seguimiento.get('evaluation')!.value,
+          test_log: this.seguimiento.get('testLog')!.value,
 
           is_active: true,
           is_delete: false
 
         }
         
+        environment.consoleMessage(project, "OBJETO: ");
         
         
-        this._projectsService.addProjects(project);
+        this._projectsService.addProjects(project).subscribe((res) => {
+          environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+          this.fButtonDisabled = false;
+          if (res.status == 'created') {
+            this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          }
+        }, (err) => {
+          this.fButtonDisabled = false;
+          let aErrors: any[] = [];
+          for(let i in err.error) {
+            aErrors = aErrors.concat(err.error[i])
+          }
+  
+          let sErrors: string = "";
+          aErrors.forEach((err) => {
+            sErrors += "- " + err + "\n";
+            environment.consoleMessage(err, "Error: ");
+          })
+  
+          this.openSnackBar(false, sErrors, "");
+        });;
         this.emitClose.emit('close');
 
       }else{
@@ -478,6 +515,38 @@ export class ProjectsFormComponent implements OnInit {
     }
 
     return message;
+  }
+
+  getMessageError(formGroup: FormGroup, field: string): string {
+    let message!: string;
+
+    if (formGroup.get(field)?.errors?.required) {
+      message = `Campo ${this.labels[field]} es requerido`
+    }
+
+    return message;
+  }
+
+  onReset(formGroup: FormGroup) {
+    this.isButtonReset = true;
+    var keys = Object.keys(formGroup.controls)
+    for (let index = 0; index < keys.length; index++) {
+      formGroup.controls[keys[index]].setValue(null);
+    }
+    if(formGroup == this.descripcion){
+      this.validateAssist();
+    }
+  }
+
+  openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
+    var panelClass = "succes-snack-bar";
+    if(!succes){
+      panelClass  = "error-snack-bar";
+    }
+    this.snackBar.open(message, action, {
+      duration: duration,
+      panelClass: panelClass
+    });
   }
 
 }
