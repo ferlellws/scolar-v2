@@ -12,10 +12,10 @@
   <form action="" [formGroup]="phasesGroup" (ngSubmit)="onSubmit()"
     *ngIf="data.mode === 'create' || (data.mode === 'edit' && phase); else loadingBlock">
     <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-12">
         <mat-form-field class="full-width">
           <mat-label>{{ singularOption }}</mat-label>
-          <input matInput formControlName="title">
+          <input matInput formControlName="title" required>
           <mat-error *ngIf="this.phasesGroup.get('title')?.invalid">
             {{ getMessageError('title', "fase") }}
           </mat-error>

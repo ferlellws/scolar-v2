@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { StrategicApproach } from '../models/strategic-approach';
 import { tap } from 'rxjs/operators';
+import { TableData } from '../models/table-data';
 
 @Injectable({
   providedIn: 'root'
@@ -11,27 +12,28 @@ export class StrategicApproachesService {
 
   private readonly API = `${environment.API}/strategic_approaches`;
 
-  emitModify = new EventEmitter<any>();
-  emitDelete = new EventEmitter<any>();
-  emitAdd = new EventEmitter<any>();
-  
-  constructor(private http: HttpClient) { }
+  emitDataTable = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
     user_token: JSON.parse(localStorage.user).authentication_token
   };
 
+  httpOptions!: any;
+  
+  constructor(
+    private http: HttpClient
+    ) {
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bareer ${localStorage.token}`
+        }),
+        params: this.inputParams
+      };
+  }
+
   getStrategicApproachesAll() {
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: this.inputParams
-    };
-
-    return this.http.get<StrategicApproach[]>(`${this.API}/list`, httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -39,15 +41,7 @@ export class StrategicApproachesService {
   }
 
   getStrategicApproachesSelect() {
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: this.inputParams
-    };
-
-    return this.http.get<StrategicApproach[]>(`${this.API}/select`, httpOptions)
+    return this.http.get<StrategicApproach[]>(`${this.API}/select`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -55,72 +49,60 @@ export class StrategicApproachesService {
   }
 
   getStrategicApproachesId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<StrategicApproach>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<StrategicApproach>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
-      tap(console.log)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
     );
   }
 
   addStrategicApproaches(strategicApproach: StrategicApproach) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.post<StrategicApproach>(this.API, strategicApproach, httpOptions)
-    .subscribe((data: StrategicApproach) => {
-      this.emitAdd.emit(data);
-    });
-  }
-
-  deleteStrategicApproachesId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.delete<StrategicApproach>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: StrategicApproach) => {
-      this.emitDelete.emit(data);
-    });
+    return this.http.post<StrategicApproach>(this.API, { strategic_approach: strategicApproach }, this.httpOptions)
+    .pipe(
+      tap((data: any) => {
+        this.emitDataTable.emit(data);
+      })
+    );
   }
 
   updateStrategicApproachesId(strategicApproach: StrategicApproach, id: number) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.put<StrategicApproach>(`${this.API}/${id}`, strategicApproach, httpOptions)
-      .subscribe((data: StrategicApproach) => {
-        this.emitModify.emit(data);
-      });
+    return this.http.put<StrategicApproach>(`${this.API}/${id}`, strategicApproach, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
+  updateStatusStrategicApproach(is_active: number, id: number) {
+    return this.http.put<StrategicApproach>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  logicalDeleteStrategicApproach(id: number) {
+    return this.http.put<StrategicApproach>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteStrategicApproachesId(id: number) {
+    return this.http.delete<StrategicApproach>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+  
 }

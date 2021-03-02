@@ -68,7 +68,6 @@ export class PhasesService {
   }
 
   updatePhaseId(phase: Phase, id: number) {
-
     return this.http.put<Phase>(`${this.API}/${id}`, phase, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -78,7 +77,6 @@ export class PhasesService {
   }
 
   updateStatusPhase(is_active: number, id: number) {
-
     return this.http.put<Phase>(`${this.API}/${id}/change_status`,
       {is_active: is_active},
       this.httpOptions)
@@ -90,7 +88,6 @@ export class PhasesService {
   }
 
   logicalDeletePhase(id: number) {
-
     return this.http.put<Phase>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -100,7 +97,6 @@ export class PhasesService {
   }
 
   deletePhase(id: number) {
-
     return this.http.delete<Phase>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {

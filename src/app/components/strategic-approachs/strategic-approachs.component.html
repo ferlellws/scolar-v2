@@ -1,1 +1,16 @@
-<p>strategic-approachs works!</p>
+<div class="cont-table mat-elevation-z5">
+  <tecno-dynamic-table
+    style="width: 100%;"
+    [objectsData]="dataTable"
+    (emitEdit)="onEdit($event)"
+    (emitStatusChange)="onStatusChange($event)"
+    (emitDelete)="onDelete($event)"
+    (emitDeleteLogic)="onDeleteLogic($event)"
+    [isUserProfile]="false"
+    >
+  </tecno-dynamic-table>
+</div>
+
+<button mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
+  <mat-icon>add</mat-icon>
+</button>

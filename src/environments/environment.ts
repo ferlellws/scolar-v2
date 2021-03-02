@@ -7,6 +7,8 @@ export const environment = {
   // API: 'http://localhost:5000',
   API: 'http://localhost:3000',
   widthFormsModal: '80%',
+  widthFormsLittleModal: '50%',
+
   // API: 'http://localhost:3000',
   consoleMessage(dataShow: any, strLabel: string = "") {
     if (strLabel != "") {

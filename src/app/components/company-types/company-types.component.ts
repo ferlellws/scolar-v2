@@ -6,6 +6,7 @@ import { environment } from './../../../environments/environment';
 import { TableData } from 'src/app/models/table-data';
 
 // COMPONENTS
+import { CompanyTypesFormComponent } from './company-types-form/company-types-form.component';
 
 // SERVICES
 import { CompanyTypesService } from 'src/app/services/company-types.service';
@@ -14,7 +15,6 @@ import { CompanyTypesService } from 'src/app/services/company-types.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
 import { MainService } from 'src/app/services/main.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CompanyTypesFormComponent } from './company-types-form/company-types-form.component';
 
 @Component({
   selector: 'tecno-company-types',
@@ -51,7 +51,7 @@ export class CompanyTypesComponent implements OnInit {
   onCreate() {
     environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(CompanyTypesFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
@@ -63,7 +63,7 @@ export class CompanyTypesComponent implements OnInit {
   onEdit(data: number) {
     environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(CompanyTypesFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         id: data,

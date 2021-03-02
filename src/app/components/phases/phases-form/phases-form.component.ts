@@ -58,7 +58,7 @@ export class PhasesFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.phasesGroup, "OnSubmit tipo de compañias: ");
+    environment.consoleMessage(this.phasesGroup, "OnSubmit fases: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PhasesResolver } from './phases.resolver';
 
-describe('CompanyTypesResolver', () => {
+describe('PhasesResolver', () => {
   let resolver: PhasesResolver;
 
   beforeEach(() => {
