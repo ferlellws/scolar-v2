@@ -151,12 +151,11 @@
                     </mat-form-field>
                 </div>        
             </div>
+            <mat-divider></mat-divider>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para beneficios</h3>
-                </div>
-            </div>
+            <tecno-text-list class="external-component" name="Beneficios" (emitChange)="onBenefits($event)"></tecno-text-list>
+               
+            <mat-divider></mat-divider>
         
             <div class="row">
                 <div class="col-sm-12 col-md-8">
@@ -187,6 +186,7 @@
                     </mat-form-field>
                 </div>
             </div>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">
@@ -229,6 +229,7 @@
                     </mat-form-field>
                 </div>
             </div>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-8">
@@ -299,6 +300,7 @@
                     </mat-form-field>
                 </div>
             </div>
+            <mat-divider></mat-divider>
 
                 
             <div class="row">
@@ -455,17 +457,13 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para Hitos</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-text-list class="external-component" name="Hitos" (emitChange)="onHighlights($event)"></tecno-text-list>
+            <mat-divider></mat-divider>
                 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para Riesgos</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-text-list class="external-component" name="Riesgos" (emitChange)="onRisks($event)"></tecno-text-list>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">
@@ -479,11 +477,9 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para KPIs</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-text-list class="external-component" name="KPIs" (emitChange)="onKpis($event)"></tecno-text-list>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">

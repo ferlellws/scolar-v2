@@ -26,6 +26,9 @@ import { MessageComponent } from './message/message.component';
 import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
 import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TextListComponent } from './text-list/text-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 const COMPONENTS = [
   MenuComponent,
@@ -33,7 +36,8 @@ const COMPONENTS = [
   FormDebugComponent,
   InfoPageComponent,
   DynamicTableComponent,
-  AlertDialogComponent
+  AlertDialogComponent,
+  TextListComponent,
 ];
 
 const materialModules = [
@@ -58,11 +62,16 @@ const materialModules = [
   declarations: [
     COMPONENTS,
     MessageComponent,
+    TextListComponent,
   ],
   imports: [
     CommonModule,
     materialModules,
-    RouterModule
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     COMPONENTS,

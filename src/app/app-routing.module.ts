@@ -70,7 +70,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
-      // projects: ProjectsResolver,
+      projects: ProjectsResolver,
       dashboard: DashboardProjectsResolver,
     }
   },

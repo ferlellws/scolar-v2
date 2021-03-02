@@ -33,6 +33,14 @@ import { Project } from 'src/app/models/project';
 import { ProjectsService } from 'src/app/services/projects.service'
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BenefitsService } from 'src/app/services/benefits.service';
+import { Benefit } from 'src/app/models/benefit';
+import { Highlight } from 'src/app/models/highlight';
+import { HighlightsService } from 'src/app/services/highlights.service';
+import { RisksService } from 'src/app/services/risks.service';
+import { Risk } from 'src/app/models/risk';
+import { KpisService } from 'src/app/services/kpis.service';
+import { Kpi } from 'src/app/models/kpi';
 
 export interface DialogData {
   id: number;
@@ -108,6 +116,10 @@ export class ProjectsFormComponent implements OnInit {
   isButtonReset: boolean = false;
   fButtonDisabled: boolean = false;
 
+  benefits: string[] = [];
+  highlights: string[] = [];
+  risks: string[] = [];
+  kpis: string[] = [];
 
   constructor(
     private _fbG: FormBuilder,
@@ -125,6 +137,10 @@ export class ProjectsFormComponent implements OnInit {
     private _phasesService: PhasesService,
     private _statesByPhasesService: StateByPhasesService,
     private _projectsService: ProjectsService,
+    private _benefitsService: BenefitsService,
+    private _highlightsService: HighlightsService,
+    private _risksService: RisksService,
+    private _kpisService: KpisService,
     public datepipe: DatePipe,
     private snackBar: MatSnackBar,
 
@@ -207,6 +223,26 @@ export class ProjectsFormComponent implements OnInit {
   ngOnInit(): void {
     this.validateAssist ();
     this.validateFormGroup(this.general)
+  }
+
+  onBenefits(benefits: string[]){
+    this.benefits = benefits;
+    environment.consoleMessage(this.benefits, "beneficios padre")
+  }
+
+  onHighlights(highlights: string[]){
+    this.highlights = highlights;
+    environment.consoleMessage(this.highlights, "hitos padre")
+  }
+
+  onRisks(risks: string[]){
+    this.risks = risks;
+    environment.consoleMessage(this.risks, "riesgos padre")
+  }
+
+  onKpis(kpis: string[]){
+    this.kpis = kpis;
+    environment.consoleMessage(this.kpis, "kpis padre")
   }
 
   validateAssist () {
@@ -374,7 +410,7 @@ export class ProjectsFormComponent implements OnInit {
     }
   }
 
-  create(){
+   async create(){
     environment.consoleMessage("CREATE");
     var valido = true;
     var message = this.validateFormGroup(this.general);
@@ -443,12 +479,52 @@ export class ProjectsFormComponent implements OnInit {
         
         environment.consoleMessage(project, "OBJETO: ");
         
-        
-        this._projectsService.addProjects(project).subscribe((res) => {
+        this.fButtonDisabled = true;
+        await this._projectsService.addProjects(project).subscribe((res) => {
           environment.consoleMessage(res, "<<<<<<<<>>>>>>");
           this.fButtonDisabled = false;
           if (res.status == 'created') {
             this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+            var id = res.location.id;
+            for (let index = 0; index < this.benefits.length; index++) {
+              var benefit: Benefit = {
+                project_id: id,
+                description: this.benefits[index],
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._benefitsService.addBenefit(benefit).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.highlights.length; index++) {
+              var highlight: Highlight = {
+                project_id: id,
+                description: this.highlights[index],
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._highlightsService.addHighlight(highlight).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.risks.length; index++) {
+              var risk: Risk = {
+                project_id: id,
+                description: this.risks[index],
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._risksService.addRisk(risk).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.kpis.length; index++) {
+              var kpi: Kpi = {
+                project_id: id,
+                description: this.kpis[index],
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._kpisService.addKpi(kpi).
+              subscribe(data => environment.consoleMessage(data));
+            }
           }
         }, (err) => {
           this.fButtonDisabled = false;
@@ -465,6 +541,7 @@ export class ProjectsFormComponent implements OnInit {
   
           this.openSnackBar(false, sErrors, "");
         });;
+        this.fButtonDisabled = false;
         this.emitClose.emit('close');
 
       }else{
