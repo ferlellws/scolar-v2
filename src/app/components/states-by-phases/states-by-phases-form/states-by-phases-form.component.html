@@ -8,25 +8,30 @@
 </mat-toolbar>
   
 <div class="example-container bg-color-white mat-elevation-z4">
-  <form action="" [formGroup]="riskLevelsGroup" (ngSubmit)="onSubmit()"
-    *ngIf="data.mode === 'create' || (data.mode === 'edit' && riskLevel); else loadingBlock">
+  <form action="" [formGroup]="stateByPhasesGroup" (ngSubmit)="onSubmit()"
+    *ngIf="data.mode === 'create' || (data.mode === 'edit' && stateByPhase); else loadingBlock">
     <div class="row">
-      <div class="col-sm-12 col-md-12">
+      <div class="col-sm-12 col-md-6">
         <mat-form-field class="full-width">
-          <mat-label>{{ singularOption }}</mat-label>
-          <input matInput formControlName="title" required>
-          <mat-error *ngIf="this.riskLevelsGroup.get('title')?.invalid">
-            {{ getMessageError('title', "nivel de riesgo") }}
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="state_id" (click)="onClickSelectState()" required>
+            <mat-option *ngFor="let state of selectState" [value]="state.id">{{ state.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.stateByPhasesGroup.get('state_id')?.invalid">
+            {{ getMessageError('state_id', " estado") }}
           </mat-error>
         </mat-form-field>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-sm-12 col-md-12">
+      <div class="col-sm-12 col-md-6">
         <mat-form-field class="full-width">
-          <mat-label>Descripción</mat-label>
-          <textarea matInput formControlName="description"></textarea>
+          <mat-label>Fase</mat-label>
+          <mat-select formControlName="phase_id" (click)="onClickSelectPhase()" required>
+            <mat-option *ngFor="let phase of selectPhase" [value]="phase.id">{{ phase.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.stateByPhasesGroup.get('phase_id')?.invalid">
+            {{ getMessageError('phase_id', " fase") }}
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -41,7 +46,7 @@
       <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
       <button class="button"
         mat-button color="primary"
-        [disabled]="riskLevelsGroup.invalid || fButtonDisabled">
+        [disabled]="stateByPhasesGroup.invalid || fButtonDisabled">
           {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
       </button>
     </div>
@@ -55,5 +60,5 @@
     </div>
   </ng-template>
 
-  <tecno-form-debug [form]="riskLevelsGroup"></tecno-form-debug>
+  <tecno-form-debug [form]="stateByPhasesGroup"></tecno-form-debug>
 </div>

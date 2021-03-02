@@ -19,7 +19,7 @@
       <div class="col-sm-12 col-md-6">
         <mat-form-field class="full-width">
           <mat-label>{{ singularOption }}</mat-label>
-          <input matInput formControlName="title">
+          <input matInput formControlName="title" required>
           <mat-error *ngIf="this.vicePresidenciesGroup.get('title')?.invalid">
             {{ getMessageError('title', "vicepresidencia") }}
           </mat-error>
@@ -28,7 +28,7 @@
       <div class="col-sm-12 col-md-6">
         <mat-form-field class="full-width">
           <mat-label>Jefe</mat-label>
-          <mat-select formControlName="manager_id" (click)="onClickSelectManager()" >
+          <mat-select formControlName="manager_id" (click)="onClickSelectManager()" required>
             <mat-option *ngFor="let manager of selectManagers" [value]="manager.id">{{ manager.full_name }}</mat-option>
           </mat-select>
           <mat-error *ngIf="this.vicePresidenciesGroup.get('manager_id')?.invalid">

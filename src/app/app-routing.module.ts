@@ -17,6 +17,9 @@ import { PrioritiesResolver } from './components/priorities/guards-priorities/pr
 import { ProgramsResolver } from './components/programs/guards-programs/programs.resolver';
 import { RiskLevelsResolver } from './components/risk-levels/guards-managements/risk-levels.resolver';
 import { StagesResolver } from './components/stages/guards-stages/stages.resolver';
+import { StrategicApproachesResolver } from './components/strategic-approachs/guards-strategic-approaches/strategic-approaches.resolver';
+import { TypificationsResolver } from './components/typifications/guards-typifications/typifications.resolver';
+import { StateByPhasesResolver } from './components/states-by-phases/guards-state-by-phases/state-by-phases.resolver';
 
 const routes: Routes = [
   {
@@ -67,7 +70,14 @@ const routes: Routes = [
       companyTypes: CompanyTypesResolver
     }
   },
-  { path: 'states-by-phases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
+  { path: 'states-by-phases',
+    loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      stateByPhases: StateByPhasesResolver
+    }
+  },
   { path: 'companies',
     loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule),
     canActivate: [AuthGuard],
@@ -84,7 +94,14 @@ const routes: Routes = [
       areas: AreasResolver
     }  
   },
-  { path: 'strategic-acpproachs', loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule) },
+  { path: 'strategic-approachs',
+    loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      strategicApproaches: StrategicApproachesResolver
+    } 
+  },
   { path: 'programs',
     loadChildren: () => import('./components/programs/programs.module').then(m => m.ProgramsModule),
     canActivate: [AuthGuard],
@@ -101,9 +118,17 @@ const routes: Routes = [
       priorities: PrioritiesResolver
     }  
   },
-  { path: 'typifications', loadChildren: () => import('./components/typifications/typifications.module').then(m => m.TypificationsModule) },
+  { path: 'typifications',
+    loadChildren: () => import('./components/typifications/typifications.module').then(m => m.TypificationsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      typifications: TypificationsResolver
+    }  
+  },
   { path: 'managements',
     loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule),
+    canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
       managements: ManagementsResolver
