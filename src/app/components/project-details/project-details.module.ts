@@ -30,8 +30,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatInputModule } from '@angular/material/input';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProjectDetailsResolver } from './guards/project-details.resolver';
+import { ValoremFormComponent } from './valorem-form/valorem.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const materialModels = [
   MatSortModule,
@@ -62,11 +64,15 @@ const materialModels = [
   MatInputModule,
   MatButtonToggleModule,
   MatRippleModule,
-  MatMenuModule
+  MatMenuModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({
-  declarations: [ProjectDetailsComponent],
+  declarations: [
+    ProjectDetailsComponent,
+    ValoremFormComponent
+  ],
   imports: [
     CommonModule,
     ProjectDetailsRoutingModule,
@@ -80,6 +86,9 @@ const materialModels = [
     DatePipe,
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }
+  ],
+  exports: [
+    materialModels
   ]
 })
 export class ProjectDetailsModule { }

@@ -1,0 +1,47 @@
+.example-container .mat-form-field + .mat-form-field {
+    margin-left: 20px;
+  }
+  
+  .example-container form {
+    margin-bottom: 20px;
+  }
+  
+  .example-container form > * {
+    margin: 5px 0;
+  }
+  
+  .example-container .mat-radio-button {
+    margin: 0 12px;
+  }
+  
+  .example-container {
+    padding: 10px;
+  }
+  
+  .error-message{
+    color: red;
+  }
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .button{
+    margin-left: 10px;
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .buttonForm {
+    //display: flex;
+    justify-content: flex-end;
+    margin: 20px;
+  }
+
+  .dialog-scroll {
+    position: relative;
+    overflow: auto;
+    max-height: 70vh;
+  }

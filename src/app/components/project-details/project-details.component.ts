@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from 'src/app/models/project';
 import { MainService } from 'src/app/services/main.service';
 import { environment } from 'src/environments/environment';
+import { ValoremFormComponent } from './valorem-form/valorem.component';
 
 @Component({
   selector: 'tecno-project-details',
@@ -14,6 +16,7 @@ export class ProjectDetailsComponent implements OnInit {
   project: any;
 
   constructor(
+    public dialog: MatDialog, 
     private route: ActivatedRoute,
     private mainService: MainService,
     private router: Router
@@ -35,6 +38,14 @@ export class ProjectDetailsComponent implements OnInit {
 
   onValorem(){
     environment.consoleMessage("onValorem");
+    const dialogRef = this.dialog.open(ValoremFormComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
   }
 
   onWeek(){
