@@ -471,27 +471,17 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para Aplicaciones inpactadas</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-applications-by-project class="external-component" (emitChange)="onApplications($event)"></tecno-applications-by-project>
+            <mat-divider></mat-divider>
 
             <mat-divider></mat-divider>
             <tecno-text-list class="external-component" name="KPIs" (emitChange)="onKpis($event)"></tecno-text-list>
             <mat-divider></mat-divider>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para areas participantes</h3>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para areas participantes</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-areas-by-project class="external-component" (emitChange)="onAreasByProject($event)" ></tecno-areas-by-project>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">
@@ -508,11 +498,9 @@
                 </div>        
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para proveedores</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-companies-by-project class="external-component" (emitChange)="onCompaniesByProject($event)" ></tecno-companies-by-project>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-4"></div>
@@ -535,11 +523,10 @@
                 <div class="col-sm-12 col-md-4"></div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-4">
-                    <h3 class="mat-title">Espacio para recursos funcionales, pruebas</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-test-users class="external-component" (emitChange)="onTestUsers($event)" ></tecno-test-users>
+            <mat-divider></mat-divider>
+            
         </form>
         <div class="buttons">
             <button class="button" mat-button color="primary" (click)="onReset(seguimiento)">Limpiar</button>

@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Form, FormGroup, Validators } from '@angular/forms';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import {VicePresidenciesService} from '../../../services/vice-presidencies.service'
@@ -41,6 +41,16 @@ import { RisksService } from 'src/app/services/risks.service';
 import { Risk } from 'src/app/models/risk';
 import { KpisService } from 'src/app/services/kpis.service';
 import { Kpi } from 'src/app/models/kpi';
+import { Application } from 'src/app/models/application';
+import { ApplicationByProject } from 'src/app/models/application-by-project';
+import { ApplicationsByProjectService } from 'src/app/services/applications-by-project.service';
+import { AreasByProjectService } from 'src/app/services/areas-by-project.service';
+import { AreaByProject } from 'src/app/models/area-by-project';
+import { Company } from 'src/app/models/company';
+import { CompanyByProject } from 'src/app/models/company-by-project';
+import { CompaniesByProjectService } from 'src/app/services/companies-by-project.service';
+import { TestUsersService } from 'src/app/services/test-users.service';
+import { TestUser } from 'src/app/models/test-user';
 
 export interface DialogData {
   id: number;
@@ -57,36 +67,12 @@ export class ProjectsFormComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
+  
+  project!: Project;
+
+
 
   message: string = "";
-
-  title!:string;
-  vicePresidency!: number;
-  area!: number;
-  strategicApproach!: number;
-  program!: number;
-
-  lead_id!: number;
-  priority!: number;
-  typification!: number;
-  projectDescription!: string;
-  management!: number;
-  pmo_id!: number;
-  pmoHours!: number;
-  pmoMinutes!: number;
-  pmoAssist_id!: number;
-  stage!: number;
-  pmoAssistHours!: number;
-  pmoAssistMinutes!: number;
-  budgetApproved!: number;
-  budgetExecuted!: number;
-  balance: number = this.budgetApproved - this.budgetExecuted;
-
-  state!: number;
-  phase!: number;
-  sprint!: number;
-  evaluation!: string;
-  testLog!:number;
 
   labels:any;
 
@@ -120,6 +106,10 @@ export class ProjectsFormComponent implements OnInit {
   highlights: string[] = [];
   risks: string[] = [];
   kpis: string[] = [];
+  applications: Application[] = [];
+  areasByProject: any[] = [];
+  companies: Company[] = [];
+  testUsers: User[] = [];
 
   constructor(
     private _fbG: FormBuilder,
@@ -141,47 +131,54 @@ export class ProjectsFormComponent implements OnInit {
     private _highlightsService: HighlightsService,
     private _risksService: RisksService,
     private _kpisService: KpisService,
+    private _applicationsByProjectsService: ApplicationsByProjectService,
+    private _areasByProjectsService: AreasByProjectService,
+    private _companiesByProjectsService: CompaniesByProjectService,
+    private _testUsersService: TestUsersService,
     public datepipe: DatePipe,
     private snackBar: MatSnackBar,
 
     ) { 
+      
       this.general = this._fbG.group({
-        'title': [this.title, [Validators.required]],
-        'vicePresidencies': [this.vicePresidency, [Validators.required]],
-        'areas': [this.area, [Validators.required]],
-        'strategicApproaches': [this.strategicApproach, [Validators.required]],
-        'receptionDate': [new Date, [Validators.required]],
-        'programs': [this.program],
+        'title': [null, [Validators.required]],
+        'vicePresidencies': [null, [Validators.required]],
+        'areas': [null, [Validators.required]],
+        'strategicApproaches': [null, [Validators.required]],
+        'receptionDate': [null, [Validators.required]],
+        'programs': [null],
       });
 
       this.descripcion = this._fbG.group({
-        'projectDescription': [this.projectDescription, [Validators.required]],
-        'leads': [this.lead_id, [Validators.required]],
-        'priorities': [this.priority, [Validators.required]],
-        'typifications': [this.typification, [Validators.required]],
-        'managements': [this.management, [Validators.required]],
-        'pmos': [this.pmo_id, [Validators.required]],
-        'pmoHours': [this.pmoHours, [Validators.required]],
-        'pmoMinutes': [this.pmoMinutes, [Validators.required]],
-        'pmoAssists': [this.pmoAssist_id],
-        'stages': [{value: this.stage, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistHours': [{value: this.pmoAssistHours, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistMinutes': [{value: this.pmoAssistMinutes, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'budgetApproved': [this.budgetApproved, [Validators.required]],
-        'budgetExecuted': [this.budgetExecuted, [Validators.required]],
-        'balance': [{value: this.balance, disabled: true}, [Validators.required]],
+        'projectDescription': [null, [Validators.required]],
+        'leads': [null, [Validators.required]],
+        'priorities': [null, [Validators.required]],
+        'typifications': [null, [Validators.required]],
+        'managements': [null, [Validators.required]],
+        'pmos': [null, [Validators.required]],
+        'pmoHours': [null, [Validators.required]],
+        'pmoMinutes': [null, [Validators.required]],
+        'pmoAssists': [null],
+        'stages': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'pmoAssistMinutes': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'budgetApproved': [null, [Validators.required]],
+        'budgetExecuted': [null, [Validators.required]],
+        'balance': [{value: null, disabled: true}, [Validators.required]],
       });
 
       this.seguimiento = this._fbG.group({
         'startDate': [],
         'dueDate': [],
         'controlDate': [],
-        'states': [this.state, [Validators.required]],
-        'phases': [this.phase, [Validators.required]],
-        'sprint': [this.phase, [Validators.required]],
-        'evaluation': [this.evaluation],
-        'testLog': [this.testLog],
+        'states': [null, [Validators.required]],
+        'phases': [null, [Validators.required]],
+        'sprint': [null, [Validators.required]],
+        'evaluation': [null],
+        'testLog': [null],
       });
+      
+      
 
 
       this.labels = {
@@ -220,9 +217,98 @@ export class ProjectsFormComponent implements OnInit {
 
     }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this._projectsService.getProjectsId(this.data.id)
+    .subscribe(project => {
+      this.project = project; 
+      environment.consoleMessage(this.project ,"project>>>>>>>>");
+      this.resetformToProject();
+    });
+    if(this.data.mode == 'edit'){
+      await this._vicePresidenciesService.getVicePresidenciesSelect()
+      .subscribe(data => this.vicePresidencies = data);
+      await this._areasService.getAreasSelect()
+        .subscribe((areas: Area[]) => this.areas = areas
+          .filter(area => area.vice_presidency_id == this.project.area?.vice_presidency_id));
+      await this._strategicApproachesService.getStrategicApproachesSelect()
+      .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
+      await this._programsService.getProgramsSelect()
+      .subscribe((programs: Program[]) => this.programs = programs);
+      await this._usersService.getManagers()
+      .subscribe((leads: User[]) => this.leads = leads);
+      await this._prioritiesService.getPrioritiesSelect()
+      .subscribe((priorities: Priority[]) => this.priorities = priorities);
+      await  this._typificationsService.getTypificationsSelect()
+      .subscribe((typifications: Typification[]) => this.typifications = typifications);
+      await  this._managementsService.getManagementsSelect()
+      .subscribe((managements: Management[]) => this.managements = managements);
+      await this._usersService.getManagers()
+      .subscribe((pmos: User[]) => this.pmos = pmos);
+      await this._usersService.getManagers()
+        .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
+      await this._stagesService.getStagesSelect()
+        .subscribe((stages: Stage[]) => this.stages = stages);
+      await this._statesService.getStatesSelect()
+      .subscribe((states: State[]) => this.states = states);
+      //fases
+      this._phasesService.getPhasesSelect()
+      .subscribe((phases: Phase[]) => 
+      {
+        this._statesByPhasesService.getStateByPhasesSelect()
+        .subscribe((stateByPhases: StateByPhase[]) =>
+        {
+          this.stateByPhases = [];
+          this.phases = [];
+          this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.project.states_by_phase?.state_id);
+          for (let index = 0; index <  this.stateByPhases.length; index++) {
+            this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase_id)[0]);
+          }
+          if( this.phases.filter(phase => phase.id == this.project.states_by_phase?.phase_id).length < 1){
+            this.seguimiento.get('phases')!.setValue(0);
+          }
+        })
+      });
+      //fin fases
+       
+      
+    }
     this.validateAssist ();
     this.validateFormGroup(this.general)
+  }
+
+  resetformToProject(){
+    this.general.get('title')?.setValue(this.project.title);
+      this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
+      this.general.get('areas')?.setValue(this.project.area!.id);
+      this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
+      this.general.get('receptionDate')?.setValue(new Date(this.project.reception_date));
+      this.general.get('programs')?.setValue(this.project.program == null ? null: this.project.program!.id);
+
+      this.descripcion.get('projectDescription')?.setValue(this.project.description);
+      this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
+      this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
+      this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
+      this.descripcion.get('managements')?.setValue(this.project.management!.id);
+      this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
+      this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
+      this.descripcion.get('pmoMinutes')?.setValue(this.project.pmo_minutes);
+      this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
+      this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
+      this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours);
+      this.descripcion.get('pmoAssistMinutes')?.setValue(this.project.pmo_assistant_minutes);
+      this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
+      this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
+      this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
+
+      this.seguimiento.get('startDate')?.setValue(new Date(this.project.start_date!));
+      this.seguimiento.get('dueDate')?.setValue(new Date(this.project.due_date!));
+      this.seguimiento.get('controlDate')?.setValue(new Date(this.project.control_date!));
+      this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
+      this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
+      this.seguimiento.get('sprint')?.setValue(this.project.sprint);
+      this.seguimiento.get('evaluation')?.setValue(this.project.evaluation);
+      this.seguimiento.get('testLog')?.setValue(this.project.test_log);
+      this.validateAssist ();
   }
 
   onBenefits(benefits: string[]){
@@ -244,6 +330,27 @@ export class ProjectsFormComponent implements OnInit {
     this.kpis = kpis;
     environment.consoleMessage(this.kpis, "kpis padre")
   }
+
+  onApplications(applications: Application[]){
+    this.applications = applications;
+    environment.consoleMessage(this.applications, "applications padre")
+  }
+
+  onAreasByProject(areasByProject: any[]){
+    this.areasByProject = areasByProject;
+    environment.consoleMessage(this.areasByProject, "areasByProject padre")
+  }
+
+  onCompaniesByProject(companiesByProject: Company[]){
+    this.companies = companiesByProject;
+    environment.consoleMessage(this.companies, "companiesByProject padre")
+  }
+
+  onTestUsers(testUsers: User[]){
+    this.testUsers = testUsers;
+    environment.consoleMessage(this.testUsers, "testUsers padre")
+  }
+
 
   validateAssist () {
     environment.consoleMessage("entro validacion");
@@ -523,6 +630,46 @@ export class ProjectsFormComponent implements OnInit {
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
               this._kpisService.addKpi(kpi).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.applications.length; index++) {
+              var application: ApplicationByProject = {
+                project_id: id,
+                application_id :this.applications[index].id,
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._applicationsByProjectsService.addApplicationByProject(application).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.areasByProject.length; index++) {
+              var area: AreaByProject = {
+                project_id: id,
+                area_id : this.areasByProject[index].id,
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._areasByProjectsService.addAreaByProject(area).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.companies.length; index++) {
+              var company: CompanyByProject = {
+                project_id: id,
+                company_id : this.companies[index].id,
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._companiesByProjectsService.addCompanyByProject(company).
+              subscribe(data => environment.consoleMessage(data));
+            }
+
+            for (let index = 0; index < this.testUsers.length; index++) {
+              var testUser: TestUser = {
+                project_id: id,
+                user_id : this.testUsers[index].id,
+                user_creates_id: JSON.parse(localStorage.user).id,
+              } 
+              this._testUsersService.addTestUser(testUser).
               subscribe(data => environment.consoleMessage(data));
             }
           }

@@ -33,6 +33,10 @@ import { MatInputModule } from '@angular/material/input';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { ProjectsResolver } from './guards-projects/projects.resolver';
 import { ProjectsDashboardComponent } from './projects-dashboard/projects-dashboard.component';
+import { ApplicationsByProjectComponent } from './projects-form/applications-by-project/applications-by-project.component';
+import { AreasByProjectComponent } from './projects-form/areas-by-project/areas-by-project.component';
+import { CompaniesByProjectComponent } from './projects-form/companies-by-project/companies-by-project.component';
+import { TestUsersComponent } from './projects-form/test-users/test-users.component';
 
 const materialModels = [
   MatSortModule,
@@ -62,7 +66,7 @@ const materialModels = [
   MatChipsModule,
   MatInputModule,
   MatButtonToggleModule,
-  MatRippleModule
+  MatRippleModule,
 ];
 
 @NgModule({
@@ -70,6 +74,10 @@ const materialModels = [
     ProjectsComponent,
     ProjectsFormComponent,
     ProjectsDashboardComponent,
+    ApplicationsByProjectComponent,
+    AreasByProjectComponent,
+    CompaniesByProjectComponent,
+    TestUsersComponent,
   ],
   imports: [
     CommonModule,
@@ -77,7 +85,9 @@ const materialModels = [
     SharedModule,
     FormsModule,
     materialModels,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     materialModels
