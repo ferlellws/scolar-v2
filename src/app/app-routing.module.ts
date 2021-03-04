@@ -22,7 +22,6 @@ const routes: Routes = [
       vicePresidencies: VicePresidenciesResolver
     }
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'states', loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule) },
   { path: 'phases', loadChildren: () => import('./components/phases/phases.module').then(m => m.PhasesModule) },
   { path: 'applications', loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule) },
@@ -36,6 +35,9 @@ const routes: Routes = [
   { path: 'managements', loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule) },
   { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
   { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
+  { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'project-progress-report', loadChildren: () => import('./components/project-progress-report/project-progress-report.module').then(m => m.ProjectProgressReportModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

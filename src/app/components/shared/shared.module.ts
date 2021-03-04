@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,14 +19,17 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 // COMPONENTS
+import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
 import { FormDebugComponent } from './form-debug/form-debug.component';
 import { InfoPageComponent } from './info-page/info-page.component';
 import { MenuComponent } from './menu/menu.component';
 import { MessageComponent } from './message/message.component';
 import { ProfileCircleComponent } from './profile-circle/profile-circle.component';
-import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { TimelineChartsComponent } from './google-charts/timeline-charts/timeline-charts.component';
+
+// MODULES
+import { GoogleChartsModule } from './google-charts/google-charts.module';
 
 const COMPONENTS = [
   MenuComponent,
@@ -33,7 +37,7 @@ const COMPONENTS = [
   FormDebugComponent,
   InfoPageComponent,
   DynamicTableComponent,
-  AlertDialogComponent
+  AlertDialogComponent,
 ];
 
 const materialModules = [
@@ -54,6 +58,11 @@ const materialModules = [
   MatDialogModule
 ];
 
+const MODULES = [
+  GoogleChartsModule,
+  materialModules
+]
+
 @NgModule({
   declarations: [
     COMPONENTS,
@@ -61,12 +70,12 @@ const materialModules = [
   ],
   imports: [
     CommonModule,
-    materialModules,
-    RouterModule
+    MODULES,
+    RouterModule,
   ],
   exports: [
     COMPONENTS,
-    materialModules
+    MODULES
   ]
 })
 export class SharedModule { }

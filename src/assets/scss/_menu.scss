@@ -40,7 +40,9 @@
         & > .mat-list-base {
           padding-top: 0;
           & > .mat-list-item {
-            height: 32px !important;
+            // height: 32px !important;
+            height: initial !important;
+            padding: 6px 0;
             color: #757575;
             // &:hover {
             //   background: mat-color($tecno-project-portfolio-primary, 50) !important;
@@ -67,6 +69,8 @@
             }
             & .mat-list-item-content {
               letter-spacing: .25px !important;
+              position: static;
+              height: calc(100% + 12px);
             }
           }
         }

@@ -172,14 +172,18 @@ export class VicePresidenciesFormComponent implements OnInit {
     });
   }
 
-  // validateUniqueness(control: FormControl):Promise<any>|Observable<any> {
-  //   let result = new Promise(
-  //     (resolve, reject) => {
-  //       this.vicePresidenciesService.getVicePresidency
-  //     }
-  //   )
-  //   // return null;
-  // }
+  validateUniqueness(control: FormControl):Promise<any>|Observable<any> {
+    environment.consoleMessage(control);
+    let result: any;
+      // (resolve, reject) => {
+        this.vicePresidenciesService.getVicePresidency(94)
+          .subscribe(res => {
+            result = {isUniq: true};
+          })
+      // }
+    // )
+    return result;
+  }
 
   getMessageError(field: string, labelField: string): string {
     let message!: string;
