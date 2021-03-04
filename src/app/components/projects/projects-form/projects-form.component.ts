@@ -103,9 +103,13 @@ export class ProjectsFormComponent implements OnInit {
   fButtonDisabled: boolean = false;
 
   benefits: string[] = [];
+  benefitsObjects: Benefit[] = [];
   highlights: string[] = [];
+  highlightsObjects: Highlight[] = [];
   risks: string[] = [];
+  risksObjects: Risk[] = [];
   kpis: string[] = [];
+  kpisObjects: Kpi[] = [];
   applications: Application[] = [];
   areasByProject: any[] = [];
   companies: Company[] = [];
@@ -218,13 +222,15 @@ export class ProjectsFormComponent implements OnInit {
     }
 
   async ngOnInit() {
-    await this._projectsService.getProjectsId(this.data.id)
-    .subscribe(project => {
-      this.project = project; 
-      environment.consoleMessage(this.project ,"project>>>>>>>>");
-      this.resetformToProject();
-    });
+    
     if(this.data.mode == 'edit'){
+      await this._projectsService.getProjectsId(this.data.id)
+      .subscribe(project => {
+        this.project = project; 
+        environment.consoleMessage(this.project ,"project>>>>>>>>");
+        this.resetformToProject();
+        this.updateTextComponents(project.id);
+      });
       await this._vicePresidenciesService.getVicePresidenciesSelect()
       .subscribe(data => this.vicePresidencies = data);
       await this._areasService.getAreasSelect()
@@ -278,57 +284,282 @@ export class ProjectsFormComponent implements OnInit {
 
   resetformToProject(){
     this.general.get('title')?.setValue(this.project.title);
-      this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
-      this.general.get('areas')?.setValue(this.project.area!.id);
-      this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
-      this.general.get('receptionDate')?.setValue(new Date(this.project.reception_date));
-      this.general.get('programs')?.setValue(this.project.program == null ? null: this.project.program!.id);
+    this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
+    this.general.get('areas')?.setValue(this.project.area!.id);
+    this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
+    this.general.get('receptionDate')?.setValue(new Date(this.project.reception_date));
+    this.general.get('programs')?.setValue(this.project.program == null ? null: this.project.program!.id);
 
-      this.descripcion.get('projectDescription')?.setValue(this.project.description);
-      this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
-      this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
-      this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
-      this.descripcion.get('managements')?.setValue(this.project.management!.id);
-      this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
-      this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
-      this.descripcion.get('pmoMinutes')?.setValue(this.project.pmo_minutes);
-      this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
-      this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
-      this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours);
-      this.descripcion.get('pmoAssistMinutes')?.setValue(this.project.pmo_assistant_minutes);
-      this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
-      this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
-      this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
+    this.descripcion.get('projectDescription')?.setValue(this.project.description);
+    this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
+    this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
+    this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
+    this.descripcion.get('managements')?.setValue(this.project.management!.id);
+    this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
+    this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
+    this.descripcion.get('pmoMinutes')?.setValue(this.project.pmo_minutes);
+    this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
+    this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
+    this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours);
+    this.descripcion.get('pmoAssistMinutes')?.setValue(this.project.pmo_assistant_minutes);
+    this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
+    this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
+    this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
 
-      this.seguimiento.get('startDate')?.setValue(new Date(this.project.start_date!));
-      this.seguimiento.get('dueDate')?.setValue(new Date(this.project.due_date!));
-      this.seguimiento.get('controlDate')?.setValue(new Date(this.project.control_date!));
-      this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
-      this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
-      this.seguimiento.get('sprint')?.setValue(this.project.sprint);
-      this.seguimiento.get('evaluation')?.setValue(this.project.evaluation);
-      this.seguimiento.get('testLog')?.setValue(this.project.test_log);
-      this.validateAssist ();
+    this.seguimiento.get('startDate')?.setValue(new Date(this.project.start_date!));
+    this.seguimiento.get('dueDate')?.setValue(new Date(this.project.due_date!));
+    this.seguimiento.get('controlDate')?.setValue(new Date(this.project.control_date!));
+    this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
+    this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
+    this.seguimiento.get('sprint')?.setValue(this.project.sprint);
+    this.seguimiento.get('evaluation')?.setValue(this.project.evaluation);
+    this.seguimiento.get('testLog')?.setValue(this.project.test_log);
+    this.validateAssist ();
   }
 
-  onBenefits(benefits: string[]){
-    this.benefits = benefits;
-    environment.consoleMessage(this.benefits, "beneficios padre")
+  updateTextComponents(id: number){
+    this._benefitsService.getBenefits()
+      .subscribe((data:Benefit[]) => 
+      { 
+        this.benefitsObjects = data.filter(benefit => benefit.project!.id == id);
+        environment.consoleMessage(this.benefitsObjects, "beneficios " );
+        this.benefits = this.benefitsObjects.map(benefit => benefit.description);
+      }
+    );
+
+    this._highlightsService.getHighlights()
+      .subscribe((data:Highlight[]) => 
+      { 
+        this.highlightsObjects = data.filter(highlight => highlight.project!.id == id);
+        environment.consoleMessage(this.highlightsObjects, "hitos " );
+        this.highlights = this.highlightsObjects.map(highlight => highlight.description);
+      }
+    );
+
+    this._risksService.getRisks()
+      .subscribe((data:Risk[]) => 
+      { 
+        this.risksObjects = data.filter(risk => risk.project!.id == id);
+        environment.consoleMessage(this.risksObjects, "riesgos " );
+        this.risks = this.risksObjects.map(risk => risk.description);
+      }
+    );
+
+    this._kpisService.getKpis()
+      .subscribe((data:Kpi[]) => 
+      { 
+        this.kpisObjects = data.filter(kpi => kpi.project!.id == id);
+        environment.consoleMessage(this.risksObjects, "kpis " );
+        this.kpis = this.kpisObjects.map(kpi => kpi.description);
+      }
+    );
+
   }
 
-  onHighlights(highlights: string[]){
-    this.highlights = highlights;
-    environment.consoleMessage(this.highlights, "hitos padre")
+  onBenefits(benefits: string[]): any{
+    environment.consoleMessage(this.data.mode, "mode ")
+    if (this.data.mode == 'create'){
+      this.benefits = benefits;
+      environment.consoleMessage(this.benefits, "beneficios padre")
+    }else if(this.data.mode == 'edit'){
+      //agregación
+      if(benefits.length > this.benefitsObjects.length){
+        this.benefits = benefits;
+        var benefit: Benefit = {
+          project_id: this.project.id,
+          description: this.benefits[benefits.length - 1],
+          user_creates_id: JSON.parse(localStorage.user).id,
+        } 
+        this._benefitsService.addBenefit(benefit).
+        subscribe(data => 
+          {
+            environment.consoleMessage(data, "objeto beneficio");
+            this.benefitsObjects.push(data)
+            this.openSnackBar(true, "Beneficio creado satisfactoriamente", "");
+            environment.consoleMessage(this.benefitsObjects, "benefitsObjects");
+          }
+        );
+      }
+      //agregación
+      else if(benefits.length < this.benefitsObjects.length){
+        for (let index = 0; index < this.benefitsObjects.length; index++) {
+          if(!this.benefits.includes(this.benefitsObjects[index].description)) {
+            var benefit: Benefit = this.benefitsObjects[index];
+            if(benefit.id == undefined){
+              benefit.id = -1;
+              this.openSnackBar(false, "Error eliminando", "");
+              environment.consoleMessage("Error eliminando id null");
+              return false;
+            }
+            this._benefitsService.deleteBenefit(benefit!.id)
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Beneficio eliminando", "");
+                  this.benefitsObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
   }
 
-  onRisks(risks: string[]){
-    this.risks = risks;
-    environment.consoleMessage(this.risks, "riesgos padre")
+  onHighlights(highlights: string[]): any{
+
+    environment.consoleMessage(this.data.mode, "mode ")
+    if (this.data.mode == 'create'){
+      this.highlights = highlights;
+      environment.consoleMessage(this.highlights, "hitos padre")
+    }else if(this.data.mode == 'edit'){
+      //agregación
+      if(highlights.length > this.highlightsObjects.length){
+        this.highlights = highlights;
+        var highlight: Highlight = {
+          project_id: this.project.id,
+          description: this.highlights[highlights.length - 1],
+          user_creates_id: JSON.parse(localStorage.user).id,
+        } 
+        this._highlightsService.addHighlight(highlight). 
+        subscribe(data => 
+          {
+            environment.consoleMessage(data, "objeto hito");
+            this.highlightsObjects.push(data)
+            this.openSnackBar(true, "Hito creado satisfactoriamente", "");
+            environment.consoleMessage(this.highlightsObjects, "highlightsObjects");
+          }
+        );
+      }
+      //agregación
+      else if(highlights.length < this.highlightsObjects.length){
+        for (let index = 0; index < this.highlightsObjects.length; index++) {
+          if(!this.highlights.includes(this.highlightsObjects[index].description)) {
+            var highlight: Highlight = this.highlightsObjects[index];
+            if(highlight.id == undefined){
+              highlight.id = -1;
+              this.openSnackBar(false, "Error eliminando", "");
+              environment.consoleMessage("Error eliminando id null");
+              return false;
+            }
+            this._highlightsService.deleteHighlight(highlight!.id)
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Hilto eliminando", "");
+                  this.highlightsObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
   }
 
-  onKpis(kpis: string[]){
-    this.kpis = kpis;
-    environment.consoleMessage(this.kpis, "kpis padre")
+  onRisks(risks: string[]): any{
+
+    
+    environment.consoleMessage(this.data.mode, "mode ")
+    if (this.data.mode == 'create'){
+      this.risks = risks;
+      environment.consoleMessage(this.risks, "riesgos padre")
+    }else if(this.data.mode == 'edit'){
+      //agregación
+      if(risks.length > this.risksObjects.length){
+        this.risks = risks;
+        var risk: Risk = {
+          project_id: this.project.id,
+          description: this.risks[risks.length - 1],
+          user_creates_id: JSON.parse(localStorage.user).id,
+        } 
+        this._risksService.addRisk(risk). 
+        subscribe(data => 
+          {
+            environment.consoleMessage(data, "objeto risk");
+            this.risksObjects.push(data)
+            this.openSnackBar(true, "Riesgo creado satisfactoriamente", "");
+            environment.consoleMessage(this.risksObjects, "risksObjects");
+          }
+        );
+      }
+      //agregación
+      else if(risks.length < this.risksObjects.length){
+        for (let index = 0; index < this.risksObjects.length; index++) {
+          if(!this.risks.includes(this.risksObjects[index].description)) {
+            var risk: Risk = this.risksObjects[index];
+            if(risk.id == undefined){
+              risk.id = -1;
+              this.openSnackBar(false, "Error eliminando", "");
+              environment.consoleMessage("Error eliminando id null");
+              return false;
+            }
+            this._risksService.deleteRisk(risk!.id)
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Riesgo eliminando", "");
+                  this.risksObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
+  }
+
+  onKpis(kpis: string[]): any{
+
+    
+    
+    environment.consoleMessage(this.data.mode, "mode ")
+    if (this.data.mode == 'create'){
+      this.kpis = kpis;
+      environment.consoleMessage(this.kpis, "kpis padre")
+    }else if(this.data.mode == 'edit'){
+      //agregación
+      if(kpis.length > this.kpisObjects.length){
+        this.kpis = kpis;
+        var kpi: Kpi = {
+          project_id: this.project.id,
+          description: this.kpis[kpis.length - 1],
+          user_creates_id: JSON.parse(localStorage.user).id,
+        } 
+        this._kpisService.addKpi(kpi). 
+        subscribe(data => 
+          {
+            environment.consoleMessage(data, "objeto kpi");
+            this.kpisObjects.push(data)
+            this.openSnackBar(true, "KPI creado satisfactoriamente", "");
+            environment.consoleMessage(this.kpisObjects, "kpisObjects");
+          }
+        );
+      }
+      //agregación
+      else if(kpis.length < this.kpisObjects.length){
+        for (let index = 0; index < this.kpisObjects.length; index++) {
+          if(!this.kpis.includes(this.kpisObjects[index].description)) {
+            var kpi: Kpi = this.kpisObjects[index];
+            if(kpi.id == undefined){
+              kpi.id = -1;
+              this.openSnackBar(false, "Error eliminando", "");
+              environment.consoleMessage("Error eliminando id null");
+              return false;
+            }
+            this._kpisService.deleteKpi(kpi!.id)
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "KPI eliminando", "");
+                  this.kpisObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
   }
 
   onApplications(applications: Application[]){
