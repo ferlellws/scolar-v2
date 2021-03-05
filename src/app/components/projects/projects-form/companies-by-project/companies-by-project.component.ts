@@ -1,7 +1,8 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Company } from 'src/app/models/company';
 import { CompaniesService } from 'src/app/services/companies.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'tecno-companies-by-project',
@@ -12,7 +13,7 @@ export class CompaniesByProjectComponent implements OnInit {
 
   companiesForm = new FormControl();
   companies: Company[] = [];
-  companiesSelected : Company[] = [];
+  @Input() companiesSelected : Company[] = [];
 
   @Output() emitChange: EventEmitter<Company[]> = new EventEmitter();
 
@@ -23,10 +24,20 @@ export class CompaniesByProjectComponent implements OnInit {
   async ngOnInit() {
     await this._companiesService.getCompaniesSelect()
     .subscribe(companies => this.companies = companies);
+    var selectedIDs: number[] = this.companiesSelected.map(company => company.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.companiesForm.setValue(selectedIDs);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.companiesSelected = changes.companiesSelected.currentValue;
+    var selectedIDs: number[] = this.companiesSelected.map(company => company.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.companiesForm.setValue(selectedIDs);
   }
 
   onChangeSelect(){
-    var selectedIDs: number [] =this.companiesForm.value;
+    var selectedIDs: number [] = this.companiesForm.value;
     this.companiesSelected = this.companies.filter(company => 
       {
         var companyID: number = -1;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Application } from 'src/app/models/application';
 import { ApplicationsService } from 'src/app/services/applications.service';
@@ -13,7 +13,7 @@ export class ApplicationsByProjectComponent implements OnInit {
 
   applicationsForm = new FormControl();
   applications: Application[] = [];
-  applicationsSelected : Application[] = [];
+  @Input() applicationsSelected : Application[] = [];
 
   @Output() emitChange: EventEmitter<Application[]> = new EventEmitter();
 
@@ -24,10 +24,20 @@ export class ApplicationsByProjectComponent implements OnInit {
   async ngOnInit() {
     await this._applicationsService.getApplicationsSelect()
     .subscribe(applications => this.applications = applications);
+    var selectedIDs: number[] = this.applicationsSelected.map(app => app.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.applicationsForm.setValue(selectedIDs);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.applicationsSelected = changes.applicationsSelected.currentValue;
+    var selectedIDs: number[] = this.applicationsSelected.map(app => app.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.applicationsForm.setValue(selectedIDs);
   }
 
   onChangeSelect(){
-    var selectedIDs: number [] =this.applicationsForm.value;
+    var selectedIDs: number [] = this.applicationsForm.value;
     this.applicationsSelected = this.applications.filter(application => 
       {
         var appID: number = -1;

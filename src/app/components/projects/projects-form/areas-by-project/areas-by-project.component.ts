@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Area } from 'src/app/models/area';
 import { VicePresidency } from 'src/app/models/vice-presidency';
@@ -17,7 +17,7 @@ export class AreasByProjectComponent implements OnInit {
   vicepresidencies: VicePresidency [] = [];
   options: any[] = []
 
-  areasSelected: any[] = [];
+  @Input() areasSelected: any[] = [];
 
   areasForm = new FormControl();
 
@@ -37,9 +37,27 @@ export class AreasByProjectComponent implements OnInit {
         this.vicepresidencies = vicepresidencies;
         this.options = this.clasifyAreas();
         console.log(this.options);
+        this.areasForm.setValue(selectedIDs);
+        for (let index = 0; index < this.areasSelected.length; index++) {
+          this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
+          .filter(vicepresidency => this.areasSelected[index].vice_presidency_id == vicepresidency.id)[0].title;
+        }
       });
+    var selectedIDs: number[] = this.areasSelected.map(area => area.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs areas")
+   
     
-    
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.areasSelected = changes.areasSelected.currentValue;
+    var selectedIDs: number[] = this.areasSelected.map(area => area.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.areasForm.setValue(selectedIDs);
+    for (let index = 0; index < this.areasSelected.length; index++) {
+      this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
+      .filter(vicepresidency => this.areasSelected[index].vice_presidency_id == vicepresidency.id)[0].title;
+    }
   }
 
   onChangeSelect(){

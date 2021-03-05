@@ -1,7 +1,8 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'tecno-test-users',
@@ -12,7 +13,7 @@ export class TestUsersComponent implements OnInit {
 
   usersForm = new FormControl();
   users: User[] = [];
-  usersSelected : User[] = [];
+  @Input() usersSelected : User[] = [];
 
   @Output() emitChange: EventEmitter<User[]> = new EventEmitter();
 
@@ -23,6 +24,16 @@ export class TestUsersComponent implements OnInit {
   async ngOnInit() {
     await this._usersService.getManagers()
     .subscribe(users => this.users = users);
+    var selectedIDs: number[] = this.usersSelected.map(user => user.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.usersForm.setValue(selectedIDs);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.usersSelected = changes.usersSelected.currentValue;
+    var selectedIDs: number[] = this.usersSelected.map(user => user.id!);
+    environment.consoleMessage(selectedIDs, "selectedIDs")
+    this.usersForm.setValue(selectedIDs);
   }
 
   onChangeSelect(){

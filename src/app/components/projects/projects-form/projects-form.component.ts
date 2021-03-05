@@ -51,6 +51,7 @@ import { CompanyByProject } from 'src/app/models/company-by-project';
 import { CompaniesByProjectService } from 'src/app/services/companies-by-project.service';
 import { TestUsersService } from 'src/app/services/test-users.service';
 import { TestUser } from 'src/app/models/test-user';
+import { ApplicationsService } from 'src/app/services/applications.service';
 
 export interface DialogData {
   id: number;
@@ -111,9 +112,14 @@ export class ProjectsFormComponent implements OnInit {
   kpis: string[] = [];
   kpisObjects: Kpi[] = [];
   applications: Application[] = [];
+  applicationsObjects: ApplicationByProject[] = [];
   areasByProject: any[] = [];
+  areasByProjectObjects: AreaByProject[] = [];
   companies: Company[] = [];
+  companiesObjects: CompanyByProject[] = [];
   testUsers: User[] = [];
+  testUsersObjects: TestUser[] = [];
+  contador = 0; //borrar
 
   constructor(
     private _fbG: FormBuilder,
@@ -141,6 +147,8 @@ export class ProjectsFormComponent implements OnInit {
     private _testUsersService: TestUsersService,
     public datepipe: DatePipe,
     private snackBar: MatSnackBar,
+
+    private _applicationsService: ApplicationsService,
 
     ) { 
       
@@ -227,9 +235,10 @@ export class ProjectsFormComponent implements OnInit {
       await this._projectsService.getProjectsId(this.data.id)
       .subscribe(project => {
         this.project = project; 
+        this.project.reception_date = this.project.reception_date.substr(0, 10);
         environment.consoleMessage(this.project ,"project>>>>>>>>");
         this.resetformToProject();
-        this.updateTextComponents(project.id);
+        this.updateChildComponents(project.id);
       });
       await this._vicePresidenciesService.getVicePresidenciesSelect()
       .subscribe(data => this.vicePresidencies = data);
@@ -283,11 +292,12 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   resetformToProject(){
+    environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
     this.general.get('title')?.setValue(this.project.title);
     this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
     this.general.get('areas')?.setValue(this.project.area!.id);
     this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
-    this.general.get('receptionDate')?.setValue(new Date(this.project.reception_date));
+    this.general.get('receptionDate')?.setValue(new Date(`${this.project.reception_date}:00:00`));
     this.general.get('programs')?.setValue(this.project.program == null ? null: this.project.program!.id);
 
     this.descripcion.get('projectDescription')?.setValue(this.project.description);
@@ -306,9 +316,9 @@ export class ProjectsFormComponent implements OnInit {
     this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
     this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
 
-    this.seguimiento.get('startDate')?.setValue(new Date(this.project.start_date!));
-    this.seguimiento.get('dueDate')?.setValue(new Date(this.project.due_date!));
-    this.seguimiento.get('controlDate')?.setValue(new Date(this.project.control_date!));
+    this.seguimiento.get('startDate')?.setValue(this.project.start_date == null ? null : new Date(`${this.project.start_date!}:00:00`));
+    this.seguimiento.get('dueDate')?.setValue(this.project.due_date == null ? null : new Date(`${this.project.due_date!}:00:00`));
+    this.seguimiento.get('controlDate')?.setValue(this.project.control_date == null? null : new Date(`${this.project.control_date!}:00:00`));
     this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
     this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
     this.seguimiento.get('sprint')?.setValue(this.project.sprint);
@@ -317,9 +327,9 @@ export class ProjectsFormComponent implements OnInit {
     this.validateAssist ();
   }
 
-  updateTextComponents(id: number){
+  updateChildComponents(id: number){
     this._benefitsService.getBenefits()
-      .subscribe((data:Benefit[]) => 
+      .subscribe((data: Benefit[]) => 
       { 
         this.benefitsObjects = data.filter(benefit => benefit.project!.id == id);
         environment.consoleMessage(this.benefitsObjects, "beneficios " );
@@ -328,7 +338,7 @@ export class ProjectsFormComponent implements OnInit {
     );
 
     this._highlightsService.getHighlights()
-      .subscribe((data:Highlight[]) => 
+      .subscribe((data: Highlight[]) => 
       { 
         this.highlightsObjects = data.filter(highlight => highlight.project!.id == id);
         environment.consoleMessage(this.highlightsObjects, "hitos " );
@@ -337,7 +347,7 @@ export class ProjectsFormComponent implements OnInit {
     );
 
     this._risksService.getRisks()
-      .subscribe((data:Risk[]) => 
+      .subscribe((data: Risk[]) => 
       { 
         this.risksObjects = data.filter(risk => risk.project!.id == id);
         environment.consoleMessage(this.risksObjects, "riesgos " );
@@ -346,7 +356,7 @@ export class ProjectsFormComponent implements OnInit {
     );
 
     this._kpisService.getKpis()
-      .subscribe((data:Kpi[]) => 
+      .subscribe((data: Kpi[]) => 
       { 
         this.kpisObjects = data.filter(kpi => kpi.project!.id == id);
         environment.consoleMessage(this.risksObjects, "kpis " );
@@ -354,6 +364,46 @@ export class ProjectsFormComponent implements OnInit {
       }
     );
 
+    this._applicationsByProjectsService.getApplicationByProjects()
+      .subscribe((data: ApplicationByProject[]) => 
+      { 
+        this.applicationsObjects = data.filter(app => app.project!.id == id);
+        environment.consoleMessage(this.applicationsObjects, "appsByProject " );
+        this.applications = this.applicationsObjects.map(app => app.application! );
+        environment.consoleMessage(this.applications, "apps " );
+      }
+    );
+
+    this._areasByProjectsService.getAreaByProjects()
+      .subscribe((data: AreaByProject[]) => 
+      { 
+        this.areasByProjectObjects = data.filter(area => area.project!.id == id);
+        environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects " );
+        this.areasByProject = this.areasByProjectObjects.map(area => area.area! );
+        environment.consoleMessage(this.areas, "areas " );
+      }
+    );
+
+    this._companiesByProjectsService.getCompanyByProjects()
+      .subscribe((data: CompanyByProject[]) => 
+      { 
+        this.companiesObjects = data.filter(company => company.project!.id == id);
+        environment.consoleMessage(this.companiesObjects, "companiesObjects " );
+        this.companies = this.companiesObjects.map(company => company.company! );
+        environment.consoleMessage(this.companies, "companies " );
+      }
+    );
+
+    this._testUsersService.getTestUsers()
+      .subscribe((data: TestUser[]) => 
+      { 
+        this.testUsersObjects = data.filter(user => user.project!.id == id);
+        environment.consoleMessage(this.testUsersObjects, "testUsersObjects " );
+        this.testUsers = this.testUsersObjects.map(user => user.user! );
+        environment.consoleMessage(this.testUsers, "testUsers " );
+      }
+    );
+    
   }
 
   onBenefits(benefits: string[]): any{
@@ -536,7 +586,7 @@ export class ProjectsFormComponent implements OnInit {
           }
         );
       }
-      //agregación
+      //eliminacion
       else if(kpis.length < this.kpisObjects.length){
         for (let index = 0; index < this.kpisObjects.length; index++) {
           if(!this.kpis.includes(this.kpisObjects[index].description)) {
@@ -562,24 +612,241 @@ export class ProjectsFormComponent implements OnInit {
     }
   }
 
-  onApplications(applications: Application[]){
-    this.applications = applications;
-    environment.consoleMessage(this.applications, "applications padre")
+  async onApplications(applications: Application[]): Promise<any>{
+    if (this.data.mode == 'create'){
+      this.applications = applications;
+      environment.consoleMessage(this.applications, "applications padre");
+    }else if(this.data.mode == 'edit'){
+      environment.consoleMessage(this.applications, "this.applications antes");
+        environment.consoleMessage(this.applicationsObjects, "this.applicationsObjects antes");
+      if(applications.length > this.applicationsObjects.length){
+        environment.consoleMessage(this.applications, "this.applications despues");
+        environment.consoleMessage(this.applicationsObjects, "this.applicationsObjects despues");
+        this.applications = applications;
+        var applicationsIDs: number[] = applications.map(app => app.id!);
+        var applicationsObjectsIDs: number[] = this.applicationsObjects.map(app => app.application!.id!);
+        for (let index = 0; index < applicationsIDs.length; index++) {
+          if(!applicationsObjectsIDs.includes(applicationsIDs[index])){
+            var application: ApplicationByProject = {
+              project_id: this.project.id,
+              application_id: applicationsIDs[index], 
+              user_creates_id: JSON.parse(localStorage.user).id,
+            } 
+            await this._applicationsByProjectsService.addApplicationByProject(application). 
+            subscribe(data => 
+              {
+                environment.consoleMessage(data, "objeto applicationsObjects");
+                this.applicationsObjects.push(data)
+                this.openSnackBar(true, "Aplicación agregada satisfactoriamente", "");
+                environment.consoleMessage(this.applicationsObjects, "applicationsObjects");
+              }
+            );
+            return true;
+          }
+          
+        }
+      }
+      //eliminacion
+      else if(applications.length < this.applicationsObjects.length){
+        var applicationsIDs: number[] = applications.map(app => app.id!);
+        var applicationsObjectsIDs: number[] = this.applicationsObjects.map(app => app.application!.id!);
+        for (let index = 0; index < applicationsObjectsIDs.length; index++) {
+          if(!applicationsIDs.includes(applicationsObjectsIDs[index])) {
+            await this._applicationsByProjectsService.deleteApplicationByProject(this.applicationsObjects[index].id!)//posible error por orden 
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Aplicación eliminanda del Proyecto", "");
+                  this.applicationsObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
   }
 
-  onAreasByProject(areasByProject: any[]){
-    this.areasByProject = areasByProject;
-    environment.consoleMessage(this.areasByProject, "areasByProject padre")
+  async onAreasByProject(areasByProject: any[]):Promise<any>{
+
+    if (this.data.mode == 'create'){
+      this.areasByProject = areasByProject;
+      environment.consoleMessage(this.areasByProject, "areasByProject padre")
+    }else if(this.data.mode == 'edit'){
+      environment.consoleMessage(this.areasByProject, "this.areasByProject antes");
+      environment.consoleMessage(this.areasByProjectObjects, "this.areasByProjectObjects antes");
+      if(areasByProject.length > this.areasByProjectObjects.length){
+        environment.consoleMessage(this.areasByProject, "this.applications despues");
+        environment.consoleMessage(this.areasByProjectObjects, "this.applicationsObjects despues");
+        this.areasByProject = areasByProject;
+        var areasIDs: number[] = areasByProject.map(area => area.id!);
+        var areasObjectsIDs: number[] = this.areasByProjectObjects.map(area => area.area!.id!);
+        for (let index = 0; index < areasByProject.length; index++) {
+          if(!areasObjectsIDs.includes(areasIDs[index])){
+            var area: AreaByProject = {
+              project_id: this.project.id,
+              area_id: areasIDs[index], 
+              user_creates_id: JSON.parse(localStorage.user).id,
+            } 
+            await this._areasByProjectsService.addAreaByProject(area). 
+            subscribe(data => 
+              {
+                environment.consoleMessage(data, "objeto areasByProject");
+                this.areasByProjectObjects.push(data)
+                this.openSnackBar(true, "Area agregada satisfactoriamente", "");
+                environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects");
+              }
+            );
+            return true;
+          }
+          
+        }
+        
+      }
+      //eliminacion
+      
+      else if(areasByProject.length < this.areasByProjectObjects.length){
+        this.areasByProject = areasByProject;
+        environment.consoleMessage(this.areasByProject, "this.areasByProject antes");
+        environment.consoleMessage(this.areasByProjectObjects, "this.areasByProjectObjects antes");
+        var areasIDs: number[] = areasByProject.map(area => area.id!);
+        var areasObjectsIDs: number[] = this.areasByProjectObjects.map(area => area.area!.id!);
+        environment.consoleMessage(areasIDs, "areasIDs antes");
+        environment.consoleMessage(areasObjectsIDs, "areasObjectsIDs antes");
+        for (let index = 0; index < areasObjectsIDs.length; index++) {
+          if(!areasIDs.includes(areasObjectsIDs[index])) {
+            await this._areasByProjectsService.deleteAreaByProject(this.areasByProjectObjects[index].id!)//posible error por orden 
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Area eliminanda del Proyecto", "");
+                  this.areasByProjectObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
+
+    
   }
 
-  onCompaniesByProject(companiesByProject: Company[]){
-    this.companies = companiesByProject;
-    environment.consoleMessage(this.companies, "companiesByProject padre")
+  async onCompaniesByProject(companiesByProject: Company[]): Promise<any>{
+
+    if (this.data.mode == 'create'){
+      this.companies = companiesByProject;
+      environment.consoleMessage(this.companies, "companiesByProject padre")
+    }else if(this.data.mode == 'edit'){
+        environment.consoleMessage(this.companies, "this.companies antes");
+        environment.consoleMessage(this.companiesObjects, "this.companiesObjects antes");
+      if(companiesByProject.length > this.companiesObjects.length){
+        environment.consoleMessage(this.companies, "this.companies despues");
+        environment.consoleMessage(this.companiesObjects, "this.companiesObjects despues");
+        this.companies = companiesByProject;
+        var companiesIDs: number[] = companiesByProject.map(company => company.id!);
+        var companiesObjectsIDs: number[] = this.companiesObjects.map(company => company.company!.id!);
+        for (let index = 0; index < companiesIDs.length; index++) {
+          if(!companiesObjectsIDs.includes(companiesIDs[index])){
+            var comapny: CompanyByProject = {
+              project_id: this.project.id,
+              company_id: companiesIDs[index], 
+              user_creates_id: JSON.parse(localStorage.user).id,
+            } 
+            await this._companiesByProjectsService.addCompanyByProject(comapny). 
+            subscribe(data => 
+              {
+                environment.consoleMessage(data, "objeto companiesObjects");
+                this.companiesObjects.push(data)
+                this.openSnackBar(true, "Proveedor agregado satisfactoriamente", "");
+                environment.consoleMessage(this.companiesObjects, "companiesObjects");
+              }
+            );
+            return true;
+          }
+          
+        }
+      }
+      //eliminacion
+      else if(companiesByProject.length < this.companiesObjects.length){
+        var companiesIDs: number[] = companiesByProject.map(company => company.id!);
+        var companiesObjectsIDs: number[] = this.companiesObjects.map(company => company.company!.id!);
+        for (let index = 0; index < companiesObjectsIDs.length; index++) {
+          if(!companiesIDs.includes(companiesObjectsIDs[index])) {
+            await this._companiesByProjectsService.deleteCompanyByProject(this.companiesObjects[index].id!)//posible error por orden 
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Proveedor eliminando del Proyecto", "");
+                  this.companiesObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
+
+
   }
 
-  onTestUsers(testUsers: User[]){
-    this.testUsers = testUsers;
-    environment.consoleMessage(this.testUsers, "testUsers padre")
+  async onTestUsers(testUsers: User[]): Promise<any>{
+
+    if (this.data.mode == 'create'){
+      this.testUsers = testUsers;
+      environment.consoleMessage(this.testUsers, "testUsers padre")
+    }else if(this.data.mode == 'edit'){
+        environment.consoleMessage(this.testUsers, "this.testUsers antes");
+        environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects antes");
+      if(testUsers.length > this.testUsersObjects.length){
+        environment.consoleMessage(this.testUsers, "this.testUsers despues");
+        environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects despues");
+        this.testUsers = testUsers;
+        var testUsersIDs: number[] = testUsers.map(user => user.id!);
+        var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.user!.id!);
+        for (let index = 0; index < testUsersIDs.length; index++) {
+          if(!testUsersObjectsIDs.includes(testUsersIDs[index])){
+            var user: any = { //borrar
+              project_id: this.project.id,
+              user_id: testUsersIDs[index], 
+              user_creates_id: JSON.parse(localStorage.user).id,
+              description: 'asd' + this.contador,
+            } 
+            this.contador++;
+            await this._testUsersService.addTestUser(user). 
+            subscribe(data => 
+              {
+                environment.consoleMessage(data, "objeto testUsersObjects");
+                this.testUsersObjects.push(data)
+                this.openSnackBar(true, "Recurso de pruebas agregado satisfactoriamente", "");
+                environment.consoleMessage(this.testUsersObjects, "testUsersObjects");
+              }
+            );
+            return true;
+          }
+          
+        }
+      }
+      //eliminacion
+      else if(testUsers.length < this.testUsersObjects.length){
+        var testUsersIDs: number[] = testUsers.map(user => user.id!);
+        var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.user!.id!);
+        for (let index = 0; index < testUsersObjectsIDs.length; index++) {
+          if(!testUsersIDs.includes(testUsersObjectsIDs[index])) {
+            await this._testUsersService.deleteTestUser(this.testUsersObjects[index].id!)//posible error por orden 
+              .subscribe(data =>
+                {
+                  environment.consoleMessage(data, "data eliminacion")
+                  this.openSnackBar(true, "Recurso de pruebas eliminando del Proyecto", "");
+                  this.testUsersObjects.splice(index, 1);
+                  return true;
+                }
+              );
+          }
+        }
+      }
+    }
+
   }
 
 
@@ -748,6 +1015,94 @@ export class ProjectsFormComponent implements OnInit {
     }
   }
 
+  async edit(){
+    environment.consoleMessage("Editar");
+    var valido = true;
+    var message = this.validateFormGroup(this.general);
+    if (message != ""){
+      valido = false;
+    }
+
+    message = this.validateFormGroup(this.descripcion);
+    if (message != ""){
+      valido = false;
+    }
+
+    message = this.validateFormGroup(this.seguimiento);
+    if (message != ""){
+      valido = false;
+    }
+
+    if (message != ""){
+      this.message = message;
+    } else {
+      environment.consoleMessage(valido, "SIN ERROR: ");
+      this.message = "";
+      if (valido){
+        this.fButtonDisabled = true;
+
+        var editProject: any = {}
+
+        environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
+
+        this.project.title != this.general.get('title')?.value ? editProject.title = this.general.get('title')!.value : true ;
+        this.project.area!.id != this.general.get('areas')?.value ? editProject.area_id = this.general.get('areas')!.value : true ;
+        this.project.strategic_approach!.id != this.general.get('strategicApproaches')?.value ? editProject.strategic_approach_id = this.general.get('strategicApproaches')!.value : true ;
+        this.project.reception_date != this.parseDate(this.general.get('receptionDate')?.value) ? editProject.reception_date = this.parseDate(this.general.get('receptionDate')!.value) : true ;
+        (this.project.program == null ? null: this.project.program!.id) != this.general.get('programs')?.value ? editProject.program_id = this.general.get('programs')?.value : true ;
+
+
+        this.project.description != this.descripcion.get('projectDescription')?.value ? editProject.description = this.descripcion.get('projectDescription')!.value : true ;
+        this.project.functional_lead!.id != this.descripcion.get('leads')?.value ? editProject.functional_lead_id = this.descripcion.get('leads')!.value : true ;
+        this.project.priority!.id != this.descripcion.get('priorities')?.value ? editProject.priority_id = this.descripcion.get('priorities')!.value : true ;
+        this.project.typification!.id != this.descripcion.get('typifications')?.value ? editProject.typification_id = this.descripcion.get('typifications')!.value : true ;
+        this.project.management!.id != this.descripcion.get('managements')?.value ? editProject.management_id = this.descripcion.get('managements')!.value : true ;
+        this.project.pmo!.id != this.descripcion.get('pmos')?.value ? editProject.pmo_id = this.descripcion.get('pmos')!.value : true ;
+        this.project.pmo_hours != this.descripcion.get('pmoHours')?.value ? editProject.pmo_hours = this.descripcion.get('pmoHours')!.value : true ;
+        this.project.pmo_minutes != this.descripcion.get('pmoMinutes')?.value ? editProject.pmo_minutes = this.descripcion.get('pmoMinutes')!.value : true ;
+        (this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id) != this.descripcion.get('pmoAssists')?.value ? editProject.pmo_assitant_id = this.descripcion.get('pmoAssists')?.value : true ;
+        (this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id) != this.descripcion.get('stages')?.value ? editProject.pmo_assitant_stage_id = this.descripcion.get('stages')?.value : true ;
+        this.project.pmo_assistant_hours != this.descripcion.get('pmoAssistHours')?.value ? editProject.pmo_assistant_hours = this.descripcion.get('pmoAssistHours')!.value : true ;
+        this.project.pmo_assistant_minutes != this.descripcion.get('pmoAssistMinutes')?.value ? editProject.pmo_assistant_minutes = this.descripcion.get('pmoAssistMinutes')!.value : true ;
+        this.project.budget_approved != this.descripcion.get('budgetApproved')?.value ? editProject.budget_approved = this.descripcion.get('budgetApproved')!.value : true ;
+        this.project.budget_executed != this.descripcion.get('budgetExecuted')?.value ? editProject.budget_executed = this.descripcion.get('budgetExecuted')!.value : true ;
+
+        this.project.start_date != (this.seguimiento.get('startDate')?.value == null ? null : this.parseDate(this.seguimiento.get('startDate')?.value)) ? editProject.start_date = this.parseDate(this.seguimiento.get('startDate')!.value) : true ;
+        this.project.due_date != (this.seguimiento.get('dueDate')?.value == null ? null : this.parseDate(this.seguimiento.get('dueDate')?.value)) ? editProject.due_date = this.parseDate(this.seguimiento.get('dueDate')!.value) : true ;
+        this.project.control_date != (this.seguimiento.get('controlDate')?.value == null ? null : this.parseDate(this.seguimiento.get('controlDate')?.value)) ? editProject.control_date = this.parseDate(this.seguimiento.get('controlDate')!.value) : true ;
+       
+        if(this.project.states_by_phase!.state_id != this.seguimiento.get('states')?.value ||
+        this.project.states_by_phase!.phase_id != this.seguimiento.get('phases')?.value){
+          var stateByPhases: any[] = this.stateByPhases.
+          filter(stateByPhase => (
+              stateByPhase.state_id == this.seguimiento.get('states')!.value) 
+              && (stateByPhase.phase_id == this.seguimiento.get('phases')!.value)
+          );
+          var sbf: StateByPhase = stateByPhases[0];
+          editProject.states_by_phase_id = sbf.id ;
+
+        }
+        
+
+        this.project.sprint != this.seguimiento.get('sprint')?.value ? editProject.sprint = this.seguimiento.get('sprint')!.value : true ;
+        this.project.evaluation != this.seguimiento.get('evaluation')?.value ? editProject.evaluation = this.seguimiento.get('evaluation')!.value : true ;
+        this.project.test_log != this.seguimiento.get('testLog')?.value ? editProject.test_log = this.seguimiento.get('testLog')!.value : true ;
+
+        environment.consoleMessage(editProject, "editProject >>>>>>>>>>>>>>")
+
+        await this._projectsService.updateProjectsId(editProject, this.project.id!)
+          .subscribe(data =>
+            {
+              environment.consoleMessage(data, "data edición");
+              this.openSnackBar(true, "Proyecto editado", "");
+            }
+        );
+        this.fButtonDisabled = false;
+        this.emitClose.emit('close');
+      }
+    }
+  }
+
    async create(){
     environment.consoleMessage("CREATE");
     var valido = true;
@@ -895,11 +1250,13 @@ export class ProjectsFormComponent implements OnInit {
             }
 
             for (let index = 0; index < this.testUsers.length; index++) {
-              var testUser: TestUser = {
+              var testUser: any = { //borar
                 project_id: id,
                 user_id : this.testUsers[index].id,
+                description : 'dsfkmlndsfklnsd' + this.contador,//borrar
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
+              this.contador++;//borrar
               this._testUsersService.addTestUser(testUser).
               subscribe(data => environment.consoleMessage(data));
             }

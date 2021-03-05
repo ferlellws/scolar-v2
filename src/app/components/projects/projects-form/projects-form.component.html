@@ -472,7 +472,7 @@
             </div>
 
             <mat-divider></mat-divider>
-            <tecno-applications-by-project class="external-component" (emitChange)="onApplications($event)"></tecno-applications-by-project>
+            <tecno-applications-by-project class="external-component" [applicationsSelected]="applications" (emitChange)="onApplications($event)"></tecno-applications-by-project>
             <mat-divider></mat-divider>
 
             <mat-divider></mat-divider>
@@ -480,7 +480,7 @@
             <mat-divider></mat-divider>
 
             <mat-divider></mat-divider>
-            <tecno-areas-by-project class="external-component" (emitChange)="onAreasByProject($event)" ></tecno-areas-by-project>
+            <tecno-areas-by-project class="external-component" (emitChange)="onAreasByProject($event)" [areasSelected]="areasByProject" ></tecno-areas-by-project>
             <mat-divider></mat-divider>
 
             <div class="row">
@@ -499,7 +499,7 @@
             </div>
 
             <mat-divider></mat-divider>
-            <tecno-companies-by-project class="external-component" (emitChange)="onCompaniesByProject($event)" ></tecno-companies-by-project>
+            <tecno-companies-by-project class="external-component" (emitChange)="onCompaniesByProject($event)" [companiesSelected]="companies" ></tecno-companies-by-project>
             <mat-divider></mat-divider>
 
             <div class="row">
@@ -511,8 +511,8 @@
                         formControlName="testLog" 
                         required >
                             <mat-option>-- None --</mat-option>
-                            <mat-option [value]="0">No</mat-option>
-                            <mat-option [value]="1">Sí</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                            <mat-option [value]="true">Sí</mat-option>
                         </mat-select>
                         <mat-label>{{labels.testLog}}</mat-label>
                         <mat-error *ngIf="this.seguimiento.get('testLog')?.invalid">
@@ -524,14 +524,14 @@
             </div>
 
             <mat-divider></mat-divider>
-            <tecno-test-users class="external-component" (emitChange)="onTestUsers($event)" ></tecno-test-users>
+            <tecno-test-users class="external-component" (emitChange)="onTestUsers($event)" [usersSelected]="testUsers" ></tecno-test-users>
             <mat-divider></mat-divider>
             
         </form>
         <div class="buttons">
             <button class="button" mat-button color="primary" (click)="onReset(seguimiento)">Limpiar</button>
             <button class="button"
-            (click)="create()"
+            (click)="data.mode == 'create' ? create() : edit()"
             mat-button color="primary"
             [disabled]="seguimiento.invalid || fButtonDisabled">
                 {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
