@@ -3,12 +3,12 @@ import { Valorem } from "./valorem";
 
 export class ProductOverdue {
     id?: number;
-    valorem_id?: number;
-    valorem?: Valorem;
+    external_company_tracing_id?: number;
+    external_company_tracing?: Valorem;
     description!: string;
     date?: string;
     is_active?: boolean;
-    is_delete?: number;
+    is_delete?: boolean;
     user_updates_id?: number;
     user_updates?: User;
     user_creates_id?: number;

@@ -9,9 +9,10 @@ import { Valorem } from '../models/valorem';
   providedIn: 'root'
 })
 export class ValoremService {
-  private readonly API = `${environment.API}/valorem`;
+  private readonly API = `${environment.API}/external_company_tracings`;
 
   emitDataTable = new EventEmitter<any>();
+  emitClose = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -39,8 +40,7 @@ export class ValoremService {
     );
   }
 
-  getCompaniesSelect() {
-
+  getValoremSelect() {
     var httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${localStorage.token}`
@@ -66,10 +66,21 @@ export class ValoremService {
   }
 
   addValorem(valorem: Valorem) {
-    return this.http.post<Valorem>(this.API, { valorem: valorem }, this.httpOptions)
+    return this.http.post<Valorem>(this.API, { external_company_tracing: valorem }, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  //Se realiza POST de ProductosEntregados/PorEntregar/Atrasados
+  addProductsDetails(products: any) {
+    return this.http.post<any>(`${environment.API}/main_create_tables/create_data_external_companies`, { e_c_main_tables: products }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+          this.emitClose.emit('close');
         })
       );
   }

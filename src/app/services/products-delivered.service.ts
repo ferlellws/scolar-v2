@@ -49,7 +49,7 @@ export class ProductsDeliveredService {
 
   getProductDeliveredByProjectId(id: number) {
     this.getProductToBeDeliveredAll().subscribe( (data: ProductDelivered[]) => {
-      return data.filter(productDelivered => productDelivered.valorem!.id == id);
+      return data.filter(productDelivered => productDelivered.external_company_tracing!.id == id);
     })
   }
 

@@ -2,11 +2,11 @@ import { User } from "./user";
 
 export class ValoremSchedule {
     id?: number;
-    title: string;
+    name: string;
     description: string;
     color: string;
-    is_active: boolean;
-    is_delete: boolean;
+    is_active?: boolean;
+    is_delete?: boolean;
     user_creates?: User | number;
     user_deletes?: User | number;
     user_updates?: User | number;
@@ -15,7 +15,7 @@ export class ValoremSchedule {
     deleted_at?: string;
 
     constructor(){
-        this.title = "";
+        this.name = "";
         this.description = "";
         this.color = "";
         this.is_active = true;

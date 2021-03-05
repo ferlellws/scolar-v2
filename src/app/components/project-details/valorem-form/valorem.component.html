@@ -12,56 +12,47 @@
   *ngIf="data.mode === 'create' || (data.mode === 'edit' && valorem); else loadingBlock">
 
     <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-4">
         <mat-form-field class="full-width">
           <mat-label>Estado</mat-label>
-          <mat-select formControlName="valorem_state_id" (click)="onClickSelectStatusValorem()" required>
-            <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">{{ valoremState.title }}</mat-option>
+          <mat-select formControlName="external_company_state_id" (openedChange)="onClickSelectStatusValorem($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">{{ valoremState.name }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="this.valoremGroup.get('valorem_state_id')?.invalid">
-            {{ getMessageError('valorem_state_id', " estado") }}
+          <mat-error *ngIf="this.valoremGroup.get('external_company_state_id')?.invalid">
+            {{ getMessageError('external_company_state_id', " estado") }}
           </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-4">
         <mat-form-field class="full-width">
           <mat-label>Cronograma</mat-label>
-          <mat-select formControlName="valorem_schedule_id" (click)="onClickSelectScheduleValorem()" required>
-            <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">{{ companyType.title }}</mat-option>
+          <mat-select formControlName="external_company_schedule_id" (click)="onClickSelectScheduleValorem()" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">{{ companyType.name }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="this.valoremGroup.get('valorem_schedule_id')?.invalid">
-            {{ getMessageError('valorem_schedule_id', " cronograma") }}
+          <mat-error *ngIf="this.valoremGroup.get('external_company_schedule_id')?.invalid">
+            {{ getMessageError('external_company_schedule_id', " cronograma") }}
           </mat-error>
         </mat-form-field>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-sm-12 col-md-6">
-        <mat-form-field
-        class="full-width">
-            <mat-label>{{labels.startDate}}</mat-label>
-            <input matInput required [matDatepicker]="picker1" formControlName="start_date">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-            <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid">
-              {{ getMessageError('start_date', " fecha de inicio") }}
-            </mat-error>
+      <div class="col-sm-12 col-md-4">
+        <mat-form-field class="full-width">
+          <mat-label>Fecha de Inicio y Finalización</mat-label>
+          <mat-date-range-input [formGroup]="valoremGroup" [rangePicker]="picker" required>
+            <input matStartDate formControlName="start_date" placeholder="Inicio">
+            <input matEndDate formControlName="due_date" placeholder="Fin">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid && this.valoremGroup.get('due_date')?.invalid">
+            {{ getMessageError('start_date', " fecha de inicio y finalización") }}
+          </mat-error>
         </mat-form-field>
       </div>
-      <div class="col-sm-12 col-md-6">
-        <mat-form-field
-        class="full-width">
-            <mat-label>{{labels.dueDate}}</mat-label>
-            <input matInput required [matDatepicker]="picker2" formControlName="due_date">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-            <mat-error *ngIf="this.valoremGroup.get('due_date')?.invalid">
-              {{ getMessageError('due_date', " fecha de finalización") }}
-            </mat-error>
-        </mat-form-field>
-      </div>
+
     </div>
 
     <div class="row">
@@ -70,33 +61,39 @@
             class="full-width"
             style="width: 100%;">
             <mat-label>{{labels.statusDetail}}</mat-label>
-            <input matInput placeholder="{{labels.statusDetail}}" formControlName="status_details" required>
-            <mat-error *ngIf="this.valoremGroup.get('status_details')?.invalid">
-              {{ getMessageError('status_details', " detalle de estado") }}
+            <textarea matInput placeholder="{{labels.statusDetail}}" formControlName="status_detail" required></textarea>
+            <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
+              {{ getMessageError('status_detail', " detalle de estado") }}
             </mat-error>
         </mat-form-field>
       </div>
     </div>
 
-    <mat-divider></mat-divider>
     <br>
-    <tecno-text-list-date class="external-component" name="Productos Entregados" (emitChange)="onProductDelivered($event)"></tecno-text-list-date>
-
     <mat-divider></mat-divider>
-    <br>
-    <tecno-text-list-date class="external-component" name="Productos por Entregar" (emitChange)="onProductDelivered($event)"></tecno-text-list-date>
+    <tecno-text-list-date class="external-component" name="Productos Entregados" [items]="productsDelivered" (emitChange)="onProductDelivered($event)"></tecno-text-list-date>
 
+    <br>
     <mat-divider></mat-divider>
-    <br>
-    <tecno-text-list-date class="external-component" name="Productos Atrasados" (emitChange)="onProductDelivered($event)"></tecno-text-list-date>
+    <tecno-text-list-date class="external-component" name="Productos por Entregar" [items]="productsToBeDelivered" (emitChange)="onProductToBeDelivered($event)"></tecno-text-list-date>
 
+    <br>
+    <mat-divider></mat-divider>
+    <tecno-text-list-date class="external-component" name="Productos Atrasados" [items]="productsOverdue" (emitChange)="onProductOverdue($event)"></tecno-text-list-date>
+
+    <br>
+    <div class="row">
+      <div class="col-sm-12 col-md-2">
+        <mat-slide-toggle formControlName="is_active">Estado</mat-slide-toggle>
+      </div>
+    </div>
 
     <div class="buttons">
       <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
       <button class="button"
         mat-button color="primary"
         [disabled]="valoremGroup.invalid || fButtonDisabled">
-          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+        {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
       </button>
     </div>
     

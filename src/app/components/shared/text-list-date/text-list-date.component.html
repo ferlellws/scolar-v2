@@ -1,10 +1,11 @@
-<div class="row">
+<div class="row" style="margin-bottom: -5px">
     <h3 class="mat-title col-sm-12 col-md-12">{{name}}</h3>
 </div>
 <div class="row">
     <mat-form-field class="col-sm-12 col-md-8">
         <mat-label>Añadir {{name}}</mat-label>
-        <input matInput type="text" [(ngModel)]="inpuText">
+        <textarea matInput [(ngModel)]="inpuText"></textarea>
+            
     </mat-form-field>
     <mat-form-field class="col-sm-12 col-md-3">
         <mat-label>Fecha {{name}}</mat-label>
@@ -12,7 +13,11 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <button class="button" mat-mini-fab color="primary" *ngIf="inpuText && datePicker" matSuffix mat-icon-button aria-label="Clear" (click)="add()">
+    <button class="button"
+    (click)="add()"
+    [disabled] = "!(inpuText && datePicker)"
+    mat-mini-fab color="primary"
+    matSuffix mat-icon-button aria-label="Clear">
         <mat-icon>add</mat-icon>
     </button>
 </div>
@@ -21,11 +26,11 @@
     <div class="col-sm-12 col-md-12">
         <mat-card >
             <div class="card-content">
-                <div style="display: flex; width: 100%;">
-                    <div class="texto">{{i+1}}. {{item.text}}</div>
+                <div class="text-conten">
+                    <div class="texto">{{i+1}}. {{item.description}}</div>
                 </div>
                 <div class="date-button">
-                    <div>{{item.date}}</div>
+                    <div>Fecha: {{item.date}}</div>
                     <mat-icon color="warn" (click)="delete(i)" matRipple class="delete">delete</mat-icon>
                 </div>
             </div>

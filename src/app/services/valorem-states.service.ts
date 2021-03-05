@@ -10,7 +10,7 @@ import { ValoremState } from '../models/valorem-state';
 })
 export class ValoremStatesService {
 
-  private readonly API = `${environment.API}/valorem_states`;
+  private readonly API = `${environment.API}/external_company_states`;
 
   emitDataTable = new EventEmitter<any>();
 
@@ -49,7 +49,7 @@ export class ValoremStatesService {
       params: this.inputParams
     };
 
-    return this.http.get<ValoremState[]>(`${this.API}/select`, httpOptions)
+    return this.http.get<ValoremState[]>(`${this.API}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

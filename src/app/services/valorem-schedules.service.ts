@@ -10,7 +10,7 @@ import { ValoremSchedule } from '../models/valorem-schedule';
 })
 export class ValoremSchedulesService {
 
-  private readonly API = `${environment.API}/valorem_schedule`;
+  private readonly API = `${environment.API}/external_company_schedules`;
 
   emitDataTable = new EventEmitter<any>();
 
@@ -40,7 +40,7 @@ export class ValoremSchedulesService {
     );
   }
 
-  getValoremStatesSelect() {
+  getValoremSchedulesSelect() {
 
     var httpOptions = {
       headers: new HttpHeaders({
@@ -49,7 +49,7 @@ export class ValoremSchedulesService {
       params: this.inputParams
     };
 
-    return this.http.get<ValoremSchedule[]>(`${this.API}/select`, httpOptions)
+    return this.http.get<ValoremSchedule[]>(`${this.API}`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

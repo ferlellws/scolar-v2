@@ -29,7 +29,7 @@ export class ProjectDetailsComponent implements OnInit {
       data.project.budget_executed = new Intl.NumberFormat('en-US').format( data.project.budget_executed);
       data.project.budget_approved = new Intl.NumberFormat('en-US').format( data.project.budget_approved);
       this.project = data.project;
-      console.log(this.project);
+      console.log("Datos Proyecto",this.project);
       
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
@@ -39,11 +39,32 @@ export class ProjectDetailsComponent implements OnInit {
   onValorem(){
     environment.consoleMessage("onValorem");
     const dialogRef = this.dialog.open(ValoremFormComponent, {
-      width: environment.widthFormsLittleModal,
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
-        labelAction: 'Crear'
+        labelAction: 'Crear',
+        idProject: this.project.id
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data = 'close'){
+          dialogRef.close();
+        }
+      }
+    );
+  }
+
+  onValoremEdit(){
+    environment.consoleMessage("onValorem");
+    const dialogRef = this.dialog.open(ValoremFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idValorem: 1,     
+        mode: 'edit',
+        labelAction: 'Editar'
       }
     });
   }

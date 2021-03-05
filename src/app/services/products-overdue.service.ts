@@ -49,7 +49,7 @@ export class ProductsOverdueService {
 
   getProductOverdueByProjectId(id: number) {
     this.getProductOverdueAll().subscribe( (data: ProductOverdue[]) => {
-      return data.filter(productOverdue => productOverdue.valorem!.id == id);
+      return data.filter(productOverdue => productOverdue.external_company_tracing!.id == id);
     })
   }
 
