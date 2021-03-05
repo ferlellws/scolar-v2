@@ -153,7 +153,7 @@
             </div>
             <mat-divider></mat-divider>
 
-            <tecno-text-list class="external-component" name="Beneficios" (emitChange)="onBenefits($event)"></tecno-text-list>
+            <tecno-text-list class="external-component" name="Beneficios" [items]="benefits" (emitChange)="onBenefits($event)"></tecno-text-list>
                
             <mat-divider></mat-divider>
         
@@ -458,11 +458,11 @@
             </div>
 
             <mat-divider></mat-divider>
-            <tecno-text-list class="external-component" name="Hitos" (emitChange)="onHighlights($event)"></tecno-text-list>
+            <tecno-text-list class="external-component" name="Hitos" [items]="highlights" (emitChange)="onHighlights($event)"></tecno-text-list>
             <mat-divider></mat-divider>
                 
             <mat-divider></mat-divider>
-            <tecno-text-list class="external-component" name="Riesgos" (emitChange)="onRisks($event)"></tecno-text-list>
+            <tecno-text-list class="external-component" name="Riesgos" [items]="risks" (emitChange)="onRisks($event)"></tecno-text-list>
             <mat-divider></mat-divider>
 
             <div class="row">
@@ -471,27 +471,17 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para Aplicaciones inpactadas</h3>
-                </div>
-            </div>
-
             <mat-divider></mat-divider>
-            <tecno-text-list class="external-component" name="KPIs" (emitChange)="onKpis($event)"></tecno-text-list>
+            <tecno-applications-by-project class="external-component" [applicationsSelected]="applications" (emitChange)="onApplications($event)"></tecno-applications-by-project>
             <mat-divider></mat-divider>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para areas participantes</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-text-list class="external-component" name="KPIs" [items]="kpis"  (emitChange)="onKpis($event)"></tecno-text-list>
+            <mat-divider></mat-divider>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para areas participantes</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-areas-by-project class="external-component" (emitChange)="onAreasByProject($event)" [areasSelected]="areasByProject" ></tecno-areas-by-project>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">
@@ -508,11 +498,9 @@
                 </div>        
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para proveedores</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-companies-by-project class="external-component" (emitChange)="onCompaniesByProject($event)" [companiesSelected]="companies" ></tecno-companies-by-project>
+            <mat-divider></mat-divider>
 
             <div class="row">
                 <div class="col-sm-12 col-md-4"></div>
@@ -523,8 +511,8 @@
                         formControlName="testLog" 
                         required >
                             <mat-option>-- None --</mat-option>
-                            <mat-option [value]="0">No</mat-option>
-                            <mat-option [value]="1">Sí</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                            <mat-option [value]="true">Sí</mat-option>
                         </mat-select>
                         <mat-label>{{labels.testLog}}</mat-label>
                         <mat-error *ngIf="this.seguimiento.get('testLog')?.invalid">
@@ -535,16 +523,15 @@
                 <div class="col-sm-12 col-md-4"></div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-4">
-                    <h3 class="mat-title">Espacio para recursos funcionales, pruebas</h3>
-                </div>
-            </div>
+            <mat-divider></mat-divider>
+            <tecno-test-users class="external-component" (emitChange)="onTestUsers($event)" [usersSelected]="testUsers" ></tecno-test-users>
+            <mat-divider></mat-divider>
+            
         </form>
         <div class="buttons">
             <button class="button" mat-button color="primary" (click)="onReset(seguimiento)">Limpiar</button>
             <button class="button"
-            (click)="create()"
+            (click)="data.mode == 'create' ? create() : edit()"
             mat-button color="primary"
             [disabled]="seguimiento.invalid || fButtonDisabled">
                 {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
