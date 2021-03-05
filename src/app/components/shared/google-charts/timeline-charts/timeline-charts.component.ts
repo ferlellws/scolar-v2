@@ -25,7 +25,7 @@ export class TimelineChartsComponent implements OnInit {
   @Input() legend!: string;
   @Input() fMaterial!: boolean;
   @Input() dataTable!: any [];
-  @Input() width: string = "80%";
+  @Input() width: string = "95%";
   @Input() height: string = "500px";
   @Input() chartClass: string = "";
   @Input() pieHole: number = 0;
@@ -70,9 +70,14 @@ export class TimelineChartsComponent implements OnInit {
     // pieSliceTextStyle: this.pieSliceTextStyle,
     // colors: this.colors,
     colors: string[];
-    timeline: { groupByRowLabel: boolean; colorByRowLabel: boolean; };
+    timeline: {
+      groupByRowLabel: boolean;
+      colorByRowLabel: boolean;
+      // barLabelStyle: any;
+    };
     avoidOverlappingGridLines: boolean;
     height: number;
+    // backgroundColor: string[] | string;
   };
   formatDate: any;
 
@@ -126,7 +131,7 @@ export class TimelineChartsComponent implements OnInit {
     });
 
     this.formatDate = new this.gLib.visualization.DateFormat({
-      pattern: 'MM/dd/yyyy'
+      pattern: 'yyyy-dd-MM'
     });
 
     let dataTableGroup = this.gLib.visualization.data.group(dataTable, [0]);
@@ -147,9 +152,13 @@ export class TimelineChartsComponent implements OnInit {
       colors: ['#cbb69d', '#603913', '#c69c6e'],
       timeline: {
         groupByRowLabel: true,
-        colorByRowLabel: false
+        colorByRowLabel: false,
+        // barLabelStyle: {
+        //   fontSize: 50
+        // }
       },
-      avoidOverlappingGridLines: false,
+      // backgroundColor: '#cbb69d',
+      avoidOverlappingGridLines: true,
       height: (dataTableGroup.getNumberOfRows() * rowHeight) + rowHeight
     };
 
@@ -159,14 +168,22 @@ export class TimelineChartsComponent implements OnInit {
 
     this.gLib.visualization.events.addListener(chart, 'ready',  () => {
       // add marker for current date
-      this.addMarker(new Date());
-      // this.addMarker(new Date(2020, 8, 31));
+      this.addMarker(new Date(), '#F44336');
+      // this.addMarker(new Date(2020, 8, 31), 'green');
     });
+
+  //   this.gLib.visualization.events.addListener(chart, 'ready', function () {
+  //     // set the width of the column with the title "Name" to 100px
+  //     var title = 'Name';
+  //     var width = '100px';
+  //     document.getElementsByClassName("google-visualization-table-th")[0].style.width = width;
+  //     // $('.google-visualization-table-th:contains(' + title + ')').css('width', width);
+  // });
 
     chart.draw(dataTable, this.options);
   }
 
-  addMarker(markerDate: Date) {
+  addMarker(markerDate: Date, color: string) {
     let baseline;
     let baselineBounds;
     let chartElements;
@@ -214,10 +231,11 @@ export class TimelineChartsComponent implements OnInit {
     markerSpan = markerDate.getTime() - this.dateRangeStart.min.getTime();
 
     // add label
-    markerLabel.setAttribute('fill', '#e91e63');
+    markerLabel.setAttribute('fill', color);
     markerLabel.setAttribute('y', this.options.height);
     markerLabel.setAttribute('x', (baselineBounds.x + (timelineUnit * markerSpan) - 4));
     markerLabel.textContent = this.formatDate.formatValue(markerDate);
+    markerLabel.setAttribute('font-weight', 'bold');
     svg.appendChild(markerLabel);
 
     // add line
@@ -228,7 +246,7 @@ export class TimelineChartsComponent implements OnInit {
     markerLine.setAttribute('width', 1);
     markerLine.setAttribute('stroke', 'none');
     markerLine.setAttribute('stroke-width', '0');
-    markerLine.setAttribute('fill', '#e91e63');
+    markerLine.setAttribute('fill', color);
     svg.appendChild(markerLine);
   }
 
