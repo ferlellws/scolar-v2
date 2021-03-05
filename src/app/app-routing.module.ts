@@ -37,7 +37,12 @@ const routes: Routes = [
   { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
   { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'project-progress-report', loadChildren: () => import('./components/project-progress-report/project-progress-report.module').then(m => m.ProjectProgressReportModule) },
+  {
+    path: 'project-progress-report',
+    loadChildren: () => import('./components/project-progress-report/project-progress-report.module').then(m => m.ProjectProgressReportModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard]
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

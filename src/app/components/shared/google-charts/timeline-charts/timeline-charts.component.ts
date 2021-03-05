@@ -131,7 +131,7 @@ export class TimelineChartsComponent implements OnInit {
     });
 
     this.formatDate = new this.gLib.visualization.DateFormat({
-      pattern: 'yyyy-dd-MM'
+      pattern: 'yyyy-MM-dd'
     });
 
     let dataTableGroup = this.gLib.visualization.data.group(dataTable, [0]);
