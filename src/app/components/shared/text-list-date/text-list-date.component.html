@@ -1,5 +1,5 @@
 <div class="row" style="margin-bottom: -5px">
-    <h3 class="mat-title col-sm-12 col-md-12">{{name}}</h3>
+    <h3 class="mat-title col-sm-12 col-md-12" style="font-weight: 500;">{{name}}</h3>
 </div>
 <div class="row">
     <mat-form-field class="col-sm-12 col-md-8">
@@ -27,10 +27,14 @@
         <mat-card >
             <div class="card-content">
                 <div class="text-conten">
-                    <div class="texto">{{i+1}}. {{item.description}}</div>
+                    <span style="font-weight: 500">{{i+1}}.
+                        <span style="font-weight: 400">{{item.description}}</span>
+                    </span>
                 </div>
                 <div class="date-button">
-                    <div>Fecha: {{item.date}}</div>
+                    <span style="font-weight: 500">Fecha:
+                        <span style="font-weight: 400">{{item.date}}</span>
+                    </span>
                     <mat-icon color="warn" (click)="delete(i)" matRipple class="delete">delete</mat-icon>
                 </div>
             </div>

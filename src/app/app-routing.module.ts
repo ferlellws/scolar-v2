@@ -167,7 +167,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
-      // projects: ProjectsResolver,
+      //projects: ProjectsResolver,
       projects: ProjectsByVicepresidencyResolver,
     }
   },

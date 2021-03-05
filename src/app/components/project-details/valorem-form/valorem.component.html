@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="mat-elevation-z4">
-  <h1 class="mat-headline">{{ data.labelAction }} {{ singularOption }} </h1>
+  <h1 class="mat-headline"> {{ singularOption }} </h1>
   <span class="example-spacer"></span>
 
   <button mat-icon-button mat-dialog-close *ngIf="showBtnClose">
@@ -8,10 +8,52 @@
 </mat-toolbar>
 
 <div class="example-container bg-color-white mat-elevation-z4">
-  <form action="" [formGroup]="valoremGroup"  class="dialog-scroll" (ngSubmit)="onSubmit()"
+  
+  <form style="width: 100%;">
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <h2 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500">Reportes Creados</h2>
+        <div class="row" *ngFor="let item of items; index as i">
+          <div class="col-sm-12 col-md-12">
+            <mat-card >
+              <div class="card-content">
+                <div class="row">
+                  <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
+                </div>
+                <div class="row">
+                  <span class="col-sm-12 col-md-3" style="font-weight: 500;">Estado:
+                    <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
+                  </span>
+                  <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
+                    <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
+                  </span>
+                  <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
+                    <span style="font-weight: 400; ">{{item.start_date}}</span>
+                  </span>
+                  <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
+                    <span style="font-weight: 400; ">{{item.due_date}}</span>
+                  </span>
+                </div>
+                <div class="row">
+                  <span style="font-weight: 500; ">Detalle de Estado:
+                    <span style="font-weight: 400; ">{{item.status_detail}}</span>
+                  </span>
+                </div>
+              </div>
+            </mat-card>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </form>
+  <mat-divider></mat-divider>
+
+  <form action="" [formGroup]="valoremGroup" (ngSubmit)="onSubmit()"
   *ngIf="data.mode === 'create' || (data.mode === 'edit' && valorem); else loadingBlock">
 
     <div class="row">
+      <h2 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;;">Nuevo Reporte</h2>
       <div class="col-sm-12 col-md-4">
         <mat-form-field class="full-width">
           <mat-label>Estado</mat-label>

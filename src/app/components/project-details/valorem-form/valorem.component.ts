@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -48,6 +49,8 @@ export class ValoremFormComponent implements OnInit {
   productsToBeDelivered: ProductToBeDelivered[] = [];
   productsOverdue: ProductOverdue[] = [];
 
+  items: Valorem[] = [];
+
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
 
   constructor(
@@ -61,6 +64,7 @@ export class ValoremFormComponent implements OnInit {
     private productsToBeDeliveredService: ProductsToBeDeliveredService,
     private productsOverdueService: ProductsOverdueService,
     private snackBar: MatSnackBar,
+    public datepipe: DatePipe,
   ) { 
     this.labels = {
       startDate: 'Fecha de Inicio',
@@ -71,7 +75,10 @@ export class ValoremFormComponent implements OnInit {
 
   async ngOnInit(): Promise<void> { 
     
+    this.getReports();
+
     environment.consoleMessage(this.data, "++++++++++");
+    
     this.valoremGroup = this.fb.group({
       external_company_state_id: [null, Validators.required],
       external_company_schedule_id: [null, Validators.required],
@@ -126,6 +133,19 @@ export class ValoremFormComponent implements OnInit {
     this.productsOverdue = [];
   }
 
+  getReports() {
+    environment.consoleMessage("", ">>>>>>>>>  Entro a Registro  <<<<<<<<");
+    this.valoremService.getValoremSelect()
+      .subscribe((res: Valorem[]) => {
+        environment.consoleMessage(res, ">>>>>>>>>  Valorem Creados  <<<<<<<<");
+        this.items = res;
+        this.items.map(data => {
+          data.start_date = data.start_date?.substr(0,10);
+          data.due_date = data.due_date?.substr(0,10);
+        });
+      });
+  }
+
   async createRegister() {
     environment.consoleMessage(this.valoremGroup)
     this.valoremGroup.setValue({
@@ -168,9 +188,11 @@ export class ValoremFormComponent implements OnInit {
             environment.consoleMessage(res, "Registro Productos Creado: ");
           })
         
-        this.valoremService.emitClose.subscribe((res: any) => {
-          this.dialog.closeAll();
-        })
+        // this.valoremService.emitClose.subscribe((res: any) => {
+        //   this.dialog.closeAll();
+        // })
+        this.getReports();
+        this.onReset();
       }
     }, (err) => {
       this.fButtonDisabled = false;
@@ -277,8 +299,22 @@ export class ValoremFormComponent implements OnInit {
     return message;
   }
 
-  getToStringDate(date: Date){
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+  getToStringDate(date: any): string {
+    if (date == '' || date == undefined || date == null){
+      return '';
+    }
+    if (date + "" != "Invalid Date" ){
+      let d!: Date;
+      try {
+        d = new Date(date);
+      } catch {
+        d = new Date();
+      } finally {
+          return `${this.datepipe.transform( d, 'yyyy-MM-dd')}`;
+      }
+    } else {
+      return "";
+    }
   }
 
 }
