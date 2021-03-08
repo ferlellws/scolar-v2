@@ -168,12 +168,12 @@ export class ProjectsFormComponent implements OnInit {
         'typifications': [null, [Validators.required]],
         'managements': [null, [Validators.required]],
         'pmos': [null, [Validators.required]],
-        'pmoHours': [null, [Validators.required]],
-        'pmoMinutes': [null, [Validators.required]],
+        'pmoHours': [null, [Validators.required, Validators.max(40), Validators.min(0)]],
+        'pmoMinutes': [null, [Validators.required, Validators.max(59), Validators.min(0)]],
         'pmoAssists': [null],
         'stages': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistMinutes': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
+        'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
+        'pmoAssistMinutes': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
         'budgetApproved': [null, [Validators.required]],
         'budgetExecuted': [null, [Validators.required]],
         'balance': [{value: null, disabled: true}, [Validators.required]],
@@ -185,9 +185,9 @@ export class ProjectsFormComponent implements OnInit {
         'controlDate': [],
         'states': [null, [Validators.required]],
         'phases': [null, [Validators.required]],
-        'sprint': [null, [Validators.required]],
+        'sprint': [null, [Validators.required, Validators.min(0)]],
         'evaluation': [null],
-        'testLog': [null],
+        'testLog': [null, [Validators.required]],
       });
       
       
@@ -237,7 +237,9 @@ export class ProjectsFormComponent implements OnInit {
         this.project = project; 
         this.project.reception_date = this.project.reception_date.substr(0, 10);
         environment.consoleMessage(this.project ,"project>>>>>>>>");
-        this.resetformToProject();
+        this.resetformToProject(this.general);
+        this.resetformToProject(this.descripcion);
+        this.resetformToProject(this.seguimiento);
         this.updateChildComponents(project.id);
       });
       await this._vicePresidenciesService.getVicePresidenciesSelect()
@@ -291,40 +293,45 @@ export class ProjectsFormComponent implements OnInit {
     this.validateFormGroup(this.general)
   }
 
-  resetformToProject(){
+  resetformToProject(formGroup: FormGroup){
     environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
-    this.general.get('title')?.setValue(this.project.title);
-    this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
-    this.general.get('areas')?.setValue(this.project.area!.id);
-    this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
-    this.general.get('receptionDate')?.setValue(new Date(`${this.project.reception_date}:00:00`));
-    this.general.get('programs')?.setValue(this.project.program == null ? null: this.project.program!.id);
+    if(formGroup == this.general){
+      this.general.get('title')?.setValue(this.project.title);
+      this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
+      this.general.get('areas')?.setValue(this.project.area!.id);
+      this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
+      this.general.get('receptionDate')?.setValue(new Date(`${this.project.reception_date}:00:00`));
+      this.general.get('programs')?.setValue(this.project.program == null ? null: this.project.program!.id);
+    }
+    if(formGroup == this.descripcion){
+      this.descripcion.get('projectDescription')?.setValue(this.project.description);
+      this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
+      this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
+      this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
+      this.descripcion.get('managements')?.setValue(this.project.management!.id);
+      this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
+      this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
+      this.descripcion.get('pmoMinutes')?.setValue(this.project.pmo_minutes);
+      this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
+      this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
+      this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours);
+      this.descripcion.get('pmoAssistMinutes')?.setValue(this.project.pmo_assistant_minutes);
+      this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
+      this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
+      this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
+      this.validateAssist ();
+    }
 
-    this.descripcion.get('projectDescription')?.setValue(this.project.description);
-    this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
-    this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
-    this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
-    this.descripcion.get('managements')?.setValue(this.project.management!.id);
-    this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
-    this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
-    this.descripcion.get('pmoMinutes')?.setValue(this.project.pmo_minutes);
-    this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
-    this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
-    this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours);
-    this.descripcion.get('pmoAssistMinutes')?.setValue(this.project.pmo_assistant_minutes);
-    this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
-    this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
-    this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
-
-    this.seguimiento.get('startDate')?.setValue(this.project.start_date == null ? null : new Date(`${this.project.start_date!}:00:00`));
-    this.seguimiento.get('dueDate')?.setValue(this.project.due_date == null ? null : new Date(`${this.project.due_date!}:00:00`));
-    this.seguimiento.get('controlDate')?.setValue(this.project.control_date == null? null : new Date(`${this.project.control_date!}:00:00`));
-    this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
-    this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
-    this.seguimiento.get('sprint')?.setValue(this.project.sprint);
-    this.seguimiento.get('evaluation')?.setValue(this.project.evaluation);
-    this.seguimiento.get('testLog')?.setValue(this.project.test_log);
-    this.validateAssist ();
+    if(formGroup == this.seguimiento){
+      this.seguimiento.get('startDate')?.setValue(this.project.start_date == null ? null : new Date(`${this.project.start_date!}:00:00`));
+      this.seguimiento.get('dueDate')?.setValue(this.project.due_date == null ? null : new Date(`${this.project.due_date!}:00:00`));
+      this.seguimiento.get('controlDate')?.setValue(this.project.control_date == null? null : new Date(`${this.project.control_date!}:00:00`));
+      this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
+      this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
+      this.seguimiento.get('sprint')?.setValue(this.project.sprint);
+      this.seguimiento.get('evaluation')?.setValue(this.project.evaluation);
+      this.seguimiento.get('testLog')?.setValue(this.project.test_log);
+    }
   }
 
   updateChildComponents(id: number){
@@ -864,7 +871,9 @@ export class ProjectsFormComponent implements OnInit {
       this.descripcion.get('stages')!.disable();
       this.descripcion.get('stages')!.setValue(null);
       this.descripcion.get('pmoAssistHours')!.disable();
+      this.descripcion.get('pmoAssistHours')!.setValue(null);
       this.descripcion.get('pmoAssistMinutes')!.disable();
+      this.descripcion.get('pmoAssistMinutes')!.setValue(null);
     }
     return this.deshabilitarAssist
   }
@@ -1331,9 +1340,14 @@ export class ProjectsFormComponent implements OnInit {
 
   getMessageError(formGroup: FormGroup, field: string): string {
     let message!: string;
-
     if (formGroup.get(field)?.errors?.required) {
       message = `Campo ${this.labels[field]} es requerido`
+    }
+    if (formGroup.get(field)?.errors?.max) {
+      message = `Máximo ${formGroup.get(field)?.errors?.max.max}`
+    }
+    if (formGroup.get(field)?.errors?.min) {
+      message = `Mínimo ${formGroup.get(field)?.errors?.min.min}`
     }
 
     return message;
@@ -1341,12 +1355,16 @@ export class ProjectsFormComponent implements OnInit {
 
   onReset(formGroup: FormGroup) {
     this.isButtonReset = true;
-    var keys = Object.keys(formGroup.controls)
-    for (let index = 0; index < keys.length; index++) {
-      formGroup.controls[keys[index]].setValue(null);
-    }
-    if(formGroup == this.descripcion){
-      this.validateAssist();
+    if(this.data.mode == 'create'){
+      var keys = Object.keys(formGroup.controls)
+      for (let index = 0; index < keys.length; index++) {
+        formGroup.controls[keys[index]].setValue(null);
+      }
+      if(formGroup == this.descripcion){
+        this.validateAssist();
+      }
+    }else if(this.data.mode == 'edit'){
+      this.resetformToProject(formGroup);
     }
   }
 
