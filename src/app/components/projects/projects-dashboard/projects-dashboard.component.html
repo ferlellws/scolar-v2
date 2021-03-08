@@ -1,23 +1,26 @@
 <div class="cards-container">
-    <mat-card *ngFor="let board of dashboard; index as i" [ngStyle]="{'background-color': colors[i]}">
-        <mat-card-header  matRipple (click)="onVicepresindency(board.vice_presidency.id)">
-            <mat-card-title>{{board.vice_presidency.title}}</mat-card-title>          
-        </mat-card-header>
-        <mat-card-content>
-
-            <mat-list>
-                <div *ngFor="let area of board.areas">
-                    <div mat-subheader>{{area.area.title}}</div>
-                    <div matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
-                        <mat-list-item >
-                            <mat-icon mat-list-icon>preview</mat-icon>
-                            <div mat-line>{{project.title}}</div>
-                            <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
-                        </mat-list-item>
+    <div style="display: flex; flex-direction: column; min-width: 450px;" *ngFor="let board of dashboard; index as i" f>
+        <mat-card [ngStyle]="{'background-color': colors[i]}">
+            <mat-card-header  class="project" matRipple (click)="onVicepresindency(board.vice_presidency.id)">
+                <mat-card-title>{{board.vice_presidency.title}}</mat-card-title>          
+            </mat-card-header>
+            <mat-card-content>
+    
+                <mat-list>
+                    <div *ngFor="let area of board.areas">
+                        <div mat-subheader>{{area.area.title}}</div>
+                        <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
+                            <mat-list-item >
+                                <mat-icon mat-list-icon>preview</mat-icon>
+                                <div mat-line>{{project.title}}</div>
+                                <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
+                            </mat-list-item>
+                        </div>
                     </div>
-                </div>
-              </mat-list>
-            
-        </mat-card-content>
-    </mat-card>
+                  </mat-list>
+                
+            </mat-card-content>
+        </mat-card>
+    </div>
+    
 </div>
