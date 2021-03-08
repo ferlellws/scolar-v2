@@ -187,10 +187,7 @@ export class ValoremFormComponent implements OnInit {
           .subscribe((res) => {
             environment.consoleMessage(res, "Registro Productos Creado: ");
           })
-        
-        // this.valoremService.emitClose.subscribe((res: any) => {
-        //   this.dialog.closeAll();
-        // })
+
         this.getReports();
         this.onReset();
       }

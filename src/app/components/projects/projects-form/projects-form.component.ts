@@ -1067,9 +1067,12 @@ export class ProjectsFormComponent implements OnInit {
         this.project.budget_approved != this.descripcion.get('budgetApproved')?.value ? editProject.budget_approved = this.descripcion.get('budgetApproved')!.value : true ;
         this.project.budget_executed != this.descripcion.get('budgetExecuted')?.value ? editProject.budget_executed = this.descripcion.get('budgetExecuted')!.value : true ;
 
-        this.project.start_date != (this.seguimiento.get('startDate')?.value == null ? null : this.parseDate(this.seguimiento.get('startDate')?.value)) ? editProject.start_date = this.parseDate(this.seguimiento.get('startDate')!.value) : true ;
-        this.project.due_date != (this.seguimiento.get('dueDate')?.value == null ? null : this.parseDate(this.seguimiento.get('dueDate')?.value)) ? editProject.due_date = this.parseDate(this.seguimiento.get('dueDate')!.value) : true ;
-        this.project.control_date != (this.seguimiento.get('controlDate')?.value == null ? null : this.parseDate(this.seguimiento.get('controlDate')?.value)) ? editProject.control_date = this.parseDate(this.seguimiento.get('controlDate')!.value) : true ;
+        this.project.start_date != (this.seguimiento.get('startDate')?.value == null ? null : this.parseDate(this.seguimiento.get('startDate')?.value)) ? editProject.start_date = 
+          (this.parseDate(this.seguimiento.get('startDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('startDate')!.value)) : true ;
+        this.project.due_date != (this.seguimiento.get('dueDate')?.value == null ? null : this.parseDate(this.seguimiento.get('dueDate')?.value)) ? editProject.due_date =
+          (this.parseDate(this.seguimiento.get('dueDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('dueDate')!.value)) : true ;
+        this.project.control_date != (this.seguimiento.get('controlDate')?.value == null ? null : this.parseDate(this.seguimiento.get('controlDate')?.value)) ? editProject.control_date = 
+          (this.parseDate(this.seguimiento.get('controlDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('controlDate')!.value)) : true ;
        
         if(this.project.states_by_phase!.state_id != this.seguimiento.get('states')?.value ||
         this.project.states_by_phase!.phase_id != this.seguimiento.get('phases')?.value){
@@ -1157,9 +1160,9 @@ export class ProjectsFormComponent implements OnInit {
           budget_approved: this.descripcion.get('budgetApproved')!.value,
           budget_executed: this.descripcion.get('budgetExecuted')!.value,
 
-          start_date: this.parseDate(this.seguimiento.get('startDate')!.value),
-          due_date: this.parseDate(this.seguimiento.get('dueDate')!.value),
-          control_date: this.parseDate(this.seguimiento.get('controlDate')!.value),
+          start_date: this.parseDate(this.seguimiento.get('startDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('startDate')!.value),
+          due_date: this.parseDate(this.seguimiento.get('dueDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('dueDate')!.value),
+          control_date: this.parseDate(this.seguimiento.get('controlDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('controlDate')!.value),
           states_by_phase_id: stateByPhase,
           sprint: this.seguimiento.get('sprint')!.value,
           evaluation: this.seguimiento.get('evaluation')!.value,
