@@ -25,6 +25,7 @@
         <mat-form-field class="full-width">
           <mat-label>Vicepresidencia</mat-label>
           <mat-select formControlName="vice_presidency_id" (click)="onClickSelectVicepresidency()" required>
+            <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let vicePresidency of selectVicepresidency" [value]="vicePresidency.id">{{ vicePresidency.title }}</mat-option>
           </mat-select>
           <mat-error *ngIf="this.areasGroup.get('vice_presidency_id')?.invalid">

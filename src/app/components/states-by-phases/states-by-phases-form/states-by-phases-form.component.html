@@ -15,6 +15,7 @@
         <mat-form-field class="full-width">
           <mat-label>Estado</mat-label>
           <mat-select formControlName="state_id" (click)="onClickSelectState()" required>
+            <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let state of selectState" [value]="state.id">{{ state.title }}</mat-option>
           </mat-select>
           <mat-error *ngIf="this.stateByPhasesGroup.get('state_id')?.invalid">
@@ -27,6 +28,7 @@
         <mat-form-field class="full-width">
           <mat-label>Fase</mat-label>
           <mat-select formControlName="phase_id" (click)="onClickSelectPhase()" required>
+            <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let phase of selectPhase" [value]="phase.id">{{ phase.title }}</mat-option>
           </mat-select>
           <mat-error *ngIf="this.stateByPhasesGroup.get('phase_id')?.invalid">

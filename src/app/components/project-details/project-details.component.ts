@@ -32,6 +32,8 @@ export class ProjectDetailsComponent implements OnInit {
   kpisByProject!: any[];
   risksByProject!: any[];
   semanal_hours = 40;
+  labelAssignment = "Sin asignar";
+  panelOpenState = false;
 
   constructor(
     public dialog: MatDialog, 
