@@ -52,6 +52,8 @@ import { CompaniesByProjectService } from 'src/app/services/companies-by-project
 import { TestUsersService } from 'src/app/services/test-users.service';
 import { TestUser } from 'src/app/models/test-user';
 import { ApplicationsService } from 'src/app/services/applications.service';
+import { MainTableProject } from 'src/app/models/main-table-project';
+import { MainCreateTablesService } from 'src/app/services/main-create-tables.service';
 
 export interface DialogData {
   id: number;
@@ -148,8 +150,7 @@ export class ProjectsFormComponent implements OnInit {
     public datepipe: DatePipe,
     private snackBar: MatSnackBar,
 
-    private _applicationsService: ApplicationsService,
-
+    private _mainCreateTablesService: MainCreateTablesService
     ) { 
       
       this.general = this._fbG.group({
@@ -173,7 +174,7 @@ export class ProjectsFormComponent implements OnInit {
         'pmoAssists': [null],
         'stages': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
         'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
-        'pmoAssistMinutes': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
+        'pmoAssistMinutes': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(59), Validators.min(0)]],
         'budgetApproved': [null, [Validators.required]],
         'budgetExecuted': [null, [Validators.required]],
         'balance': [{value: null, disabled: true}, [Validators.required]],
@@ -1188,14 +1189,23 @@ export class ProjectsFormComponent implements OnInit {
           if (res.status == 'created') {
             this.openSnackBar(true, "Registro creado satisfactoriamente", "");
             var id = res.location.id;
+            var mainTable: MainTableProject = {
+              benefits: [],
+              highlights: [],
+              risks: [],
+              applications_by_projects: [],
+              kpis: [],
+              areas_by_projects: [],
+              test_users: [],
+              companies_by_projects: [],
+            };
             for (let index = 0; index < this.benefits.length; index++) {
               var benefit: Benefit = {
                 project_id: id,
                 description: this.benefits[index],
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._benefitsService.addBenefit(benefit).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.benefits?.push(benefit);
             }
 
             for (let index = 0; index < this.highlights.length; index++) {
@@ -1204,8 +1214,7 @@ export class ProjectsFormComponent implements OnInit {
                 description: this.highlights[index],
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._highlightsService.addHighlight(highlight).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.highlights?.push(highlight);
             }
 
             for (let index = 0; index < this.risks.length; index++) {
@@ -1214,8 +1223,7 @@ export class ProjectsFormComponent implements OnInit {
                 description: this.risks[index],
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._risksService.addRisk(risk).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.risks?.push(risk);
             }
 
             for (let index = 0; index < this.kpis.length; index++) {
@@ -1224,8 +1232,7 @@ export class ProjectsFormComponent implements OnInit {
                 description: this.kpis[index],
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._kpisService.addKpi(kpi).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.kpis?.push(kpi);
             }
 
             for (let index = 0; index < this.applications.length; index++) {
@@ -1234,8 +1241,7 @@ export class ProjectsFormComponent implements OnInit {
                 application_id :this.applications[index].id,
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._applicationsByProjectsService.addApplicationByProject(application).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.applications_by_projects?.push(application);
             }
 
             for (let index = 0; index < this.areasByProject.length; index++) {
@@ -1244,8 +1250,7 @@ export class ProjectsFormComponent implements OnInit {
                 area_id : this.areasByProject[index].id,
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._areasByProjectsService.addAreaByProject(area).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.areas_by_projects?.push(area);
             }
 
             for (let index = 0; index < this.companies.length; index++) {
@@ -1254,8 +1259,7 @@ export class ProjectsFormComponent implements OnInit {
                 company_id : this.companies[index].id,
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
-              this._companiesByProjectsService.addCompanyByProject(company).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.companies_by_projects?.push(company)
             }
 
             for (let index = 0; index < this.testUsers.length; index++) {
@@ -1266,9 +1270,11 @@ export class ProjectsFormComponent implements OnInit {
                 user_creates_id: JSON.parse(localStorage.user).id,
               } 
               this.contador++;//borrar
-              this._testUsersService.addTestUser(testUser).
-              subscribe(data => environment.consoleMessage(data));
+              mainTable.test_users?.push(testUser);
             }
+            this._mainCreateTablesService.addMainTableProject(mainTable).subscribe(
+              data => environment.consoleMessage(data, "dataMainTable")
+            );
           }
         }, (err) => {
           this.fButtonDisabled = false;
