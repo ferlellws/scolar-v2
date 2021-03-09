@@ -10,6 +10,11 @@
         <form [formGroup]="general" style="width: 100%;">
             <ng-template matStepLabel>General</ng-template>
             <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title txt-accent">Aspectos generales</h3>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
                         class="full-width"
@@ -107,7 +112,11 @@
         <form [formGroup]="descripcion" class="step-scroll">
             <ng-template matStepLabel>Descripción Proyecto</ng-template>
             <div class="row">
-
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title txt-accent">Descripción General</h3>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
                     class="full-width">
@@ -122,7 +131,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-12 col-md-8">
+                <div class="col-sm-12 col-md-4">
                     <mat-form-field
                     class="full-width">
                         <mat-select required (openedChange)="_openTypifications($event)" formControlName="typifications">
@@ -132,6 +141,20 @@
                         <mat-label>{{labels.typifications}}</mat-label>
                         <mat-error *ngIf="this.descripcion.get('typifications')?.invalid">
                             {{ getMessageError(descripcion ,'typifications') }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 col-md-4">
+                    <mat-form-field
+                    class="full-width">
+                        <mat-select required (openedChange)="_openStrategicGuidelines($event)" formControlName="strategicGuidelines">
+                            <mat-option>-- None --</mat-option>
+                            <mat-option *ngFor="let strategicGuideline of strategicGuidelines" [value]="strategicGuideline.id">{{strategicGuideline.name}}</mat-option>
+                        </mat-select>
+                        <mat-label>{{labels.strategicGuidelines}}</mat-label>
+                        <mat-error *ngIf="this.descripcion.get('strategicGuidelines')?.invalid">
+                            {{ getMessageError(descripcion ,'strategicGuidelines') }}
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -187,7 +210,12 @@
                 </div>
             </div>
             <mat-divider></mat-divider>
-
+           
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title txt-accent">PMO</h3>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <mat-form-field
@@ -231,6 +259,11 @@
             </div>
             <mat-divider></mat-divider>
 
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title txt-accent">PMO de apoyo</h3>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-12 col-md-8">
                     <mat-form-field
@@ -302,7 +335,11 @@
             </div>
             <mat-divider></mat-divider>
 
-                
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title txt-accent">Presupuesto</h3>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
@@ -369,6 +406,11 @@
     <mat-step [stepControl]="seguimiento" [editable]="true">
         <form [formGroup]="seguimiento" class="step-scroll" style="width: 100%;">
             <ng-template matStepLabel>Seguimiento</ng-template>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title txt-accent">Fechas y Estado</h3>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
@@ -464,12 +506,6 @@
             <tecno-text-list class="external-component" name="Riesgos" [items]="risks" (emitChange)="onRisks($event)"></tecno-text-list>
             <mat-divider></mat-divider>
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <h3 class="mat-title">Espacio para Eventos de riesgo</h3>
-                </div>
-            </div>
-
             <mat-divider></mat-divider>
             <tecno-applications-by-project class="external-component" [applicationsSelected]="applications" (emitChange)="onApplications($event)"></tecno-applications-by-project>
             <mat-divider></mat-divider>
@@ -499,8 +535,8 @@
             <tecno-companies-by-project class="external-component" (emitChange)="onCompaniesByProject($event)" [companiesSelected]="companies" ></tecno-companies-by-project>
             <mat-divider></mat-divider>
 
+            <tecno-test-users class="external-component" (emitChange)="onTestUsers($event)" [usersSelected]="testUsers" ></tecno-test-users>
             <div class="row">
-                <div class="col-sm-12 col-md-4"></div>
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
                     class="full-width">
@@ -517,11 +553,8 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-12 col-md-4"></div>
+                <div class="col-sm-12 col-md-8"></div>
             </div>
-
-            <mat-divider></mat-divider>
-            <tecno-test-users class="external-component" (emitChange)="onTestUsers($event)" [usersSelected]="testUsers" ></tecno-test-users>
             <mat-divider></mat-divider>
             
         </form>

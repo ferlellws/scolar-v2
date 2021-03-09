@@ -1,14 +1,14 @@
 <div class="cards-container">
     <div style="display: flex; flex-direction: column; min-width: 450px;" *ngFor="let board of dashboard; index as i" f>
-        <mat-card [ngStyle]="{'background-color': colors[i]}">
+        <mat-card class="mat-elevation-z4">
             <mat-card-header  class="project" matRipple (click)="onVicepresindency(board.vice_presidency.id)">
-                <mat-card-title>{{board.vice_presidency.title}}</mat-card-title>          
+                <mat-card-title class="txt-accent">{{board.vice_presidency.title}}</mat-card-title>          
             </mat-card-header>
             <mat-card-content>
     
                 <mat-list>
                     <div *ngFor="let area of board.areas">
-                        <div mat-subheader>{{area.area.title}}</div>
+                        <div mat-subheader class="txt-primary">{{area.area.title}}</div>
                         <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
                             <mat-list-item >
                                 <mat-icon mat-list-icon>preview</mat-icon>
