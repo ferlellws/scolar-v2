@@ -40,7 +40,7 @@ export class AreasByProjectComponent implements OnInit {
         this.areasForm.setValue(selectedIDs);
         for (let index = 0; index < this.areasSelected.length; index++) {
           this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
-          .filter(vicepresidency => this.areasSelected[index].vice_presidency_id == vicepresidency.id)[0].title;
+          .filter(vicepresidency => this.areasSelected[index].vice_presidency!.id == vicepresidency.id)[0].title;
         }
       });
     var selectedIDs: number[] = this.areasSelected.map(area => area.id!);
@@ -56,7 +56,7 @@ export class AreasByProjectComponent implements OnInit {
     this.areasForm.setValue(selectedIDs);
     for (let index = 0; index < this.areasSelected.length; index++) {
       this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
-      .filter(vicepresidency => this.areasSelected[index].vice_presidency_id == vicepresidency.id)[0].title;
+      .filter(vicepresidency => this.areasSelected[index].vice_presidency!.id == vicepresidency.id)[0].title;
     }
   }
 
@@ -72,7 +72,7 @@ export class AreasByProjectComponent implements OnInit {
       });
     for (let index = 0; index < this.areasSelected.length; index++) {
       this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
-      .filter(vicepresidency => this.areasSelected[index].vice_presidency_id == vicepresidency.id)[0].title;
+      .filter(vicepresidency => this.areasSelected[index].vice_presidency!.id == vicepresidency.id)[0].title;
     }
     this.emitChange.emit(this.areasSelected);
   } 
@@ -89,7 +89,7 @@ export class AreasByProjectComponent implements OnInit {
     for (let index = 0; index < this.vicepresidencies.length; index++) {
       var row: any = {};
       row.title = this.vicepresidencies[index].title;
-      row.areas = this.areas.filter(area => area.vice_presidency_id == this.vicepresidencies[index].id)
+      row.areas = this.areas.filter(area => area.vice_presidency!.id == this.vicepresidencies[index].id)
       result.push(row);
     }
     return result;

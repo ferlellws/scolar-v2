@@ -7,6 +7,7 @@ import { Typification } from "./typification";
 import { Management } from "./management";
 import { StateByPhase } from "./state-by-phase";
 import { Stage } from "./stage";
+import { StrategicGuidelines } from "./strategic-guidelines";
 
 export class Project {
     id?: number;
@@ -20,6 +21,8 @@ export class Project {
     priority?: Priority;
     typification_id?: number;
     typification?: Typification ;
+    strategic_guideline_id?: number;
+    strategic_guideline?: StrategicGuidelines ;
     functional_lead?: User;
     functional_lead_id?: number;
     management_id?:number;

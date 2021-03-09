@@ -54,6 +54,8 @@ import { TestUser } from 'src/app/models/test-user';
 import { ApplicationsService } from 'src/app/services/applications.service';
 import { MainTableProject } from 'src/app/models/main-table-project';
 import { MainCreateTablesService } from 'src/app/services/main-create-tables.service';
+import { StrategicGuidelinesService } from 'src/app/services/strategic-guidelines.service';
+import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 
 export interface DialogData {
   id: number;
@@ -91,6 +93,7 @@ export class ProjectsFormComponent implements OnInit {
   pmos: User[] = [];
   pmoAssists: User[] = [];
   stages: Stage[] = [];
+  strategicGuidelines: StrategicGuidelines[] = [];
 
   states: State[] = [];
   phases: Phase[] = [];
@@ -147,6 +150,7 @@ export class ProjectsFormComponent implements OnInit {
     private _areasByProjectsService: AreasByProjectService,
     private _companiesByProjectsService: CompaniesByProjectService,
     private _testUsersService: TestUsersService,
+    private _strategicGuidelinesService: StrategicGuidelinesService,
     public datepipe: DatePipe,
     private snackBar: MatSnackBar,
 
@@ -167,6 +171,7 @@ export class ProjectsFormComponent implements OnInit {
         'leads': [null, [Validators.required]],
         'priorities': [null, [Validators.required]],
         'typifications': [null, [Validators.required]],
+        'strategicGuidelines': [null, [Validators.required]],
         'managements': [null, [Validators.required]],
         'pmos': [null, [Validators.required]],
         'pmoHours': [null, [Validators.required, Validators.max(40), Validators.min(0)]],
@@ -204,6 +209,7 @@ export class ProjectsFormComponent implements OnInit {
   
         priorities: `Prioridad`,
         typifications: `Tipificación`,
+        strategicGuidelines: `Lineamiento Estratégico`,
         projectDescription: `Descripción`,
         leads: `Lider Funcional`,
         managements: `Gestión`,
@@ -247,7 +253,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe(data => this.vicePresidencies = data);
       await this._areasService.getAreasSelect()
         .subscribe((areas: Area[]) => this.areas = areas
-          .filter(area => area.vice_presidency_id == this.project.area?.vice_presidency_id));
+          .filter(area => area.vice_presidency!.id == this.project.area?.vice_presidency!.id));
       await this._strategicApproachesService.getStrategicApproachesSelect()
       .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
       await this._programsService.getProgramsSelect()
@@ -268,20 +274,24 @@ export class ProjectsFormComponent implements OnInit {
         .subscribe((stages: Stage[]) => this.stages = stages);
       await this._statesService.getStatesSelect()
       .subscribe((states: State[]) => this.states = states);
+      await this._strategicGuidelinesService.getStrategicGuidelinesSelect()
+      .subscribe((strategicGuidelines: StrategicGuidelines[]) => this.strategicGuidelines = strategicGuidelines);
+      
       //fases
-      this._phasesService.getPhasesSelect()
+      await this._phasesService.getPhasesSelect()
       .subscribe((phases: Phase[]) => 
       {
         this._statesByPhasesService.getStateByPhasesSelect()
         .subscribe((stateByPhases: StateByPhase[]) =>
         {
+          environment.consoleMessage(stateByPhases, "213231213231")
           this.stateByPhases = [];
           this.phases = [];
-          this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.project.states_by_phase?.state_id);
+          this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state!.id == this.project.states_by_phase?.state!.id);
           for (let index = 0; index <  this.stateByPhases.length; index++) {
-            this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase_id)[0]);
+            this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase!.id)[0]);
           }
-          if( this.phases.filter(phase => phase.id == this.project.states_by_phase?.phase_id).length < 1){
+          if( this.phases.filter(phase => phase.id == this.project.states_by_phase?.phase!.id).length < 1){
             this.seguimiento.get('phases')!.setValue(0);
           }
         })
@@ -298,7 +308,7 @@ export class ProjectsFormComponent implements OnInit {
     environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
     if(formGroup == this.general){
       this.general.get('title')?.setValue(this.project.title);
-      this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency_id);
+      this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency!.id);
       this.general.get('areas')?.setValue(this.project.area!.id);
       this.general.get('strategicApproaches')?.setValue(this.project.strategic_approach!.id);
       this.general.get('receptionDate')?.setValue(new Date(`${this.project.reception_date}:00:00`));
@@ -309,6 +319,7 @@ export class ProjectsFormComponent implements OnInit {
       this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
       this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
       this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
+      this.descripcion.get('strategicGuidelines')?.setValue(this.project.strategic_guideline!.id);
       this.descripcion.get('managements')?.setValue(this.project.management!.id);
       this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
       this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
@@ -327,8 +338,8 @@ export class ProjectsFormComponent implements OnInit {
       this.seguimiento.get('startDate')?.setValue(this.project.start_date == null ? null : new Date(`${this.project.start_date!}:00:00`));
       this.seguimiento.get('dueDate')?.setValue(this.project.due_date == null ? null : new Date(`${this.project.due_date!}:00:00`));
       this.seguimiento.get('controlDate')?.setValue(this.project.control_date == null? null : new Date(`${this.project.control_date!}:00:00`));
-      this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state_id);
-      this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase_id);
+      this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state!.id);
+      this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase!.id);
       this.seguimiento.get('sprint')?.setValue(this.project.sprint);
       this.seguimiento.get('evaluation')?.setValue(this.project.evaluation);
       this.seguimiento.get('testLog')?.setValue(this.project.test_log);
@@ -900,7 +911,7 @@ export class ProjectsFormComponent implements OnInit {
     if (ev) {
       var vice: number = this.general.get('vicePresidencies')!.value;
       this._areasService.getAreasSelect()
-        .subscribe((areas: Area[]) => this.areas = areas.filter(area => area.vice_presidency_id == vice));
+        .subscribe((areas: Area[]) => this.areas = areas.filter(area => area.vice_presidency!.id == vice));
     }
   }
 
@@ -936,6 +947,13 @@ export class ProjectsFormComponent implements OnInit {
     if (ev) {
       this._typificationsService.getTypificationsSelect()
         .subscribe((typifications: Typification[]) => this.typifications = typifications);
+    }
+  }
+
+  _openStrategicGuidelines(ev: boolean) {
+    if (ev) {
+      this._strategicGuidelinesService.getStrategicGuidelinesSelect()
+        .subscribe((strategicGuidelines: StrategicGuidelines[]) => this.strategicGuidelines = strategicGuidelines);
     }
   }
 
@@ -982,9 +1000,9 @@ export class ProjectsFormComponent implements OnInit {
           {
             this.stateByPhases = [];
             this.phases = [];
-            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.seguimiento.get('states')!.value);
+            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state!.id == this.seguimiento.get('states')!.value);
             for (let index = 0; index <  this.stateByPhases.length; index++) {
-              this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase_id)[0]);
+              this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase!.id)[0]);
             }
             if( this.phases.filter(phase => phase.id == this.seguimiento.get('phases')!.value).length < 1){
               this.seguimiento.get('phases')!.setValue(0);
@@ -1002,11 +1020,12 @@ export class ProjectsFormComponent implements OnInit {
           this._statesByPhasesService.getStateByPhasesSelect()
           .subscribe((stateByPhases: StateByPhase[]) =>
           {
+            environment.consoleMessage(stateByPhases, "stte >>>>>>>>>>>>>>>>")
             this.stateByPhases = [];
             this.phases = [];
-            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state_id == this.seguimiento.get('states')!.value);
+            this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state!.id == this.seguimiento.get('states')!.value);
             for (let index = 0; index <  this.stateByPhases.length; index++) {
-              this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase_id)[0]);
+              this.phases.push(phases.filter(phase => phase.id == this.stateByPhases[index].phase!.id)[0]);
             }
           })
         });
@@ -1066,6 +1085,7 @@ export class ProjectsFormComponent implements OnInit {
         this.project.functional_lead!.id != this.descripcion.get('leads')?.value ? editProject.functional_lead_id = this.descripcion.get('leads')!.value : true ;
         this.project.priority!.id != this.descripcion.get('priorities')?.value ? editProject.priority_id = this.descripcion.get('priorities')!.value : true ;
         this.project.typification!.id != this.descripcion.get('typifications')?.value ? editProject.typification_id = this.descripcion.get('typifications')!.value : true ;
+        this.project.strategic_guideline!.id != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
         this.project.management!.id != this.descripcion.get('managements')?.value ? editProject.management_id = this.descripcion.get('managements')!.value : true ;
         this.project.pmo!.id != this.descripcion.get('pmos')?.value ? editProject.pmo_id = this.descripcion.get('pmos')!.value : true ;
         this.project.pmo_hours != this.descripcion.get('pmoHours')?.value ? editProject.pmo_hours = this.descripcion.get('pmoHours')!.value : true ;
@@ -1084,12 +1104,12 @@ export class ProjectsFormComponent implements OnInit {
         this.project.control_date != (this.seguimiento.get('controlDate')?.value == null ? null : this.parseDate(this.seguimiento.get('controlDate')?.value)) ? editProject.control_date = 
           (this.parseDate(this.seguimiento.get('controlDate')!.value) == ''? null: this.parseDate(this.seguimiento.get('controlDate')!.value)) : true ;
        
-        if(this.project.states_by_phase!.state_id != this.seguimiento.get('states')?.value ||
-        this.project.states_by_phase!.phase_id != this.seguimiento.get('phases')?.value){
+        if(this.project.states_by_phase!.state!.id != this.seguimiento.get('states')?.value ||
+        this.project.states_by_phase!.phase!.id != this.seguimiento.get('phases')?.value){
           var stateByPhases: any[] = this.stateByPhases.
           filter(stateByPhase => (
-              stateByPhase.state_id == this.seguimiento.get('states')!.value) 
-              && (stateByPhase.phase_id == this.seguimiento.get('phases')!.value)
+              stateByPhase.state!.id == this.seguimiento.get('states')!.value) 
+              && (stateByPhase.phase!.id == this.seguimiento.get('phases')!.value)
           );
           var sbf: StateByPhase = stateByPhases[0];
           editProject.states_by_phase_id = sbf.id ;
@@ -1145,8 +1165,8 @@ export class ProjectsFormComponent implements OnInit {
         this.stateByPhases.
         filter(
           stateByPhase => (
-            stateByPhase.state_id == this.seguimiento.get('states')!.value) 
-            && (stateByPhase.phase_id == this.seguimiento.get('phases')!.value));
+            stateByPhase.state!.id == this.seguimiento.get('states')!.value) 
+            && (stateByPhase.phase!.id == this.seguimiento.get('phases')!.value));
         var stateByPhase: number = stateByPhases[0].id;  
         var project: Project = {
           title: this.general.get('title')!.value,
@@ -1159,6 +1179,7 @@ export class ProjectsFormComponent implements OnInit {
           functional_lead_id: this.descripcion.get('leads')!.value,
           priority_id: this.descripcion.get('priorities')!.value,
           typification_id: this.descripcion.get('typifications')!.value,
+          strategic_guideline_id: this.descripcion.get('strategicGuidelines')!.value,
           management_id: this.descripcion.get('managements')!.value,
           pmo_id: this.descripcion.get('pmos')!.value,
           pmo_hours: this.descripcion.get('pmoHours')!.value,

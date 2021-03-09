@@ -19,4 +19,4 @@ export class Application {
         this.is_active = true;
         this.is_delete = false;
     }
-  }
+}
