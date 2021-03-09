@@ -2,15 +2,15 @@ import { TableData } from 'src/app/models/table-data';
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { VicePresidency } from '../models/vice-presidency';
 import { tap } from 'rxjs/operators';
+import { ValoremState } from '../models/valorem-state';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VicePresidenciesService {
+export class ValoremStatesService {
 
-  private readonly API = `${environment.API}/vice_presidencies`;
+  private readonly API = `${environment.API}/external_company_states`;
 
   emitDataTable = new EventEmitter<any>();
 
@@ -32,17 +32,7 @@ export class VicePresidenciesService {
       };
   }
 
-  getVicePresidenciesSelect() {
-
-    return this.http.get<VicePresidency[]>(`${this.API}/select`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap(console.log)
-    );
-  }
-
-  getVicePresidenciesAll() {
-
+  getValoremStatesAll() {
     return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -50,9 +40,24 @@ export class VicePresidenciesService {
     );
   }
 
-  getVicePresidency(id: number) {
+  getValoremStatesSelect() {
 
-    return this.http.get<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
+    var httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${localStorage.token}`
+      }),
+      params: this.inputParams
+    };
+
+    return this.http.get<ValoremState[]>(`${this.API}`, httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getValoremStatesId(id: number) {
+    return this.http.get<ValoremState>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -61,31 +66,8 @@ export class VicePresidenciesService {
     );
   }
 
-  getProjectsByVicepresidency(id: number) {
-
-    return this.http.get<VicePresidency>(`${this.API}/${id}/projects_by_vice_presidency`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getProjectsDashboard() {
-
-    return this.http.get<VicePresidency>(`${this.API}/projects`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  addVicePresidency(vicePresidency: VicePresidency) {
-
-    return this.http.post<VicePresidency>(this.API, { vice_presidency: vicePresidency }, this.httpOptions)
+  addValoremState(valorem_state: ValoremState) {
+    return this.http.post<ValoremState>(this.API, { valorem_state: valorem_state }, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
@@ -93,9 +75,8 @@ export class VicePresidenciesService {
       );
   }
 
-  updateVicePresidency(vicePresidency: VicePresidency, id: number) {
-
-    return this.http.put<VicePresidency>(`${this.API}/${id}`, vicePresidency, this.httpOptions)
+  updateCompaniesId(valorem_state: ValoremState, id: number) {
+    return this.http.put<ValoremState>(`${this.API}/${id}`, valorem_state, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
@@ -103,9 +84,9 @@ export class VicePresidenciesService {
       );
   }
 
-  updateStatusVicePresidency(is_active: number, id: number) {
+  updateStatusValoremState(is_active: number, id: number) {
 
-    return this.http.put<VicePresidency>(`${this.API}/${id}/change_status`,
+    return this.http.put<ValoremState>(`${this.API}/${id}/change_status`,
       {is_active: is_active},
       this.httpOptions)
       .pipe(
@@ -115,9 +96,9 @@ export class VicePresidenciesService {
       );
   }
 
-  logicalDeleteVicePresidency(id: number) {
+  logicalDeleteCompany(id: number) {
 
-    return this.http.put<VicePresidency>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+    return this.http.put<ValoremState>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
@@ -125,9 +106,8 @@ export class VicePresidenciesService {
       );
   }
 
-  deleteVicePresidency(id: number) {
-
-    return this.http.delete<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
+  deleteCompany(id: number) {
+    return this.http.delete<ValoremState>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);

@@ -263,8 +263,6 @@ $width-field-1: 220px;
   text-align: center;
 }
 
-
-
 .loading {
   position: absolute !important;
   top: 0;
@@ -274,3 +272,12 @@ $width-field-1: 220px;
 .full-width {
   width: 100%;
 }
+
+.txt-primary {
+  color: mat-color($tecno-project-portfolio-primary, 500) !important;
+}
+
+.txt-accent {
+  color: mat-color($tecno-project-portfolio-accent, 500) !important;
+}
+

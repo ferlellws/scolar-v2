@@ -77,6 +77,13 @@ export class ProjectsComponent implements OnInit {
         labelAction: 'Editar'
       }
     });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data = 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
   onDelete(data: number) {

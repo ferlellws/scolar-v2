@@ -1,12 +1,13 @@
 import { VicePresidency } from './../../../models/vice-presidency';
 import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 export interface DialogData {
   id: number;
@@ -26,7 +27,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   singularOption: string = "vicepresidencia";
   isButtonReset: boolean = false;
 
-  selectManagers!: User [];
+  selectManagers: User [] = [];
   fButtonDisabled: boolean = false;
 
   vicePresidency!: VicePresidency;
@@ -42,16 +43,20 @@ export class VicePresidenciesFormComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     environment.consoleMessage(this.data, "++++++++++");
     this.vicePresidenciesGroup = this.fb.group({
-      title: [null, Validators.required],
+      title: [null, [
+          Validators.required,
+          // this.validateUniqueness
+        ]
+      ],
       description: null,
-      manager_id: [null, Validators.required],
+      manager_id: [null],
       is_active: true
     });
 
     await this.getSelectManagers();
     if (this.data.mode == 'edit') {
 
-      this.vicePresidenciesService.getVicePresidenciesId(this.data.id)
+      this.vicePresidenciesService.getVicePresidency(this.data.id)
         .subscribe((res: VicePresidency) => {
           this.vicePresidency = res;
           this.vicePresidenciesGroup.patchValue({
@@ -114,8 +119,9 @@ export class VicePresidenciesFormComponent implements OnInit {
 
   updateRegister() {
     environment.consoleMessage(this.vicePresidenciesGroup, `updateRegister para registro con id ${this.data.id}: `);
-    
-    this.vicePresidenciesService.updateVicePresidencyId(
+
+    // this.fButtonDisabled = true;
+    this.vicePresidenciesService.updateVicePresidency(
       this.vicePresidenciesGroup.value,
       this.data.id
     )
@@ -165,6 +171,9 @@ export class VicePresidenciesFormComponent implements OnInit {
 
   getMessageError(field: string, labelField: string): string {
     let message!: string;
+    if (this.vicePresidenciesGroup.get(field)?.errors?.pattern) {
+      message = `Por favor, ingrese ${labelField} válido`
+    }
 
     if (this.vicePresidenciesGroup.get(field)?.errors?.required) {
       message = `Campo ${labelField} es requerido`

@@ -1,0 +1,38 @@
+.header-row {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+}
+
+.icons-cards {
+    margin-left: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+}
+
+.h3-subtitle {
+    padding-left: 16px;
+    margin-bottom: 0px;
+}
+
+.line-text {
+    padding-left: 16px;
+    padding-bottom: 10px;
+}
+
+.line-text-font {
+    padding-left: 16px;
+    padding-bottom: 10px;
+    font-weight: 300;
+}
+
+.card-content {
+    margin-bottom: 30px;
+}
+
+.buttons-options {
+   width: auto;
+   text-align: center;
+   border-radius: 5px;
+}

@@ -41,9 +41,9 @@ export class Project {
     pmo_assistant_minutes?: number;
     budget_approved!: number;
     budget_executed!: number;
-    start_date?: string;
-    due_date?: string;
-    control_date?: string;
+    start_date?: string | null;
+    due_date?: string | null;
+    control_date?: string | null;
     sprint!: number;
     evaluation?: string;
     test_log!: boolean;

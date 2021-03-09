@@ -23,6 +23,14 @@ import { StagesResolver } from './components/stages/guards-stages/stages.resolve
 import { StrategicApproachesResolver } from './components/strategic-approachs/guards-strategic-approaches/strategic-approaches.resolver';
 import { TypificationsResolver } from './components/typifications/guards-typifications/typifications.resolver';
 import { StateByPhasesResolver } from './components/states-by-phases/guards-state-by-phases/state-by-phases.resolver';
+import { ApplicationsByProjectsResolver } from './components/project-details/guards/applications-by-projects.resolver';
+import { AreasByProjectsResolver } from './components/project-details/guards/areas-by-projects.resolver';
+import { CompaniesByProjectsResolver } from './components/project-details/guards/companies-by-projects.resolver';
+import { TestUsersByProjectsResolver } from './components/project-details/guards/test-users-by-projects.resolver';
+import { BenefitsByProjectsResolver } from './components/project-details/guards/benefits-by-projects.resolver';
+import { HighlightsByProjectsResolver } from './components/project-details/guards/highlights-by-projects.resolver';
+import { KpisByProjectsResolver } from './components/project-details/guards/kpis-by-projects.resolver';
+import { RisksByProjectsResolver } from './components/project-details/guards/risk-by-projects.resolver';
 
 const routes: Routes = [
   {
@@ -167,7 +175,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
-      // projects: ProjectsResolver,
+      //projects: ProjectsResolver,
       projects: ProjectsByVicepresidencyResolver,
     }
   },
@@ -178,6 +186,14 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     resolve: {
       project: ProjectDetailsResolver,
+      applicationsByProject: ApplicationsByProjectsResolver,
+      areasByProject: AreasByProjectsResolver,
+      companiesByProject: CompaniesByProjectsResolver,
+      testUsersByProject: TestUsersByProjectsResolver,
+      benefitsByProject: BenefitsByProjectsResolver,
+      highlightsByProject: HighlightsByProjectsResolver,
+      kpisByProject: KpisByProjectsResolver,
+      risksByProject: RisksByProjectsResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

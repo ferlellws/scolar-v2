@@ -66,7 +66,8 @@ const materialModels = [
 @NgModule({
   declarations: [
     CompaniesComponent,
-    CompaniesFormComponent],
+    CompaniesFormComponent
+  ],
   imports: [
     CommonModule,
     CompaniesRoutingModule,

@@ -33,8 +33,8 @@ export class MenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._iconsService.getIcons()
-      .subscribe(icons => this.icons = icons);
+    // this._iconsService.getIcons()
+    //   .subscribe(icons => this.icons = icons);
 
     this.getMenu();
   }

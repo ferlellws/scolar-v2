@@ -27,6 +27,7 @@ import { ProfileCircleComponent } from './profile-circle/profile-circle.componen
 import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextListComponent } from './text-list/text-list.component';
+import { TextListDateComponent } from './text-list-date/text-list-date.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
@@ -38,6 +39,7 @@ const COMPONENTS = [
   DynamicTableComponent,
   AlertDialogComponent,
   TextListComponent,
+  TextListDateComponent,
 ];
 
 const materialModules = [
@@ -63,6 +65,7 @@ const materialModules = [
     COMPONENTS,
     MessageComponent,
     TextListComponent,
+    TextListDateComponent
   ],
   imports: [
     CommonModule,
