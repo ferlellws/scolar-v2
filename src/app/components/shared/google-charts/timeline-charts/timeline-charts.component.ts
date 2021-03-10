@@ -123,6 +123,7 @@ export class TimelineChartsComponent implements OnInit {
     dataTable.addColumn({ type: 'string', id: 'Role' });
     dataTable.addColumn({ type: 'string', id: 'Name' });
     dataTable.addColumn({ type: 'string', id: 'style', role: 'style' });
+    dataTable.addColumn({ type: 'string', role: 'tooltip' });
     dataTable.addColumn({ type: 'date', id: 'Start' });
     dataTable.addColumn({ type: 'date', id: 'End' });
 
@@ -135,8 +136,8 @@ export class TimelineChartsComponent implements OnInit {
     });
 
     let dataTableGroup = this.gLib.visualization.data.group(dataTable, [0]);
-    this.dateRangeStart = dataTable.getColumnRange(3);
-    this.dateRangeEnd = dataTable.getColumnRange(4);
+    this.dateRangeStart = dataTable.getColumnRange(4);
+    this.dateRangeEnd = dataTable.getColumnRange(5);
     console.log({dataTableGroup});
 
     let rowHeight = 44;

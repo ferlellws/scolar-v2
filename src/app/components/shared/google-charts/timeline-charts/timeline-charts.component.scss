@@ -1,0 +1,39 @@
+.traffic-light {
+  margin: 5px 10px 5px 5px;
+  width: 15px;
+  height: 15px;
+  float: left;
+}
+
+.status {
+  margin: 5px 10px 5px 5px;
+  width: 40px;
+  height: 15px;
+  float: left;
+}
+
+
+.bg {
+  &-feasibility {
+    background-color: #f4b083;
+  }
+  &-planning {
+    background-color: #ffd966;
+  }
+  &-pilot {
+    background-color: #4372c3;
+  }
+  &-deployment {
+    background-color: #3f3f3f;
+  }
+  &-send-operation {
+    background-color: #538234;
+  }
+  &-relate {
+    background-color: #00b04f;
+  }
+  &-backwardness {
+    background-color: #ff1643;
+  }
+}
+
