@@ -32,6 +32,15 @@ export class VicePresidenciesService {
       };
   }
 
+  getVicePresidenciesSelect() {
+
+    return this.http.get<VicePresidency[]>(`${this.API}/select`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getVicePresidenciesAll() {
 
     return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
@@ -44,6 +53,28 @@ export class VicePresidenciesService {
   getVicePresidency(id: number) {
 
     return this.http.get<VicePresidency>(`${this.API}/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getProjectsByVicepresidency(id: number) {
+
+    return this.http.get<VicePresidency>(`${this.API}/${id}/projects_by_vice_presidency`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getProjectsDashboard() {
+
+    return this.http.get<VicePresidency>(`${this.API}/projects`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {

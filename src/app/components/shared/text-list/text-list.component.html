@@ -1,0 +1,22 @@
+<div class="row">
+    <h3 class="mat-title col-sm-12 col-md-12 txt-accent">{{name}}</h3>
+</div>
+<div class="row">
+    <mat-form-field class="col-sm-12 col-md-12">
+        <mat-label>Añadir {{name}}</mat-label>
+        <input matInput type="text" [(ngModel)]="inpuText">
+        <button mat-button *ngIf="inpuText" matSuffix mat-icon-button aria-label="Clear" (click)="add()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </mat-form-field>
+</div>
+<div class="row" *ngFor="let item of items; index as i">
+    <div class="col-sm-12 col-md-12">
+        <mat-card >
+            <div class="card-content">
+                <div class="texto">{{item}}</div>
+                <mat-icon (click)="delete(i)" matRipple class="delete">delete</mat-icon>
+            </div>
+        </mat-card>
+    </div>
+</div>

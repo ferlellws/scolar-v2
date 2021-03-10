@@ -5,8 +5,71 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
+import { CompaniesResolver } from './components/companies/guards-companies/companies.resolver';
+import { CompanyTypesResolver } from './components/company-types/guards-company-types/company-types.resolver';
+import { PhasesResolver } from './components/phases/guards-phases/phases.resolver';
+import { DashboardProjectsResolver } from './components/projects/guards-projects/dashboard-projects.resolver';
+import { ProjectsByVicepresidencyResolver } from './components/projects-by-vicepresidency/guards/projects-by-vicepresidency.resolver';
+import { ProjectDetailsResolver } from './components/project-details/guards/project-details.resolver';
+import { StatesResolver } from './components/states/guards-states/states.resolver';
+import { ApplicationsResolver } from './components/applications/guards-applications/applications.resolver';
+import { AreasResolver } from './components/areas/guards-areas/areas.resolver';
+import { ManagementsResolver } from './components/managements/guards-managements/managements.resolver';
+import { PrioritiesResolver } from './components/priorities/guards-priorities/priorities.resolver';
+import { ProgramsResolver } from './components/programs/guards-programs/programs.resolver';
+import { RiskLevelsResolver } from './components/risk-levels/guards-managements/risk-levels.resolver';
+import { StagesResolver } from './components/stages/guards-stages/stages.resolver';
+import { StrategicApproachesResolver } from './components/strategic-approachs/guards-strategic-approaches/strategic-approaches.resolver';
+import { TypificationsResolver } from './components/typifications/guards-typifications/typifications.resolver';
+import { StateByPhasesResolver } from './components/states-by-phases/guards-state-by-phases/state-by-phases.resolver';
+import { ApplicationsByProjectsResolver } from './components/project-details/guards/applications-by-projects.resolver';
+import { AreasByProjectsResolver } from './components/project-details/guards/areas-by-projects.resolver';
+import { CompaniesByProjectsResolver } from './components/project-details/guards/companies-by-projects.resolver';
+import { TestUsersByProjectsResolver } from './components/project-details/guards/test-users-by-projects.resolver';
+import { BenefitsByProjectsResolver } from './components/project-details/guards/benefits-by-projects.resolver';
+import { HighlightsByProjectsResolver } from './components/project-details/guards/highlights-by-projects.resolver';
+import { KpisByProjectsResolver } from './components/project-details/guards/kpis-by-projects.resolver';
+import { RisksByProjectsResolver } from './components/project-details/guards/risk-by-projects.resolver';
 
 const routes: Routes = [
+  {
+    path: 'applications',
+    loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      applications: ApplicationsResolver
+    }
+  },
+  {
+    path: 'areas',
+    loadChildren: () => import('./components/areas/areas.module').then(m => m.AreasModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      areas: AreasResolver
+    }
+  },
+  {
+    path: 'companies',
+    loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      companies: CompaniesResolver
+    }
+  },
+  {
+    path: 'company-types',
+    loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      companyTypes: CompanyTypesResolver
+    }
+  },
+  { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
   {
     path: 'home',
     component: HomeComponent,
@@ -14,35 +77,148 @@ const routes: Routes = [
    },
   { path: 'login', component: LoginComponent },
   {
+    path: 'managements',
+    loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      managements: ManagementsResolver
+    }
+  },
+  {
+    path: 'phases',
+    loadChildren: () => import('./components/phases/phases.module').then(m => m.PhasesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      phases: PhasesResolver
+    }
+  },
+  {
+    path: 'priorities',
+    loadChildren: () => import('./components/priorities/priorities.module').then(m => m.PrioritiesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      priorities: PrioritiesResolver
+    }
+  },
+  {
+    path: 'programs',
+    loadChildren: () => import('./components/programs/programs.module').then(m => m.ProgramsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      programs: ProgramsResolver
+    }
+  },
+  {
+    path: 'project-details/:id',
+    loadChildren: () => import('./components/project-details/project-details.module').then(m => m.ProjectDetailsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      project: ProjectDetailsResolver,
+      applicationsByProject: ApplicationsByProjectsResolver,
+      areasByProject: AreasByProjectsResolver,
+      companiesByProject: CompaniesByProjectsResolver,
+      testUsersByProject: TestUsersByProjectsResolver,
+      benefitsByProject: BenefitsByProjectsResolver,
+      highlightsByProject: HighlightsByProjectsResolver,
+      kpisByProject: KpisByProjectsResolver,
+      risksByProject: RisksByProjectsResolver
+    }
+  },
+  {
+    path: 'project-progress-report',
+    loadChildren: () => import('./components/project-progress-report/project-progress-report.module')
+      .then(m => m.ProjectProgressReportModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard]
+  },
+  {
+    path: 'projects',
+    loadChildren: () => import('./components/projects/projects.module').then(m => m.ProjectsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      projects: ProjectsResolver,
+      dashboard: DashboardProjectsResolver,
+    }
+  },
+  {
+    path: 'projects-by-vicepresidency/:id',
+    loadChildren: () => import('./components/projects-by-vicepresidency/projects-by-vicepresidency.module').then(m => m.ProjectsByVicepresidencyModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      //projects: ProjectsResolver,
+      projects: ProjectsByVicepresidencyResolver,
+    }
+  },
+  {
+    path: 'risk-levels',
+    loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule),
+    canLoad: [AuthGuard],
+    resolve: {
+      riskLevels: RiskLevelsResolver
+    }
+  },
+  {
+    path: 'stages',
+    loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule),
+    canLoad: [AuthGuard],
+    resolve: {
+      stages: StagesResolver
+    }
+  },
+  {
+    path: 'states',
+    loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      states: StatesResolver
+    }
+  },
+  {
+    path: 'states-by-phases',
+    loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      stateByPhases: StateByPhasesResolver
+    }
+  },
+  {
+    path: 'strategic-approachs',
+    loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      strategicApproaches: StrategicApproachesResolver
+    }
+  },
+  {
+    path: 'typifications',
+    loadChildren: () => import('./components/typifications/typifications.module').then(m => m.TypificationsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      typifications: TypificationsResolver
+    }
+  },
+  {
     path: 'vice-presidencies',
-    loadChildren: () => import('./components/vice-presidencies/vice-presidencies.module').then(m => m.VicePresidenciesModule),
+    loadChildren: () => import('./components/vice-presidencies/vice-presidencies.module')
+      .then(m => m.VicePresidenciesModule),
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
       vicePresidencies: VicePresidenciesResolver
     }
   },
-  { path: 'states', loadChildren: () => import('./components/states/states.module').then(m => m.StatesModule) },
-  { path: 'phases', loadChildren: () => import('./components/phases/phases.module').then(m => m.PhasesModule) },
-  { path: 'applications', loadChildren: () => import('./components/applications/applications.module').then(m => m.ApplicationsModule) },
-  { path: 'company-types', loadChildren: () => import('./components/company-types/company-types.module').then(m => m.CompanyTypesModule) },
-  { path: 'states-by-phases', loadChildren: () => import('./components/states-by-phases/states-by-phases.module').then(m => m.StatesByPhasesModule) },
-  { path: 'companies', loadChildren: () => import('./components/companies/companies.module').then(m => m.CompaniesModule) },
-  { path: 'strategic-acpproachs', loadChildren: () => import('./components/strategic-approachs/strategic-approachs.module').then(m => m.StrategicApproachsModule) },
-  { path: 'programs', loadChildren: () => import('./components/programs/programs.module').then(m => m.ProgramsModule) },
-  { path: 'priorities', loadChildren: () => import('./components/priorities/priorities.module').then(m => m.PrioritiesModule) },
-  { path: 'typifications', loadChildren: () => import('./components/typifications/typifications.module').then(m => m.TypificationsModule) },
-  { path: 'managements', loadChildren: () => import('./components/managements/managements.module').then(m => m.ManagementsModule) },
-  { path: 'stages', loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule) },
-  { path: 'risk-levels', loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule) },
-  { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  {
-    path: 'project-progress-report',
-    loadChildren: () => import('./components/project-progress-report/project-progress-report.module').then(m => m.ProjectProgressReportModule),
-    canActivate: [AuthGuard],
-    canLoad: [AuthGuard]
-  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

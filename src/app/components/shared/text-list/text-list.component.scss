@@ -1,0 +1,21 @@
+.row{
+    margin-bottom: 5px;
+    max-width: 100%;
+}
+mat-card{
+    background-color: #F8F8F8;
+}
+.card-content {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+}
+.texto{
+    display: flex; 
+    flex-wrap: wrap;
+    max-width: 95%;
+}
+
+.delete {
+    cursor:pointer;
+}

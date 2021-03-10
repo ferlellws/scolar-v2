@@ -68,6 +68,8 @@ $directions: '', 't', 'r', 'b', 'l';
 $margins: 'm', 'p';
 $margin_text: '';
 $direction_text: '';
+$width-field-1: 220px;
+
 @for $size from 0 through 100 {
   @each $margin in $margins {
     @each $direction in $directions {
@@ -286,3 +288,12 @@ $direction_text: '';
     background-color: #FFC107;
   }
 }
+
+.txt-primary {
+  color: mat-color($tecno-project-portfolio-primary, 500) !important;
+}
+
+.txt-accent {
+  color: mat-color($tecno-project-portfolio-accent, 500) !important;
+}
+

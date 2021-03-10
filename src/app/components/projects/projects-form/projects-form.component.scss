@@ -1,0 +1,60 @@
+.example-container .mat-form-field + .mat-form-field {
+  margin-left: 20px;
+}
+
+.example-container form {
+  margin-bottom: 20px;
+}
+
+.example-container form > * {
+  margin: 5px 0;
+}
+
+.example-container .mat-radio-button {
+  margin: 0 12px;
+}
+
+.example-container {
+  padding: 10px;
+}
+
+.error-message{
+  color: red;
+}
+.buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.button{
+  margin-left: 10px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.buttonForm {
+  //display: flex;
+  justify-content: flex-end;
+  margin: 20px;
+}
+
+.step-scroll {
+  position: relative;
+  overflow: auto;
+  max-height: 50vh;
+}
+.row{
+  margin-bottom: 5px;
+  max-width: 100%;
+}
+
+mat-divider{
+  margin-bottom: 15px;
+}
+
+.external-component{
+  max-width: 100%;
+  background-color: yellow;
+}

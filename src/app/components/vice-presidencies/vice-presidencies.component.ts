@@ -9,19 +9,12 @@ import { TableData } from 'src/app/models/table-data';
 import { VicePresidenciesFormComponent } from './vice-presidencies-form/vice-presidencies-form.component';
 
 // SERVICES
-import { MenuService } from 'src/app/services/menu.service';
 import { VicePresidenciesService } from './../../services/vice-presidencies.service';
 
 // MATERIAL
 import { MatDialog } from '@angular/material/dialog';
-import { AppComponent } from 'src/app/app.component';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
-
-// export interface DialogData {
-//   message: string;
-//   name: string;
-// }
 
 @Component({
   selector: 'tecno-vice-presidencies',
@@ -183,7 +176,6 @@ export class VicePresidenciesComponent implements OnInit {
           }
         });
       })
-
   }
 
 }

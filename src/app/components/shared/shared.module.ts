@@ -30,6 +30,10 @@ import { TimelineChartsComponent } from './google-charts/timeline-charts/timelin
 
 // MODULES
 import { GoogleChartsModule } from './google-charts/google-charts.module';
+import { TextListComponent } from './text-list/text-list.component';
+import { TextListDateComponent } from './text-list-date/text-list-date.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 const COMPONENTS = [
   MenuComponent,
@@ -38,6 +42,8 @@ const COMPONENTS = [
   InfoPageComponent,
   DynamicTableComponent,
   AlertDialogComponent,
+  TextListComponent,
+  TextListDateComponent,
 ];
 
 const materialModules = [
@@ -67,11 +73,19 @@ const MODULES = [
   declarations: [
     COMPONENTS,
     MessageComponent,
+    TextListComponent,
+    TextListDateComponent
   ],
   imports: [
     CommonModule,
     MODULES,
     RouterModule,
+    materialModules,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     COMPONENTS,

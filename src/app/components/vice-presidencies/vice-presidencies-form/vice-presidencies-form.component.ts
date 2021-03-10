@@ -118,9 +118,6 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    // this.vicePresidenciesGroup.patchValue({
-    //   title: "Hola"
-    // });
     environment.consoleMessage(this.vicePresidenciesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     // this.fButtonDisabled = true;

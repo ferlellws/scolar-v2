@@ -1,0 +1,28 @@
+mat-card{
+    min-width: 300px;
+    max-width: 300px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+mat-card-footer{
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    padding-bottom: 10px;
+}
+
+.cards-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 15px;
+}
+
+mat-divider{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.txt{
+    padding-left: 15px;
+}

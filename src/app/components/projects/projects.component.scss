@@ -1,0 +1,12 @@
+.cont-table {
+    position: relative;
+    overflow: auto;
+}
+
+::ng-deep .mat-header-cell {
+    min-width: 230px;
+}
+.top-buttons{
+    display: flex;
+    justify-content: flex-start;
+  }

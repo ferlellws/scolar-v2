@@ -1,0 +1,29 @@
+<div class="top-buttons">
+  <p>
+    <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">
+      <mat-button-toggle value="dashboard" (click)="changeMode('dashboard')">Tablero</mat-button-toggle>
+      <mat-button-toggle value="table" (click)="changeMode('table')">Tabla</mat-button-toggle>
+    </mat-button-toggle-group>
+  </p>
+</div>
+
+<div class="cont-table mat-elevation-z5" *ngIf="mode == 'table'">
+  <tecno-dynamic-table
+    style="width: 100%;"
+    [objectsData]="dataTable"
+    (emitEdit)="onEdit($event)"
+    (emitStatusChange)="onStatusChange($event)"
+    (emitDelete)="onDelete($event)"
+    (emitDeleteLogic)="onDeleteLogic($event)"
+    [isUserProfile]="false"
+    >
+  </tecno-dynamic-table>
+</div>
+<div class="cont-table" *ngIf="mode == 'dashboard'">
+  <tecno-projects-dashboard [dashboard]="dashboard" ></tecno-projects-dashboard>
+</div>
+
+
+<button mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
+    <mat-icon>add</mat-icon>
+</button>

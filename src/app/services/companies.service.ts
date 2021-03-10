@@ -1,3 +1,4 @@
+import { TableData } from 'src/app/models/table-data';
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -11,23 +12,44 @@ export class CompaniesService {
 
   private readonly API = `${environment.API}/companies`;
 
-  emitModify = new EventEmitter<any>();
-  emitDelete = new EventEmitter<any>();
-  emitAdd = new EventEmitter<any>();
-  
-  constructor(private http: HttpClient) { }
+  emitDataTable = new EventEmitter<any>();
+
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+
+  httpOptions!: any;
+
+  constructor(
+    private http: HttpClient
+    ) {
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bareer ${localStorage.token}`
+        }),
+        params: this.inputParams
+      };
+  }
 
   getCompaniesAll() {
-    var inputParams: any = {user_id: localStorage.id};
+    return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getCompaniesSelect() {
 
     var httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${localStorage.token}`
       }),
-      params: inputParams
+      params: this.inputParams
     };
 
-    return this.http.get<Company[]>(this.API, httpOptions)
+    return this.http.get<Company[]>(`${this.API}/select`, httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -35,72 +57,62 @@ export class CompaniesService {
   }
 
   getCompaniesId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<Company>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<Company>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
-      tap(console.log)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
     );
   }
 
   addCompanies(company: Company) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.post<Company>(this.API, company, httpOptions)
-    .subscribe((data: Company) => {
-      this.emitAdd.emit(data);
-    });
-  }
-
-  deleteCompaniesId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.delete<Company>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Company) => {
-      this.emitDelete.emit(data);
-    });
+    return this.http.post<Company>(this.API, { company: company }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
   updateCompaniesId(company: Company, id: number) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
+    return this.http.put<Company>(`${this.API}/${id}`, company, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
+  updateStatusCompany(is_active: number, id: number) {
 
-    return this.http.put<Company>(`${this.API}/${id}`, company, httpOptions)
-      .subscribe((data: Company) => {
-        this.emitModify.emit(data);
-      });
+    return this.http.put<Company>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  logicalDeleteCompany(id: number) {
+
+    return this.http.put<Company>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteCompany(id: number) {
+    return this.http.delete<Company>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
 }

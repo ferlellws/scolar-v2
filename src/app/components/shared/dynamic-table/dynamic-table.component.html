@@ -1,6 +1,6 @@
 <div class="container-general">
   <div  class="container-list" [ngStyle]="{'max-height': maxHeight}">
-    <table mat-table id="{{customId}}" [dataSource]="dataSource" class="mat-elevation-z8" >
+    <table mat-table id="{{customId}}" [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
 
       <ng-container *ngFor="let column of displayedColumns; index as i" matColumnDef="{{column}}">
         <!-- HEADERS -->
@@ -49,12 +49,9 @@
 
         <!-- FOOTER -->
         <div *ngIf="showFooter">
-          <td mat-footer-cell *matFooterCellDef style="color: {{footerTextColor}};"> {{footer[column]}} </td>
+          <td mat-footer-cell *matFooterCellDef [ngStyle]="{'color': footerTextColor}"> {{footer[column]}} </td>
         </div>
       </ng-container>
-
-      <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" class="{{headerClass}}" ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

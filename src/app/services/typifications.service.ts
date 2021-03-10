@@ -1,8 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { Typification } from '../models/typification';
 import { tap } from 'rxjs/operators';
+import { TableData } from '../models/table-data';
 
 @Injectable({
   providedIn: 'root'
@@ -11,23 +12,36 @@ export class TypificationsService {
 
   private readonly API = `${environment.API}/typifications`;
 
-  emitModify = new EventEmitter<any>();
-  emitDelete = new EventEmitter<any>();
-  emitAdd = new EventEmitter<any>();
+  emitDataTable = new EventEmitter<any>();
+
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+
+  httpOptions!: any;
   
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+    ) {
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bareer ${localStorage.token}`
+        }),
+        params: this.inputParams
+      };
+  }
 
   getTypificationsAll() {
-    var inputParams: any = {user_id: localStorage.id};
+    return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<Typification[]>(this.API, httpOptions)
+  getTypificationsSelect() {
+    return this.http.get<Typification[]>(`${this.API}/select`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -35,72 +49,60 @@ export class TypificationsService {
   }
 
   getTypificationsId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.get<Typification>(`${this.API}/${id}`, httpOptions)
+    return this.http.get<Typification>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
-      tap(console.log)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
     );
   }
 
   addTypifications(typification: Typification) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.post<Typification>(this.API, typification, httpOptions)
-    .subscribe((data: Typification) => {
-      this.emitAdd.emit(data);
-    });
-  }
-
-  deleteTypificationsId(id: number) {
-    var inputParams: any = {user_id: localStorage.id};
-
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
-
-    return this.http.delete<Typification>(`${this.API}/${id}`, httpOptions)
-    .subscribe((data: Typification) => {
-      this.emitDelete.emit(data);
-    });
+    return this.http.post<Typification>(this.API, { typification: typification }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
   updateTypificationsId(typification: Typification, id: number) {
-    var inputParams: any = {
-      //user_id: localStorage.id
-    };
+    return this.http.put<Typification>(`${this.API}/${id}`, typification, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-    var httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: `Bareer ${localStorage.token}`
-      }),
-      params: inputParams
-    };
+  updateStatusTypification(is_active: number, id: number) {
+    return this.http.put<Typification>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
 
-    return this.http.put<Typification>(`${this.API}/${id}`, typification, httpOptions)
-      .subscribe((data: Typification) => {
-        this.emitModify.emit(data);
-      });
+  logicalDeleteTypification(id: number) {
+    return this.http.put<Typification>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteTypification(id: number) {
+    return this.http.delete<Typification>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
   }
 
 }
