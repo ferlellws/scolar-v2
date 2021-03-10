@@ -1,0 +1,85 @@
+.example-container .mat-form-field + .mat-form-field {
+margin-left: 20px;
+}
+
+.example-container form {
+margin-bottom: 20px;
+}
+
+.example-container form > * {
+margin: 5px 0;
+}
+
+.example-container .mat-radio-button {
+margin: 0 12px;
+}
+
+.example-container {
+padding: 10px;
+position: relative;
+overflow: auto;
+max-height: 75vh;
+}
+
+.error-message{
+color: red;
+}
+.buttons{
+display: flex;
+flex-direction: row;
+justify-content: flex-end;
+}
+.button{
+margin-left: 10px;
+}
+
+.example-spacer {
+flex: 1 1 auto;
+}
+
+.buttonForm {
+//display: flex;
+justify-content: flex-end;
+margin: 20px;
+}
+
+.row{
+margin-bottom: 5px;
+max-width: 100%;
+}
+
+mat-divider{
+margin-bottom: 15px;
+}
+
+.external-component {
+max-width: 100%;
+background-color: yellow;
+}
+
+.card-content{
+margin-bottom: 10px;
+width: 100%;
+}
+
+.circle{
+    border-radius: 25px;
+    height: 25px;
+    width: 25px;
+}
+
+.indicator-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-height: 27px;
+}
+.indicator-general-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+h3.mat-title{
+    font-weight: 500;
+}

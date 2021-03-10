@@ -1,5 +1,5 @@
 <div class="row" style="margin-bottom: -5px">
-    <h3 class="mat-title col-sm-12 col-md-12" style="font-weight: 500;">{{name}}</h3>
+    <h3 class="mat-title col-sm-12 col-md-12 {{titleClass}}" style="font-weight: 500;">{{name}}</h3>
 </div>
 <div class="row">
     <mat-form-field class="col-sm-12 col-md-8">
@@ -13,13 +13,16 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <button class="button"
-    (click)="add()"
-    [disabled] = "!(inpuText && datePicker)"
-    mat-mini-fab color="primary"
-    matSuffix mat-icon-button aria-label="Clear">
-        <mat-icon>add</mat-icon>
-    </button>
+    <div class="button col-sm-12 col-md-1">
+        <button 
+            (click)="add()"
+            [disabled] = "!(inpuText && datePicker)"
+            mat-mini-fab color="primary"
+            matSuffix mat-icon-button aria-label="Clear">
+                <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    
 </div>
 
 <div class="row" *ngFor="let item of items; index as i">

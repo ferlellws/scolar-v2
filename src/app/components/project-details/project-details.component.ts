@@ -14,6 +14,7 @@ import { MainService } from 'src/app/services/main.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
+import { WeekFormComponent } from './week-form/week-form.component';
 
 @Component({
   selector: 'tecno-project-details',
@@ -146,7 +147,7 @@ export class ProjectDetailsComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( data =>
       {
-        if (data = 'close'){
+        if (data == 'close'){
           dialogRef.close();
         }
       }
@@ -165,7 +166,7 @@ export class ProjectDetailsComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( data =>
       {
-        if (data = 'close'){
+        if (data == 'close'){
           dialogRef.close();
         }
       }
@@ -173,7 +174,22 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onWeek(){
-    environment.consoleMessage("onWeek");
+    const dialogRef = this.dialog.open(WeekFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        id: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
 

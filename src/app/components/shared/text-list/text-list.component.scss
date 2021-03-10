@@ -5,6 +5,12 @@
 mat-card{
     background-color: #F8F8F8;
 }
+
+.button {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
 .card-content {
     display: flex; 
     align-items: center; 
@@ -13,6 +19,7 @@ mat-card{
 .texto{
     display: flex; 
     flex-wrap: wrap;
+    word-wrap: break-word;
     max-width: 95%;
 }
 

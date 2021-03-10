@@ -17,8 +17,9 @@ export class TextListComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
   ) { }
-  @Input() name: string = "";
 
+  @Input() name: string = "";
+  @Input() titleClass: string = "txt-primary";
   @Output() emitChange: EventEmitter<string[]> = new EventEmitter();
 
   ngOnInit(): void {
