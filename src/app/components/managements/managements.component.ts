@@ -41,14 +41,14 @@ export class ManagementsComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.managementsService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        // environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    // environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(ManagementsFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -60,7 +60,7 @@ export class ManagementsComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(ManagementsFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -73,7 +73,7 @@ export class ManagementsComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.managementsService.getManagementsId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -87,11 +87,11 @@ export class ManagementsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.managementsService.deleteManagement(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -99,7 +99,7 @@ export class ManagementsComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.managementsService.getManagementsId(data)
@@ -115,11 +115,11 @@ export class ManagementsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.managementsService.logicalDeleteManagement(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -127,7 +127,7 @@ export class ManagementsComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.managementsService.getManagementsId(data.id)
@@ -143,11 +143,11 @@ export class ManagementsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.managementsService.updateStatusManagement(result.data, data.id)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};

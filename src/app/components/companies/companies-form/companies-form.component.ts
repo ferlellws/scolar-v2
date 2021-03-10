@@ -41,7 +41,7 @@ export class CompaniesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    // environment.consoleMessage(this.data, "++++++++++");
     this.companiesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
@@ -66,7 +66,7 @@ export class CompaniesFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.companiesGroup, "OnSubmit compañias: ");
+    // environment.consoleMessage(this.companiesGroup, "OnSubmit compañias: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -88,10 +88,10 @@ export class CompaniesFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.companiesGroup.value, "createRegister: ");
+    // environment.consoleMessage(this.companiesGroup.value, "createRegister: ");
     this.companiesService.addCompanies(this.companiesGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -106,7 +106,7 @@ export class CompaniesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -114,14 +114,14 @@ export class CompaniesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.companiesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    // environment.consoleMessage(this.companiesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.companiesService.updateCompaniesId(
       this.companiesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -136,7 +136,7 @@ export class CompaniesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -144,7 +144,7 @@ export class CompaniesFormComponent implements OnInit {
   }
 
   onClickSelectCompanyType() {
-    environment.consoleMessage("", "Cargar info de managers");
+    // environment.consoleMessage("", "Cargar info de managers");
     this.getSelectCompanyTypes();
   }
 

@@ -41,7 +41,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    // environment.consoleMessage(this.data, "++++++++++");
     this.vicePresidenciesGroup = this.fb.group({
       title: [null, [
           Validators.required,
@@ -70,7 +70,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   onSubmit() {
-    environment.consoleMessage(this.vicePresidenciesGroup, "OnSubmit vicepresidencias: ");
+    // environment.consoleMessage(this.vicePresidenciesGroup, "OnSubmit vicepresidencias: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -92,10 +92,10 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.vicePresidenciesGroup.value, "createRegister: ");
+    // environment.consoleMessage(this.vicePresidenciesGroup.value, "createRegister: ");
     this.vicePresidenciesService.addVicePresidency(this.vicePresidenciesGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -110,7 +110,7 @@ export class VicePresidenciesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -118,7 +118,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.vicePresidenciesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    // environment.consoleMessage(this.vicePresidenciesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     // this.fButtonDisabled = true;
     this.vicePresidenciesService.updateVicePresidency(
@@ -126,7 +126,7 @@ export class VicePresidenciesFormComponent implements OnInit {
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -141,7 +141,7 @@ export class VicePresidenciesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -149,7 +149,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   onClickSelectManager() {
-    environment.consoleMessage("", "Cargar info de managers");
+    // environment.consoleMessage("", "Cargar info de managers");
     this.getSelectManagers();
   }
 
@@ -170,7 +170,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   validateUniqueness(control: FormControl):Promise<any>|Observable<any> {
-    environment.consoleMessage(control);
+    // environment.consoleMessage(control);
     let result: any;
       // (resolve, reject) => {
         this.vicePresidenciesService.getVicePresidency(94)

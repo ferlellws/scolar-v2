@@ -243,7 +243,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe(project => {
         this.project = project; 
         this.project.reception_date = this.project.reception_date.substr(0, 10);
-        environment.consoleMessage(this.project ,"project>>>>>>>>");
+        // environment.consoleMessage(this.project ,"project>>>>>>>>");
         this.resetformToProject(this.general);
         this.resetformToProject(this.descripcion);
         this.resetformToProject(this.seguimiento);
@@ -284,7 +284,7 @@ export class ProjectsFormComponent implements OnInit {
         this._statesByPhasesService.getStateByPhasesSelect()
         .subscribe((stateByPhases: StateByPhase[]) =>
         {
-          environment.consoleMessage(stateByPhases, "213231213231")
+          // environment.consoleMessage(stateByPhases, "213231213231")
           this.stateByPhases = [];
           this.phases = [];
           this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state!.id == this.project.states_by_phase?.state!.id);
@@ -305,7 +305,7 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   resetformToProject(formGroup: FormGroup){
-    environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
+    // environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
     if(formGroup == this.general){
       this.general.get('title')?.setValue(this.project.title);
       this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency!.id);
@@ -351,7 +351,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Benefit[]) => 
       { 
         this.benefitsObjects = data.filter(benefit => benefit.project!.id == id);
-        environment.consoleMessage(this.benefitsObjects, "beneficios " );
+        // environment.consoleMessage(this.benefitsObjects, "beneficios " );
         this.benefits = this.benefitsObjects.map(benefit => benefit.description);
       }
     );
@@ -360,7 +360,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Highlight[]) => 
       { 
         this.highlightsObjects = data.filter(highlight => highlight.project!.id == id);
-        environment.consoleMessage(this.highlightsObjects, "hitos " );
+        // environment.consoleMessage(this.highlightsObjects, "hitos " );
         this.highlights = this.highlightsObjects.map(highlight => highlight.description);
       }
     );
@@ -369,7 +369,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Risk[]) => 
       { 
         this.risksObjects = data.filter(risk => risk.project!.id == id);
-        environment.consoleMessage(this.risksObjects, "riesgos " );
+        // environment.consoleMessage(this.risksObjects, "riesgos " );
         this.risks = this.risksObjects.map(risk => risk.description);
       }
     );
@@ -378,7 +378,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Kpi[]) => 
       { 
         this.kpisObjects = data.filter(kpi => kpi.project!.id == id);
-        environment.consoleMessage(this.risksObjects, "kpis " );
+        // environment.consoleMessage(this.risksObjects, "kpis " );
         this.kpis = this.kpisObjects.map(kpi => kpi.description);
       }
     );
@@ -387,9 +387,9 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: ApplicationByProject[]) => 
       { 
         this.applicationsObjects = data.filter(app => app.project!.id == id);
-        environment.consoleMessage(this.applicationsObjects, "appsByProject " );
+        // environment.consoleMessage(this.applicationsObjects, "appsByProject " );
         this.applications = this.applicationsObjects.map(app => app.application! );
-        environment.consoleMessage(this.applications, "apps " );
+        // environment.consoleMessage(this.applications, "apps " );
       }
     );
 
@@ -397,9 +397,9 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: AreaByProject[]) => 
       { 
         this.areasByProjectObjects = data.filter(area => area.project!.id == id);
-        environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects " );
+        // environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects " );
         this.areasByProject = this.areasByProjectObjects.map(area => area.area! );
-        environment.consoleMessage(this.areas, "areas " );
+        // environment.consoleMessage(this.areas, "areas " );
       }
     );
 
@@ -407,9 +407,9 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: CompanyByProject[]) => 
       { 
         this.companiesObjects = data.filter(company => company.project!.id == id);
-        environment.consoleMessage(this.companiesObjects, "companiesObjects " );
+        // environment.consoleMessage(this.companiesObjects, "companiesObjects " );
         this.companies = this.companiesObjects.map(company => company.company! );
-        environment.consoleMessage(this.companies, "companies " );
+        // environment.consoleMessage(this.companies, "companies " );
       }
     );
 
@@ -417,19 +417,19 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: TestUser[]) => 
       { 
         this.testUsersObjects = data.filter(user => user.project!.id == id);
-        environment.consoleMessage(this.testUsersObjects, "testUsersObjects " );
+        // environment.consoleMessage(this.testUsersObjects, "testUsersObjects " );
         this.testUsers = this.testUsersObjects.map(user => user.user! );
-        environment.consoleMessage(this.testUsers, "testUsers " );
+        // environment.consoleMessage(this.testUsers, "testUsers " );
       }
     );
     
   }
 
   onBenefits(benefits: string[]): any{
-    environment.consoleMessage(this.data.mode, "mode ")
+    // environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.benefits = benefits;
-      environment.consoleMessage(this.benefits, "beneficios padre")
+      // environment.consoleMessage(this.benefits, "beneficios padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(benefits.length > this.benefitsObjects.length){
@@ -442,10 +442,10 @@ export class ProjectsFormComponent implements OnInit {
         this._benefitsService.addBenefit(benefit).
         subscribe(data => 
           {
-            environment.consoleMessage(data, "objeto beneficio");
+            // environment.consoleMessage(data, "objeto beneficio");
             this.benefitsObjects.push(data)
             this.openSnackBar(true, "Beneficio creado satisfactoriamente", "");
-            environment.consoleMessage(this.benefitsObjects, "benefitsObjects");
+            // environment.consoleMessage(this.benefitsObjects, "benefitsObjects");
           }
         );
       }
@@ -457,13 +457,13 @@ export class ProjectsFormComponent implements OnInit {
             if(benefit.id == undefined){
               benefit.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              environment.consoleMessage("Error eliminando id null");
+              // environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._benefitsService.deleteBenefit(benefit!.id)
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Beneficio eliminando", "");
                   this.benefitsObjects.splice(index, 1);
                   return true;
@@ -477,10 +477,10 @@ export class ProjectsFormComponent implements OnInit {
 
   onHighlights(highlights: string[]): any{
 
-    environment.consoleMessage(this.data.mode, "mode ")
+    // environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.highlights = highlights;
-      environment.consoleMessage(this.highlights, "hitos padre")
+      // environment.consoleMessage(this.highlights, "hitos padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(highlights.length > this.highlightsObjects.length){
@@ -493,10 +493,10 @@ export class ProjectsFormComponent implements OnInit {
         this._highlightsService.addHighlight(highlight). 
         subscribe(data => 
           {
-            environment.consoleMessage(data, "objeto hito");
+            // environment.consoleMessage(data, "objeto hito");
             this.highlightsObjects.push(data)
             this.openSnackBar(true, "Hito creado satisfactoriamente", "");
-            environment.consoleMessage(this.highlightsObjects, "highlightsObjects");
+            // environment.consoleMessage(this.highlightsObjects, "highlightsObjects");
           }
         );
       }
@@ -508,13 +508,13 @@ export class ProjectsFormComponent implements OnInit {
             if(highlight.id == undefined){
               highlight.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              environment.consoleMessage("Error eliminando id null");
+              // environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._highlightsService.deleteHighlight(highlight!.id)
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Hilto eliminando", "");
                   this.highlightsObjects.splice(index, 1);
                   return true;
@@ -529,10 +529,10 @@ export class ProjectsFormComponent implements OnInit {
   onRisks(risks: string[]): any{
 
     
-    environment.consoleMessage(this.data.mode, "mode ")
+    // environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.risks = risks;
-      environment.consoleMessage(this.risks, "riesgos padre")
+      // environment.consoleMessage(this.risks, "riesgos padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(risks.length > this.risksObjects.length){
@@ -545,10 +545,10 @@ export class ProjectsFormComponent implements OnInit {
         this._risksService.addRisk(risk). 
         subscribe(data => 
           {
-            environment.consoleMessage(data, "objeto risk");
+            // environment.consoleMessage(data, "objeto risk");
             this.risksObjects.push(data)
             this.openSnackBar(true, "Riesgo creado satisfactoriamente", "");
-            environment.consoleMessage(this.risksObjects, "risksObjects");
+            // environment.consoleMessage(this.risksObjects, "risksObjects");
           }
         );
       }
@@ -560,13 +560,13 @@ export class ProjectsFormComponent implements OnInit {
             if(risk.id == undefined){
               risk.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              environment.consoleMessage("Error eliminando id null");
+              // environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._risksService.deleteRisk(risk!.id)
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Riesgo eliminando", "");
                   this.risksObjects.splice(index, 1);
                   return true;
@@ -582,10 +582,10 @@ export class ProjectsFormComponent implements OnInit {
 
     
     
-    environment.consoleMessage(this.data.mode, "mode ")
+    // environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.kpis = kpis;
-      environment.consoleMessage(this.kpis, "kpis padre")
+      // environment.consoleMessage(this.kpis, "kpis padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(kpis.length > this.kpisObjects.length){
@@ -598,10 +598,10 @@ export class ProjectsFormComponent implements OnInit {
         this._kpisService.addKpi(kpi). 
         subscribe(data => 
           {
-            environment.consoleMessage(data, "objeto kpi");
+            // environment.consoleMessage(data, "objeto kpi");
             this.kpisObjects.push(data)
             this.openSnackBar(true, "KPI creado satisfactoriamente", "");
-            environment.consoleMessage(this.kpisObjects, "kpisObjects");
+            // environment.consoleMessage(this.kpisObjects, "kpisObjects");
           }
         );
       }
@@ -613,13 +613,13 @@ export class ProjectsFormComponent implements OnInit {
             if(kpi.id == undefined){
               kpi.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              environment.consoleMessage("Error eliminando id null");
+              // environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._kpisService.deleteKpi(kpi!.id)
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "KPI eliminando", "");
                   this.kpisObjects.splice(index, 1);
                   return true;
@@ -634,13 +634,13 @@ export class ProjectsFormComponent implements OnInit {
   async onApplications(applications: Application[]): Promise<any>{
     if (this.data.mode == 'create'){
       this.applications = applications;
-      environment.consoleMessage(this.applications, "applications padre");
+      // environment.consoleMessage(this.applications, "applications padre");
     }else if(this.data.mode == 'edit'){
-      environment.consoleMessage(this.applications, "this.applications antes");
-        environment.consoleMessage(this.applicationsObjects, "this.applicationsObjects antes");
+      // environment.consoleMessage(this.applications, "this.applications antes");
+        // environment.consoleMessage(this.applicationsObjects, "this.applicationsObjects antes");
       if(applications.length > this.applicationsObjects.length){
-        environment.consoleMessage(this.applications, "this.applications despues");
-        environment.consoleMessage(this.applicationsObjects, "this.applicationsObjects despues");
+        // environment.consoleMessage(this.applications, "this.applications despues");
+        // environment.consoleMessage(this.applicationsObjects, "this.applicationsObjects despues");
         this.applications = applications;
         var applicationsIDs: number[] = applications.map(app => app.id!);
         var applicationsObjectsIDs: number[] = this.applicationsObjects.map(app => app.application!.id!);
@@ -654,10 +654,10 @@ export class ProjectsFormComponent implements OnInit {
             await this._applicationsByProjectsService.addApplicationByProject(application). 
             subscribe(data => 
               {
-                environment.consoleMessage(data, "objeto applicationsObjects");
+                // environment.consoleMessage(data, "objeto applicationsObjects");
                 this.applicationsObjects.push(data)
                 this.openSnackBar(true, "Aplicación agregada satisfactoriamente", "");
-                environment.consoleMessage(this.applicationsObjects, "applicationsObjects");
+                // environment.consoleMessage(this.applicationsObjects, "applicationsObjects");
               }
             );
             return true;
@@ -674,7 +674,7 @@ export class ProjectsFormComponent implements OnInit {
             await this._applicationsByProjectsService.deleteApplicationByProject(this.applicationsObjects[index].id!)//posible error por orden 
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Aplicación eliminanda del Proyecto", "");
                   this.applicationsObjects.splice(index, 1);
                   return true;
@@ -690,13 +690,13 @@ export class ProjectsFormComponent implements OnInit {
 
     if (this.data.mode == 'create'){
       this.areasByProject = areasByProject;
-      environment.consoleMessage(this.areasByProject, "areasByProject padre")
+      // environment.consoleMessage(this.areasByProject, "areasByProject padre")
     }else if(this.data.mode == 'edit'){
-      environment.consoleMessage(this.areasByProject, "this.areasByProject antes");
-      environment.consoleMessage(this.areasByProjectObjects, "this.areasByProjectObjects antes");
+      // environment.consoleMessage(this.areasByProject, "this.areasByProject antes");
+      // environment.consoleMessage(this.areasByProjectObjects, "this.areasByProjectObjects antes");
       if(areasByProject.length > this.areasByProjectObjects.length){
-        environment.consoleMessage(this.areasByProject, "this.applications despues");
-        environment.consoleMessage(this.areasByProjectObjects, "this.applicationsObjects despues");
+        // environment.consoleMessage(this.areasByProject, "this.applications despues");
+        // environment.consoleMessage(this.areasByProjectObjects, "this.applicationsObjects despues");
         this.areasByProject = areasByProject;
         var areasIDs: number[] = areasByProject.map(area => area.id!);
         var areasObjectsIDs: number[] = this.areasByProjectObjects.map(area => area.area!.id!);
@@ -710,10 +710,10 @@ export class ProjectsFormComponent implements OnInit {
             await this._areasByProjectsService.addAreaByProject(area). 
             subscribe(data => 
               {
-                environment.consoleMessage(data, "objeto areasByProject");
+                // environment.consoleMessage(data, "objeto areasByProject");
                 this.areasByProjectObjects.push(data)
                 this.openSnackBar(true, "Area agregada satisfactoriamente", "");
-                environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects");
+                // environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects");
               }
             );
             return true;
@@ -726,18 +726,18 @@ export class ProjectsFormComponent implements OnInit {
       
       else if(areasByProject.length < this.areasByProjectObjects.length){
         this.areasByProject = areasByProject;
-        environment.consoleMessage(this.areasByProject, "this.areasByProject antes");
-        environment.consoleMessage(this.areasByProjectObjects, "this.areasByProjectObjects antes");
+        // environment.consoleMessage(this.areasByProject, "this.areasByProject antes");
+        // environment.consoleMessage(this.areasByProjectObjects, "this.areasByProjectObjects antes");
         var areasIDs: number[] = areasByProject.map(area => area.id!);
         var areasObjectsIDs: number[] = this.areasByProjectObjects.map(area => area.area!.id!);
-        environment.consoleMessage(areasIDs, "areasIDs antes");
-        environment.consoleMessage(areasObjectsIDs, "areasObjectsIDs antes");
+        // environment.consoleMessage(areasIDs, "areasIDs antes");
+        // environment.consoleMessage(areasObjectsIDs, "areasObjectsIDs antes");
         for (let index = 0; index < areasObjectsIDs.length; index++) {
           if(!areasIDs.includes(areasObjectsIDs[index])) {
             await this._areasByProjectsService.deleteAreaByProject(this.areasByProjectObjects[index].id!)//posible error por orden 
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Area eliminanda del Proyecto", "");
                   this.areasByProjectObjects.splice(index, 1);
                   return true;
@@ -755,13 +755,13 @@ export class ProjectsFormComponent implements OnInit {
 
     if (this.data.mode == 'create'){
       this.companies = companiesByProject;
-      environment.consoleMessage(this.companies, "companiesByProject padre")
+      // environment.consoleMessage(this.companies, "companiesByProject padre")
     }else if(this.data.mode == 'edit'){
-        environment.consoleMessage(this.companies, "this.companies antes");
-        environment.consoleMessage(this.companiesObjects, "this.companiesObjects antes");
+        // environment.consoleMessage(this.companies, "this.companies antes");
+        // environment.consoleMessage(this.companiesObjects, "this.companiesObjects antes");
       if(companiesByProject.length > this.companiesObjects.length){
-        environment.consoleMessage(this.companies, "this.companies despues");
-        environment.consoleMessage(this.companiesObjects, "this.companiesObjects despues");
+        // environment.consoleMessage(this.companies, "this.companies despues");
+        // environment.consoleMessage(this.companiesObjects, "this.companiesObjects despues");
         this.companies = companiesByProject;
         var companiesIDs: number[] = companiesByProject.map(company => company.id!);
         var companiesObjectsIDs: number[] = this.companiesObjects.map(company => company.company!.id!);
@@ -775,10 +775,10 @@ export class ProjectsFormComponent implements OnInit {
             await this._companiesByProjectsService.addCompanyByProject(comapny). 
             subscribe(data => 
               {
-                environment.consoleMessage(data, "objeto companiesObjects");
+                // environment.consoleMessage(data, "objeto companiesObjects");
                 this.companiesObjects.push(data)
                 this.openSnackBar(true, "Proveedor agregado satisfactoriamente", "");
-                environment.consoleMessage(this.companiesObjects, "companiesObjects");
+                // environment.consoleMessage(this.companiesObjects, "companiesObjects");
               }
             );
             return true;
@@ -795,7 +795,7 @@ export class ProjectsFormComponent implements OnInit {
             await this._companiesByProjectsService.deleteCompanyByProject(this.companiesObjects[index].id!)//posible error por orden 
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Proveedor eliminando del Proyecto", "");
                   this.companiesObjects.splice(index, 1);
                   return true;
@@ -813,13 +813,13 @@ export class ProjectsFormComponent implements OnInit {
 
     if (this.data.mode == 'create'){
       this.testUsers = testUsers;
-      environment.consoleMessage(this.testUsers, "testUsers padre")
+      // environment.consoleMessage(this.testUsers, "testUsers padre")
     }else if(this.data.mode == 'edit'){
-        environment.consoleMessage(this.testUsers, "this.testUsers antes");
-        environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects antes");
+        // environment.consoleMessage(this.testUsers, "this.testUsers antes");
+        // environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects antes");
       if(testUsers.length > this.testUsersObjects.length){
-        environment.consoleMessage(this.testUsers, "this.testUsers despues");
-        environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects despues");
+        // environment.consoleMessage(this.testUsers, "this.testUsers despues");
+        // environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects despues");
         this.testUsers = testUsers;
         var testUsersIDs: number[] = testUsers.map(user => user.id!);
         var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.user!.id!);
@@ -835,10 +835,10 @@ export class ProjectsFormComponent implements OnInit {
             await this._testUsersService.addTestUser(user). 
             subscribe(data => 
               {
-                environment.consoleMessage(data, "objeto testUsersObjects");
+                // environment.consoleMessage(data, "objeto testUsersObjects");
                 this.testUsersObjects.push(data)
                 this.openSnackBar(true, "Recurso de pruebas agregado satisfactoriamente", "");
-                environment.consoleMessage(this.testUsersObjects, "testUsersObjects");
+                // environment.consoleMessage(this.testUsersObjects, "testUsersObjects");
               }
             );
             return true;
@@ -855,7 +855,7 @@ export class ProjectsFormComponent implements OnInit {
             await this._testUsersService.deleteTestUser(this.testUsersObjects[index].id!)//posible error por orden 
               .subscribe(data =>
                 {
-                  environment.consoleMessage(data, "data eliminacion")
+                  // environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Recurso de pruebas eliminando del Proyecto", "");
                   this.testUsersObjects.splice(index, 1);
                   return true;
@@ -870,8 +870,8 @@ export class ProjectsFormComponent implements OnInit {
 
 
   validateAssist () {
-    environment.consoleMessage("entro validacion");
-    environment.consoleMessage(this.descripcion.get('pmoAssists')!.value);
+    // environment.consoleMessage("entro validacion");
+    // environment.consoleMessage(this.descripcion.get('pmoAssists')!.value);
     var valor = this.descripcion.get('pmoAssists')!.value;
     if( valor != "" && valor != null && valor != 0 ){
       this.deshabilitarAssist = false;
@@ -1020,7 +1020,7 @@ export class ProjectsFormComponent implements OnInit {
           this._statesByPhasesService.getStateByPhasesSelect()
           .subscribe((stateByPhases: StateByPhase[]) =>
           {
-            environment.consoleMessage(stateByPhases, "stte >>>>>>>>>>>>>>>>")
+            // environment.consoleMessage(stateByPhases, "stte >>>>>>>>>>>>>>>>")
             this.stateByPhases = [];
             this.phases = [];
             this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state!.id == this.seguimiento.get('states')!.value);
@@ -1045,7 +1045,7 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   async edit(){
-    environment.consoleMessage("Editar");
+    // environment.consoleMessage("Editar");
     var valido = true;
     var message = this.validateFormGroup(this.general);
     if (message != ""){
@@ -1065,14 +1065,14 @@ export class ProjectsFormComponent implements OnInit {
     if (message != ""){
       this.message = message;
     } else {
-      environment.consoleMessage(valido, "SIN ERROR: ");
+      // environment.consoleMessage(valido, "SIN ERROR: ");
       this.message = "";
       if (valido){
         this.fButtonDisabled = true;
 
         var editProject: any = {}
 
-        environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
+        // environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
 
         this.project.title != this.general.get('title')?.value ? editProject.title = this.general.get('title')!.value : true ;
         this.project.area!.id != this.general.get('areas')?.value ? editProject.area_id = this.general.get('areas')!.value : true ;
@@ -1121,12 +1121,12 @@ export class ProjectsFormComponent implements OnInit {
         this.project.evaluation != this.seguimiento.get('evaluation')?.value ? editProject.evaluation = this.seguimiento.get('evaluation')!.value : true ;
         this.project.test_log != this.seguimiento.get('testLog')?.value ? editProject.test_log = this.seguimiento.get('testLog')!.value : true ;
 
-        environment.consoleMessage(editProject, "editProject >>>>>>>>>>>>>>")
+        // environment.consoleMessage(editProject, "editProject >>>>>>>>>>>>>>")
 
         await this._projectsService.updateProjectsId(editProject, this.project.id!)
           .subscribe(data =>
             {
-              environment.consoleMessage(data, "data edición");
+              // environment.consoleMessage(data, "data edición");
               this.openSnackBar(true, "Proyecto editado", "");
             }
         );
@@ -1137,7 +1137,7 @@ export class ProjectsFormComponent implements OnInit {
   }
 
    async create(){
-    environment.consoleMessage("CREATE");
+    // environment.consoleMessage("CREATE");
     var valido = true;
     var message = this.validateFormGroup(this.general);
     if (message != ""){
@@ -1157,7 +1157,7 @@ export class ProjectsFormComponent implements OnInit {
     if (message != ""){
       this.message = message;
     } else {
-      environment.consoleMessage(valido, "SIN ERROR: ");
+      // environment.consoleMessage(valido, "SIN ERROR: ");
       this.message = "";
       if (valido){
         
@@ -1204,11 +1204,11 @@ export class ProjectsFormComponent implements OnInit {
 
         }
         
-        environment.consoleMessage(project, "OBJETO: ");
+        // environment.consoleMessage(project, "OBJETO: ");
         
         this.fButtonDisabled = true;
         await this._projectsService.addProjects(project).subscribe((res) => {
-          environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+          // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
           this.fButtonDisabled = false;
           if (res.status == 'created') {
             this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -1297,7 +1297,7 @@ export class ProjectsFormComponent implements OnInit {
               mainTable.test_users?.push(testUser);
             }
             this._mainCreateTablesService.addMainTableProject(mainTable).subscribe(
-              data => environment.consoleMessage(data, "dataMainTable")
+              data => // environment.consoleMessage(data, "dataMainTable")
             );
           }
         }, (err) => {
@@ -1310,7 +1310,7 @@ export class ProjectsFormComponent implements OnInit {
           let sErrors: string = "";
           aErrors.forEach((err) => {
             sErrors += "- " + err + "\n";
-            environment.consoleMessage(err, "Error: ");
+            // environment.consoleMessage(err, "Error: ");
           })
   
           this.openSnackBar(false, sErrors, "");

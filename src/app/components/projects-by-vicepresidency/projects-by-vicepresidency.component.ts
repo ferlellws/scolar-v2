@@ -29,7 +29,7 @@ export class ProjectsByVicepresidencyComponent implements OnInit {
 
   onProject(id: number){
     this.router.navigate([`/project-details/${id}`]);
-    environment.consoleMessage(id, "project");
+    // environment.consoleMessage(id, "project");
   }
 
 }

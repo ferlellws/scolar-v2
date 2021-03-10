@@ -65,68 +65,68 @@ export class ProjectDetailsComponent implements OnInit {
       console.log("Datos Proyecto",this.project);
 
       //Aplicaciones Impactadas
-      environment.consoleMessage(data.applicationsByProject, "data app");
+      // environment.consoleMessage(data.applicationsByProject, "data app");
       this.applicationsByProject = data.applicationsByProject.filter((apps: ApplicationByProject) => 
         apps.project!.id == data.project.id
       )
       //this.applicationsByProject = data.applicationsByProject;
-      environment.consoleMessage(this.applicationsByProject, "APPS")
+      // environment.consoleMessage(this.applicationsByProject, "APPS")
       
 
       //Areas Relacionadas
-      environment.consoleMessage(data.areasByProject, "data areas");
+      // environment.consoleMessage(data.areasByProject, "data areas");
       this.areasByProject = data.areasByProject.filter((areas: AreaByProject) => 
         areas.project!.id == data.project.id
       )
-      environment.consoleMessage(this.areasByProject, "AREAS ")
+      // environment.consoleMessage(this.areasByProject, "AREAS ")
 
 
       //Provedores
-      environment.consoleMessage(data.companiesByProject, "data companies");
+      // environment.consoleMessage(data.companiesByProject, "data companies");
       this.companiesByProject = data.companiesByProject.filter((companies: CompanyByProject) => 
         companies.project!.id == data.project.id
       )
-      environment.consoleMessage(this.companiesByProject, "COMPAÑIAS ")
+      // environment.consoleMessage(this.companiesByProject, "COMPAÑIAS ")
 
 
       //Recursos Funcionales de Prueba
-      environment.consoleMessage(data.testUsersByProject, "data test users");
+      // environment.consoleMessage(data.testUsersByProject, "data test users");
       this.testUsersByProject = data.testUsersByProject.filter((users: CompanyByProject) => 
         users.project!.id == data.project.id
       )
-      environment.consoleMessage(this.testUsersByProject, "TEST USERS ")
+      // environment.consoleMessage(this.testUsersByProject, "TEST USERS ")
 
 
       //Beneficios
-      environment.consoleMessage(data.benefitsByProject, "data benefits");
+      // environment.consoleMessage(data.benefitsByProject, "data benefits");
       this.benefitsByProject = data.benefitsByProject.filter((benefits: Benefit) => 
         benefits.project!.id == data.project.id
       )
-      environment.consoleMessage(this.benefitsByProject, "BENEFITS ")
+      // environment.consoleMessage(this.benefitsByProject, "BENEFITS ")
 
 
       //Hitos
-      environment.consoleMessage(data.highlightsByProject, "data highlights");
+      // environment.consoleMessage(data.highlightsByProject, "data highlights");
       this.highlightsByProject = data.highlightsByProject.filter((highlights: Highlight) => 
         highlights.project!.id == data.project.id
       )
-      environment.consoleMessage(this.highlightsByProject, "HIGHLIGHTS ")
+      // environment.consoleMessage(this.highlightsByProject, "HIGHLIGHTS ")
 
 
       //Kpis
-      environment.consoleMessage(data.kpisByProject, "data kpis");
+      // environment.consoleMessage(data.kpisByProject, "data kpis");
       this.kpisByProject = data.kpisByProject.filter((kpis: Kpi) => 
         kpis.project!.id == data.project.id
       )
-      environment.consoleMessage(this.kpisByProject, "KPIS ")
+      // environment.consoleMessage(this.kpisByProject, "KPIS ")
 
 
       //Riesgos
-      environment.consoleMessage(data.risksByProject, "data risks");
+      // environment.consoleMessage(data.risksByProject, "data risks");
       this.risksByProject = data.risksByProject.filter((risks: Kpi) => 
         risks.project!.id == data.project.id
       )
-      environment.consoleMessage(this.risksByProject, "KPIS ")
+      // environment.consoleMessage(this.risksByProject, "KPIS ")
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
@@ -134,7 +134,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onValorem(){
-    environment.consoleMessage("onValorem");
+    // environment.consoleMessage("onValorem");
     const dialogRef = this.dialog.open(ValoremFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -173,7 +173,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onWeek(){
-    environment.consoleMessage("onWeek");
+    // environment.consoleMessage("onWeek");
   }
 
 

@@ -25,14 +25,14 @@ export class TestUsersComponent implements OnInit {
     await this._usersService.getManagers()
     .subscribe(users => this.users = users);
     var selectedIDs: number[] = this.usersSelected.map(user => user.id!);
-    environment.consoleMessage(selectedIDs, "selectedIDs")
+    // environment.consoleMessage(selectedIDs, "selectedIDs")
     this.usersForm.setValue(selectedIDs);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.usersSelected = changes.usersSelected.currentValue;
     var selectedIDs: number[] = this.usersSelected.map(user => user.id!);
-    environment.consoleMessage(selectedIDs, "selectedIDs")
+    // environment.consoleMessage(selectedIDs, "selectedIDs")
     this.usersForm.setValue(selectedIDs);
   }
 

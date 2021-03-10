@@ -40,7 +40,7 @@ export class InfoPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    environment.consoleMessage("onInit")
+    // environment.consoleMessage("onInit")
 
     this.fAnimation = false;
     setTimeout(() => { this.fAnimation = true; }, 200);

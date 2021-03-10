@@ -42,14 +42,14 @@ export class PrioritiesComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.prioritiesService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        // environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    // environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(PrioritiesFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -61,7 +61,7 @@ export class PrioritiesComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(PrioritiesFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -74,7 +74,7 @@ export class PrioritiesComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.prioritiesService.getPrioritiesId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -88,11 +88,11 @@ export class PrioritiesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.prioritiesService.deletePrioritiesId(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -100,7 +100,7 @@ export class PrioritiesComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.prioritiesService.getPrioritiesId(data)
@@ -116,11 +116,11 @@ export class PrioritiesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.prioritiesService.logicalDeletePriority(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -128,7 +128,7 @@ export class PrioritiesComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.prioritiesService.getPrioritiesId(data.id)
@@ -144,11 +144,11 @@ export class PrioritiesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.prioritiesService.updateStatusPriority(result.data, data.id)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};
