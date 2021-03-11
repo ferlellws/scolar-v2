@@ -110,15 +110,27 @@
 
     <br>
     <mat-divider></mat-divider>
-    <tecno-text-list-date class="external-component" name="Productos Entregados" [items]="productsDelivered" (emitChange)="onProductDelivered($event)"></tecno-text-list-date>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <tecno-text-list-date titleClass="txt-primary" class="external-component" name="Productos Entregados" [items]="productsDelivered" (emitChange)="onProductDelivered($event)"></tecno-text-list-date>
+      </div>
+    </div>
 
     <br>
     <mat-divider></mat-divider>
-    <tecno-text-list-date class="external-component" name="Productos por Entregar" [items]="productsToBeDelivered" (emitChange)="onProductToBeDelivered($event)"></tecno-text-list-date>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <tecno-text-list-date titleClass="txt-primary" class="external-component" name="Productos por Entregar" [items]="productsToBeDelivered" (emitChange)="onProductToBeDelivered($event)"></tecno-text-list-date>
+      </div>
+    </div>
 
     <br>
     <mat-divider></mat-divider>
-    <tecno-text-list-date class="external-component" name="Productos Atrasados" [items]="productsOverdue" (emitChange)="onProductOverdue($event)"></tecno-text-list-date>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <tecno-text-list-date titleClass="txt-primary" class="external-component" name="Productos Atrasados" [items]="productsOverdue" (emitChange)="onProductOverdue($event)"></tecno-text-list-date>
+      </div>
+    </div>
 
     <br>
     <div class="row">

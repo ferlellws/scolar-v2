@@ -12,7 +12,8 @@ export class WeeksService {
 
   private readonly API = `${environment.API}/weeks`;
 
-  emitDataTable = new EventEmitter<any>();
+  emitWeek = new EventEmitter<any>();
+  emitWeekDelete = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -53,7 +54,7 @@ export class WeeksService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitWeek.emit(data);
       })
     );
   }
@@ -63,7 +64,7 @@ export class WeeksService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitWeek.emit(data);
       })
     );
   }
@@ -72,7 +73,7 @@ export class WeeksService {
     return this.http.post<Week>(this.API, { week: week }, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitWeek.emit(data);
         })
       );
   }
@@ -82,7 +83,7 @@ export class WeeksService {
     return this.http.put<Week>(`${this.API}/${id}`, week, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitWeek.emit(data);
         })
       );
   }
@@ -93,7 +94,7 @@ export class WeeksService {
       this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitWeek.emit(data);
         })
       );
   }
@@ -102,7 +103,7 @@ export class WeeksService {
     return this.http.put<Week>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitWeek.emit(data);
         })
       );
   }
@@ -112,7 +113,7 @@ export class WeeksService {
     return this.http.delete<Week>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitWeek.emit(data);
         })
       );
   }

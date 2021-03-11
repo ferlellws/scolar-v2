@@ -3,8 +3,8 @@ import { Week } from "./week";
 
 export class Observation {
     id?: number;
-    week!: Week;
-    week_id!: number;
+    week?: Week;
+    week_id?: number;
     description!: string;
     is_active: boolean;
     is_delete: boolean;

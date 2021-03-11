@@ -1,0 +1,126 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <h1 class="mat-headline"> {{ singularOption }} </h1>
+    <span class="example-spacer"></span>
+  
+    <button mat-icon-button mat-dialog-close *ngIf="showBtnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="example-container bg-color-white mat-elevation-z4">
+  
+    <form [formGroup]="general" style="width: 100%;">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title txt-accent">Nuevo Seguimiento Semanal</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <mat-form-field appearance="fill" class="full-width" style="width: 100%;">
+                    <mat-label>Ingrese un rango de fechas</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate formControlName="start_date" placeholder="{{labels.start_date}}">
+                        <input matEndDate formControlName="end_date" placeholder="{{labels.end_date}}">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-error *ngIf="this.general.get('start_date')?.invalid">
+                        {{ getMessageError(general ,'start_date') }}
+                    </mat-error>
+                    <mat-error *ngIf="this.general.get('end_date')?.invalid">
+                        {{ getMessageError(general ,'end_date') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+
+            <div class="col-sm-12 col-md-3">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <input matInput 
+                    [min]="0" [max]="100" type="number" 
+                    placeholder="{{labels.advance_spected}}" 
+                    (change)="changeAdvance()"
+                    formControlName="advance_spected" required>
+                    <mat-label>{{labels.advance_spected}}</mat-label>
+                    <mat-error *ngIf="this.general.get('advance_spected')?.invalid">
+                        {{ getMessageError(general ,'advance_spected') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <input matInput 
+                    [min]="0" [max]="100" type="number" 
+                    placeholder="{{labels.advance_real}}" 
+                    (change)="changeAdvance()"
+                    formControlName="advance_real" required>
+                    <mat-label>{{labels.advance_real}}</mat-label>
+                    <mat-error *ngIf="this.general.get('advance_real')?.invalid">
+                        {{ getMessageError(general ,'advance_real') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-12 col-md-3">
+                <span *ngIf="indicator == null">Por favor ingrese avance esperado y real</span>
+                <div *ngIf="indicator != null" class="indicator-general-container">
+                    <span class="txt-primary" style="font-size: smaller;">Indicaor de desviación</span>
+                    <div class="indicator-container">
+                        <div class="circle" [ngStyle]="{'background-color': indicator.color}"></div>
+                        <span>{{indicator.name}} ({{indicator.balance}}%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <mat-divider></mat-divider>
+    <div class="row">
+        <div class="col-sm-12 col-md-12"  style="margin-left: 15px;">
+            <tecno-text-list-date 
+            class="external-component" 
+            titleClass="txt-primary" 
+            name="Logros del periodo" 
+            [items]="goals" 
+            (emitChange)="onGoal($event)"></tecno-text-list-date>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12" style="margin-left: 15px;">
+            <tecno-text-list-date 
+            class="external-component" 
+            titleClass="txt-primary" 
+            name="Proximas actividades" 
+            [items]="nextActivities" 
+            (emitChange)="onNextActivities($event)"></tecno-text-list-date>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="row">
+        <div style="margin-left: 15px;" class="col-sm-12 col-md-12">         
+            <tecno-text-list 
+            class="external-component" 
+            titleClass="txt-primary" 
+            name="Observaciones" 
+            [items]="observations" 
+            (emitChange)="onObservations($event)"></tecno-text-list>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+        <button class="button"
+            (click)="crear()"
+          mat-button color="primary"
+          [disabled]="general.invalid || fButtonDisabled">
+          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+        </button>
+    </div>
+</div>

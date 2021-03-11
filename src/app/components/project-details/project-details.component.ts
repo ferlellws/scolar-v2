@@ -26,6 +26,7 @@ import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
+import { WeekFormComponent } from './week-form/week-form.component';
 
 export interface Indicator {
   name: string;
@@ -133,8 +134,8 @@ export class ProjectDetailsComponent implements OnInit {
       }
 
       data.weeksByProject.map((data: any) => {
-        data.start_date = this.getToStringDate(data.start_date);
-        data.end_date = this.getToStringDate(data.end_date);
+        data.start_date = this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`));
+        data.end_date = this.getToStringDate(new Date(`${(data.end_date).substring(0,10)}:00:00`));
       });
 
       data.goalsByWeeks.map((data: any) => {
@@ -262,7 +263,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Logros  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.goalsByWeeks, "data goals");
       this.goalsByWeeks = data.goalsByWeeks.filter((goals: Goal) => 
-        goals.week.project!.id == data.project.id
+        goals.week!.project!.id == data.project.id
       )
       environment.consoleMessage(this.goalsByWeeks, "GOALS ")
 
@@ -270,7 +271,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Prixomas Actividades  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.nextActivitiesByWeek, "data next_activities");    
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => 
-        next_activity.week.project!.id == data.project.id
+        next_activity.week!.project!.id == data.project.id
       )
       environment.consoleMessage(this.nextActivitiesByWeek, "NEXT ACTIVITIES ")
 
@@ -278,7 +279,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Observaciones  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.obseravtionsByWeek, "data observations");
       this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => 
-        observation.week.project!.id == data.project.id
+        observation.week!.project!.id == data.project.id
       )
       environment.consoleMessage(this.obseravtionsByWeek, "OBSERVATIONS ")
       
@@ -355,6 +356,7 @@ export class ProjectDetailsComponent implements OnInit {
     
     this.goalsService.emitGoal
       .subscribe((res: any) => {
+        res.date = this.getToStringDate(new Date(`${(res.date).substring(0,10)}:00:00`));
         this.goalsByWeeks.push(res);
       });
 
@@ -363,13 +365,14 @@ export class ProjectDetailsComponent implements OnInit {
         this.goalsService.getGoalsAll()
           .subscribe((data) => {
             this.goalsByWeeks = data.filter((goals: Goal) => {
-              return goals.week.project!.id == this.project.id
+              return goals.week!.project!.id == this.project.id
             })
           })
       });
     
     this.nextActivitiesService.emitNextActivities
       .subscribe((res: any) => {
+        res.date = this.getToStringDate(new Date(`${(res.date).substring(0,10)}:00:00`));
         this.nextActivitiesByWeek.push(res);
       });
 
@@ -378,7 +381,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.nextActivitiesService.getNextActivitiesAll()
           .subscribe((data) => {
             this.nextActivitiesByWeek = data.filter((next_activities: NextActivity) => {
-              return next_activities.week.project!.id == this.project.id
+              return next_activities.week!.project!.id == this.project.id
             })
           })
       });
@@ -393,9 +396,36 @@ export class ProjectDetailsComponent implements OnInit {
         this.observationsService.getObservationsAll()
           .subscribe((data) => {
             this.obseravtionsByWeek = data.filter((observations: Observation) => {
-              return observations.week.project!.id == this.project.id
+              return observations.week!.project!.id == this.project.id
             })
           })
+      });
+
+    this.weeksService.emitWeek
+      .subscribe((res: any) => {
+        res.start_date = this.getToStringDate(new Date(`${(res.start_date).substring(0,10)}:00:00`));
+        res.end_date = this.getToStringDate(new Date(`${(res.end_date).substring(0,10)}:00:00`));
+
+
+
+        var mes = new Date(res.start_date).getMonth(); 
+        var año = new Date(res.start_date).getFullYear();
+        res.month = this.meses[mes].mes;
+        res.year = año;
+
+        environment.consoleMessage(this.year, "YEAR");
+        if (res.year != this.meses[mes].year) {
+          this.meses[mes].nReg = 0;
+          this.year = res.year;
+        }
+        environment.consoleMessage(this.year, "YEAR");
+
+        this.meses[mes].nReg++;
+        res.nReg = this.meses[mes].nReg;
+        this.meses[mes].year = res.year;
+
+
+        this.weeksByProject.push(res);
       });
 
   }
@@ -413,7 +443,7 @@ export class ProjectDetailsComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( data =>
       {
-        if (data = 'close'){
+        if (data == 'close'){
           dialogRef.close();
         }
       }
@@ -432,7 +462,7 @@ export class ProjectDetailsComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( data =>
       {
-        if (data = 'close'){
+        if (data == 'close'){
           dialogRef.close();
         }
       }
@@ -440,7 +470,22 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onWeek(){
-    environment.consoleMessage("onWeek");
+    const dialogRef = this.dialog.open(WeekFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
   nextWeek(){
@@ -473,23 +518,6 @@ export class ProjectDetailsComponent implements OnInit {
       }
     } else {
       return "";
-    }
-  }
-
-  backTofrontDateXD(date: any) {    
-    if(date == null || date == '') {
-      return null;
-    } else {
-      var newDate;
-      var fullDate:string ;
-      var newDateEdit;
-      newDate = new Date(date);
-      environment.consoleMessage(newDate, "NEW DATE")
-      fullDate = `${newDate.getUTCFullYear()}-${newDate.getMonth()}-${newDate.getDate()}`;
-      environment.consoleMessage(fullDate, "FULL DATE")
-      newDateEdit = new Date(fullDate + ':00:00');
-      environment.consoleMessage(newDateEdit, "NEW DATE EDIT")
-      return newDateEdit;
     }
   }
 

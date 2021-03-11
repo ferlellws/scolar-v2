@@ -34,6 +34,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProjectDetailsResolver } from './guards/project-details.resolver';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { WeekFormComponent } from './week-form/week-form.component';
 
 const materialModels = [
   MatSortModule,
@@ -71,7 +72,8 @@ const materialModels = [
 @NgModule({
   declarations: [
     ProjectDetailsComponent,
-    ValoremFormComponent
+    ValoremFormComponent,
+    WeekFormComponent
   ],
   imports: [
     CommonModule,
