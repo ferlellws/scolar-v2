@@ -29,7 +29,7 @@ export class AreasFormComponent implements OnInit {
 
   fButtonDisabled: boolean = false;
 
-  area!: Area;
+  area!: any;
 
   constructor(
     private fb: FormBuilder,
@@ -49,13 +49,14 @@ export class AreasFormComponent implements OnInit {
     });
     if (this.data.mode == 'edit') {
 
+      await this.getSelectVicepresidencies();
       this.areasService.getAreasId(this.data.id)
         .subscribe((res: Area) => {
           this.area = res;
           this.areasGroup.patchValue({
             title: this.area.title,
             description: this.area.description,
-            vice_presidency_id: this.area.vice_presidency_id,            
+            vice_presidency_id: this.area.vice_presidency.id,            
             is_active: this.area.is_active
           });
         });

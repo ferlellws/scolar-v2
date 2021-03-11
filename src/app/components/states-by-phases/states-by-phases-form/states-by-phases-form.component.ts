@@ -30,7 +30,7 @@ export class StatesByPhasesFormComponent implements OnInit {
 
   fButtonDisabled: boolean = false;
 
-  stateByPhase!: StateByPhase;
+  stateByPhase!: any;
   selectState!: State [];
   selectPhase!: Phase [];
 
@@ -50,14 +50,18 @@ export class StatesByPhasesFormComponent implements OnInit {
       phase_id: [null, Validators.required],
       is_active: true
     });
-    if (this.data.mode == 'edit') {
 
+    await this.getSelectStates();
+    await this.getSelectPhases();
+
+    if (this.data.mode == 'edit') {
       this.stateByPhasesService.getStateByPhasesId(this.data.id)
         .subscribe((res: StateByPhase) => {
           this.stateByPhase = res;
+          environment.consoleMessage(this.stateByPhase.state.id);
           this.stateByPhasesGroup.patchValue({
-            state: this.stateByPhase.state_id,
-            phase_id: this.stateByPhase.phase_id,            
+            state_id: this.stateByPhase.state.id,
+            phase_id: this.stateByPhase.phase.id,            
             is_active: this.stateByPhase.is_active
           });
         });

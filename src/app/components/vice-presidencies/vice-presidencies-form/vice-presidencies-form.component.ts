@@ -30,7 +30,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   selectManagers: User [] = [];
   fButtonDisabled: boolean = false;
 
-  vicePresidency!: VicePresidency;
+  vicePresidency!: any;
 
   constructor(
     private fb: FormBuilder,
@@ -54,15 +54,14 @@ export class VicePresidenciesFormComponent implements OnInit {
     });
 
     await this.getSelectManagers();
-    if (this.data.mode == 'edit') {
-
+    if (this.data.mode == 'edit') {    
       this.vicePresidenciesService.getVicePresidency(this.data.id)
         .subscribe((res: VicePresidency) => {
           this.vicePresidency = res;
           this.vicePresidenciesGroup.patchValue({
             title: this.vicePresidency.title,
             description: this.vicePresidency.description,
-            manager_id: this.vicePresidency.manager_id,
+            manager_id: this.vicePresidency.manager.id,
             is_active: this.vicePresidency.is_active
           });
         });
