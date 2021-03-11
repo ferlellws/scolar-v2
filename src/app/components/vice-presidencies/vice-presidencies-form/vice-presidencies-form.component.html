@@ -29,6 +29,7 @@
         <mat-form-field class="full-width">
           <mat-label>Jefe</mat-label>
           <mat-select formControlName="manager_id" (click)="onClickSelectManager()" required>
+            <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let manager of selectManagers" [value]="manager.id">{{ manager.full_name }}</mat-option>
           </mat-select>
           <mat-error *ngIf="this.vicePresidenciesGroup.get('manager_id')?.invalid">
