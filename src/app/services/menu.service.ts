@@ -53,7 +53,7 @@ export class MenuService {
         {
           id: 2,
           title: "Proveedores",
-          description: "Registro de compañias",
+          description: "Registro de Proveedores",
           sysmodule_id: 1,
           route: "/companies",
           order_menu: 2,
@@ -65,7 +65,7 @@ export class MenuService {
         {
           id: 3,
           title: "Tipos de Proveedor",
-          description: "Tipo de compañias",
+          description: "Registro Tipo de compañias",
           sysmodule_id: 1,
           route: "/company-types",
           order_menu: 3,
@@ -77,7 +77,7 @@ export class MenuService {
         {
           id: 4,
           title: "Fases",
-          description: "Tipo de fases",
+          description: "Registr Tipo de Fases",
           sysmodule_id: 1,
           route: "/phases",
           order_menu: 4,
@@ -89,7 +89,7 @@ export class MenuService {
         {
           id: 5,
           title: "Estados",
-          description: "Tipo de estados",
+          description: "Registro de Tipo de Estados",
           sysmodule_id: 1,
           route: "/states",
           order_menu: 5,
@@ -101,7 +101,7 @@ export class MenuService {
         {
           id: 6,
           title: "Estados por Fase",
-          description: "Tipo de estados",
+          description: "Registro de fases que pueden pertenecer a un estado",
           sysmodule_id: 1,
           route: "/states-by-phases",
           order_menu: 6,
@@ -113,7 +113,7 @@ export class MenuService {
         {
           id: 7,
           title: "Áreas",
-          description: "Tipo de estados",
+          description: "Registro de Áreas",
           sysmodule_id: 1,
           route: "/areas",
           order_menu: 7,
@@ -125,7 +125,7 @@ export class MenuService {
         {
           id: 8,
           title: "Gestión",
-          description: "Tipo de estados",
+          description: "Registro de Gestión",
           sysmodule_id: 1,
           route: "/managements",
           order_menu: 8,
@@ -137,7 +137,7 @@ export class MenuService {
         {
           id: 9,
           title: "Prioridades",
-          description: "Tipo de estados",
+          description: "Registro de Prioridades",
           sysmodule_id: 1,
           route: "/priorities",
           order_menu: 9,
@@ -149,7 +149,7 @@ export class MenuService {
         {
           id: 10,
           title: "Programas",
-          description: "Tipo de estados",
+          description: "Registro de Programas",
           sysmodule_id: 1,
           route: "/programs",
           order_menu: 10,
@@ -161,7 +161,7 @@ export class MenuService {
         {
           id: 11,
           title: "Niveles de Riesgo",
-          description: "Tipo de estados",
+          description: "Registro de Niveles de Riesgo",
           sysmodule_id: 1,
           route: "risk-levels",
           order_menu: 11,
@@ -173,7 +173,7 @@ export class MenuService {
         {
           id: 12,
           title: "Etapas",
-          description: "Tipo de estados",
+          description: "Registro de Etapas",
           sysmodule_id: 12,
           route: "/stages",
           order_menu: 2,
@@ -185,7 +185,7 @@ export class MenuService {
         {
           id: 13,
           title: "Enfoques Estratégicos",
-          description: "Tipo de estados",
+          description: "Registro de Enfoques Estratégicos",
           sysmodule_id: 1,
           route: "/strategic-approachs",
           order_menu: 13,
@@ -197,7 +197,7 @@ export class MenuService {
         {
           id: 14,
           title: "Tipificaciones",
-          description: "Tipo de estados",
+          description: "Registro de Tipificaciones",
           sysmodule_id: 1,
           route: "/typifications",
           order_menu: 14,
@@ -209,7 +209,7 @@ export class MenuService {
         {
           id: 15,
           title: "Aplicativos",
-          description: "Tipo de estados",
+          description: "Registro de Aplicativos",
           sysmodule_id: 1,
           route: "/applications",
           order_menu: 15,

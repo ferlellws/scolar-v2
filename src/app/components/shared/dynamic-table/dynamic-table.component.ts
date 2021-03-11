@@ -36,13 +36,15 @@ export class DynamicTableComponent implements OnInit {
   displayedColumns!: string [];
   dataSource =  new MatTableDataSource<any>();
   footer: any;
+  render: boolean = false;
+
   constructor() {
 
    }
 
    ngOnInit(): void {
     console.log("ObjData Dynamic",this.objectsData);
-    this.updateTable();
+    this.updateTable();    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -52,6 +54,11 @@ export class DynamicTableComponent implements OnInit {
   }
 
   updateTable() {
+    if(this.objectsData.dataTable.length == 0) {
+      this.render = false;
+    } else {
+      this.render = true;
+    }
     environment.consoleMessage(`${this.isUserProfile}`)
     if (this.isUserProfile) {
       this.labelDelete = "Eliminar definitivamente";
