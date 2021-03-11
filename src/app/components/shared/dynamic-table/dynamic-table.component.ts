@@ -36,23 +36,30 @@ export class DynamicTableComponent implements OnInit {
   displayedColumns!: string [];
   dataSource =  new MatTableDataSource<any>();
   footer: any;
+  render: boolean = false;
+
   constructor() {
 
    }
 
    ngOnInit(): void {
     console.log("ObjData Dynamic",this.objectsData);
-    this.updateTable();
+    this.updateTable();    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.objectsData = changes.objectsData.currentValue;
     this.updateTable();
-    // environment.consoleMessage(this.objectsData, "On change");
+    true;//environment.consoleMessage(this.objectsData, "On change");
   }
 
   updateTable() {
-    // environment.consoleMessage(`${this.isUserProfile}`)
+    if(this.objectsData.dataTable.length == 0) {
+      this.render = false;
+    } else {
+      this.render = true;
+    }
+    true;//environment.consoleMessage(`${this.isUserProfile}`)
     if (this.isUserProfile) {
       this.labelDelete = "Eliminar definitivamente";
       this.deleteIcon = "delete_forever";
@@ -79,19 +86,9 @@ export class DynamicTableComponent implements OnInit {
   }
 
   onClickStatus($event: MatSlideToggleChange, id: number) {
-    // // environment.consoleMessage(value, "value: ");
-    // // environment.consoleMessage(id, "id: ");
     let value: boolean = $event.checked;
     this.fCheckOption = value;
     this.changeCheckInDataTable(value, id);
-
-    // this.objectsData.dataTable.find((row, index) => {
-    //             if (row.idForOptions === id) {
-    //               this.objectsData.dataTable[index].checkOption = value;
-    //             }
-    //           });
-    // // environment.consoleMessage(this.objectsData, "onClickStatus: ");
-
   }
 
   changeCheckInDataTable(value: boolean, id: number) {

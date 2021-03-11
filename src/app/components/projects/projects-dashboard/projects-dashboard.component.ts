@@ -31,15 +31,15 @@ export class ProjectsDashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onVicepresindency(id: number){
+  onVicepresindency(id: number) {
     this.router.navigate([`/projects-by-vicepresidency/${id}`]);
     
-    // environment.consoleMessage(id, "vicepresidency");
+    true;//environment.consoleMessage(id, "vicepresidency");
   }
 
-  onProject(id: number){
+  onProject(id: number) {
     this.router.navigate([`/project-details/${id}`]);
-    // environment.consoleMessage(id, "project");
+    true;//environment.consoleMessage(id, "project");
   }
 
 }

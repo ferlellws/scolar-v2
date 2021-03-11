@@ -127,6 +127,6 @@ export class AppComponent implements OnInit {
   }
 
   onLoading(value: boolean) {
-    // environment.consoleMessage(value, ">>>>>>>>>>>>>");
+    true;//environment.consoleMessage(value, ">>>>>>>>>>>>>");
   }
 }

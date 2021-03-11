@@ -25,14 +25,14 @@ export class ApplicationsByProjectComponent implements OnInit {
     await this._applicationsService.getApplicationsSelect()
     .subscribe(applications => this.applications = applications);
     var selectedIDs: number[] = this.applicationsSelected.map(app => app.id!);
-    // environment.consoleMessage(selectedIDs, "selectedIDs")
+    true;//environment.consoleMessage(selectedIDs, "selectedIDs")
     this.applicationsForm.setValue(selectedIDs);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.applicationsSelected = changes.applicationsSelected.currentValue;
     var selectedIDs: number[] = this.applicationsSelected.map(app => app.id!);
-    // environment.consoleMessage(selectedIDs, "selectedIDs")
+    true;//environment.consoleMessage(selectedIDs, "selectedIDs")
     this.applicationsForm.setValue(selectedIDs);
   }
 

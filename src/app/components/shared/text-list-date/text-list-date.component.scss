@@ -1,7 +1,6 @@
 .row{
     margin-bottom: 5px;
     max-width: 100%;
-    padding-left: 15px;
 }
 mat-card{
     background-color: #F8F8F8;
@@ -22,7 +21,9 @@ mat-card{
 }
 
 .button {
-    margin-left: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .date-button {

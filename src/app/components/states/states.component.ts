@@ -43,14 +43,14 @@ export class StatesComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.statesService.emitDataTable
       .subscribe((res: any) => {
-        // environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        true;//environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    // environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(StatesFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -62,7 +62,7 @@ export class StatesComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(StatesFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -75,7 +75,7 @@ export class StatesComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.statesService.getStatesId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -89,11 +89,11 @@ export class StatesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          // environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.statesService.deleteStatesId(data)
               .subscribe(res => {
-                // environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -101,7 +101,7 @@ export class StatesComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.statesService.getStatesId(data)
@@ -117,11 +117,11 @@ export class StatesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          // environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.statesService.logicalDeleteState(data)
               .subscribe(res => {
-                // environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -129,7 +129,7 @@ export class StatesComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.statesService.getStatesId(data.id)
@@ -145,11 +145,11 @@ export class StatesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          // environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.statesService.updateStatusState(result.data, data.id)
               .subscribe(res => {
-                // environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};

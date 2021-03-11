@@ -30,7 +30,7 @@ export class StatesByPhasesFormComponent implements OnInit {
 
   fButtonDisabled: boolean = false;
 
-  stateByPhase!: StateByPhase;
+  stateByPhase!: any;
   selectState!: State [];
   selectPhase!: Phase [];
 
@@ -44,20 +44,24 @@ export class StatesByPhasesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    // environment.consoleMessage(this.data, "++++++++++");
+    true;//environment.consoleMessage(this.data, "++++++++++");
     this.stateByPhasesGroup = this.fb.group({
       state_id: [null, Validators.required],
       phase_id: [null, Validators.required],
       is_active: true
     });
-    if (this.data.mode == 'edit') {
 
+    await this.getSelectStates();
+    await this.getSelectPhases();
+
+    if (this.data.mode == 'edit') {
       this.stateByPhasesService.getStateByPhasesId(this.data.id)
         .subscribe((res: StateByPhase) => {
           this.stateByPhase = res;
+          true; //environment.consoleMessage(this.stateByPhase.state.id);
           this.stateByPhasesGroup.patchValue({
-            state: this.stateByPhase.state_id,
-            phase_id: this.stateByPhase.phase_id,            
+            state_id: this.stateByPhase.state.id,
+            phase_id: this.stateByPhase.phase.id,            
             is_active: this.stateByPhase.is_active
           });
         });
@@ -65,7 +69,7 @@ export class StatesByPhasesFormComponent implements OnInit {
   }
   
   onSubmit() {
-    // environment.consoleMessage(this.stateByPhasesGroup, "OnSubmit tipo de compañias: ");
+    true;//environment.consoleMessage(this.stateByPhasesGroup, "OnSubmit tipo de compañias: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -86,10 +90,10 @@ export class StatesByPhasesFormComponent implements OnInit {
   }
 
   createRegister() {
-    // environment.consoleMessage(this.stateByPhasesGroup.value, "createRegister: ");
+    true;//environment.consoleMessage(this.stateByPhasesGroup.value, "createRegister: ");
     this.stateByPhasesService.addStateByPhases(this.stateByPhasesGroup.value)
       .subscribe((res) => {
-        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -104,7 +108,7 @@ export class StatesByPhasesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          // environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -112,14 +116,14 @@ export class StatesByPhasesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    // environment.consoleMessage(this.stateByPhasesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    true;//environment.consoleMessage(this.stateByPhasesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.stateByPhasesService.updateStateByPhasesId(
       this.stateByPhasesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -134,7 +138,7 @@ export class StatesByPhasesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          // environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -143,11 +147,11 @@ export class StatesByPhasesFormComponent implements OnInit {
 
 
   onClickSelectState() {
-    // environment.consoleMessage("", "Cargar info de managers");
+    true;//environment.consoleMessage("", "Cargar info de managers");
     this.getSelectStates();
   }
   onClickSelectPhase() {
-    // environment.consoleMessage("", "Cargar info de managers");
+    true;//environment.consoleMessage("", "Cargar info de managers");
     this.getSelectPhases();
   }
 

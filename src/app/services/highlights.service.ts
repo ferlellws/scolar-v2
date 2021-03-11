@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Highlight } from '../models/highlight';
@@ -8,6 +8,9 @@ import { Highlight } from '../models/highlight';
   providedIn: 'root'
 })
 export class HighlightsService {
+
+  emitHighlights = new EventEmitter<any>();
+  emitDeleteHighlights = new EventEmitter<any>();
 
   private readonly API = `${environment.API}/highlights`;
 
@@ -57,6 +60,7 @@ export class HighlightsService {
     return this.http.post<Highlight>(this.API, { highlight: highlight }, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitHighlights.emit(data);
         })
       );
   }
@@ -65,6 +69,7 @@ export class HighlightsService {
     return this.http.put<any>(`${this.API}/${id}`, highlight, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitHighlights.emit(data);
         })
       );
   }
@@ -75,6 +80,7 @@ export class HighlightsService {
     return this.http.put<Highlight>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteHighlights.emit(data);
         })
       );
   }
@@ -83,6 +89,7 @@ export class HighlightsService {
     return this.http.delete<Highlight>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteHighlights.emit(data);
         })
       );
   }

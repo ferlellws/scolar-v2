@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Risk } from '../models/risk';
@@ -8,6 +8,9 @@ import { Risk } from '../models/risk';
   providedIn: 'root'
 })
 export class RisksService {
+
+  emitRisks = new EventEmitter<any>();
+  emitDeleteRisks = new EventEmitter<any>();
 
   private readonly API = `${environment.API}/risks`;
 
@@ -57,6 +60,7 @@ export class RisksService {
     return this.http.post<Risk>(this.API, { risk: risk }, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitRisks.emit(data);
         })
       );
   }
@@ -65,6 +69,7 @@ export class RisksService {
     return this.http.put<any>(`${this.API}/${id}`, risk, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitRisks.emit(data);
         })
       );
   }
@@ -75,6 +80,7 @@ export class RisksService {
     return this.http.put<Risk>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteRisks.emit(data);
         })
       );
   }
@@ -83,6 +89,7 @@ export class RisksService {
     return this.http.delete<Risk>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteRisks.emit(data);
         })
       );
   }
