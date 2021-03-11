@@ -64,8 +64,11 @@ $height-profile-container: 157px;
 }
 
 .menu-container {
-    width: $width-side-nav;
-    height: calc(100% - $height-profile-container);
+  width: $width-side-nav;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .mat-toolbar {

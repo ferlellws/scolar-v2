@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/collections';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -97,21 +98,8 @@ export class ProjectDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
-      data.project.percentage = ((((data.project.pmo_hours*60)+(data.project.pmo_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
-      data.project.balance = new Intl.NumberFormat('en-US').format( data.project.budget_approved  - data.project.budget_executed );
-      data.project.budget_executed = new Intl.NumberFormat('en-US').format( data.project.budget_executed);
-      data.project.budget_approved = new Intl.NumberFormat('en-US').format( data.project.budget_approved);
-      if(data.project.start_date != null){
-        data.project.start_date = this.getToStringDate(new Date(`${(data.project.start_date).substring(0,10)}:00:00`));
-      }
-      if(data.project.due_date != null){
-        data.project.due_date = this.getToStringDate(new Date(`${(data.project.due_date).substring(0,10)}:00:00`));
-      }
-      if(data.project.control_date != null){
-        data.project.control_date = this.getToStringDate(new Date(`${(data.project.control_date).substring(0,10)}:00:00`));
-      }
-      data.project.reception_date = this.getToStringDate(new Date(`${(data.project.reception_date).substring(0,10)}:00:00`));
-           
+      this.modificationData(data.project);
+
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
           var mes = new Date(data.start_date).getMonth(); 
@@ -147,7 +135,7 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
       this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
-      weeks.project!.id == data.project.id
+        weeks.project!.id == data.project.id
       );
 
       this.weeksByProject.map((data: any) =>{
@@ -156,141 +144,89 @@ export class ProjectDetailsComponent implements OnInit {
         data.month = this.meses[mes].mes;
         data.year = año;
 
-        environment.consoleMessage(this.year, "YEAR");
         if (data.year != this.meses[mes].year) {
           this.meses[mes].nReg = 0;
           this.year = data.year;
         }
-        environment.consoleMessage(this.year, "YEAR");
 
         this.meses[mes].nReg++;
         data.nReg = this.meses[mes].nReg;
         this.meses[mes].year = data.year;
       });
 
-      environment.consoleMessage(this.meses, "ARREGLO MESES");
-
       this.weekId = this.weeksByProject.length-1;
-      environment.consoleMessage(this.weekId, ">>>>>>>>>> WEEK ID <<<<<<<<<<");
-      
-      environment.consoleMessage(this.weeksByProject.length, "WEEKS LENGTH");
-      environment.consoleMessage(this.weeksByProject, "WEEKS PROJECT");
-
-      if (data.project.test_log == true) {
-        data.project.test_log = "Si"
-      } else { data.project.test_log = "Si" }
-
-      if (data.project.pmo_assitant != null) {
-        data.project.percentageAssistant = ((((data.project.pmo_assistant_hours*60)+(data.project.pmo_assistant_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
-      }
       
       this.project = data.project;
       console.log("Datos Proyecto",this.project);
 
       //Aplicaciones Impactadas
-      environment.consoleMessage(data.applicationsByProject, "data app");
       this.applicationsByProject = data.applicationsByProject.filter((apps: ApplicationByProject) => 
         apps.project!.id == data.project.id
       )
-      //this.applicationsByProject = data.applicationsByProject;
-      environment.consoleMessage(this.applicationsByProject, "APPS")
-      
 
       //Areas Relacionadas
-      environment.consoleMessage(data.areasByProject, "data areas");
       this.areasByProject = data.areasByProject.filter((areas: AreaByProject) => 
         areas.project!.id == data.project.id
       )
-      environment.consoleMessage(this.areasByProject, "AREAS ")
-
 
       //Provedores
-      environment.consoleMessage(data.companiesByProject, "data companies");
       this.companiesByProject = data.companiesByProject.filter((companies: CompanyByProject) => 
         companies.project!.id == data.project.id
       )
-      environment.consoleMessage(this.companiesByProject, "COMPAÑIAS ")
-
 
       //Recursos Funcionales de Prueba
-      environment.consoleMessage(data.testUsersByProject, "data test users");
       this.testUsersByProject = data.testUsersByProject.filter((users: CompanyByProject) => 
         users.project!.id == data.project.id
       )
-      environment.consoleMessage(this.testUsersByProject, "TEST USERS ")
-
 
       //Beneficios
-      environment.consoleMessage(data.benefitsByProject, "data benefits");
       this.benefitsByProject = data.benefitsByProject.filter((benefits: Benefit) => 
         benefits.project!.id == data.project.id
       )
-      environment.consoleMessage(this.benefitsByProject, "BENEFITS ")
-
 
       //Hitos
-      environment.consoleMessage(data.highlightsByProject, "data highlights");
       this.highlightsByProject = data.highlightsByProject.filter((highlights: Highlight) => 
         highlights.project!.id == data.project.id
       )
-      environment.consoleMessage(this.highlightsByProject, "HIGHLIGHTS ")
-
 
       //Kpis
-      environment.consoleMessage(data.kpisByProject, "data kpis");
       this.kpisByProject = data.kpisByProject.filter((kpis: Kpi) => 
         kpis.project!.id == data.project.id
       )
-      environment.consoleMessage(this.kpisByProject, "KPIS ")
-
 
       //Riesgos
-      environment.consoleMessage(data.risksByProject, "data risks");
       this.risksByProject = data.risksByProject.filter((risks: Risk) => 
         risks.project!.id == data.project.id
       )
-      environment.consoleMessage(this.risksByProject, "KPIS ")
-
 
       //Semanas
-      environment.consoleMessage(data.weeksByProject , "data weeks");
       this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
         weeks.project!.id == data.project.id
       )
-      environment.consoleMessage(this.weeksByProject, "WEEKS ")
 
-
-      //Logros  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
-      environment.consoleMessage(data.goalsByWeeks, "data goals");
+      //Logros
       this.goalsByWeeks = data.goalsByWeeks.filter((goals: Goal) => 
-        goals.week!.project!.id == data.project.id
+        goals.week!.project!.id == data.project.id && goals.week!.id == this.weeksByProject[this.weekId].id
       )
-      environment.consoleMessage(this.goalsByWeeks, "GOALS ")
 
-
-      //Prixomas Actividades  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
-      environment.consoleMessage(data.nextActivitiesByWeek, "data next_activities");    
+      //Prixomas Actividades
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => 
-        next_activity.week!.project!.id == data.project.id
+        next_activity.week!.project!.id == data.project.id && next_activity.week!.id == this.weeksByProject[this.weekId].id
       )
-      environment.consoleMessage(this.nextActivitiesByWeek, "NEXT ACTIVITIES ")
 
-
-      //Observaciones  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
-      environment.consoleMessage(data.obseravtionsByWeek, "data observations");
+      //Observaciones
       this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => 
-        observation.week!.project!.id == data.project.id
+        observation.week!.project!.id == data.project.id && observation.week!.id == this.weeksByProject[this.weekId].id
       )
-      environment.consoleMessage(this.obseravtionsByWeek, "OBSERVATIONS ")
-      
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
     // this.projectsService.emitDataTable
     //   .subscribe((res: any) => {
-    //     environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
-    //     this.project = res.data;
+    //     environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>                                          >>>>>>>>>>>>>>>>>>");
+    //     this.modificationData(res.location);
+    //     this.project = res.location;
     //     this.dialog.closeAll();
     //   });
     
@@ -406,8 +342,6 @@ export class ProjectDetailsComponent implements OnInit {
         res.start_date = this.getToStringDate(new Date(`${(res.start_date).substring(0,10)}:00:00`));
         res.end_date = this.getToStringDate(new Date(`${(res.end_date).substring(0,10)}:00:00`));
 
-
-
         var mes = new Date(res.start_date).getMonth(); 
         var año = new Date(res.start_date).getFullYear();
         res.month = this.meses[mes].mes;
@@ -424,6 +358,19 @@ export class ProjectDetailsComponent implements OnInit {
         res.nReg = this.meses[mes].nReg;
         this.meses[mes].year = res.year;
 
+        if (res.advance_spected != null && res.advance_real != null) {
+          res.deviation_indicator = Math.abs(res.advance_spected - res.advance_real)
+          if(res.deviation_indicator >= 0 &&  res.deviation_indicator <=5){
+            res.deviation_indicator_color = '#8BC34A';
+            res.deviation_indicator_name = 'Bajo';
+          } else if(res.deviation_indicator > 5 &&  res.deviation_indicator <= 9){
+            res.deviation_indicator_color = '#FFEB3B';
+            res.deviation_indicator_name = 'Medio';
+          } else if(res.deviation_indicator > 9 ){
+            res.deviation_indicator_color = '#FF5722';
+            res.deviation_indicator_name = 'Alto';
+          }
+        }
 
         this.weeksByProject.push(res);
       });
@@ -521,4 +468,32 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
+  modificationData(data: any) {
+    environment.consoleMessage(data, "PROJ");
+    data.percentage = ((((data.pmo_hours*60)+(data.pmo_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
+    data.balance = new Intl.NumberFormat('en-US').format( data.budget_approved  - data.budget_executed );
+    data.budget_executed = new Intl.NumberFormat('en-US').format( data.budget_executed);
+    data.budget_approved = new Intl.NumberFormat('en-US').format( data.budget_approved);
+    if(data.start_date != null){
+      data.start_date = this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`));
+    }
+    if(data.due_date != null){
+      data.due_date = this.getToStringDate(new Date(`${(data.due_date).substring(0,10)}:00:00`));
+    }
+    if(data.control_date != null){
+      data.control_date = this.getToStringDate(new Date(`${(data.control_date).substring(0,10)}:00:00`));
+    }
+    data.reception_date = this.getToStringDate(new Date(`${(data.reception_date).substring(0,10)}:00:00`));
+         
+    if (data.test_log == true) {
+      data.test_log = "Si"
+    } else { data.test_log = "Si" }
+
+    if (data.pmo_assitant != null) {
+      data.percentageAssistant = ((((data.pmo_assistant_hours*60)+(data.pmo_assistant_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
+    }
+    
+    this.project = data;
+  }
+  
 }

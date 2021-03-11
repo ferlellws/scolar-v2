@@ -2,6 +2,7 @@ import { environment } from './../../../../environments/environment';
 import { MenuService } from './../../../services/menu.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import {Location} from '@angular/common';
 
 export interface Page {
   id: number;
@@ -36,7 +37,8 @@ export class InfoPageComponent implements OnInit {
 
   constructor(
     private menuService: MenuService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -81,4 +83,7 @@ export class InfoPageComponent implements OnInit {
     this.bgFavorite = this.flagFavorite ? "accent" : "#fff";
   }
 
+  onBack(){
+    this.location.back();
+  }
 }

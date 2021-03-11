@@ -484,7 +484,43 @@ export class MenuService {
 
   set setOption(oOption: any) { this._oOption = oOption }
 
-  getOptionByRoute(route: string) {
+  getOptionByRoute(route: string) :any{
+    if (route.includes("projects-by-vicepresidency")) {
+      environment.consoleMessage("RUTAS ");
+      var oOptionPbV: Page = {
+        id: 0,
+        title: 'Proyectos por Vicepresidencias',
+        description: 'Proyectos filtrados por vicepresidencias y clasificados por áreas',
+        sysmodule_id: 0,
+        route: '',
+        order_menu: 0,
+        is_active: true,
+        bg_color: '',
+        created_at: '',
+        updated_at: '',
+      }
+      this.emitOption.emit(oOptionPbV);
+      return true;
+    }
+
+    if (route.includes("project-details")) {
+      environment.consoleMessage("RUTAS ");
+      var oOptionPD: Page = {
+        id: 0,
+        title: 'Detalle de Proyecto',
+        description: 'Descripción de parametros del proyecto',
+        sysmodule_id: 0,
+        route: '',
+        order_menu: 0,
+        is_active: true,
+        bg_color: '',
+        created_at: '',
+        updated_at: '',
+      }
+      this.emitOption.emit(oOptionPD);
+      return true;
+    }
+
     let oOption: Page = {
       id: 0,
       title: '',

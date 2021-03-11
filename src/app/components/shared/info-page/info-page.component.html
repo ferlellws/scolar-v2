@@ -6,15 +6,15 @@
         <p class="txt-color-white mat-body-1 description">{{ description }}</p>
 
         <div class="buttons-container mt-40">
-          <button mat-mini-fab [color]="'#fff'" aria-label="Menu" class="mr-12">
+          <button mat-mini-fab [color]="'#fff'" aria-label="Menu" class="mr-12" (click)="onBack()">
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <button mat-mini-fab [color]="'#fff'" aria-label="Menu" class="mr-12">
+          <!-- <button mat-mini-fab [color]="'#fff'" aria-label="Menu" class="mr-12">
             <mat-icon>delete_outline</mat-icon>
           </button>
           <button mat-mini-fab [color]="'#fff'" aria-label="Menu">
             <mat-icon>restore_from_trash</mat-icon>
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
