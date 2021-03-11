@@ -42,14 +42,14 @@ export class CompanyTypesComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.companyTypesService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        true;//environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(CompanyTypesFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -61,7 +61,7 @@ export class CompanyTypesComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(CompanyTypesFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -74,7 +74,7 @@ export class CompanyTypesComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.companyTypesService.getCompanyTypesId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -88,11 +88,11 @@ export class CompanyTypesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.companyTypesService.deleteCompanyType(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -100,7 +100,7 @@ export class CompanyTypesComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.companyTypesService.getCompanyTypesId(data)
@@ -116,11 +116,11 @@ export class CompanyTypesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.companyTypesService.logicalDeleteCompanyType(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -128,7 +128,7 @@ export class CompanyTypesComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.companyTypesService.getCompanyTypesId(data.id)
@@ -144,11 +144,11 @@ export class CompanyTypesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.companyTypesService.updateStatusCompanyType(result.data, data.id)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};

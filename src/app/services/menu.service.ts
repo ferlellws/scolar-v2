@@ -26,6 +26,775 @@ export class MenuService {
   private _menu: Menu[] = [];
   private _oOption!: Page;
   emitOption = new EventEmitter<any>();
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Maestros",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Vicepresidencias",
+  //         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi qui praesentium suscipit earum! Ullam possimus",
+  //         sysmodule_id: 1,
+  //         route: "/vice-presidencies",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Estados",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 7,
+  //         title: "Reporte Avance Proyectos",
+  //         description: "Reporte total de avance proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/project-progress-report",
+  //         order_menu: 7,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     module: {
+  //       id: 1,
+  //       title: "Proyectos",
+  //       icon_id: 32,
+  //       is_active: true,
+  //       created_at: "2020-12-04T09:24:24.000Z",
+  //       updated_at: "2020-12-04T09:24:24.000Z"
+  //     },
+  //     pages: [
+  //       {
+  //         id: 1,
+  //         title: "Proyectos",
+  //         description: "Pagina de Proyectos",
+  //         sysmodule_id: 1,
+  //         route: "/projects",
+  //         order_menu: 1,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 2,
+  //         title: "Tiempos",
+  //         description: "Visualizacion y descarga de tiempos",
+  //         sysmodule_id: 1,
+  //         route: "/times",
+  //         order_menu: 2,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 3,
+  //         title: "Statuses",
+  //         description: "Visualizacion y descarga de historico statuses",
+  //         sysmodule_id: 1,
+  //         route: "/statuses",
+  //         order_menu: 3,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 4,
+  //         title: "Requerimientos",
+  //         description: "Visualizacion y descarga de Requerimientos",
+  //         sysmodule_id: 1,
+  //         route: "/items_table",
+  //         order_menu: 4,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 5,
+  //         title: "Summary Report",
+  //         description: "Graficos y tabla resumen",
+  //         sysmodule_id: 1,
+  //         route: "/summary_report",
+  //         order_menu: 5,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       },
+  //       {
+  //         id: 6,
+  //         title: "Reporte Indicadores",
+  //         description: "Indicadores",
+  //         sysmodule_id: 1,
+  //         route: "/indicators_report",
+  //         order_menu: 6,
+  //         is_active: true,
+  //         bg_color: "#F44336",
+  //         created_at: "2020-12-04T09:24:24.000Z",
+  //         updated_at: "2020-12-04T09:24:24.000Z"
+  //       }
+  //     ]
+  //   }
+  // ];
 
   menuFull: Menu[] = [
     {
@@ -226,6 +995,18 @@ export class MenuService {
           route: "/projects",
           order_menu: 16,
           is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 17,
+          title: "Reporte Avance Proyectos",
+          description: "Reporte total de avance proyectos",
+          sysmodule_id: 1,
+          route: "/project-progress-report",
+          order_menu: 17,
+          is_active: false,
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
           updated_at: "2020-12-04T09:24:24.000Z"
@@ -435,7 +1216,7 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         }
       ]
-    },    
+    },
     {
       module: {
         id: 6,
@@ -486,7 +1267,7 @@ export class MenuService {
 
   getOptionByRoute(route: string) :any{
     if (route.includes("projects-by-vicepresidency")) {
-      environment.consoleMessage("RUTAS ");
+      true; //environment.consoleMessage("RUTAS ");
       var oOptionPbV: Page = {
         id: 0,
         title: 'Proyectos por Vicepresidencias',
@@ -504,7 +1285,7 @@ export class MenuService {
     }
 
     if (route.includes("project-details")) {
-      environment.consoleMessage("RUTAS ");
+      true; //environment.consoleMessage("RUTAS ");
       var oOptionPD: Page = {
         id: 0,
         title: 'Detalle de Proyecto',

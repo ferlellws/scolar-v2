@@ -19,6 +19,8 @@
 // @import "../node_modules/bootstrap/scss/reboot";
 // @import "../node_modules/bootstrap/scss/type";
 // @import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/bootstrap-utilities.scss";
 @import "../node_modules/bootstrap/scss/bootstrap-grid.scss";
 
 
@@ -271,6 +273,24 @@ $width-field-1: 220px;
 
 .full-width {
   width: 100%;
+}
+
+.bg {
+  &-red {
+    background-color: #F44336;
+  }
+
+  &-green {
+    background-color: #4CAF50;
+  }
+
+  &-yellow {
+    background-color: #FFC107;
+  }
+
+  &-blue {
+    background-color: #2196F3;
+  }
 }
 
 .txt-primary {

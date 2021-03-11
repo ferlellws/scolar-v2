@@ -40,7 +40,7 @@ export class ProjectsComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.projectService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        true;//environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       });
@@ -48,7 +48,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   onCreate() {
-    environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(ProjectsFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -67,7 +67,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(ProjectsFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -87,7 +87,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.projectService.getProjectsId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -101,11 +101,11 @@ export class ProjectsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.projectService.deleteProjectsId(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -113,7 +113,7 @@ export class ProjectsComponent implements OnInit {
     }
 
   onDeleteLogic(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.projectService.getProjectsId(data)
@@ -129,11 +129,11 @@ export class ProjectsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.projectService.logicalDeleteProject(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -141,7 +141,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.projectService.getProjectsId(data.id)
@@ -157,11 +157,11 @@ export class ProjectsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.projectService.updateStatusProject(result.data, data.id)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};
@@ -177,7 +177,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   changeMode(mode: string) {
-    environment.consoleMessage(mode);
+    true;//environment.consoleMessage(mode);
     this.mode = mode;
   }
 

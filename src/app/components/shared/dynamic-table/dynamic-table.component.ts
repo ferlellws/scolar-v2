@@ -50,7 +50,7 @@ export class DynamicTableComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     this.objectsData = changes.objectsData.currentValue;
     this.updateTable();
-    environment.consoleMessage(this.objectsData, "On change");
+    true;//environment.consoleMessage(this.objectsData, "On change");
   }
 
   updateTable() {
@@ -59,7 +59,7 @@ export class DynamicTableComponent implements OnInit {
     } else {
       this.render = true;
     }
-    environment.consoleMessage(`${this.isUserProfile}`)
+    true;//environment.consoleMessage(`${this.isUserProfile}`)
     if (this.isUserProfile) {
       this.labelDelete = "Eliminar definitivamente";
       this.deleteIcon = "delete_forever";
@@ -86,19 +86,9 @@ export class DynamicTableComponent implements OnInit {
   }
 
   onClickStatus($event: MatSlideToggleChange, id: number) {
-    // environment.consoleMessage(value, "value: ");
-    // environment.consoleMessage(id, "id: ");
     let value: boolean = $event.checked;
     this.fCheckOption = value;
     this.changeCheckInDataTable(value, id);
-
-    // this.objectsData.dataTable.find((row, index) => {
-    //             if (row.idForOptions === id) {
-    //               this.objectsData.dataTable[index].checkOption = value;
-    //             }
-    //           });
-    // environment.consoleMessage(this.objectsData, "onClickStatus: ");
-
   }
 
   changeCheckInDataTable(value: boolean, id: number) {

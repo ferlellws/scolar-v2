@@ -36,7 +36,7 @@ export class ProgramsFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    true;//environment.consoleMessage(this.data, "++++++++++");
     this.programsGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
@@ -57,7 +57,7 @@ export class ProgramsFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.programsGroup, "OnSubmit programas: ");
+    true;//environment.consoleMessage(this.programsGroup, "OnSubmit programas: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -79,10 +79,10 @@ export class ProgramsFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.programsGroup.value, "createRegister: ");
+    true;//environment.consoleMessage(this.programsGroup.value, "createRegister: ");
     this.programsService.addPrograms(this.programsGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -97,7 +97,7 @@ export class ProgramsFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -105,14 +105,14 @@ export class ProgramsFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.programsGroup, `updateRegister para registro con id ${this.data.id}: `);
+    true;//environment.consoleMessage(this.programsGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.programsService.updateProgramsId(
       this.programsGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -127,7 +127,7 @@ export class ProgramsFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");

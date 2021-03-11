@@ -40,7 +40,7 @@ export class AreasFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    true;//environment.consoleMessage(this.data, "++++++++++");
     this.areasGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
@@ -64,7 +64,7 @@ export class AreasFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.areasGroup, "OnSubmit areas: ");
+    true;//environment.consoleMessage(this.areasGroup, "OnSubmit areas: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -86,10 +86,10 @@ export class AreasFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.areasGroup.value, "createRegister: ");
+    true;//environment.consoleMessage(this.areasGroup.value, "createRegister: ");
     this.areasService.addAreas(this.areasGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -104,7 +104,7 @@ export class AreasFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -112,14 +112,14 @@ export class AreasFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.areasGroup, `updateRegister para registro con id ${this.data.id}: `);
+    true;//environment.consoleMessage(this.areasGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.areasService.updateAreasId(
       this.areasGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -134,7 +134,7 @@ export class AreasFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -142,7 +142,7 @@ export class AreasFormComponent implements OnInit {
   }
 
   onClickSelectVicepresidency() {
-    environment.consoleMessage("", "Cargar info de managers");
+    true;//environment.consoleMessage("", "Cargar info de managers");
     this.getSelectVicepresidencies();
   }
 

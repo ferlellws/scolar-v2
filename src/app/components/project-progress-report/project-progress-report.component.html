@@ -1,0 +1,72 @@
+<h2 class="mat-title">Reporte avance de proyectos</h2>
+
+<h3 class="mat-subtitle">Estado de entregas</h3>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <mat-card class="bg-blue text-white">
+        <mat-card-header>
+          <mat-card-title>Producto entregado</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ol>
+            <li *ngFor="let ecDeliveredProduct of dataDeliveryStatuses.ecDeliveredProducts">
+              {{ ecDeliveredProduct.description }}
+            </li>
+          </ol>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <mat-card class="bg-green text-white">
+        <mat-card-header>
+          <mat-card-title>Productos por Entregar</mat-card-title>
+          <mat-card-subtitle>(Próximas 3 Semanas)</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <ol>
+            <li *ngFor="let ecOverdueProduct of dataDeliveryStatuses.ecOverdueProducts">
+              {{ ecOverdueProduct.description }}
+            </li>
+          </ol>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-30">
+    <div class="col-sm-12 col-md-6">
+      <mat-card class="bg-red text-white">
+        <mat-card-header>
+          <mat-card-title>Producto Atrasados</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ol>
+            <li *ngFor="let ecProductsInProgress of dataDeliveryStatuses.ecProductsInProgresses">
+              {{ ecProductsInProgress.description }}
+            </li>
+          </ol>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<mat-tab-group class="mt-100" *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
+  <mat-tab *ngFor="let strategicGuideline of dataInitial.strategicGuidelines">
+    <ng-template mat-tab-label >
+      <!-- <div (click)="getDataReport(strategicGuideline.id)"> -->
+        {{ strategicGuideline.name }}
+      <!-- </div> -->
+    </ng-template>
+
+    <tecno-timeline-charts *ngIf="dataProjectProgressReport"
+      [id]="'projectTimeline'"
+      [title]="'Porcentajes Estados Requerimientos'"
+      [dataInitial]="dataInitial"
+      [dataTable]="dataProjectProgressReport"
+      [chartClass]="'content-center mt-30'">
+    </tecno-timeline-charts>
+
+  </mat-tab>
+</mat-tab-group>

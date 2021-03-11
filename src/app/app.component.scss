@@ -1,5 +1,6 @@
 $width-side-nav: 300px;
 $height-profile-container: 157px;
+$height-toolbar: 70px;
 
 .main-container {
   height: 99%;
@@ -11,7 +12,7 @@ $height-profile-container: 157px;
 
 .example-container {
     width: 100%;
-    height: calc(100% - 64px);
+    height: calc(100% - #{$height-toolbar});
     // border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
@@ -72,7 +73,7 @@ $height-profile-container: 157px;
 }
 
 .mat-toolbar {
-    height: 70px;
+    height: $height-toolbar;
 }
 
 .page-container {

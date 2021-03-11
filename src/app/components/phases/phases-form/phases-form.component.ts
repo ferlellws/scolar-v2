@@ -36,7 +36,7 @@ export class PhasesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    true;//environment.consoleMessage(this.data, "++++++++++");
     this.phasesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
@@ -58,7 +58,7 @@ export class PhasesFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.phasesGroup, "OnSubmit fases: ");
+    true;//environment.consoleMessage(this.phasesGroup, "OnSubmit fases: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -80,10 +80,10 @@ export class PhasesFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.phasesGroup.value, "createRegister: ");
+    true;//environment.consoleMessage(this.phasesGroup.value, "createRegister: ");
     this.phasesService.addPhases(this.phasesGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -98,7 +98,7 @@ export class PhasesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -106,14 +106,14 @@ export class PhasesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.phasesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    true;//environment.consoleMessage(this.phasesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.phasesService.updatePhaseId(
       this.phasesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -128,7 +128,7 @@ export class PhasesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");

@@ -25,14 +25,14 @@ export class CompaniesByProjectComponent implements OnInit {
     await this._companiesService.getCompaniesSelect()
     .subscribe(companies => this.companies = companies);
     var selectedIDs: number[] = this.companiesSelected.map(company => company.id!);
-    environment.consoleMessage(selectedIDs, "selectedIDs")
+    true;//environment.consoleMessage(selectedIDs, "selectedIDs")
     this.companiesForm.setValue(selectedIDs);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.companiesSelected = changes.companiesSelected.currentValue;
     var selectedIDs: number[] = this.companiesSelected.map(company => company.id!);
-    environment.consoleMessage(selectedIDs, "selectedIDs")
+    true;//environment.consoleMessage(selectedIDs, "selectedIDs")
     this.companiesForm.setValue(selectedIDs);
   }
 

@@ -44,7 +44,7 @@ export class AreasByProjectComponent implements OnInit {
         }
       });
     var selectedIDs: number[] = this.areasSelected.map(area => area.id!);
-    environment.consoleMessage(selectedIDs, "selectedIDs areas")
+    true;//environment.consoleMessage(selectedIDs, "selectedIDs areas")
    
     
   }
@@ -52,7 +52,7 @@ export class AreasByProjectComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     this.areasSelected = changes.areasSelected.currentValue;
     var selectedIDs: number[] = this.areasSelected.map(area => area.id!);
-    environment.consoleMessage(selectedIDs, "selectedIDs")
+    true;//environment.consoleMessage(selectedIDs, "selectedIDs")
     this.areasForm.setValue(selectedIDs);
     for (let index = 0; index < this.areasSelected.length; index++) {
       this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies

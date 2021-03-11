@@ -224,7 +224,7 @@ export class ProjectDetailsComponent implements OnInit {
 
     // this.projectsService.emitDataTable
     //   .subscribe((res: any) => {
-    //     environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>                                          >>>>>>>>>>>>>>>>>>");
+    //     true; //environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>                                          >>>>>>>>>>>>>>>>>>");
     //     this.modificationData(res.location);
     //     this.project = res.location;
     //     this.dialog.closeAll();
@@ -347,12 +347,12 @@ export class ProjectDetailsComponent implements OnInit {
         res.month = this.meses[mes].mes;
         res.year = año;
 
-        environment.consoleMessage(this.year, "YEAR");
+        true; //environment.consoleMessage(this.year, "YEAR");
         if (res.year != this.meses[mes].year) {
           this.meses[mes].nReg = 0;
           this.year = res.year;
         }
-        environment.consoleMessage(this.year, "YEAR");
+        true; //environment.consoleMessage(this.year, "YEAR");
 
         this.meses[mes].nReg++;
         res.nReg = this.meses[mes].nReg;
@@ -378,7 +378,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onValorem(){
-    environment.consoleMessage("onValorem");
+    true;//environment.consoleMessage("onValorem");
     const dialogRef = this.dialog.open(ValoremFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -436,18 +436,18 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   nextWeek(){
-      environment.consoleMessage("nextWeek");
-      environment.consoleMessage(this.weekId,"weekId");
+      true; //environment.consoleMessage("nextWeek");
+      true; //environment.consoleMessage(this.weekId,"weekId");
       this.weekId++;
-      environment.consoleMessage(this.weekId,"weekId");
+      true; //environment.consoleMessage(this.weekId,"weekId");
   }
 
   beforeWeek(){
     
-      environment.consoleMessage("beforeWeek");
-      environment.consoleMessage(this.weekId,"weekId");
+      true; //environment.consoleMessage("beforeWeek");
+      true; //environment.consoleMessage(this.weekId,"weekId");
       this.weekId--;
-      environment.consoleMessage(this.weekId,"weekId");
+      true; //environment.consoleMessage(this.weekId,"weekId");
   }
 
   getToStringDate(date: any): string {
@@ -469,7 +469,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   modificationData(data: any) {
-    environment.consoleMessage(data, "PROJ");
+    true; //environment.consoleMessage(data, "PROJ");
     data.percentage = ((((data.pmo_hours*60)+(data.pmo_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
     data.balance = new Intl.NumberFormat('en-US').format( data.budget_approved  - data.budget_executed );
     data.budget_executed = new Intl.NumberFormat('en-US').format( data.budget_executed);

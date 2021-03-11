@@ -118,17 +118,17 @@ export class WeekFormComponent implements OnInit {
     }else{
       this.indicator = null;
     }
-    environment.consoleMessage("entre", "changeAdvance")
+    true; //environment.consoleMessage("entre", "changeAdvance")
   }
 
   onGoal(data: any){
-    environment.consoleMessage(data, "OnGoals");
+    true; //environment.consoleMessage(data, "OnGoals");
   }
   onObservations(data: any){
-    environment.consoleMessage(data, "onObservation");
+    true; //environment.consoleMessage(data, "onObservation");
   }
   onNextActivities(data: any){
-    environment.consoleMessage(data, "onNextActivities");
+    true; //environment.consoleMessage(data, "onNextActivities");
   }
 
 
@@ -143,7 +143,7 @@ export class WeekFormComponent implements OnInit {
   }
 
   async crear(){
-    environment.consoleMessage("crear")
+    true; //environment.consoleMessage("crear")
     var week: Week = {
       project_id: this.data.idProject,
       advance_real: this.general.get('advance_real')!.value,
@@ -155,7 +155,7 @@ export class WeekFormComponent implements OnInit {
       user_creates_id: JSON.parse(localStorage.user).id,
     }
     await this._weeksService.addWeek(week).subscribe((res) => {
-      environment.consoleMessage(res, "respuesta");
+      true; //environment.consoleMessage(res, "respuesta");
       for (let index = 0; index < this.goals.length; index++) {
         var goal: Goal = {
           week_id: res.id,
@@ -166,7 +166,8 @@ export class WeekFormComponent implements OnInit {
           is_delete: false,
         } 
         this._goalsService.addGoal(goal).subscribe(data =>{
-          environment.consoleMessage(data, "goal")}, (err) => {
+            true; //environment.consoleMessage(data, "goal")
+          }, (err) => {
             this.fButtonDisabled = false;
             let aErrors: any[] = [];
             for(let i in err.error) {
@@ -176,7 +177,7 @@ export class WeekFormComponent implements OnInit {
             let sErrors: string = "";
             aErrors.forEach((err) => {
               sErrors += "- " + err + "\n";
-              environment.consoleMessage(err, "Error: ");
+              true; //environment.consoleMessage(err, "Error: ");
             })
       
             this.openSnackBar(false, sErrors, "");
@@ -191,7 +192,8 @@ export class WeekFormComponent implements OnInit {
           is_delete: false,
         } 
         this._nextActivitiesService.addNextActivity(nextActivity).subscribe(data =>{
-          environment.consoleMessage(data, "activity")}, (err) => {
+          true; //environment.consoleMessage(data, "activity")
+        }, (err) => {
             this.fButtonDisabled = false;
             let aErrors: any[] = [];
             for(let i in err.error) {
@@ -201,7 +203,7 @@ export class WeekFormComponent implements OnInit {
             let sErrors: string = "";
             aErrors.forEach((err) => {
               sErrors += "- " + err + "\n";
-              environment.consoleMessage(err, "Error: ");
+              true; //environment.consoleMessage(err, "Error: ");
             })
       
             this.openSnackBar(false, sErrors, "");
@@ -215,8 +217,8 @@ export class WeekFormComponent implements OnInit {
           is_delete: false,
         } 
         this._observationsService.addObservation(observation).subscribe(data =>{
-          environment.consoleMessage(data, "observation")}
-          , (err) => {
+          true; //environment.consoleMessage(data, "observation")
+        }, (err) => {
             this.fButtonDisabled = false;
             let aErrors: any[] = [];
             for(let i in err.error) {
@@ -226,7 +228,7 @@ export class WeekFormComponent implements OnInit {
             let sErrors: string = "";
             aErrors.forEach((err) => {
               sErrors += "- " + err + "\n";
-              environment.consoleMessage(err, "Error: ");
+              true; //environment.consoleMessage(err, "Error: ");
             })
       
             this.openSnackBar(false, sErrors, "");
@@ -244,7 +246,7 @@ export class WeekFormComponent implements OnInit {
       let sErrors: string = "";
       aErrors.forEach((err) => {
         sErrors += "- " + err + "\n";
-        environment.consoleMessage(err, "Error: ");
+        true; //environment.consoleMessage(err, "Error: ");
       })
 
       this.openSnackBar(false, sErrors, "");
