@@ -1121,6 +1121,8 @@ export class ProjectsFormComponent implements OnInit {
         this.project.evaluation != this.seguimiento.get('evaluation')?.value ? editProject.evaluation = this.seguimiento.get('evaluation')!.value : true ;
         this.project.test_log != this.seguimiento.get('testLog')?.value ? editProject.test_log = this.seguimiento.get('testLog')!.value : true ;
 
+        editProject.user_updates_id = JSON.parse(localStorage.user).id,
+
         environment.consoleMessage(editProject, "editProject >>>>>>>>>>>>>>")
 
         await this._projectsService.updateProjectsId(editProject, this.project.id!)

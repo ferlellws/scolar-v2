@@ -3,8 +3,8 @@ import { Week } from "./week";
 
 export class Goal {
     id?: number;
-    week!: Week;
-    week_id!: number;
+    week?: Week;
+    week_id?: number;
     description!: string;
     value_goal!: boolean;
     date!: string;

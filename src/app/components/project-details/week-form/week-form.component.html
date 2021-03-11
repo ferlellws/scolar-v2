@@ -114,4 +114,13 @@
             (emitChange)="onObservations($event)"></tecno-text-list>
         </div>
     </div>
+    <div class="buttons">
+        <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+        <button class="button"
+            (click)="crear()"
+          mat-button color="primary"
+          [disabled]="general.invalid || fButtonDisabled">
+          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+        </button>
+    </div>
 </div>

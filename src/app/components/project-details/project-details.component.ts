@@ -32,18 +32,18 @@ export interface Indicator {
 export class ProjectDetailsComponent implements OnInit {
 
   project: any;
-  applicationsByProject!: any[];
-  areasByProject!: any[];
-  companiesByProject!: any[];
-  testUsersByProject!: any[];
-  benefitsByProject!: any[];
-  highlightsByProject!: any[];
-  kpisByProject!: any[];
-  risksByProject!: any[];
-  weeksByProject!: any[];
-  goalsByWeeks!: any[];
-  nextActivitiesByWeek!: any[];
-  obseravtionsByWeek!: any[];
+  applicationsByProject: any[] = [];
+  areasByProject: any[] = [];
+  companiesByProject: any[] = [];
+  testUsersByProject: any[] = [];
+  benefitsByProject: any[] = [];
+  highlightsByProject: any[] = [];
+  kpisByProject: any[] = [];
+  risksByProject: any[] = [];
+  weeksByProject: any[] = [];
+  goalsByWeeks: any[] = [];
+  nextActivitiesByWeek: any[] = [];
+  obseravtionsByWeek: any[] = [];
   
   meses = [
     {mes: "Enero", nReg: 0},
@@ -228,7 +228,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Logros  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.goalsByWeeks, "data goals");
       this.goalsByWeeks = data.goalsByWeeks.filter((goals: Goal) => 
-        goals.week.project!.id == data.project.id
+        goals.week!.project!.id == data.project.id
       )
       environment.consoleMessage(this.goalsByWeeks, "GOALS ")
 
@@ -236,7 +236,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Prixomas Actividades  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.nextActivitiesByWeek, "data next_activities");
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => 
-        next_activity.week.project!.id == data.project.id
+        next_activity.week!.project!.id == data.project.id
       )
       environment.consoleMessage(this.nextActivitiesByWeek, "NEXT ACTIVITIES ")
 
@@ -244,7 +244,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Observaciones  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.obseravtionsByWeek, "data observations");
       this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => 
-        observation.week.project!.id == data.project.id
+        observation.week!.project!.id == data.project.id
       )
       environment.consoleMessage(this.obseravtionsByWeek, "OBSERVATIONS ")
       
@@ -298,7 +298,7 @@ export class ProjectDetailsComponent implements OnInit {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {   
-        id: this.project.id,
+        idProject: this.project.id,
         mode: 'create',
         labelAction: 'Crear'
       }

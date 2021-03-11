@@ -3,8 +3,8 @@ import { Week } from "./week";
 
 export class NextActivity {
     id?: number;
-    week!: Week;
-    week_id!: number;
+    week?: Week;
+    week_id?: number;
     description!: string;
     date!: string;
     is_active: boolean;
