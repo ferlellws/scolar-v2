@@ -1,8 +1,22 @@
 <h1>Reporte avance de proyectos</h1>
+<!-- <div *ngIf="dataInitial">
+  {{ dataInitial | json }}
+</div> -->
+<mat-tab-group class="mt-50" *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
+  <mat-tab *ngFor="let strategicGuideline of dataInitial.strategicGuidelines">
+    <ng-template mat-tab-label >
+      <div (click)="getDataReport(strategicGuideline.id)">
+        {{ strategicGuideline.name }}
+      </div>
+    </ng-template>
 
-<tecno-timeline-charts
-  [id]="'projectTimeline'"
-  [title]="'Porcentajes Estados Requerimientos'"
-  [dataTable]="dataIndividualIndicators"
-  [chartClass]="'content-center mt-30'">
-</tecno-timeline-charts>
+    <tecno-timeline-charts *ngIf="dataProjectProgressReport"
+      [id]="'projectTimeline'"
+      [title]="'Porcentajes Estados Requerimientos'"
+      [dataInitial]="dataInitial"
+      [dataTable]="dataProjectProgressReport"
+      [chartClass]="'content-center mt-30'">
+    </tecno-timeline-charts>
+
+  </mat-tab>
+</mat-tab-group>

@@ -7,6 +7,15 @@ import { PieChartsComponent } from './pie-charts/pie-charts.component';
 import { ColumnChartsComponent } from './column-charts/column-charts.component';
 import { TimelineChartsComponent } from './timeline-charts/timeline-charts.component';
 
+// MATERIAL
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+
+const Material = [
+  MatTabsModule,
+  MatCardModule
+]
+
 const googleChartsComponents = [
   LineChartComponent,
   ColumnChartsComponent,
@@ -20,10 +29,12 @@ const googleChartsComponents = [
   ],
   imports: [
     CommonModule,
+    Material
     // googleChartsComponents
   ],
   exports: [
-    googleChartsComponents
+    googleChartsComponents,
+    Material
   ]
 })
 export class GoogleChartsModule { }

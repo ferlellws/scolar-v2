@@ -1,8 +1,16 @@
+import { ProjectProgressReport } from './../../../../models/project-progress-report';
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { TableData } from 'src/app/models/table-data';
 import { GoogleChartService } from 'src/app/services/google-chart.service';
 import { MainService } from 'src/app/services/main.service';
 import { PieSliceTextStyle } from '../pie-charts/pie-charts.component';
+import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
+
+export interface DataInitial {
+  externalCompanyStates: any;
+  externalCompanySchedules: any;
+  strategicGuidelines: StrategicGuidelines[]
+}
 
 @Component({
   selector: 'tecno-timeline-charts',
@@ -24,7 +32,8 @@ export class TimelineChartsComponent implements OnInit {
   @Input() curveType!: string;
   @Input() legend!: string;
   @Input() fMaterial!: boolean;
-  @Input() dataTable!: any [];
+  @Input() dataInitial!: DataInitial;
+  @Input() dataTable!: any;
   @Input() width: string = "95%";
   @Input() height: string = "500px";
   @Input() chartClass: string = "";
@@ -95,26 +104,10 @@ export class TimelineChartsComponent implements OnInit {
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   console.log("dataTable: ", this.dataTable);
-  //   this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
-  // }
-
-  // static footerToDataChart(data: TableData): any{
-  //   var keys: string[] = Object.keys(data.footer);
-  //   var total = data.footer[keys[keys.length -1]];
-  //   var result = [];
-  //   result.push(["ColumnHeader1", "ColumnHeader1"]);
-  //   for(let index = 1; index < keys.length -1; index++) {
-  //     result.push(
-  //       [
-  //         data.headers[index],
-  //         parseFloat(((data.footer[keys[index]] / total) * 100).toFixed(1)),
-  //       ]
-  //     );
-  //   }
-  //   return result;
-  // }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataTable = changes.dataTable.currentValue;
+    this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
+  }
 
   private drawChart() {
 
@@ -127,7 +120,9 @@ export class TimelineChartsComponent implements OnInit {
     dataTable.addColumn({ type: 'date', id: 'Start' });
     dataTable.addColumn({ type: 'date', id: 'End' });
 
-    this.dataTable.forEach(data => {
+    console.log("////////////", this.dataTable);
+
+    this.dataTable.dataChart.forEach((data: any) => {
       dataTable.addRows([data]);
     });
 

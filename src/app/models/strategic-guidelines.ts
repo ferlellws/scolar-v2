@@ -1,7 +1,7 @@
 import { User } from "./user";
 
 export class StrategicGuidelines {
-    id?: number;
+    id!: number;
     name!: string;
     description!: string;
     is_active?: boolean;
