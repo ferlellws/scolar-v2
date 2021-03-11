@@ -82,10 +82,11 @@ export class ProjectProgressReportComponent implements OnInit {
 
   dataProjectProgressReport!: any;
   dataInitial!: DataInitial;
+  dataDeliveryStatuses!: any;
 
   constructor(
     private mainService: MainService,
-    private projectProgressReport: ProjectProgressReportService
+    private projectProgressReport: ProjectProgressReportService,
   ) { }
 
   ngOnInit(): void {
@@ -96,45 +97,33 @@ export class ProjectProgressReportComponent implements OnInit {
 
       this.projectProgressReport.getDataProjectProgressReport(this.dataInitial.strategicGuidelines[0].id)
       .subscribe((data: ProjectProgressReport) => {
-        this.dataProjectProgressReport = this.getFormatData(data),
-        console.log(">>>>>>>>>> getDataReport", this.dataProjectProgressReport);
+        this.dataProjectProgressReport = this.getFormatData(data);
       });
-      console.log(">>>>>>>>>>dataInitial: ", this.dataInitial);
     });
 
-    // this.projectProgressReport.getDataProjectProgressReport()
-    //   .subscribe((data: ProjectProgressReport) => {
-    //     this.dataProjectProgressReport = this.getFormatData(data),
-    //     console.log(">>>>>>>>>>", this.dataProjectProgressReport);
+    this.projectProgressReport.getDeliveryStatuses()
+    .subscribe((data: DataInitial) => {
+      this.dataDeliveryStatuses = data;
+    });
 
-    //   });
     setTimeout(() => {this.mainService.hideLoading()}, 1000);
   }
 
   onTabChanged(event: MatTabChangeEvent) {
-    console.log(",,,,,,,,,,,", event);
-  }
-
-  getDataReport(strategicGuidelineId: any) {
-    console.log("hizo click", strategicGuidelineId);
-    this.projectProgressReport.getDataProjectProgressReport(strategicGuidelineId)
+    this.projectProgressReport.getDataProjectProgressReport(this.dataInitial.strategicGuidelines[event.index].id)
       .subscribe((data: ProjectProgressReport) => {
-        this.dataProjectProgressReport = this.getFormatData(data),
-        console.log(">>>>>>>>>> getDataReport", this.dataProjectProgressReport);
+        this.dataProjectProgressReport = this.getFormatData(data);
       });
   }
 
   getFormatData(dataReport: ProjectProgressReport): any {
-    let arrayData: any;
     let dataTable: any;
-    console.log("++++++++++++++++++++", dataReport.dataChart);
 
     dataTable = {
       strategicGuideline: dataReport.strategicGuideline,
       dataChart: []
     }
-    dataReport.dataChart.forEach(data => {
-      console.log({data});
+    dataReport.dataChart.forEach((data: any) => {
       dataTable.dataChart.push([
         data.projectName,
         data.textBox,
