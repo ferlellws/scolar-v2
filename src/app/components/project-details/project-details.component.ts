@@ -11,10 +11,8 @@ import { Highlight } from 'src/app/models/highlight';
 import { Kpi } from 'src/app/models/kpi';
 import { NextActivity } from 'src/app/models/next-activity';
 import { Observation } from 'src/app/models/observation';
-import { Project } from 'src/app/models/project';
 import { Risk } from 'src/app/models/risk';
 import { Week } from 'src/app/models/week';
-import { ApplicationsByProjectService } from 'src/app/services/applications-by-project.service';
 import { MainService } from 'src/app/services/main.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
@@ -45,9 +43,21 @@ export class ProjectDetailsComponent implements OnInit {
   goalsByWeeks!: any[];
   nextActivitiesByWeek!: any[];
   obseravtionsByWeek!: any[];
-  weeksByMonths!: any[12][];
   
-  meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  meses = [
+    {mes: "Enero", nReg: 0},
+    {mes: "Febrero", nReg: 0},
+    {mes: "Marzo", nReg: 0},
+    {mes: "Abril", nReg: 0},
+    {mes: "Mayo", nReg: 0},
+    {mes: "Junio", nReg: 0},
+    {mes: "Julio", nReg: 0},
+    {mes: "Agosto", nReg: 0},
+    {mes: "Septiembre", nReg: 0},
+    {mes: "Octubre", nReg: 0},
+    {mes: "Noviembre", nReg: 0},
+    {mes: "Diciembre", nReg: 0}
+  ];
 
   indicator: Indicator | null = null;
   weekId!: number;  
@@ -79,7 +89,7 @@ export class ProjectDetailsComponent implements OnInit {
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
           var mes = new Date(data.start_date).getMonth(); 
-          data.month = this.meses[mes];
+          data.month = this.meses[mes].mes;
   
           if (data.advance_spected != null && data.advance_real != null) {
             data.deviation_indicator = Math.abs(data.advance_spected - data.advance_real)
@@ -111,8 +121,18 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
       this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
-        weeks.project!.id == data.project.id
+      weeks.project!.id == data.project.id
       );
+
+      this.weeksByProject.map((data: any) =>{
+        var mes = new Date(data.start_date).getMonth(); 
+        var año = new Date(data.start_date).getFullYear();
+        data.month = this.meses[mes].mes;
+        data.year = año;
+        this.meses[mes].nReg++;
+        data.nReg = this.meses[mes].nReg;
+      });
+      environment.consoleMessage(this.meses, "ARREGLO MESES");
 
       this.weekId = this.weeksByProject.length-1;
       environment.consoleMessage(this.weekId, ">>>>>>>>>> WEEK ID <<<<<<<<<<");
@@ -207,7 +227,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Logros  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.goalsByWeeks, "data goals");
       this.goalsByWeeks = data.goalsByWeeks.filter((goals: Goal) => 
-        goals.week.project.id == data.project.id
+        goals.week.project!.id == data.project.id
       )
       environment.consoleMessage(this.goalsByWeeks, "GOALS ")
 
@@ -215,7 +235,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Prixomas Actividades  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.nextActivitiesByWeek, "data next_activities");
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => 
-        next_activity.week.project.id == data.project.id
+        next_activity.week.project!.id == data.project.id
       )
       environment.consoleMessage(this.nextActivitiesByWeek, "NEXT ACTIVITIES ")
 
@@ -223,7 +243,7 @@ export class ProjectDetailsComponent implements OnInit {
       //Observaciones  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
       environment.consoleMessage(data.obseravtionsByWeek, "data observations");
       this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => 
-        observation.week.project.id == data.project.id
+        observation.week.project!.id == data.project.id
       )
       environment.consoleMessage(this.obseravtionsByWeek, "OBSERVATIONS ")
       
