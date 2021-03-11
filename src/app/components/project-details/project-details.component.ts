@@ -13,7 +13,16 @@ import { NextActivity } from 'src/app/models/next-activity';
 import { Observation } from 'src/app/models/observation';
 import { Risk } from 'src/app/models/risk';
 import { Week } from 'src/app/models/week';
+import { BenefitsService } from 'src/app/services/benefits.service';
+import { GoalsService } from 'src/app/services/goals.service';
+import { HighlightsService } from 'src/app/services/highlights.service';
+import { KpisService } from 'src/app/services/kpis.service';
 import { MainService } from 'src/app/services/main.service';
+import { NextActivitiesService } from 'src/app/services/next-activities.service';
+import { ObservationsService } from 'src/app/services/observations.service';
+import { ProjectsService } from 'src/app/services/projects.service';
+import { RisksService } from 'src/app/services/risks.service';
+import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
@@ -31,32 +40,33 @@ export interface Indicator {
 export class ProjectDetailsComponent implements OnInit {
 
   project: any;
-  applicationsByProject!: any[];
-  areasByProject!: any[];
-  companiesByProject!: any[];
-  testUsersByProject!: any[];
-  benefitsByProject!: any[];
-  highlightsByProject!: any[];
-  kpisByProject!: any[];
-  risksByProject!: any[];
-  weeksByProject!: any[];
-  goalsByWeeks!: any[];
-  nextActivitiesByWeek!: any[];
-  obseravtionsByWeek!: any[];
+  applicationsByProject: any[] = [];
+  areasByProject: any[] = [];
+  companiesByProject: any[] = [];
+  testUsersByProject: any[] = [];
+  benefitsByProject: any[] = [];
+  highlightsByProject: any[] = [];
+  kpisByProject: any[] = [];
+  risksByProject: any[] = [];
+  weeksByProject: any[] = [];
+  goalsByWeeks: any[] = [];
+  nextActivitiesByWeek: any[] = [];
+  obseravtionsByWeek: any[] = [];
+  year: number = -1;
   
   meses = [
-    {mes: "Enero", nReg: 0},
-    {mes: "Febrero", nReg: 0},
-    {mes: "Marzo", nReg: 0},
-    {mes: "Abril", nReg: 0},
-    {mes: "Mayo", nReg: 0},
-    {mes: "Junio", nReg: 0},
-    {mes: "Julio", nReg: 0},
-    {mes: "Agosto", nReg: 0},
-    {mes: "Septiembre", nReg: 0},
-    {mes: "Octubre", nReg: 0},
-    {mes: "Noviembre", nReg: 0},
-    {mes: "Diciembre", nReg: 0}
+    {mes: "Enero", nReg: 0, year: -1},
+    {mes: "Febrero", nReg: 0, year: -1},
+    {mes: "Marzo", nReg: 0, year: -1},
+    {mes: "Abril", nReg: 0, year: -1},
+    {mes: "Mayo", nReg: 0, year: -1},
+    {mes: "Junio", nReg: 0, year: -1},
+    {mes: "Julio", nReg: 0, year: -1},
+    {mes: "Agosto", nReg: 0, year: -1},
+    {mes: "Septiembre", nReg: 0, year: -1},
+    {mes: "Octubre", nReg: 0, year: -1},
+    {mes: "Noviembre", nReg: 0, year: -1},
+    {mes: "Diciembre", nReg: 0, year: -1}
   ];
 
   indicator: Indicator | null = null;
@@ -72,6 +82,15 @@ export class ProjectDetailsComponent implements OnInit {
     private mainService: MainService,
     private router: Router,
     public datepipe: DatePipe,
+    private projectsService:ProjectsService,
+    private benefitsService:BenefitsService,
+    private highlightsService:HighlightsService,
+    private kpisService:KpisService,
+    private risksService:RisksService,
+    private weeksService:WeeksService,
+    private goalsService:GoalsService,
+    private nextActivitiesService:NextActivitiesService,
+    private observationsService:ObservationsService,
   ) { }
 
   ngOnInit(): void {
@@ -81,10 +100,16 @@ export class ProjectDetailsComponent implements OnInit {
       data.project.balance = new Intl.NumberFormat('en-US').format( data.project.budget_approved  - data.project.budget_executed );
       data.project.budget_executed = new Intl.NumberFormat('en-US').format( data.project.budget_executed);
       data.project.budget_approved = new Intl.NumberFormat('en-US').format( data.project.budget_approved);
-      data.project.start_date = this.getToStringDate(data.project.start_date);
-      data.project.due_date = this.getToStringDate(data.project.due_date);
-      data.project.control_date = this.getToStringDate(data.project.control_date);
-      data.project.reception_date = this.getToStringDate(data.project.reception_date);
+      if(data.project.start_date != null){
+        data.project.start_date = this.getToStringDate(new Date(`${(data.project.start_date).substring(0,10)}:00:00`));
+      }
+      if(data.project.due_date != null){
+        data.project.due_date = this.getToStringDate(new Date(`${(data.project.due_date).substring(0,10)}:00:00`));
+      }
+      if(data.project.control_date != null){
+        data.project.control_date = this.getToStringDate(new Date(`${(data.project.control_date).substring(0,10)}:00:00`));
+      }
+      data.project.reception_date = this.getToStringDate(new Date(`${(data.project.reception_date).substring(0,10)}:00:00`));
            
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
@@ -129,9 +154,19 @@ export class ProjectDetailsComponent implements OnInit {
         var año = new Date(data.start_date).getFullYear();
         data.month = this.meses[mes].mes;
         data.year = año;
+
+        environment.consoleMessage(this.year, "YEAR");
+        if (data.year != this.meses[mes].year) {
+          this.meses[mes].nReg = 0;
+          this.year = data.year;
+        }
+        environment.consoleMessage(this.year, "YEAR");
+
         this.meses[mes].nReg++;
         data.nReg = this.meses[mes].nReg;
+        this.meses[mes].year = data.year;
       });
+
       environment.consoleMessage(this.meses, "ARREGLO MESES");
 
       this.weekId = this.weeksByProject.length-1;
@@ -233,7 +268,7 @@ export class ProjectDetailsComponent implements OnInit {
 
 
       //Prixomas Actividades  >>>>>>>>>>>>>>>>>>>  FALTA FILTRO POR SEMANA  <<<<<<<<<<<<<<<<<<<<<<<<<<<
-      environment.consoleMessage(data.nextActivitiesByWeek, "data next_activities");
+      environment.consoleMessage(data.nextActivitiesByWeek, "data next_activities");    
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => 
         next_activity.week.project!.id == data.project.id
       )
@@ -250,6 +285,118 @@ export class ProjectDetailsComponent implements OnInit {
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
+
+    // this.projectsService.emitDataTable
+    //   .subscribe((res: any) => {
+    //     environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+    //     this.project = res.data;
+    //     this.dialog.closeAll();
+    //   });
+    
+    this.benefitsService.emitBenefits
+      .subscribe((res: any) => {
+        this.benefitsByProject.push(res);
+      });
+    
+    this.benefitsService.emitDeleteBenefits
+      .subscribe((res: any) => {
+        this.benefitsService.getBenefits()
+          .subscribe((data) => {
+            this.benefitsByProject = data.filter((benefits: Benefit) => {
+              return benefits.project!.id == this.project.id
+            })        
+          })
+      });
+
+    this.highlightsService.emitHighlights
+      .subscribe((res: any) => {
+        this.highlightsByProject.push(res);
+      });
+
+    this.highlightsService.emitDeleteHighlights
+      .subscribe((res: any) => {
+        this.highlightsService.getHighlights()
+          .subscribe((data) => {
+            this.highlightsByProject = data.filter((highlights: Highlight) => {
+              return highlights.project!.id == this.project.id
+            })
+          })
+      });
+
+    this.kpisService.emitKpis
+      .subscribe((res: any) => {
+        this.kpisByProject.push(res);
+      });
+    
+    this.kpisService.emitDeleteKpis
+      .subscribe((res: any) => {
+        this.kpisService.getKpis()
+          .subscribe((data) => {
+            this.kpisByProject = data.filter((kpis: Kpi) => {
+              return kpis.project!.id == this.project.id
+            })
+          })
+      });
+
+    this.risksService.emitRisks
+      .subscribe((res: any) => {
+        this.risksByProject.push(res);
+      });
+
+    this.risksService.emitDeleteRisks
+      .subscribe((res: any) => {
+        this.risksService.getRisks()
+          .subscribe((data) => {
+            this.risksByProject = data.filter((risks: Risk) => {
+              return risks.project!.id == this.project.id
+            })
+          })
+      });
+    
+    this.goalsService.emitGoal
+      .subscribe((res: any) => {
+        this.goalsByWeeks.push(res);
+      });
+
+    this.goalsService.emitGoalDelete
+      .subscribe((res: any) => {
+        this.goalsService.getGoalsAll()
+          .subscribe((data) => {
+            this.goalsByWeeks = data.filter((goals: Goal) => {
+              return goals.week.project!.id == this.project.id
+            })
+          })
+      });
+    
+    this.nextActivitiesService.emitNextActivities
+      .subscribe((res: any) => {
+        this.nextActivitiesByWeek.push(res);
+      });
+
+    this.nextActivitiesService.emitNextActivitiesDelete
+      .subscribe((res: any) => {
+        this.nextActivitiesService.getNextActivitiesAll()
+          .subscribe((data) => {
+            this.nextActivitiesByWeek = data.filter((next_activities: NextActivity) => {
+              return next_activities.week.project!.id == this.project.id
+            })
+          })
+      });
+    
+    this.observationsService.emitObservations
+      .subscribe((res: any) => {
+        this.obseravtionsByWeek.push(res);
+      });
+
+    this.observationsService.emitObservationsDelete
+      .subscribe((res: any) => {
+        this.observationsService.getObservationsAll()
+          .subscribe((data) => {
+            this.obseravtionsByWeek = data.filter((observations: Observation) => {
+              return observations.week.project!.id == this.project.id
+            })
+          })
+      });
 
   }
 
@@ -328,4 +475,22 @@ export class ProjectDetailsComponent implements OnInit {
       return "";
     }
   }
+
+  backTofrontDateXD(date: any) {    
+    if(date == null || date == '') {
+      return null;
+    } else {
+      var newDate;
+      var fullDate:string ;
+      var newDateEdit;
+      newDate = new Date(date);
+      environment.consoleMessage(newDate, "NEW DATE")
+      fullDate = `${newDate.getUTCFullYear()}-${newDate.getMonth()}-${newDate.getDate()}`;
+      environment.consoleMessage(fullDate, "FULL DATE")
+      newDateEdit = new Date(fullDate + ':00:00');
+      environment.consoleMessage(newDateEdit, "NEW DATE EDIT")
+      return newDateEdit;
+    }
+  }
+
 }

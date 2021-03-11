@@ -12,7 +12,8 @@ export class ObservationsService {
 
   private readonly API = `${environment.API}/observations`;
 
-  emitDataTable = new EventEmitter<any>();
+  emitObservations = new EventEmitter<any>();
+  emitObservationsDelete = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -53,7 +54,7 @@ export class ObservationsService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitObservations.emit(data);
       })
     );
   }
@@ -63,7 +64,7 @@ export class ObservationsService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitObservations.emit(data);
       })
     );
   }
@@ -72,7 +73,7 @@ export class ObservationsService {
     return this.http.post<Observation>(this.API, { observation: observation }, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitObservations.emit(data);
         })
       );
   }
@@ -82,7 +83,7 @@ export class ObservationsService {
     return this.http.put<Observation>(`${this.API}/${id}`, observation, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitObservations.emit(data);
         })
       );
   }
@@ -93,7 +94,7 @@ export class ObservationsService {
       this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitObservations.emit(data);
         })
       );
   }
@@ -102,7 +103,7 @@ export class ObservationsService {
     return this.http.put<Observation>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitObservationsDelete.emit(data);
         })
       );
   }
@@ -112,7 +113,7 @@ export class ObservationsService {
     return this.http.delete<Observation>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitObservationsDelete.emit(data);
         })
       );
   }

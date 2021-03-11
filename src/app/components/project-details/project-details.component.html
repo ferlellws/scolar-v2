@@ -60,7 +60,7 @@
                             <div mat-line class="line-text" style="padding-left: 0px;"> {{i+1}}. {{highlightsByProject[i].description}} </div>
                         </div>
                     </div>
-                    <div *ngIf="benefitsByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                    <div *ngIf="highlightsByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
                 </mat-expansion-panel>
 
                 <mat-expansion-panel class="mat-elevation-z0"
@@ -108,7 +108,7 @@
             <div mat-line class="line-text"> {{project.id}} </div>
             
             <h3 class="h3-subtitle txt-primary">Vicepresidencia</h3>
-            <div mat-line class="line-text"> {{project.area.vice_presidency_id}} </div>
+            <div mat-line class="line-text"> {{project.area.vice_presidency.title}} </div>
             
             <h3 class="h3-subtitle txt-primary">Área</h3>
             <div mat-line class="line-text"> {{project.area.title}} </div>

@@ -11,7 +11,8 @@ import { NextActivity } from '../models/next-activity';
 export class NextActivitiesService {
   private readonly API = `${environment.API}/next_activities`;
 
-  emitDataTable = new EventEmitter<any>();
+  emitNextActivities = new EventEmitter<any>();
+  emitNextActivitiesDelete = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -52,7 +53,7 @@ export class NextActivitiesService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitNextActivities.emit(data);
       })
     );
   }
@@ -62,7 +63,7 @@ export class NextActivitiesService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitNextActivities.emit(data);
       })
     );
   }
@@ -71,7 +72,7 @@ export class NextActivitiesService {
     return this.http.post<NextActivity>(this.API, { next_activity: next_activity }, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitNextActivities.emit(data);
         })
       );
   }
@@ -81,7 +82,7 @@ export class NextActivitiesService {
     return this.http.put<NextActivity>(`${this.API}/${id}`, next_activity, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitNextActivities.emit(data);
         })
       );
   }
@@ -92,7 +93,7 @@ export class NextActivitiesService {
       this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitNextActivities.emit(data);
         })
       );
   }
@@ -101,7 +102,7 @@ export class NextActivitiesService {
     return this.http.put<NextActivity>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitNextActivitiesDelete.emit(data);
         })
       );
   }
@@ -111,7 +112,7 @@ export class NextActivitiesService {
     return this.http.delete<NextActivity>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitNextActivitiesDelete.emit(data);
         })
       );
   }

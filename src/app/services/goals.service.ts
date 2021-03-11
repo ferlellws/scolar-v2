@@ -12,7 +12,8 @@ export class GoalsService {
 
   private readonly API = `${environment.API}/goals`;
 
-  emitDataTable = new EventEmitter<any>();
+  emitGoal = new EventEmitter<any>();
+  emitGoalDelete = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -53,7 +54,7 @@ export class GoalsService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitGoal.emit(data);
       })
     );
   }
@@ -63,7 +64,7 @@ export class GoalsService {
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
-        // this.emitDataTable.emit(data);
+        // this.emitGoal.emit(data);
       })
     );
   }
@@ -72,7 +73,7 @@ export class GoalsService {
     return this.http.post<Goal>(this.API, { goal: goal }, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitGoal.emit(data);
         })
       );
   }
@@ -82,7 +83,7 @@ export class GoalsService {
     return this.http.put<Goal>(`${this.API}/${id}`, goal, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitGoal.emit(data);
         })
       );
   }
@@ -93,7 +94,7 @@ export class GoalsService {
       this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitGoal.emit(data);
         })
       );
   }
@@ -102,7 +103,7 @@ export class GoalsService {
     return this.http.put<Goal>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitGoalDelete.emit(data);
         })
       );
   }
@@ -112,7 +113,7 @@ export class GoalsService {
     return this.http.delete<Goal>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          this.emitDataTable.emit(data);
+          this.emitGoalDelete.emit(data);
         })
       );
   }
