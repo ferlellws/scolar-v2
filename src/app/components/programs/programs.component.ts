@@ -35,14 +35,14 @@ export class ProgramsComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.programsService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        // environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    // environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(ProgramsFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -54,7 +54,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(ProgramsFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -67,7 +67,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.programsService.getProgramsId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -81,11 +81,11 @@ export class ProgramsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.programsService.deleteProgram(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -93,7 +93,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.programsService.getProgramsId(data)
@@ -109,11 +109,11 @@ export class ProgramsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.programsService.logicalDeleteProgram(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -121,7 +121,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.programsService.getProgramsId(data.id)
@@ -137,11 +137,11 @@ export class ProgramsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.programsService.updateStatusProgram(result.data, data.id)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};

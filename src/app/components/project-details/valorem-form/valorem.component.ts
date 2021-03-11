@@ -77,7 +77,7 @@ export class ValoremFormComponent implements OnInit {
     
     this.getReports();
 
-    environment.consoleMessage(this.data, "++++++++++");
+    // environment.consoleMessage(this.data, "++++++++++");
     
     this.valoremGroup = this.fb.group({
       external_company_state_id: [null, Validators.required],
@@ -89,7 +89,7 @@ export class ValoremFormComponent implements OnInit {
     });
 
     if (this.data.mode == 'edit') {
-      environment.consoleMessage(this.data.idValorem);
+      // environment.consoleMessage(this.data.idValorem);
       // Peticion del Formulario segun id del proyecto?
       this.valoremService.getValoremId(this.data.idValorem)
         .subscribe((res: Valorem) => {
@@ -107,7 +107,7 @@ export class ValoremFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.valoremGroup, "OnSubmit Valorem: ");
+    // environment.consoleMessage(this.valoremGroup, "OnSubmit Valorem: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -134,10 +134,10 @@ export class ValoremFormComponent implements OnInit {
   }
 
   getReports() {
-    environment.consoleMessage("", ">>>>>>>>>  Entro a Registro  <<<<<<<<");
+    // environment.consoleMessage("", ">>>>>>>>>  Entro a Registro  <<<<<<<<");
     this.valoremService.getValoremSelect()
       .subscribe((res: Valorem[]) => {
-        environment.consoleMessage(res, ">>>>>>>>>  Valorem Creados  <<<<<<<<");
+        // environment.consoleMessage(res, ">>>>>>>>>  Valorem Creados  <<<<<<<<");
         this.items = res;
         this.items.map(data => {
           data.start_date = data.start_date?.substr(0,10);
@@ -147,7 +147,7 @@ export class ValoremFormComponent implements OnInit {
   }
 
   async createRegister() {
-    environment.consoleMessage(this.valoremGroup)
+    // environment.consoleMessage(this.valoremGroup)
     this.valoremGroup.setValue({
       external_company_state_id: this.valoremGroup.value.external_company_state_id,
       external_company_schedule_id: this.valoremGroup.value.external_company_schedule_id,
@@ -161,11 +161,11 @@ export class ValoremFormComponent implements OnInit {
     this.valorem.project_id = this.data.idProject;
     this.valorem.external_company_id = 1;
     
-    environment.consoleMessage(this.valorem, "VALOREM");
+    // environment.consoleMessage(this.valorem, "VALOREM");
 
     await this.valoremService.addValorem(this.valorem)
     .subscribe((res) => {
-      environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+      // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
       this.fButtonDisabled = false;
       if (res != null) {
         this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -181,11 +181,11 @@ export class ValoremFormComponent implements OnInit {
           e_c_overdue_products: this.productsOverdue
         };
 
-        environment.consoleMessage(main_tables, "MAIN TABLE: ");
+        // environment.consoleMessage(main_tables, "MAIN TABLE: ");
 
         this.valoremService.addProductsDetails(main_tables)
           .subscribe((res) => {
-            environment.consoleMessage(res, "Registro Productos Creado: ");
+            // environment.consoleMessage(res, "Registro Productos Creado: ");
           })
 
         this.getReports();
@@ -201,7 +201,7 @@ export class ValoremFormComponent implements OnInit {
       let sErrors: string = "";
       aErrors.forEach((err) => {
         sErrors += "- " + err + "\n";
-        environment.consoleMessage(err, "Error: ");
+        // environment.consoleMessage(err, "Error: ");
       })
 
       this.openSnackBar(false, sErrors, "");
@@ -209,14 +209,14 @@ export class ValoremFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.valoremGroup, `updateRegister para registro con id ${this.data.idValorem}: `);
+    // environment.consoleMessage(this.valoremGroup, `updateRegister para registro con id ${this.data.idValorem}: `);
 
     this.valoremService.updateValoremId(
       this.valoremGroup.value,
       this.data.idValorem
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -231,7 +231,7 @@ export class ValoremFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -240,13 +240,13 @@ export class ValoremFormComponent implements OnInit {
 
   onClickSelectStatusValorem(ev: boolean) {
     if(ev){
-      environment.consoleMessage("", "Cargar info de Status");
+      // environment.consoleMessage("", "Cargar info de Status");
       this.getSelectStatusValorem();
     }
   }
 
   onClickSelectScheduleValorem() {
-    environment.consoleMessage("", "Cargar info de Schedules");
+    // environment.consoleMessage("", "Cargar info de Schedules");
     this.getSelectScheduleValorem();
   }
 
@@ -262,17 +262,17 @@ export class ValoremFormComponent implements OnInit {
 
   onProductDelivered(productDelivered: ProductDelivered[]){
     this.productsDelivered = productDelivered;
-    environment.consoleMessage(this.productsDelivered, "Productos Entregados Padre")
+    // environment.consoleMessage(this.productsDelivered, "Productos Entregados Padre")
   }
 
   onProductToBeDelivered(productToBeDelivered: ProductToBeDelivered[]){
     this.productsToBeDelivered = productToBeDelivered;
-    environment.consoleMessage(this.productsToBeDelivered, "Productos Por Entregar Padre")
+    // environment.consoleMessage(this.productsToBeDelivered, "Productos Por Entregar Padre")
   }
 
   onProductOverdue(productOverdue: ProductOverdue[]){
     this.productsOverdue = productOverdue;
-    environment.consoleMessage(this.productsOverdue, "Productos Atrasados Padre")
+    // environment.consoleMessage(this.productsOverdue, "Productos Atrasados Padre")
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {

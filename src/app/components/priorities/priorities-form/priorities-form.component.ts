@@ -36,7 +36,7 @@ export class PrioritiesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    // environment.consoleMessage(this.data, "++++++++++");
     this.prioritiesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
@@ -57,7 +57,7 @@ export class PrioritiesFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.prioritiesGroup, "OnSubmit prioridades: ");
+    // environment.consoleMessage(this.prioritiesGroup, "OnSubmit prioridades: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -79,10 +79,10 @@ export class PrioritiesFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.prioritiesGroup.value, "createRegister: ");
+    // environment.consoleMessage(this.prioritiesGroup.value, "createRegister: ");
     this.prioritysService.addPriorities(this.prioritiesGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -97,7 +97,7 @@ export class PrioritiesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -105,14 +105,14 @@ export class PrioritiesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.prioritiesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    // environment.consoleMessage(this.prioritiesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.prioritysService.updatePrioritiesId(
       this.prioritiesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -127,7 +127,7 @@ export class PrioritiesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");

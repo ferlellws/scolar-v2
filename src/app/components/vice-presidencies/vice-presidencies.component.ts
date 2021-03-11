@@ -41,14 +41,14 @@ export class VicePresidenciesComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.vicePresidenciesService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        // environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    // environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(VicePresidenciesFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -60,7 +60,7 @@ export class VicePresidenciesComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(VicePresidenciesFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -73,7 +73,7 @@ export class VicePresidenciesComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.vicePresidenciesService.getVicePresidency(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -87,11 +87,11 @@ export class VicePresidenciesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.vicePresidenciesService.deleteVicePresidency(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           } else {
             // dataTableCopy = {...this.dataTable};
@@ -107,7 +107,7 @@ export class VicePresidenciesComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.vicePresidenciesService.getVicePresidency(data)
@@ -123,11 +123,11 @@ export class VicePresidenciesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.vicePresidenciesService.logicalDeleteVicePresidency(data)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           } else {
             // dataTableCopy = {...this.dataTable};
@@ -143,7 +143,7 @@ export class VicePresidenciesComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.vicePresidenciesService.getVicePresidency(data.id)
@@ -159,11 +159,11 @@ export class VicePresidenciesComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          environment.consoleMessage(result, 'The dialog was closed');
+          // environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.vicePresidenciesService.updateStatusVicePresidency(result.data, data.id)
               .subscribe(res => {
-                environment.consoleMessage(res, 'res: ');
+                // environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};

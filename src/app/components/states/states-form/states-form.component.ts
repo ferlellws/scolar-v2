@@ -36,7 +36,7 @@ export class StatesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    environment.consoleMessage(this.data, "++++++++++");
+    // environment.consoleMessage(this.data, "++++++++++");
     this.statesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
@@ -58,7 +58,7 @@ export class StatesFormComponent implements OnInit {
   }
   
   onSubmit() {
-    environment.consoleMessage(this.statesGroup, "OnSubmit estados: ");
+    // environment.consoleMessage(this.statesGroup, "OnSubmit estados: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -80,10 +80,10 @@ export class StatesFormComponent implements OnInit {
   }
 
   createRegister() {
-    environment.consoleMessage(this.statesGroup.value, "createRegister: ");
+    // environment.consoleMessage(this.statesGroup.value, "createRegister: ");
     this.statesService.addStates(this.statesGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -98,7 +98,7 @@ export class StatesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -106,14 +106,14 @@ export class StatesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.statesGroup, `updateRegister para registro con id ${this.data.id}: `);
+    // environment.consoleMessage(this.statesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
     this.statesService.updateStatesId(
       this.statesGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        // environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -128,7 +128,7 @@ export class StatesFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
+          // environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
