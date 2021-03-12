@@ -52,6 +52,9 @@ export class ProjectDetailsComponent implements OnInit {
   risksByProject: any[] = [];
   weeksByProject: any[] = [];
   goalsByWeeks: any[] = [];
+  goalsAll: any[] = [];
+  nextActivitiesAll: any[] = [];
+  obseravtionsAll: any[] = [];
   nextActivitiesByWeek: any[] = [];
   obseravtionsByWeek: any[] = [];
   year: number = -1;
@@ -205,19 +208,31 @@ export class ProjectDetailsComponent implements OnInit {
       )
 
       //Logros
-      this.goalsByWeeks = data.goalsByWeeks.filter((goals: Goal) => 
-        goals.week!.project!.id == data.project.id && goals.week!.id == this.weeksByProject[this.weekId].id
-      )
+      this.goalsAll = data.goalsByWeeks.filter((goals: Goal) => {
+        return goals.week!.project!.id == data.project.id
+      })
+
+      this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
+        return goals.week!.id == this.weeksByProject[this.weekId].id
+      })
 
       //Prixomas Actividades
-      this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => 
-        next_activity.week!.project!.id == data.project.id && next_activity.week!.id == this.weeksByProject[this.weekId].id
-      )
+      this.nextActivitiesAll = data.nextActivitiesByWeek.filter((next_activity: Goal) => {
+        return next_activity.week!.project!.id == data.project.id
+      })
+
+      this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => {
+        return next_activity.week!.id == this.weeksByProject[this.weekId].id
+      })
 
       //Observaciones
-      this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => 
-        observation.week!.project!.id == data.project.id && observation.week!.id == this.weeksByProject[this.weekId].id
-      )
+      this.obseravtionsAll = data.obseravtionsByWeek.filter((observations: Goal) => {
+        return observations.week!.project!.id == data.project.id
+      })
+
+      this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => {
+        return observation.week!.id == this.weeksByProject[this.weekId].id
+      })
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
@@ -436,18 +451,29 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   nextWeek(){
-      true; //environment.consoleMessage("nextWeek");
-      true; //environment.consoleMessage(this.weekId,"weekId");
-      this.weekId++;
-      true; //environment.consoleMessage(this.weekId,"weekId");
+    this.weekId++;
+    this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
+      return goals.week!.id == this.weeksByProject[this.weekId].id
+    }) 
+    this.nextActivitiesByWeek = this.nextActivitiesAll.filter((next_activity: NextActivity) => {
+      return next_activity.week!.id == this.weeksByProject[this.weekId].id
+    })   
+    this.obseravtionsByWeek = this.obseravtionsAll.filter((observation: Observation) => {
+      return observation.week!.id == this.weeksByProject[this.weekId].id
+    }) 
   }
 
   beforeWeek(){
-    
-      true; //environment.consoleMessage("beforeWeek");
-      true; //environment.consoleMessage(this.weekId,"weekId");
-      this.weekId--;
-      true; //environment.consoleMessage(this.weekId,"weekId");
+    this.weekId--;
+    this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
+      return goals.week!.id == this.weeksByProject[this.weekId].id
+    }) 
+    this.nextActivitiesByWeek = this.nextActivitiesAll.filter((next_activity: NextActivity) => {
+      return next_activity.week!.id == this.weeksByProject[this.weekId].id
+    })   
+    this.obseravtionsByWeek = this.obseravtionsAll.filter((observation: Observation) => {
+      return observation.week!.id == this.weeksByProject[this.weekId].id
+    }) 
   }
 
   getToStringDate(date: any): string {
