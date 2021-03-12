@@ -61,7 +61,7 @@
     </ng-template>
 
     <tecno-timeline-charts *ngIf="dataProjectProgressReport"
-      [id]="'projectTimeline'"
+      [id]="'project-timeline-' + strategicGuideline.id"
       [title]="'Porcentajes Estados Requerimientos'"
       [dataInitial]="dataInitial"
       [dataTable]="dataProjectProgressReport"
