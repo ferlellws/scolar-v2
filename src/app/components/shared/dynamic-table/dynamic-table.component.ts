@@ -58,19 +58,19 @@ export class DynamicTableComponent implements OnInit {
       this.render = false;
     } else {
       this.render = true;
+      true;//environment.consoleMessage(`${this.isUserProfile}`)
+      if (this.isUserProfile) {
+        this.labelDelete = "Eliminar definitivamente";
+        this.deleteIcon = "delete_forever";
+      } else {
+        this.labelDelete = "Enviar a papelera";
+        this.deleteIcon = "delete";
+      }
+      this.displayedColumns = Object.keys(this.objectsData.dataTable[0]);
+      this.dataSource.data = this.objectsData.dataTable;
+      this.footer = this.objectsData.footer;
+      this.showFooter = this.footer != null;
     }
-    true;//environment.consoleMessage(`${this.isUserProfile}`)
-    if (this.isUserProfile) {
-      this.labelDelete = "Eliminar definitivamente";
-      this.deleteIcon = "delete_forever";
-    } else {
-      this.labelDelete = "Enviar a papelera";
-      this.deleteIcon = "delete";
-    }
-    this.displayedColumns = Object.keys(this.objectsData.dataTable[0]);
-    this.dataSource.data = this.objectsData.dataTable;
-    this.footer = this.objectsData.footer;
-    this.showFooter = this.footer != null;
   }
 
   onEdit(id: number) {

@@ -1,8 +1,8 @@
 <div class="top-buttons">
   <p>
-    <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">
-      <mat-button-toggle value="dashboard" (click)="changeMode('dashboard')">Tablero</mat-button-toggle>
-      <mat-button-toggle value="table" (click)="changeMode('table')">Tabla</mat-button-toggle>
+    <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">
+      <mat-button-toggle value="dashboard" (click)="mode = 'dashboard'">Tablero</mat-button-toggle>
+      <mat-button-toggle value="table" (click)="mode = 'table'">Tabla</mat-button-toggle>
     </mat-button-toggle-group>
   </p>
 </div>
