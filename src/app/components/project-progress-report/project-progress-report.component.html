@@ -1,10 +1,10 @@
-<h2 class="mat-title">Reporte avance de proyectos</h2>
+<h1 class="mat-title txt-accent" style="font-weight: 500;">Reporte avance de proyectos</h1>
 
-<h3 class="mat-subtitle">Estado de entregas</h3>
+<h2 class="mat-subtitle txt-primary" style="font-weight: 500;">Estado de entregas</h2>
 
 <div class="container" *ngIf="dataDeliveryStatuses">
   <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-12">
       <mat-card class="bg-blue text-white">
         <mat-card-header>
           <mat-card-title>Producto entregado</mat-card-title>
@@ -18,7 +18,10 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <div class="col-sm-12 col-md-6">
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
       <mat-card class="bg-green text-white">
         <mat-card-header>
           <mat-card-title>Productos por Entregar</mat-card-title>
@@ -34,25 +37,26 @@
       </mat-card>
     </div>
   </div>
-  <div class="row justify-content-center mt-30">
-    <div class="col-sm-12 col-md-6">
-      <mat-card class="bg-red text-white">
-        <mat-card-header>
-          <mat-card-title>Producto Atrasados</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ol>
-            <li *ngFor="let ecProductsInProgress of dataDeliveryStatuses.ecProductsInProgresses">
-              {{ ecProductsInProgress.description }}
-            </li>
-          </ol>
-        </mat-card-content>
-      </mat-card>
-    </div>
+
+  <div class="col-sm-12 col-md-12">
+    <mat-card class="bg-red text-white">
+      <mat-card-header>
+        <mat-card-title>Producto Atrasados</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ol>
+          <li *ngFor="let ecProductsInProgress of dataDeliveryStatuses.ecProductsInProgresses">
+            {{ ecProductsInProgress.description }}
+          </li>
+        </ol>
+      </mat-card-content>
+    </mat-card>
   </div>
+  
 </div>
 
-<mat-tab-group class="mt-100" *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
+<h2 class="mat-subtitle txt-primary" style="font-weight: 500; margin-top: 100px;">Gráfica por lineamiento estratégico</h2>
+<mat-tab-group *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
   <mat-tab *ngFor="let strategicGuideline of dataInitial.strategicGuidelines">
     <ng-template mat-tab-label >
       <!-- <div (click)="getDataReport(strategicGuideline.id)"> -->

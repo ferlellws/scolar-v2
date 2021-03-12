@@ -1,6 +1,6 @@
 <div class="menu-container">
   <mat-accordion *ngIf="menu.length">
-    <mat-expansion-panel *ngFor="let m of menu; let i = index" [expanded]="i === 0"
+    <mat-expansion-panel *ngFor="let m of menu; let i = index" [expanded]="i === moduleSelected"
       (opened)="onOpenOption(i)"
       (closed)="onCloseOption(i)"
       [class.bg-selected-module]="panelOpenState[i]">

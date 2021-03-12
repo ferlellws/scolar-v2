@@ -138,7 +138,10 @@ export class ValoremFormComponent implements OnInit {
     this.valoremService.getValoremSelect()
       .subscribe((res: Valorem[]) => {
         true;//environment.consoleMessage(res, ">>>>>>>>>  Valorem Creados  <<<<<<<<");
-        this.items = res;
+        this.items = res.filter((valorem) =>{
+          return valorem.project?.id == this.data.idProject
+        })
+
         this.items.map(data => {
           data.start_date = data.start_date?.substr(0,10);
           data.due_date = data.due_date?.substr(0,10);
