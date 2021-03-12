@@ -335,9 +335,9 @@ export class ProjectsFormComponent implements OnInit {
     }
 
     if(formGroup == this.seguimiento){
-      this.seguimiento.get('startDate')?.setValue(this.project.start_date == null ? null : new Date(`${this.project.start_date!}:00:00`));
-      this.seguimiento.get('dueDate')?.setValue(this.project.due_date == null ? null : new Date(`${this.project.due_date!}:00:00`));
-      this.seguimiento.get('controlDate')?.setValue(this.project.control_date == null? null : new Date(`${this.project.control_date!}:00:00`));
+      this.seguimiento.get('startDate')?.setValue(this.project.start_date == null ? null : new Date(`${this.project.start_date!.substr(0, 10)}:00:00`));
+      this.seguimiento.get('dueDate')?.setValue(this.project.due_date == null ? null : new Date(`${this.project.due_date!.substr(0, 10)}:00:00`));
+      this.seguimiento.get('controlDate')?.setValue(this.project.control_date == null? null : new Date(`${this.project.control_date!.substr(0, 10)}:00:00`));
       this.seguimiento.get('states')?.setValue(this.project.states_by_phase!.state!.id);
       this.seguimiento.get('phases')?.setValue(this.project.states_by_phase!.phase!.id);
       this.seguimiento.get('sprint')?.setValue(this.project.sprint);
