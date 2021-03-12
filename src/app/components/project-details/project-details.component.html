@@ -1,19 +1,21 @@
 <div class="row" style="margin-bottom: 20px;">
     <div class="header-row col-sm-12 col-md-12" style="flex-wrap: wrap;">
         <h1 class="col-sm-12 col-md-6 txt-accent" style="font-weight: 500; font-size: xx-large;">{{project.title}}</h1>
-        <div class="header-row col-sm-12 col-md-6" style="flex-wrap: wrap;">
-            <button class="buttons-options" mat-menu-item (click)="onProjectEdit()">
+        <div class="header-row col-sm-12 col-md-6" style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+            <!-- <button class="buttons-options" mat-menu-item (click)="onProjectEdit()">
                 <mat-icon>editchart</mat-icon>
                 <span>Editar Proyecto</span>
-            </button>
+            </button> -->
+            
             <button class="buttons-options" mat-menu-item (click)="onWeek()">
                 <mat-icon>insert_invitation</mat-icon>
                 <span>Seguimiento Semanal</span>
             </button>
+            
             <button class="buttons-options" mat-menu-item (click)="onValorem()">
                 <mat-icon>addchart</mat-icon>
                 <span>Reporte Valorem</span>
-              </button>
+            </button>
         </div>
     </div>
 </div>
@@ -21,27 +23,79 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-4">
-        <mat-card class="card-content mat-elevation-z4 mat-elevation-z4">
+        <mat-card class="card-content mat-elevation-z4">
             <mat-icon class="icons-cards txt-primary">bubble_chart</mat-icon>
             <mat-card-header>
                 <mat-card-title class="txt-accent">Objetivos</mat-card-title>  
             </mat-card-header>
-            <h3 class="h3-subtitle txt-primary">Beneficios</h3>
-            <div *ngFor="let benefitsProject of benefitsByProject; index as i">
-                <div mat-line class="line-text"> {{benefitsByProject[i].description}} </div>
-            </div>
-            <h3 class="h3-subtitle txt-primary">Hitos</h3>
-            <div *ngFor="let highlightsProject of highlightsByProject; index as i">
-                <div mat-line class="line-text"> {{highlightsByProject[i].description}} </div>
-            </div>
-            <h3 class="h3-subtitle txt-primary">KPI's</h3>
-            <div *ngFor="let kpisProject of kpisByProject; index as i">
-                <div mat-line class="line-text"> {{kpisByProject[i].description}} </div>
-            </div>
-            <h3 class="h3-subtitle txt-primary">Riesgos</h3>
-            <div *ngFor="let risksProject of risksByProject; index as i">
-                <div mat-line class="line-text"> {{risksByProject[i].description}} </div>
-            </div>
+            
+            
+            <mat-accordion>
+                <mat-expansion-panel class="mat-elevation-z0" style="padding-left: -15px;"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h3 class="txt-primary title-expansion">Beneficios</h3>
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="benefitsByProject.length != 0">
+                        <div *ngFor="let benefitsProject of benefitsByProject; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> {{i+1}}. {{benefitsByProject[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="benefitsByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="mat-elevation-z0"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h3 class="txt-primary title-expansion">Hitos</h3>
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="highlightsByProject.length != 0">
+                        <div *ngFor="let highlightsProject of highlightsByProject; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> {{i+1}}. {{highlightsByProject[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="highlightsByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="mat-elevation-z0"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h3 class="txt-primary title-expansion">KPI's</h3>
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="kpisByProject.length != 0">
+                        <div *ngFor="let kpisProject of kpisByProject; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> {{i+1}}. {{kpisByProject[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="kpisByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="mat-elevation-z0"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h3 class="txt-primary title-expansion">Riesgos</h3>
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="risksByProject.length != 0">
+                        <div *ngFor="let risksProject of risksByProject; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> {{i+1}}. {{risksByProject[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="risksByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+
+            </mat-accordion>
         </mat-card>
 
         <mat-card class="card-content mat-elevation-z4">
@@ -49,31 +103,157 @@
             <mat-card-header>
                 <mat-card-title class="txt-accent">Aspectos Generales</mat-card-title>  
             </mat-card-header>
+            
             <h3 class="h3-subtitle txt-primary">Número de Proyecto</h3>
             <div mat-line class="line-text"> {{project.id}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Vicepresidencia</h3>
-            <div mat-line class="line-text"> {{project.area.vice_presidency_id}} </div>
+            <div mat-line class="line-text"> {{project.area.vice_presidency.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Área</h3>
             <div mat-line class="line-text"> {{project.area.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Enfoque Estratégico</h3>
             <div mat-line class="line-text"> {{project.strategic_approach.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Fecha de Recepción</h3>
             <div mat-line class="line-text"> {{project.reception_date}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Programa</h3>
             <div mat-line *ngIf="project.program != null" class="line-text" > {{project.program.title}} </div>
-            <div mat-line *ngIf="project.program == null" class="line-text-font"> Sin asignar </div>
+            <div mat-line *ngIf="project.program == null" class="line-text-font"> {{labelAssignment}} </div>
+        </mat-card>
+
+        <mat-card class="card-content mat-elevation-z4">
+            <mat-icon class="icons-cards txt-primary">supervisor_account</mat-icon>
+            <mat-card-header>
+                <mat-card-title class="txt-accent">Recursos Funcionales de Prueba</mat-card-title>  
+            </mat-card-header>
+            <div *ngIf="testUsersByProject.length != 0">
+                <div *ngFor="let testUsersProject of testUsersByProject; index as i">
+                    <div mat-line class="line-text"> {{i+1}}. {{testUsersByProject[i].user.first_name}} {{testUsersByProject[i].user.last_name}} </div>
+                </div>
+            </div>
+            <div *ngIf="testUsersByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+        </mat-card>
+
+        <mat-card class="card-content mat-elevation-z4">
+            <div class="row">
+                <div class="header-row col-sm-12 col-md-12">
+                    <mat-icon class="icons-cards txt-primary col-sm-12 col-md-6">event</mat-icon>
+                    <div *ngIf="weeksByProject.length != 0" class="header-row col-sm-12 col-md-6" style="flex-wrap: wrap;">
+                        <button [disabled]="weekId == 0" class="buttons-options" mat-menu-item (click)="beforeWeek()">
+                            <mat-icon [ngClass]="(weekId == 0)? 'icons-cards':'icons-cards txt-primary'">navigate_before</mat-icon>
+                        </button>
+                        <button [disabled]="weekId == weeksByProject.length-1" class="buttons-options" mat-menu-item (click)="nextWeek()">
+                            <mat-icon [ngClass]="(weekId == weeksByProject.length-1)? 'icons-cards':'icons-cards txt-primary'">navigate_next</mat-icon>
+                        </button> 
+                    </div>   
+                </div> 
+            </div>    
+            <mat-card-header>
+                <mat-card-title class="txt-accent">Seguimiento Semanal </mat-card-title>
+                <mat-card-title *ngIf="weeksByProject[weekId] != null" style="font-size: 16px;">Semana {{weeksByProject[weekId].nReg}} - {{weeksByProject[weekId].month}} {{weeksByProject[weekId].year}} </mat-card-title> 
+            </mat-card-header>
+            <h3 class="h3-subtitle txt-primary">Fecha Inicio</h3>
+            <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].start_date}} </div>
+            <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
+            <h3 class="h3-subtitle txt-primary">Fecha Final</h3>
+            <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].end_date}} </div>
+            <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
+            <h3 class="h3-subtitle txt-primary">Avance esperado</h3>
+            <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].advance_spected}}% </div>
+            <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
+            <h3 class="h3-subtitle txt-primary">Avance real</h3>
+            <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].advance_real}}% </div>
+            <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
+            <h3 class="h3-subtitle txt-primary">Indicador de Desviación </h3>
+            <div class="indicator-container">
+                <div *ngIf="weeksByProject[weekId] != null" class="circle" [ngStyle]="{'background-color': weeksByProject[weekId].deviation_indicator_color}"></div>
+                <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text" style="padding: 0px;">{{weeksByProject[weekId].deviation_indicator_name}} ({{weeksByProject[weekId].deviation_indicator}}%)</div>
+            </div>
+            <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
+            <mat-accordion>
+                <mat-expansion-panel class="mat-elevation-z0"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h3 class="txt-primary title-expansion">Logros</h3>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="goalsByWeeks.length != 0">
+                        <div *ngFor="let goalsWeek of goalsByWeeks; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> 
+                                <span style="font-weight: 500">{{i+1}}. Fecha: 
+                                    <span style="font-weight: 400">{{goalsByWeeks[i].date}}</span>
+                                </span>
+                            </div>
+                            <div mat-line class="line-text"> {{goalsByWeeks[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="goalsByWeeks.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="mat-elevation-z0"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h3 class="txt-primary title-expansion">Próximas actividades</h3>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="nextActivitiesByWeek.length != 0">
+                        <div *ngFor="let nextActivitiesWeek of nextActivitiesByWeek; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> 
+                                <span style="font-weight: 500">{{i+1}}. Fecha: 
+                                    <span style="font-weight: 400">{{nextActivitiesByWeek[i].date}}</span>
+                                </span>
+                            </div>
+                            <div mat-line class="line-text"> {{nextActivitiesByWeek[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="nextActivitiesByWeek.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="mat-elevation-z0"
+                                     (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h3 class="txt-primary title-expansion">Observaciones</h3>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="obseravtionsByWeek.length != 0">
+                        <div *ngFor="let obseravtionsWeek of obseravtionsByWeek; index as i">
+                            <div mat-line class="line-text" style="padding-left: 0px;"> {{i+1}}. {{obseravtionsByWeek[i].description}} </div>
+                        </div>
+                    </div>
+                    <div *ngIf="obseravtionsByWeek.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+
         </mat-card>
     </div>
+
     <div class="col-sm-12 col-md-4">
         <mat-card class="card-content mat-elevation-z4">
             <mat-icon class="icons-cards txt-primary">paid</mat-icon>
             <mat-card-header>
                 <mat-card-title class="txt-accent">Presupuesto</mat-card-title>  
             </mat-card-header>
-            <h3 class="h3-subtitle txt-primary">Aprovado</h3>
+            
+            <h3 class="h3-subtitle txt-primary">Aprobado</h3>
             <div mat-line class="line-text"> {{project.budget_approved}} COP</div>
+            
             <h3 class="h3-subtitle txt-primary">Ejecutado</h3>
             <div mat-line class="line-text"> {{project.budget_executed}} COP</div>
+            
             <h3 class="h3-subtitle txt-primary">Saldo</h3>
             <div mat-line class="line-text"> {{project.balance}} COP</div>
         </mat-card>
@@ -83,40 +263,51 @@
             <mat-card-header>
                 <mat-card-title class="txt-accent">Descripción del Proyecto</mat-card-title>  
             </mat-card-header>
+            
             <h3 class="h3-subtitle txt-primary">Descripción</h3>
             <div mat-line class="line-text"> {{project.description}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Líder Funcional</h3>
             <div mat-line class="line-text"> {{project.functional_lead.first_name}} {{project.functional_lead.last_name}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Prioridad</h3>
             <div mat-line class="line-text"> {{project.priority.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Tipificación</h3>
             <div mat-line class="line-text"> {{project.typification.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Gestión</h3>
             <div mat-line class="line-text"> {{project.management.title}} </div>
+
+            <h3 class="h3-subtitle txt-primary">Lineamiento Estratégico</h3>
+            <div mat-line class="line-text"> {{project.strategic_guideline.name}} </div>
+            
             <h3 class="h3-subtitle txt-primary">PMO asignado</h3>
-            <div mat-line class="line-text"> {{project.pmo.first_name}} {{project.pmo.first_name}} </div>
+            <div mat-line class="line-text"> {{project.pmo.first_name}} {{project.pmo.last_name}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Ocupación semanal PMO asignado</h3>
             <div mat-line class="line-text"> {{project.percentage}} %</div>
+            
             <h3 class="h3-subtitle txt-primary">PMO de apoyo asignado</h3>
-            <div mat-line *ngIf="project.pmo_assitant != null" class="line-text"> {{project.pmo_assitant.first_name}} {{project.pmo_assitant.first_name}} </div>
-            <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> Sin asignar </div>
+            <div mat-line *ngIf="project.pmo_assitant != null" class="line-text"> {{project.pmo_assitant.first_name}} {{project.pmo_assitant.last_name}} </div>
+            <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> {{labelAssignment}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Ocupación semanal PMO apoyo</h3>
             <div mat-line *ngIf="project.pmo_assitant != null" class="line-text"> {{project.percentageAssistant}} %</div>
-            <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> Sin asignar </div>
+            <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> {{labelAssignment}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Etapa de apoyo PMO de apoyo</h3>
             <div mat-line *ngIf="project.pmo_assitant_stage != null" class="line-text"> {{project.pmo_assitant_stage.title}} </div>
-            <div mat-line *ngIf="project.pmo_assitant_stage == null" class="line-text-font"> Sin asignar </div>
+            <div mat-line *ngIf="project.pmo_assitant_stage == null" class="line-text-font"> {{labelAssignment}} </div>
         </mat-card>
 
         <mat-card class="card-content mat-elevation-z4">
-            <mat-icon class="icons-cards txt-primary">supervisor_account</mat-icon>
+            <mat-icon class="icons-cards txt-primary">stream</mat-icon>
             <mat-card-header>
-                <mat-card-title class="txt-accent">Recursos Funcionales de Prueba</mat-card-title>  
+                <mat-card-title class="txt-accent">Interrelaciones</mat-card-title>  
             </mat-card-header>
-            <div *ngFor="let testUsersProject of testUsersByProject; index as i">
-                <div mat-line class="line-text"> {{testUsersByProject[i].user.first_name}} {{testUsersByProject[i].user.last_name}} </div>
-            </div>
         </mat-card>
+
     </div>
     <div class="col-sm-12 col-md-4">
         <mat-card class="card-content mat-elevation-z4">
@@ -124,24 +315,32 @@
             <mat-card-header>
                 <mat-card-title class="txt-accent">Seguimiento</mat-card-title>  
             </mat-card-header>
+            
             <h3 class="h3-subtitle txt-primary">Fecha de Inicio</h3>
-            <div mat-line *ngIf="project.start_date == null || project.start_date == ''" class="line-text-font"> Sin asignar</div>
+            <div mat-line *ngIf="project.start_date == null || project.start_date == ''" class="line-text-font"> {{labelAssignment}}</div>
             <div mat-line *ngIf="project.start_date != null" class="line-text"> {{project.start_date}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Fecha estimada de Finalización</h3>
-            <div mat-line *ngIf="project.due_date == null || project.due_date == ''" class="line-text-font"> Sin asignar </div>
+            <div mat-line *ngIf="project.due_date == null || project.due_date == ''" class="line-text-font"> {{labelAssignment}} </div>
             <div mat-line *ngIf="project.due_date != null" class="line-text"> {{project.due_date}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Fecha de Control</h3>
-            <div mat-line *ngIf="project.control_date == null || project.control_date == ''" class="line-text-font"> Sin asignar</div>
+            <div mat-line *ngIf="project.control_date == null || project.control_date == ''" class="line-text-font"> {{labelAssignment}}</div>
             <div mat-line *ngIf="project.control_date != null" class="line-text"> {{project.control_date}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Estado</h3>
-            <div mat-line class="line-text"> {{project.states_by_phase.state_id}} </div>
+            <div mat-line class="line-text"> {{project.states_by_phase.state.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Fase</h3>
-            <div mat-line class="line-text"> {{project.states_by_phase.phase_id}} </div>
+            <div mat-line class="line-text"> {{project.states_by_phase.phase.title}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Sprint</h3>
             <div mat-line class="line-text"> {{project.sprint}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Evaluación de Proveedores</h3>
-            <div mat-line *ngIf="project.evaluation == null" class="line-text-font"> Sin asignar </div>
+            <div mat-line *ngIf="project.evaluation == null" class="line-text-font"> {{labelAssignment}} </div>
             <div mat-line *ngIf="project.evaluation != null" class="line-text"> {{project.evaluation}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Bitacora de Pruebas</h3>
             <div mat-line class="line-text"> {{project.test_log}} </div>
         </mat-card>
@@ -151,18 +350,37 @@
             <mat-card-header>
                 <mat-card-title class="txt-accent">Relacionados</mat-card-title>  
             </mat-card-header>
+            
             <h3 class="h3-subtitle txt-primary">Aplicaciones Impactadas</h3>
-            <div *ngFor="let applicationProject of applicationsByProject; index as i">
-                <div mat-line class="line-text"> {{applicationsByProject[i].application.title}} </div>
+            <div *ngIf="applicationsByProject.length != 0">
+                <div *ngFor="let applicationProject of applicationsByProject; index as i">
+                    <div mat-line class="line-text"> {{i+1}}. {{applicationsByProject[i].application.title}} </div>
+                </div>
             </div>
+            <div *ngIf="applicationsByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Áreas Participantes</h3>
-            <div *ngFor="let areasProject of areasByProject; index as i">
-                <div mat-line class="line-text"> {{areasByProject[i].area.title}} - {{areasByProject[i].area.vice_presidency_id}}</div>
+            <div *ngIf="areasByProject.length != 0">
+                <div *ngFor="let areasProject of areasByProject; index as i">
+                    <div mat-line class="line-text"> {{i+1}}. {{areasByProject[i].area.title}} - {{areasByProject[i].area.vice_presidency.title}}</div>
+                </div>
             </div>
+            <div *ngIf="areasByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+            
             <h3 class="h3-subtitle txt-primary">Proveedores</h3>
-            <div *ngFor="let companiesProject of companiesByProject; index as i">
-                <div mat-line class="line-text"> {{companiesByProject[i].company.title}} </div>
+            <div *ngIf="companiesByProject.length != 0">
+                <div *ngFor="let companiesProject of companiesByProject; index as i">
+                    <div mat-line class="line-text"> {{i+1}}. {{companiesByProject[i].company.title}} </div>
+                </div>
             </div>
+            <div *ngIf="companiesByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+        </mat-card>
+
+        <mat-card class="card-content mat-elevation-z4">
+            <mat-icon class="icons-cards txt-primary">dynamic_form</mat-icon>
+            <mat-card-header>
+                <mat-card-title class="txt-accent">Causales de Desviación</mat-card-title>  
+            </mat-card-header>
         </mat-card>
     </div>
 

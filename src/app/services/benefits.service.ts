@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Benefit } from '../models/benefit';
@@ -10,6 +10,9 @@ import { Benefit } from '../models/benefit';
 export class BenefitsService {
 
   private readonly API = `${environment.API}/benefits`;
+
+  emitBenefits = new EventEmitter<any>();
+  emitDeleteBenefits = new EventEmitter<any>();
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -57,6 +60,7 @@ export class BenefitsService {
     return this.http.post<Benefit>(this.API, { benefit: benefit }, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitBenefits.emit(data);
         })
       );
   }
@@ -65,6 +69,7 @@ export class BenefitsService {
     return this.http.put<any>(`${this.API}/${id}`, benefit, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitBenefits.emit(data);
         })
       );
   }
@@ -75,6 +80,7 @@ export class BenefitsService {
     return this.http.put<Benefit>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteBenefits.emit(data);
         })
       );
   }
@@ -83,6 +89,7 @@ export class BenefitsService {
     return this.http.delete<Benefit>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteBenefits.emit(data);
         })
       );
   }

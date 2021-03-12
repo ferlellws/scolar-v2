@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Kpi } from '../models/kpi';
@@ -8,6 +8,9 @@ import { Kpi } from '../models/kpi';
   providedIn: 'root'
 })
 export class KpisService {
+
+  emitKpis = new EventEmitter<any>();
+  emitDeleteKpis = new EventEmitter<any>();
 
   private readonly API = `${environment.API}/kpis`;
 
@@ -57,6 +60,7 @@ export class KpisService {
     return this.http.post<Kpi>(this.API, { kpi: kpi }, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitKpis.emit(data);
         })
       );
   }
@@ -65,6 +69,7 @@ export class KpisService {
     return this.http.put<any>(`${this.API}/${id}`, risk, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitKpis.emit(data);
         })
       );
   }
@@ -75,6 +80,7 @@ export class KpisService {
     return this.http.put<Kpi>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteKpis.emit(data);
         })
       );
   }
@@ -83,6 +89,7 @@ export class KpisService {
     return this.http.delete<Kpi>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitDeleteKpis.emit(data);
         })
       );
   }

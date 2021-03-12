@@ -10,6 +10,7 @@ export class TextListDateComponent implements OnInit {
 
   @Input() items: any[] = [];
   @Input() name: string = "";
+  @Input() titleClass: string = "txt-primary";
   @Output() emitChange: EventEmitter<any[]> = new EventEmitter();
   
   inpuText = '';

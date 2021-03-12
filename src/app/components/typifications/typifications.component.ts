@@ -41,14 +41,14 @@ export class TypificationsComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.typificationsService.emitDataTable
       .subscribe((res: any) => {
-        // environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        true;//environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    // environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
+    true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(TypificationsFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -60,7 +60,7 @@ export class TypificationsComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(TypificationsFormComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -73,7 +73,7 @@ export class TypificationsComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.typificationsService.getTypificationsId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -87,11 +87,11 @@ export class TypificationsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          // environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.typificationsService.deleteTypification(data)
               .subscribe(res => {
-                // environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -99,7 +99,7 @@ export class TypificationsComponent implements OnInit {
   }
 
   onDeleteLogic(data: number) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDeleteLogic: ");
     // let dataTableCopy!: TableData;
 
     this.typificationsService.getTypificationsId(data)
@@ -115,11 +115,11 @@ export class TypificationsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          // environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.typificationsService.logicalDeleteTypification(data)
               .subscribe(res => {
-                // environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           }
         });
@@ -127,7 +127,7 @@ export class TypificationsComponent implements OnInit {
   }
 
   onStatusChange(data: any) {
-    // environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
+    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
     let dataTableCopy!: TableData;
 
     this.typificationsService.getTypificationsId(data.id)
@@ -143,11 +143,11 @@ export class TypificationsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result: any) => {
-          // environment.consoleMessage(result, 'The dialog was closed');
+          true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
             this.typificationsService.updateStatusTypification(result.data, data.id)
               .subscribe(res => {
-                // environment.consoleMessage(res, 'res: ');
+                true;//environment.consoleMessage(res, 'res: ');
               })
           } else {
             dataTableCopy = {...this.dataTable};

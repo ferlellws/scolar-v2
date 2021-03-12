@@ -1,6 +1,6 @@
-<h2 class="mat-title">Reporte avance de proyectos</h2>
+<h1 class="mat-title txt-accent" style="font-weight: 500;">Reporte avance de proyectos</h1>
 
-<h3 class="mat-subtitle">Estado de entregas</h3>
+<h2 class="mat-subtitle txt-primary" style="font-weight: 500;">Estado de entregas</h2>
 
 <div class="container" *ngIf="dataDeliveryStatuses">
   <div class="row justify-content-center">
@@ -52,9 +52,11 @@
       </mat-card>
     </div>
   </div>
+
 </div>
 
-<mat-tab-group class="mt-100" *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
+<h2 class="mat-subtitle txt-primary" style="font-weight: 500; margin-top: 100px;">Gráfica por lineamiento estratégico</h2>
+<mat-tab-group *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
   <mat-tab *ngFor="let strategicGuideline of dataInitial.strategicGuidelines">
     <ng-template mat-tab-label >
       <!-- <div (click)="getDataReport(strategicGuideline.id)"> -->

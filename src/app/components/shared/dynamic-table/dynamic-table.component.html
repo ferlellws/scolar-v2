@@ -1,4 +1,4 @@
-<div class="container-general">
+<div *ngIf="render" class="container-general">
   <div  class="container-list" [ngStyle]="{'max-height': maxHeight}">
     <table mat-table id="{{customId}}" [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
 
@@ -61,3 +61,12 @@
     </table>
   </div>
 </div>
+
+<div *ngIf="!render" style="padding: 20px;">
+  <h1 class="mat-title txt-accent">No hay datos registrados</h1>
+  <div style="display: flex; align-items: center; font-size: larger;">
+    <span style="padding-right: 5px;">Oprima el icono</span>
+    <mat-icon class="txt-accent">add_circle</mat-icon>
+    <span style="padding-left: 5px;">para agregar un nuevo registro</span>
+  </div>  
+</div> 

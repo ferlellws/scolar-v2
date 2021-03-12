@@ -8,7 +8,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <div routerLink="/home"
-      (click)="onLink('/home')" >
+      (click)="onLink('/home')" style="cursor: pointer;">
       KOBA<span style="font-weight: 100;">Project </span>
     </div>
     <!-- <img src="../assets/images/logo_tecno_project_oscuros.png" alt="tecno_project"
@@ -32,7 +32,7 @@
     </button>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-container" style="height: 99%;">
+  <mat-sidenav-container class="example-container" overflow= "hidden">
     <mat-sidenav #sidenav mode="side" class="menu-container" opened>
       <div class="profile-container">
         <!-- AVATAR -->

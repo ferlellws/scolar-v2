@@ -31,6 +31,10 @@ import { BenefitsByProjectsResolver } from './components/project-details/guards/
 import { HighlightsByProjectsResolver } from './components/project-details/guards/highlights-by-projects.resolver';
 import { KpisByProjectsResolver } from './components/project-details/guards/kpis-by-projects.resolver';
 import { RisksByProjectsResolver } from './components/project-details/guards/risk-by-projects.resolver';
+import { WeeksByProjectsResolver } from './components/project-details/guards/weeks-by-projects.resolver';
+import { GoalsByWeeksResolver } from './components/project-details/guards/goals-by-weeks.resolver';
+import { NextActivitiesByWeeksResolver } from './components/project-details/guards/next-activities-by-weeks.resolver';
+import { ObseravtionsByWeeksResolver } from './components/project-details/guards/observations-by-weeks.resolver';
 
 const routes: Routes = [
   {
@@ -126,7 +130,11 @@ const routes: Routes = [
       benefitsByProject: BenefitsByProjectsResolver,
       highlightsByProject: HighlightsByProjectsResolver,
       kpisByProject: KpisByProjectsResolver,
-      risksByProject: RisksByProjectsResolver
+      risksByProject: RisksByProjectsResolver,
+      weeksByProject: WeeksByProjectsResolver,
+      goalsByWeeks: GoalsByWeeksResolver,
+      nextActivitiesByWeek: NextActivitiesByWeeksResolver,
+      obseravtionsByWeek: ObseravtionsByWeeksResolver
     }
   },
   {
