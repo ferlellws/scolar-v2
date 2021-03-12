@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
   getmenusSuccses: boolean = false;
   panelOpenState: boolean [] = []; // Array de flags para saber si esta abierto o no un panel
   // panelOpenState: boolean = false;
-  moduleSelected: number = 0;
+  moduleSelected: number = 1;
 
   constructor(
     private menuService: MenuService,
