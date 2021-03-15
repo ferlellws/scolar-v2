@@ -3,8 +3,6 @@ import { User } from "./user";
 
 export class DelayTypification {
     id?: number;
-    delay_cause_by_sources_id?: number;
-    delay_cause_by_sources?: DelayCauseBySource;
     title!: string;
     description!: string;
     is_active?: boolean;

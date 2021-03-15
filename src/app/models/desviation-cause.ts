@@ -1,5 +1,5 @@
 import { DelayCauseBySource } from "./delay-cause-by-source";
-import { DelayTypificationBySource } from "./delay-typification-by-source";
+import { DelayTypification } from "./delay-typification";
 import { Project } from "./project";
 import { SolutionState } from "./solution-state";
 import { User } from "./user";
@@ -9,9 +9,10 @@ export class DesviationCause {
     project_id?: number;
     project?: Project;
     delay_typification_by_sources_id? :number;
-    delay_typification_by_sources?: DelayTypificationBySource;
     delay_cause_by_sources_id?: number;
     delay_cause_by_sources?: DelayCauseBySource;
+    delay_typification_id?: number;
+    delay_typification?: DelayTypification;
     solution_state_id?: number;
     solution_state?: SolutionState;
     
