@@ -99,7 +99,7 @@
     </div>
 
     <div class="row" style="padding-right: 12px !important;">
-      <div class="col-sm-12 col-md-12">
+      <div class="col-sm-12 col-md-8">
         <mat-form-field
             class="full-width"
             style="width: 100%;">
@@ -108,6 +108,15 @@
             <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
               {{ getMessageError('status_detail', " detalle de estado") }}
             </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-4">
+        <mat-form-field
+            class="full-width"
+            style="width: 100%;">
+            <mat-label>{{labels.labelBlock}}</mat-label>
+            <textarea matInput placeholder="{{labels.labelBlock}}" formControlName="label_block"></textarea>
         </mat-form-field>
       </div>
     </div>

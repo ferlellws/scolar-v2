@@ -70,6 +70,7 @@ export class ValoremFormComponent implements OnInit {
       startDate: 'Fecha de Inicio',
       dueDate: 'Fecha de Finalización',
       statusDetail: 'Detalle de Estado',
+      labelBlock: 'Detalle de Cronograma',
     }
   } 
 
@@ -83,6 +84,7 @@ export class ValoremFormComponent implements OnInit {
       external_company_state_id: [null, Validators.required],
       external_company_schedule_id: [null, Validators.required],
       status_detail: [null, Validators.required],
+      label_block: [null],
       start_date: [null, Validators.required],
       due_date: [null, Validators.required],
       is_active: true
@@ -98,6 +100,7 @@ export class ValoremFormComponent implements OnInit {
             external_company_state_id: this.valorem.external_company_state_id,
             external_company_schedule_id: this.valorem.external_company_schedule_id,
             status_detail: this.valorem.status_detail,
+            label_block: this.valorem.label_block,
             start_date: this.valorem.start_date,
             due_date: this.valorem.due_date,
             is_active: this.valorem.is_active
@@ -124,6 +127,7 @@ export class ValoremFormComponent implements OnInit {
       external_company_state_id: null,
       external_company_schedule_id: null,
       status_detail: null,
+      label_block: null,
       start_date: null,
       due_date: null,
       is_active: true
@@ -155,6 +159,7 @@ export class ValoremFormComponent implements OnInit {
       external_company_state_id: this.valoremGroup.value.external_company_state_id,
       external_company_schedule_id: this.valoremGroup.value.external_company_schedule_id,
       status_detail: this.valoremGroup.value.status_detail,
+      label_block: this.valoremGroup.value.label_block,
       start_date: this.getToStringDate(this.valoremGroup.value.start_date),
       due_date: this.getToStringDate(this.valoremGroup.value.due_date),
       is_active: this.valoremGroup.value.is_active,
