@@ -9,7 +9,7 @@ export class DelayCauseBySource {
     delay_sources_id?: number;
     delay_sources?: DelaySource;
     is_active?: boolean;
-    is_delete?: number;
+    is_delete?: boolean;
     user_updates_id?: number;
     user_updates?: User;
     user_creates_id?: number;

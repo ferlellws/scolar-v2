@@ -1,0 +1,103 @@
+<mat-accordion>
+
+    <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+        [expanded]="step === 0" (opened)="setStep(0)">
+
+        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+            <mat-panel-title class="col-sm-12 col-md-5">
+                <h3 class="txt-primary title-expansion ">{{labelsTitle.source}}</h3>
+            </mat-panel-title>
+            <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.source}}</mat-panel-description>
+        </mat-expansion-panel-header> 
+        
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        <span class="txt-accent" style="font-weight: 500;">Filtros</span>
+        <div class="row">
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Años</mat-label>
+                <mat-select [formControl]="yearsForm" (selectionChange)="onChangeSelectYears()" multiple>
+                    <mat-option *ngFor="let year of optionsYears" [value]="year">{{year}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Meses</mat-label>
+                <mat-select [formControl]="monthsForm" (selectionChange)="onChangeSelectMonths()" multiple>
+                    <mat-option *ngFor="let month of optionsMonths" [value]="month">{{month}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Proyectos</mat-label>
+                <mat-select [formControl]="monthsForm" (selectionChange)="onChangeSelectMonths()" multiple>
+                    <mat-option *ngFor="let month of optionsMonths" [value]="month">{{month}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Tipificaciones</mat-label>
+                <mat-select [formControl]="monthsForm" (selectionChange)="onChangeSelectMonths()" multiple>
+                    <mat-option *ngFor="let month of optionsMonths" [value]="month">{{month}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="row col-sm-12 col-md-4">
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="primary" (click)="filter()">{{labelButton.filter}}</button>
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="accent" (click)="remove()">{{labelButton.remove}}</button>
+            </div>
+        </div>
+
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+
+        <div class="row">
+            <tecno-pie-charts class="col-sm-12 col-md-6"
+                [id]="'1'"
+                [title]="''"
+                [pieHole]="0.6"
+                [dataTable]="dataGraphicSource">
+            </tecno-pie-charts>
+    
+            <tecno-dynamic-table  class="col-sm-12 col-md-6"
+                [objectsData]="dataTableSource">
+            </tecno-dynamic-table>
+        </div>
+
+        <mat-action-row>
+        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+        [expanded]="step === 1" (opened)="setStep(1)">
+        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+            <mat-panel-title class="col-sm-12 col-md-5">
+                <h3 class="txt-primary title-expansion"> {{labelsTitle.vicepresidency}}</h3>
+            </mat-panel-title>
+            <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.vicepresidency}}</mat-panel-description>        
+        </mat-expansion-panel-header>
+        
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+            <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+          </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="row mat-elevation-z0 card-expansion">
+        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+            <mat-panel-title class="col-sm-12 col-md-5">
+                <h3 class="txt-primary title-expansion"> {{labelsTitle.area}}</h3>
+            </mat-panel-title>
+            <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.area}}</mat-panel-description>        
+        </mat-expansion-panel-header>        
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="row mat-elevation-z0 card-expansion">
+        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+            <mat-panel-title class="col-sm-12 col-md-5">
+                <h3 class="txt-primary title-expansion"> {{labelsTitle.typification}}</h3>
+            </mat-panel-title>
+            <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.typification}}</mat-panel-description>        
+        </mat-expansion-panel-header>        
+    </mat-expansion-panel>
+
+</mat-accordion>

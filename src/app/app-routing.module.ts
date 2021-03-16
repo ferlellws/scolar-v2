@@ -226,7 +226,15 @@ const routes: Routes = [
       vicePresidencies: VicePresidenciesResolver
     }
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  { path: 'desviation-causes',
+    loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 
