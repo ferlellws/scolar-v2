@@ -3,7 +3,7 @@ import { User } from "./user";
 
 export class DelayTypification {
     id?: number;
-    title!: string;
+    name!: string;
     description!: string;
     is_active?: boolean;
     is_delete?: number;

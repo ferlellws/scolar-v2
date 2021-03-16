@@ -26,6 +26,7 @@ import { RisksService } from 'src/app/services/risks.service';
 import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
+import { DesviationCausesFormComponent } from './desviation-causes-form/desviation-causes-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
 
@@ -433,6 +434,25 @@ export class ProjectDetailsComponent implements OnInit {
 
   onWeek(){
     const dialogRef = this.dialog.open(WeekFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
+  }
+
+  onDesviation(){
+    const dialogRef = this.dialog.open(DesviationCausesFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {   

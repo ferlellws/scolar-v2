@@ -2,7 +2,7 @@ import { User } from "./user";
 
 export class DelayCause {
     id?: number;
-    title!: string;
+    name!: string;
     description!: string;
     is_active?: boolean;
     is_delete?: number;

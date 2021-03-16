@@ -35,6 +35,7 @@ import { ProjectDetailsResolver } from './guards/project-details.resolver';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WeekFormComponent } from './week-form/week-form.component';
+import { DesviationCausesFormComponent } from './desviation-causes-form/desviation-causes-form.component';
 
 const materialModels = [
   MatSortModule,
@@ -73,7 +74,8 @@ const materialModels = [
   declarations: [
     ProjectDetailsComponent,
     ValoremFormComponent,
-    WeekFormComponent
+    WeekFormComponent,
+    DesviationCausesFormComponent
   ],
   imports: [
     CommonModule,
