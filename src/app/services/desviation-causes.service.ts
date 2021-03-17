@@ -36,6 +36,16 @@ export class DesviationCausesService {
     );
   }
 
+  getDesviationCausesBySource() {
+    return this.http.get<DesviationCause>(`${this.API}/data_table_report`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   getDesviationCausesId(id: number) {
     return this.http.get<DesviationCause>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

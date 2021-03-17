@@ -35,6 +35,7 @@ import { WeeksByProjectsResolver } from './components/project-details/guards/wee
 import { GoalsByWeeksResolver } from './components/project-details/guards/goals-by-weeks.resolver';
 import { NextActivitiesByWeeksResolver } from './components/project-details/guards/next-activities-by-weeks.resolver';
 import { ObseravtionsByWeeksResolver } from './components/project-details/guards/observations-by-weeks.resolver';
+import { DesviationCausesBySourceResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-source.resolver';
 
 const routes: Routes = [
   {
@@ -234,6 +235,9 @@ const routes: Routes = [
     loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
+    resolve: {
+      desviationCausesBySource: DesviationCausesBySourceResolver
+    }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];

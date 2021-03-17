@@ -12,7 +12,7 @@
         
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
         <span class="txt-accent" style="font-weight: 500;">Filtros</span>
-        <div class="row">
+        <div class="row" style="margin-bottom: 20px;">
             <mat-form-field class="col-sm-12 col-md-2">
                 <mat-label>Años</mat-label>
                 <mat-select [formControl]="yearsForm" (selectionChange)="onChangeSelectYears()" multiple>
@@ -50,15 +50,16 @@
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 
         <div class="row">
-            <tecno-pie-charts class="col-sm-12 col-md-6"
+            <tecno-pie-charts class="col-sm-12 col-md-6 graph"
                 [id]="'1'"
-                [title]="''"
+                [title]="'Fuente de Atraso'"
                 [pieHole]="0.6"
                 [dataTable]="dataGraphicSource">
             </tecno-pie-charts>
-    
-            <tecno-dynamic-table  class="col-sm-12 col-md-6"
-                [objectsData]="dataTableSource">
+
+            <tecno-dynamic-table class="col-sm-12 col-md-6"
+                [objectsData]="dataTableSource"
+                emptyText="Ingrese causales de desviación">
             </tecno-dynamic-table>
         </div>
 
@@ -97,7 +98,22 @@
                 <h3 class="txt-primary title-expansion"> {{labelsTitle.typification}}</h3>
             </mat-panel-title>
             <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.typification}}</mat-panel-description>        
-        </mat-expansion-panel-header>        
+        </mat-expansion-panel-header>
+
+        <div class="row">
+            <tecno-vega-charts class="col-sm-12 col-md-6"
+                [id]="'4'"
+                [title]="'Hola'"
+                [dataTable]="dataVega"
+                [maxScale]= "'14'"
+                [width]= "'700'"
+                [height]= "'500'">
+            </tecno-vega-charts>
+    
+            <tecno-dynamic-table  class="col-sm-12 col-md-6"
+                [objectsData]="dataTableSource1">
+            </tecno-dynamic-table>
+        </div>
     </mat-expansion-panel>
 
 </mat-accordion>

@@ -1,6 +1,7 @@
 import { GoogleChartService } from './../../../../services/google-chart.service';
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { TableData } from 'src/app/models/table-data';
+import { environment } from 'src/environments/environment';
 
 export interface PieSliceTextStyle {
   color: string;
@@ -88,6 +89,38 @@ export class PieChartsComponent implements OnInit {
         ]
       );
     }
+    return result;
+  }
+
+  static TableToChart(dataTable: TableData, keysSelected?: string[]){
+    var keysAll = Object.keys(dataTable.dataTable[0]);
+    var keys = [];
+    var headers = [];
+
+    if (keysSelected != null){
+      headers.push(dataTable.headers[0]);
+      keys.push(keysAll[0]);
+      for (let index = 0; index < keysSelected.length; index++) {
+        var indexFound = keysAll.indexOf(keysSelected[index]);
+        keys.push(keysAll[indexFound]);
+        headers.push(dataTable.headers[indexFound]);
+      }
+    }else{
+      keys = keysAll.slice(0, keysAll.length -1);
+      headers = dataTable.headers.slice(0, keysAll.length -1);
+    }
+
+    var result = [];
+    result.push(headers);
+
+    for (let index = 0; index < dataTable.dataTable.length; index++) {
+      var arrayAux =[];
+      for (let j = 0; j < keys.length; j++) {
+        arrayAux.push(dataTable.dataTable[index][keys[j]]);
+      }
+      result.push(arrayAux);
+    }
+    
     return result;
   }
 

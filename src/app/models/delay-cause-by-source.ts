@@ -4,10 +4,10 @@ import { User } from "./user";
 
 export class DelayCauseBySource {
     id?: number;
-    delay_causes_id?: number;
-    delay_causes?: DelayCause;
-    delay_sources_id?: number;
-    delay_sources?: DelaySource;
+    delay_cause_id?: number;
+    delay_cause?: DelayCause;
+    delay_source_id?: number;
+    delay_source?: DelaySource;
     is_active?: boolean;
     is_delete?: boolean;
     user_updates_id?: number;

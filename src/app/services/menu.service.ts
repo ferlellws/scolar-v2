@@ -307,7 +307,7 @@ export class MenuService {
           title: "Causales de Desviación",
           description: "Visualizacion y descarga de historico statuses",
           sysmodule_id: 1,
-          route: "",
+          route: "desviation-causes",
           order_menu: 3,
           is_active: true,
           bg_color: "#F44336",

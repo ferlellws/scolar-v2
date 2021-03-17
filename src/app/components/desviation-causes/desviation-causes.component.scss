@@ -15,10 +15,6 @@
     display: flex;
     width: 100%;
 }
-.chips {
-    margin-left: 5px;
-    margin-bottom: 10px;
-}
 
 .description {
     align-items: center;
@@ -30,5 +26,12 @@
     display: flex;
     justify-content: space-between;
     margin-left: 5px;
+    align-items: center;
+}
+.graph {
+    overflow: hidden;
+}
+
+.row {
     align-items: center;
 }
