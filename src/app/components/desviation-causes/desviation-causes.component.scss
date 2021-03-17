@@ -29,9 +29,17 @@
     align-items: center;
 }
 .graph {
-    overflow: hidden;
+   //overflow: hidden;
+   //display: flex;
+   //max-width: 100%;
+   //justify-content: center;
+
 }
 
 .row {
     align-items: center;
+}
+
+.content {
+    //overflow-x: scroll;
 }

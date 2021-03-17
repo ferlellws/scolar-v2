@@ -8,7 +8,7 @@ import { DesviationCausesService } from "src/app/services/desviation-causes.serv
 @Injectable({
   providedIn: 'root'
 })
-export class DesviationCausesBySourceResolver implements Resolve<TableData> {
+export class DesviationCausesByTypificationsResolver implements Resolve<TableData> {
 
   constructor(
     private desviationCausesService: DesviationCausesService
@@ -18,10 +18,10 @@ export class DesviationCausesBySourceResolver implements Resolve<TableData> {
   months: any = "";
   projects: any = "";
   typifications: any = "";
-
+  
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<TableData> {
-      return this.desviationCausesService.getDesviationCausesBySource(this.years, this.months, this.projects, this.typifications);
+      return this.desviationCausesService.getDesviationCausesByTypifications(this.years, this.months, this.projects, this.typifications);
   }
 }

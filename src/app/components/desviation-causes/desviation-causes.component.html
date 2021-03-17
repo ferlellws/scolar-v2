@@ -12,41 +12,39 @@
         
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
         <span class="txt-accent" style="font-weight: 500;">Filtros</span>
-        <div class="row" style="margin-bottom: 20px;">
+        <form [formGroup]="sourceGroup" class="row" style="margin-bottom: 20px;">
             <mat-form-field class="col-sm-12 col-md-2">
                 <mat-label>Años</mat-label>
-                <mat-select [formControl]="yearsForm" (selectionChange)="onChangeSelectYears()" multiple>
+                <mat-select formControlName="yearsForm" multiple>
                     <mat-option *ngFor="let year of optionsYears" [value]="year">{{year}}</mat-option>
                 </mat-select>
             </mat-form-field>
             
             <mat-form-field class="col-sm-12 col-md-2">
                 <mat-label>Meses</mat-label>
-                <mat-select [formControl]="monthsForm" (selectionChange)="onChangeSelectMonths()" multiple>
-                    <mat-option *ngFor="let month of optionsMonths" [value]="month">{{month}}</mat-option>
+                <mat-select formControlName="monthsForm" multiple>
+                    <mat-option *ngFor="let month of optionsMonths; index as i" [value]="i">{{month}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field class="col-sm-12 col-md-2">
                 <mat-label>Proyectos</mat-label>
-                <mat-select [formControl]="monthsForm" (selectionChange)="onChangeSelectMonths()" multiple>
-                    <mat-option *ngFor="let month of optionsMonths" [value]="month">{{month}}</mat-option>
+                <mat-select formControlName="projectsForm" multiple>
+                    <mat-option *ngFor="let project of projects" [value]="project.id">{{project.title}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field class="col-sm-12 col-md-2">
                 <mat-label>Tipificaciones</mat-label>
-                <mat-select [formControl]="monthsForm" (selectionChange)="onChangeSelectMonths()" multiple>
-                    <mat-option *ngFor="let month of optionsMonths" [value]="month">{{month}}</mat-option>
+                <mat-select formControlName="typificationsForm" multiple>
+                    <mat-option *ngFor="let typification of optionTypifications" [value]="typification.id">{{typification.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
-
             <div class="row col-sm-12 col-md-4">
-                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="primary" (click)="filter()">{{labelButton.filter}}</button>
-                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="accent" (click)="remove()">{{labelButton.remove}}</button>
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="primary" (click)="filter(sourceGroup, 'sourceGroup')">{{labelButton.filter}}</button>
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="accent" (click)="removeValueGroup(sourceGroup, 'sourceGroup')">{{labelButton.remove}}</button>
             </div>
-        </div>
-
+        </form>    
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 
         <div class="row">
@@ -64,7 +62,7 @@
         </div>
 
         <mat-action-row>
-        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+            <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
         </mat-action-row>
     </mat-expansion-panel>
 
@@ -77,22 +75,131 @@
             <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.vicepresidency}}</mat-panel-description>        
         </mat-expansion-panel-header>
         
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        <span class="txt-accent" style="font-weight: 500;">Filtros</span>
+        <form [formGroup]="vicepresidencyGroup" class="row" style="margin-bottom: 20px;">
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Años</mat-label>
+                <mat-select formControlName="yearsForm" multiple>
+                    <mat-option *ngFor="let year of optionsYears" [value]="year">{{year}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Meses</mat-label>
+                <mat-select formControlName="monthsForm" multiple>
+                    <mat-option *ngFor="let month of optionsMonths; index as i" [value]="i">{{month}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Proyectos</mat-label>
+                <mat-select formControlName="projectsForm" multiple>
+                    <mat-option *ngFor="let project of projects" [value]="project.id">{{project.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Tipificaciones</mat-label>
+                <mat-select formControlName="typificationsForm" multiple>
+                    <mat-option *ngFor="let typification of optionTypifications" [value]="typification.id">{{typification.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="row col-sm-12 col-md-4">
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="primary" (click)="filter(vicepresidencyGroup, 'vicepresidencyGroup')">{{labelButton.filter}}</button>
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="accent" (click)="removeValueGroup(vicepresidencyGroup, 'vicepresidencyGroup')">{{labelButton.remove}}</button>
+            </div>
+        </form>    
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        
+        <div class="row">
+            <tecno-pie-charts class="col-sm-12 col-md-6 graph"
+                [id]="'2'"
+                [title]="'Vicepresidencias'"
+                [pieHole]="0.6"
+                [dataTable]="dataGraphicVicePresidency">
+            </tecno-pie-charts>
+
+            <tecno-dynamic-table class="col-sm-12 col-md-6"
+                [objectsData]="dataTableVicePresidency"
+                emptyText="Ingrese causales de desviación">
+            </tecno-dynamic-table>
+        </div>
+
         <mat-action-row>
             <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
             <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
-          </mat-action-row>
+        </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel class="row mat-elevation-z0 card-expansion">
+    <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+        [expanded]="step === 2" (opened)="setStep(2)">
         <mat-expansion-panel-header class="col-sm-12 col-md-12">
             <mat-panel-title class="col-sm-12 col-md-5">
                 <h3 class="txt-primary title-expansion"> {{labelsTitle.area}}</h3>
             </mat-panel-title>
             <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.area}}</mat-panel-description>        
-        </mat-expansion-panel-header>        
+        </mat-expansion-panel-header> 
+        
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        <span class="txt-accent" style="font-weight: 500;">Filtros</span>
+        <form [formGroup]="areaGroup" class="row" style="margin-bottom: 20px;">
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Años</mat-label>
+                <mat-select formControlName="yearsForm" multiple>
+                    <mat-option *ngFor="let year of optionsYears" [value]="year">{{year}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Meses</mat-label>
+                <mat-select formControlName="monthsForm" multiple>
+                    <mat-option *ngFor="let month of optionsMonths; index as i" [value]="i">{{month}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Proyectos</mat-label>
+                <mat-select formControlName="projectsForm" multiple>
+                    <mat-option *ngFor="let project of projects" [value]="project.id">{{project.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Tipificaciones</mat-label>
+                <mat-select formControlName="typificationsForm" multiple>
+                    <mat-option *ngFor="let typification of optionTypifications" [value]="typification.id">{{typification.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="row col-sm-12 col-md-4">
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="primary" (click)="filter(areaGroup, 'areaGroup')">{{labelButton.filter}}</button>
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="accent" (click)="removeValueGroup(areaGroup, 'areaGroup')">{{labelButton.remove}}</button>
+            </div>
+        </form>    
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+
+        <div class="row">
+            <tecno-pie-charts class="col-sm-12 col-md-6 graph"
+                [id]="'3'"
+                [title]="'Areas'"
+                [pieHole]="0.6"
+                [dataTable]="dataGraphicArea">
+            </tecno-pie-charts>
+
+            <tecno-dynamic-table class="col-sm-12 col-md-6"
+                [objectsData]="dataTableArea"
+                emptyText="Ingrese causales de desviación">
+            </tecno-dynamic-table>
+        </div>
+        
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+            <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+        </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel class="row mat-elevation-z0 card-expansion">
+    <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+        [expanded]="step === 3" (opened)="setStep(3)">
         <mat-expansion-panel-header class="col-sm-12 col-md-12">
             <mat-panel-title class="col-sm-12 col-md-5">
                 <h3 class="txt-primary title-expansion"> {{labelsTitle.typification}}</h3>
@@ -100,20 +207,61 @@
             <mat-panel-description class="col-sm-12 col-md-7 description">{{labelsDescription}} {{labelsTitle.typification}}</mat-panel-description>        
         </mat-expansion-panel-header>
 
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        <span class="txt-accent" style="font-weight: 500;">Filtros</span>
+        <form [formGroup]="typificationGroup" class="row" style="margin-bottom: 20px;">
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Años</mat-label>
+                <mat-select formControlName="yearsForm" multiple>
+                    <mat-option *ngFor="let year of optionsYears" [value]="year">{{year}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Meses</mat-label>
+                <mat-select formControlName="monthsForm" multiple>
+                    <mat-option *ngFor="let month of optionsMonths; index as i" [value]="i">{{month}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Proyectos</mat-label>
+                <mat-select formControlName="projectsForm" multiple>
+                    <mat-option *ngFor="let project of projects" [value]="project.id">{{project.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12 col-md-2">
+                <mat-label>Tipificaciones</mat-label>
+                <mat-select formControlName="typificationsForm" multiple>
+                    <mat-option *ngFor="let typification of optionTypifications" [value]="typification.id">{{typification.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="row col-sm-12 col-md-4">
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="primary" (click)="filter(typificationGroup, 'typificationGroup')">{{labelButton.filter}}</button>
+                <button mat-raised-button class="col-sm-12 col-md-6 button-filter" color="accent" (click)="removeValueGroup(typificationGroup, 'typificationGroup')">{{labelButton.remove}}</button>
+            </div>
+        </form>    
+        <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        
         <div class="row">
-            <tecno-vega-charts class="col-sm-12 col-md-6"
+            <tecno-vega-charts class="col-sm-12 col-md-6 graph"
                 [id]="'4'"
-                [title]="'Hola'"
-                [dataTable]="dataVega"
-                [maxScale]= "'14'"
-                [width]= "'700'"
-                [height]= "'500'">
+                [title]="'Tipificaciones'"
+                [dataTable]="dataGraphicTypification"
+                [maxScale]= "123"
+                [width]= "700"
+                [height]= "600">
             </tecno-vega-charts>
     
             <tecno-dynamic-table  class="col-sm-12 col-md-6"
-                [objectsData]="dataTableSource1">
+                [objectsData]="dataTableTypification">
             </tecno-dynamic-table>
         </div>
+
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+        </mat-action-row>
     </mat-expansion-panel>
 
 </mat-accordion>

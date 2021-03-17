@@ -43,8 +43,10 @@ export class VegaChartsComponent implements OnInit {
   ];
   color1 = '#ff4081';
   color2 = '#3f51b5';
-  limit = 200;
+  limit = 400;
   numberSize = 15;
+  fontSize = 15;
+  graphSize = 200;
   private gLib: any;
 
   constructor(private gChartService : GoogleChartService) {
@@ -83,23 +85,23 @@ export class VegaChartsComponent implements OnInit {
   static TableToChart(dataTable: TableData, keysSelected?: string[]){
     var keysAll = Object.keys(dataTable.dataTable[0]);
     var keys = [];
-    var headers = [];
+    //var headers = [];
 
     if (keysSelected != null){
-      headers.push(dataTable.headers[0]);
+      //headers.push(dataTable.headers[0]);
       keys.push(keysAll[0]);
       for (let index = 0; index < keysSelected.length; index++) {
         var indexFound = keysAll.indexOf(keysSelected[index]);
         keys.push(keysAll[indexFound]);
-        headers.push(dataTable.headers[indexFound]);
+        //headers.push(dataTable.headers[indexFound]);
       }
     }else{
       keys = keysAll.slice(0, keysAll.length -1);
-      headers = dataTable.headers.slice(0, keysAll.length -1);
+      //headers = dataTable.headers.slice(0, keysAll.length -1);
     }
 
     var result = [];
-    result.push(headers);
+    //result.push(headers);
 
     for (let index = 0; index < dataTable.dataTable.length; index++) {
       var arrayAux =[];
@@ -119,11 +121,25 @@ export class VegaChartsComponent implements OnInit {
         dataTable.addColumn({type: 'number', 'id': 'value'});
         dataTable.addRows(this.dataTable);
 
-    environment.consoleMessage(dataTable.fg, "kajsdbaskdhkasdkahsdkasdba");
-    
-    if(dataTable.fg.length > 10) {
-      this.limit = 80;
+    if(dataTable.fg.length > 0 && dataTable.fg.length <= 8) {
+      //this.limit = 150;
+      this.fontSize = 15;
+      this.numberSize = 15;
+      this.graphSize = 200;
+    } else if (dataTable.fg.length > 8 && dataTable.fg.length <= 13) {
+      //this.limit = 200;
+      this.fontSize = 12;
       this.numberSize = 12;
+      this.graphSize = 250;
+      this.width = this.width + 10
+      this.height = this.height + 20
+    } else {
+      //this.limit = 150;
+      this.fontSize = 10;
+      this.numberSize = 10;
+      this.graphSize = 270;
+      this.width = this.width + 10
+      this.height = this.height + 20
     }
 
     const options = {
@@ -141,7 +157,7 @@ export class VegaChartsComponent implements OnInit {
           //"subtitle": "RDI per 100g"
         },
         "signals": [
-          {"name": "radius", "update": 200}
+          {"name": "radius", "update": this.graphSize}
         ],
         "data": [
           {
@@ -281,7 +297,7 @@ export class VegaChartsComponent implements OnInit {
                   }
                 ],
                 "fill": {"value": "black"},
-                "fontSize": {"value": 13},
+                "fontSize": {"value": this.fontSize},
                 "limit": {"value": this.limit},
               }
             }

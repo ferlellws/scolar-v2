@@ -1,12 +1,18 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { DelayTypification } from 'src/app/models/delay-typification';
+import { Project } from 'src/app/models/project';
 import { TableData } from 'src/app/models/table-data';
+import { DelayTypificationsService } from 'src/app/services/delay-typifications.service';
+import { DesviationCausesService } from 'src/app/services/desviation-causes.service';
 import { MainService } from 'src/app/services/main.service';
+import { ProjectsService } from 'src/app/services/projects.service';
 import { environment } from 'src/environments/environment';
 import { PieChartsComponent } from '../shared/google-charts/pie-charts/pie-charts.component';
+import { VegaChartsComponent } from '../shared/google-charts/vega-charts/vega-charts.component';
 
 @Component({
   selector: 'tecno-desviation-causes',
@@ -18,101 +24,22 @@ export class DesviationCausesComponent implements OnInit {
   step = 0;
   dataTableSource!: TableData;
   dataGraphicSource!: any;
-
   dataTableVicePresidency!: TableData;
+  dataGraphicVicePresidency!: any;
   dataTableArea!: TableData;
-  dataTabletypification!: TableData;
+  dataGraphicArea!: any;
+  dataTableTypification!: TableData;
+  dataGraphicTypification!: any;
 
-  dataTableSource1: TableData = {
-    "headers": [
-      "Fuente de atraso",
-      "Suma de Impacto Tiempo (Días)",
-      "Suma de Variación de Costos (COP)"
-    ],
-    "dataTable": [
-      {
-        "fuente": "Tecnología",
-        "tiempo": 366,
-        "costos": 0
-      },
-      {
-        "fuente": "Unidad de Negocio (Funcionales",
-        "tiempo": 367,
-        "costos": 345700000
-      },
-      {
-        "fuente": "Financiero",
-        "tiempo": 0,
-        "costos": 0
-      },
-      {
-        "fuente": "Jurídico",
-        "tiempo": 0,
-        "costos": 0
-      },
-      {
-        "fuente": "Servicios Administrativos (Compras)",
-        "tiempo": 0,
-        "costos": 0
-      },
-      {
-        "fuente": "Gestión Humana",
-        "tiempo": 0,
-        "costos": 0
-      },
-      {
-        "fuente": "PMO",
-        "tiempo": 182,
-        "costos": 29500000
-      },
-      {
-        "fuente": "Lineamiento Directivo",
-        "tiempo": 50,
-        "costos": 0
-      },
-
-    ],
-    "footer": {
-        "fuente": "Total",
-        "tiempo": 965,
-        "costos": 375200000
-    }
-  };
-
-  dataVega = [
-    ["Apoyo definición",4],
-    ["Atrasos en Compras",3],
-    ["Atrasos en definición de alcance",6],
-    ["Demora Elaboración Contrato",2],
-    ["Disponibilidad de Recurso",14],
-    ["Disponibilidad de Recurso Área IT",4],
-    ["Disponibilidad de Recurso Proveedor IT",5],
-    ["Falla en Especificaciones",12],
-    ["Fallas de Calidad IT",2],
-    ["Fallas de Calidad Proveedor",10],
-    ["Fallas de Planeación",4],
-    ["Variable Exógena",2],
-    ["Apoyo definición2",4],
-    ["Atrasos en Compras2",3],
-    ["Atrasos en definición de alcance2",6],
-    ["Demora Elaboración Contrato2",2],
-    ["Disponibilidad de Recurso2",14],
-    ["Disponibilidad de Recurso Área IT2",4],
-    ["Disponibilidad de Recurso Proveedor IT2",5],
-  ];
-
-  yearsForm = new FormControl();
-  monthsForm = new FormControl();
-  projectsForm = new FormControl();
-  typificationsForm = new FormControl();
+  sourceGroup!: FormGroup;
+  vicepresidencyGroup!: FormGroup;
+  areaGroup!: FormGroup;
+  typificationGroup!: FormGroup;
   
-  optionsYears = ["2021", "2020"];
+  optionsYears: any[] = [];
+  optionTypifications: any[] = [];
+  projects: Project[] = [];
   optionsMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-
-  yearsSelected: any[] = [];
-  monthsSelected: any[] = [];
-  projectsSelected: any[] = [];
-  typificationsSelected: any[] = [];
 
   labelsTitle = {
     source: "Fuente",
@@ -120,11 +47,13 @@ export class DesviationCausesComponent implements OnInit {
     area: "Área",
     typification: "Tipificación"
   }
+
   labelsDescription = "Gráfico Impacto de Tiempo por"
   labelStep = {
     back: "Atrás",
     next: "Siguiente"
   }
+
   labelButton = {
     remove: "Limpiar Filtros",
     filter: "Filtrar"
@@ -135,59 +64,131 @@ export class DesviationCausesComponent implements OnInit {
     private route: ActivatedRoute,
     private mainService: MainService,
     public datepipe: DatePipe,
-    
-  ) { }
+    private desviationCausesService: DesviationCausesService,
+    private projectsService:ProjectsService,
+    private delayTypificationsService:DelayTypificationsService,
+    private fg: FormBuilder 
+  ) {
+    this.sourceGroup = this.fg.group({
+      yearsForm: [null],
+      monthsForm: [null],
+      projectsForm: [null],
+      typificationsForm: [null],
+    });
+    this.vicepresidencyGroup = this.fg.group({
+      yearsForm: [null],
+      monthsForm: [null],
+      projectsForm: [null],
+      typificationsForm: [null],
+    });
+    this.areaGroup = this.fg.group({
+      yearsForm: [null],
+      monthsForm: [null],
+      projectsForm: [null],
+      typificationsForm: [null],
+    });
+    this.typificationGroup = this.fg.group({
+      yearsForm: [null],
+      monthsForm: [null],
+      projectsForm: [null],
+      typificationsForm: [null],
+    });
+  }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.mainService.showLoading();
-    this.route.data.subscribe((data: any) =>{
+    await this.route.data.subscribe((data: any) =>{
       this.dataTableSource = data.desviationCausesBySource.data;
-
       this.dataGraphicSource = PieChartsComponent.TableToChart(this.dataTableSource);
-      setTimeout(() => {this.mainService.hideLoading()}, 1000);
-    })
 
-    environment.consoleMessage(this.dataTableSource, ">>>>>> datos back <<<<<<<");
+      this.dataTableVicePresidency = data.desviationCausesByVicepresidencies.data;
+      this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency);
+
+      this.dataTableArea = data.desviationCausesByAreas.data;
+      this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea);
+
+      this.dataTableTypification = data.desviationCausesByTypifications.data;
+      this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification, ['sum_impacts_time']);
+
+      this.projectsService.getProjectsSelect()
+      .subscribe((projects: Project[]) => {
+        this.projects = projects
+        for (let index = 0; index < this.projects.length; index++) {
+          var year = this.projects[index].reception_date
+          if((year != null && year != "")) {
+            if(!(this.optionsYears.includes(year.split("-")[0]))) {
+              this.optionsYears.push(year.split("-")[0]);
+            }
+          }
+        }
+      });
+    
+      this.delayTypificationsService.getDelayTypifications()
+        .subscribe((delayTypification: DelayTypification[]) => {
+          this.optionTypifications = delayTypification;
+        });
+
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);
+    });
+    
   }
 
   setStep(index: number) {
     this.step = index;
-    this.remove();
   }
 
   nextStep() {
     this.step++;
-    this.remove();
   }
 
   prevStep() {
     this.step--;
-    this.remove();
   }
 
-  onChangeSelectYears(){
-    this.yearsSelected = this.yearsForm.value;
-    environment.consoleMessage(this.yearsSelected);
+  filter(group: FormGroup, nameGroup: string) {
+    var years = this.arrayToString(group.get("yearsForm")!.value);
+    var months = this.arrayToString(group.get("monthsForm")!.value);
+    var projects = this.arrayToString(group.get("projectsForm")!.value);
+    var typifications = this.arrayToString(group.get("typificationsForm")!.value);
+
+    if(nameGroup == "sourceGroup") {
+      this.desviationCausesService.getDesviationCausesBySource(years, months, projects, typifications);
+    } else if (nameGroup == "vicepresidencyGroup") {
+      this.desviationCausesService.getDesviationCausesByVicepresidencies(years, months, projects, typifications);
+    } else if (nameGroup == "areaGroup") {
+      this.desviationCausesService.getDesviationCausesByAreas(years, months, projects, typifications);
+    } else if (nameGroup == "typificationGroup") {
+      this.desviationCausesService.getDesviationCausesByTypifications(years, months, projects, typifications);
+    }
+    
   }
 
-  onChangeSelectMonths(){
-    this.monthsSelected = this.monthsForm.value;
-    environment.consoleMessage(this.monthsSelected);
+  removeValueGroup(group: FormGroup, nameGroup: string) {
+    var keys: string[] = Object.keys(group.controls);
+    for (let index = 0; index < keys.length; index++) {
+      group.get(keys[index])?.setValue(null);
+    }
+    if(nameGroup == "sourceGroup") {
+      this.desviationCausesService.getDesviationCausesBySource("", "", "", "");
+    } else if (nameGroup == "vicepresidencyGroup") {
+      this.desviationCausesService.getDesviationCausesByVicepresidencies("", "", "", "");
+    } else if (nameGroup == "areaGroup") {
+      this.desviationCausesService.getDesviationCausesByAreas("", "", "", "");
+    } else if (nameGroup == "typificationGroup") {
+      this.desviationCausesService.getDesviationCausesByTypifications("", "", "", "");
+    }
   }
 
-  filter() {
-
+  arrayToString(array: any[]) {
+    var data:string = "";
+    if(array != null) {
+      for (let index = 0; index < array.length; index++) {
+        data = data+array[index];
+        if(index < array.length-1) {
+          data = data+","
+        }
+      }
+    }
+    return data;
   }
-
-  remove(){
-    this.yearsForm.setValue(null);
-    this.yearsSelected = [];
-    this.monthsForm.setValue(null);
-    this.monthsSelected = [];
-    this.projectsForm.setValue(null);
-    this.projectsSelected = [];
-    this.typificationsForm.setValue(null);
-    this.typificationsSelected = [];
-  }
-
 }
