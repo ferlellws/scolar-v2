@@ -4,11 +4,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DelayCause } from 'src/app/models/delay-cause';
+import { DelayCauseBySource } from 'src/app/models/delay-cause-by-source';
 import { DelaySource } from 'src/app/models/delay-source';
 import { DelayTypification } from 'src/app/models/delay-typification';
 import { DesviationCause } from 'src/app/models/desviation-cause';
 import { SolutionState } from 'src/app/models/solution-state';
+import { Typification } from 'src/app/models/typification';
+import { DelayCauseBySourceBySourcesService } from 'src/app/services/delay-cause-by-sources.service';
+import { DelayCauseService } from 'src/app/services/delay-causes.service';
+import { DelaySourcesService } from 'src/app/services/delay-sources.service';
+import { DelayTypificationsService } from 'src/app/services/delay-typifications.service';
 import { DesviationCausesService } from 'src/app/services/desviation-causes.service';
+import { SolutionStatesService } from 'src/app/services/solution-states.service';
+import { environment } from 'src/environments/environment';
 
 export interface DialogData {
   idProject: number;
@@ -35,6 +43,7 @@ export class DesviationCausesFormComponent implements OnInit {
   causes: DelayCause[] = [];
   delayTypifications: DelayTypification[] = [];
   solutionStates: SolutionState[] = [];
+  causesIDs: DelayCauseBySource[] = [];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -42,6 +51,11 @@ export class DesviationCausesFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public datepipe: DatePipe,
     private _desviationCausesService: DesviationCausesService,
+    private _delaySourcesService: DelaySourcesService,
+    private _delayCauseService: DelayCauseService,
+    private _delayCauseBySourceBySourcesService: DelayCauseBySourceBySourcesService,
+    private _delayTypificationsService: DelayTypificationsService,
+    private _solutionStatesService: SolutionStatesService,
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +69,7 @@ export class DesviationCausesFormComponent implements OnInit {
       'cause_delay': [null, [Validators.required]],
 
       'impacts_critical_path': [null, [Validators.required]],
-      'impacts_time': [null, [Validators.required, Validators.min(10)]],
+      'impacts_time': [null, [Validators.required, Validators.min(0)]],
       'cost_variation': [null, [Validators.required]],
       'schedule_activity_impacted': [null, [Validators.required]],
 
@@ -73,7 +87,7 @@ export class DesviationCausesFormComponent implements OnInit {
       cause_delay: `Causa del atraso`,
 
       impacts_critical_path: `Impacta ruta crítica`,
-      impacts_time: `Causa de atraso`,
+      impacts_time: `Impacto tiempo (días)`,
       cost_variation: `Variación de costos`,
       schedule_activity_impacted: `Actividad cronograma impactada`,
 
@@ -84,40 +98,70 @@ export class DesviationCausesFormComponent implements OnInit {
 
   _openSources(ev: boolean) {
     if (ev) {
-      // this._stagesService.getStagesSelect()
-      //   .subscribe((stages: Stage[]) => this.stages = stages);
+      this._delaySourcesService.getDelaySources()
+        .subscribe((sources: DelaySource[]) => this.sources = sources);
+    }else{
+      this.general.get('cause')!.setValue(null);
+      this._delayCauseBySourceBySourcesService.getDelayCauseBySources()
+        .subscribe((causeBySourceBySources: DelayCauseBySource[]) => {
+          this.causesIDs = [];
+          for (let index = 0; index < causeBySourceBySources.length; index++) {
+            if(causeBySourceBySources[index].delay_source!.id! == this.general.get('source')!.value){
+              this.causesIDs.push(causeBySourceBySources[index]);
+            }
+          }
+          this._delayCauseService.getDelayCauses()
+          .subscribe((causes: DelayCause[]) => {
+            var causesIDs: number[] = this.causesIDs.map(cause => cause.delay_cause!.id!)
+            this.causes = causes.filter(cause => causesIDs.includes(cause.id!));
+          })
+        });
     }
   }
 
   _openCauses(ev: boolean) {
     if (ev) {
-      // this._stagesService.getStagesSelect()
-      //   .subscribe((stages: Stage[]) => this.stages = stages);
+      this.general.get('cause')!.setValue(null);
+      this._delayCauseBySourceBySourcesService.getDelayCauseBySources()
+        .subscribe((causeBySourceBySources: DelayCauseBySource[]) => {
+          this.causesIDs = [];
+          for (let index = 0; index < causeBySourceBySources.length; index++) {
+            if(causeBySourceBySources[index].delay_source!.id! == this.general.get('source')!.value){
+              this.causesIDs.push(causeBySourceBySources[index]);
+            }
+          }
+          this._delayCauseService.getDelayCauses()
+          .subscribe((causes: DelayCause[]) => {
+            var causesIDs: number[] = this.causesIDs.map(cause => cause.delay_cause!.id!)
+            this.causes = causes.filter(cause => causesIDs.includes(cause.id!));
+          })
+        });
     }
   }
 
   _openDelayTypification(ev: boolean) {
     if (ev) {
-      // this._stagesService.getStagesSelect()
-      //   .subscribe((stages: Stage[]) => this.stages = stages);
+      this._delayTypificationsService.getDelayTypifications()
+        .subscribe((typifications: DelayTypification[]) => this.delayTypifications = typifications);
     }
   }
 
   _openSolutionState(ev: boolean) {
     if (ev) {
-      // this._stagesService.getStagesSelect()
-      //   .subscribe((stages: Stage[]) => this.stages = stages);
+      this._solutionStatesService.getSolutionStates()
+        .subscribe(data => this.solutionStates = data);
     }
   }
 
   async crear(){
     true; //environment.consoleMessage("crear")
+    environment.consoleMessage(this.causesIDs, "causes >>")
     var desviation: DesviationCause = {
       project_id: this.data.idProject,
       date: this.parseDate(this.general.get('date')!.value),
       deliverable: this.general.get('deliverable')!.value,
 
-      delay_cause_by_sources_id: this.delay_cause_by_sources_id,
+      delay_cause_by_source_id: this.causesIDs.filter(cause => cause.delay_cause!.id! == this.general.get('cause')!.value)[0].id,
       delay_typification_id: this.general.get('delay_typification')!.value,
       cause_delay: this.general.get('cause_delay')!.value,
 
@@ -152,6 +196,7 @@ export class DesviationCausesFormComponent implements OnInit {
 
       this.openSnackBar(false, sErrors, "");
     });
+    this.emitClose.emit("close");
   }
 
   getMessageError(formGroup: FormGroup, field: string): string {
@@ -199,10 +244,14 @@ export class DesviationCausesFormComponent implements OnInit {
   }
 
   onReset(){
-    var controllers = Object.keys(this.general);
+    environment.consoleMessage("HOLAAAAA", ">>>>>CONTROLLERS")
+    var controllers = Object.keys(this.labels);
+    environment.consoleMessage(controllers, ">>>>>CONTROLLERS")
     for (let index = 0; index < controllers.length; index++) {
       this.general.get(controllers[index])?.setValue(null);
     }
+    this.causesIDs = [];
+    this.causes = []
   }
 
 }

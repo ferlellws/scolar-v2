@@ -8,8 +8,7 @@ export class DesviationCause {
     id?: number;
     project_id?: number;
     project?: Project;
-    delay_typification_by_sources_id? :number;
-    delay_cause_by_sources_id?: number;
+    delay_cause_by_source_id?: number;
     delay_cause_by_sources?: DelayCauseBySource;
     delay_typification_id?: number;
     delay_typification?: DelayTypification;

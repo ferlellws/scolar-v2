@@ -46,8 +46,8 @@ export class DesviationCausesService {
     );
   }
 
-  addDesviationCauses(desviation_causes: DesviationCause) {
-    return this.http.post<DesviationCause>(this.API, { desviation_causes: desviation_causes }, this.httpOptions)
+  addDesviationCauses(desviation_cause: DesviationCause) {
+    return this.http.post<DesviationCause>(this.API, { desviation_cause: desviation_cause }, this.httpOptions)
       .pipe(
         tap((data: any) => {
         })

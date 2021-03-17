@@ -12,7 +12,7 @@
     <form [formGroup]="general" style="width: 100%;">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <h3 class="mat-title txt-accent">Geenral</h3>
+                <h3 class="mat-title txt-accent">General</h3>
             </div>
         </div>
         <div class="row">
@@ -109,10 +109,10 @@
             <div class="col-sm-12 col-md-4">
                 <mat-form-field
                     class="full-width">
-                    <mat-select required formControlName="source">
+                    <mat-select required formControlName="impacts_critical_path">
                         <mat-option>-- None --</mat-option>
                         <mat-option [value]="true" >Sí</mat-option>
-                        <mat-option [value]="false" >NO</mat-option>
+                        <mat-option [value]="false" >No</mat-option>
                     </mat-select>
                     <mat-label>{{labels.impacts_critical_path}}</mat-label>
                     <mat-error *ngIf="this.general.get('impacts_critical_path')?.invalid">
@@ -184,4 +184,13 @@
             </div>
         </div>
     </form>
+    <div class="buttons">
+        <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+        <button class="button"
+            (click)="crear()"
+          mat-button color="primary"
+          [disabled]="general.invalid || fButtonDisabled">
+          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+        </button>
+    </div>
 </div>
