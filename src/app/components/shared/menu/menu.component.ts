@@ -39,7 +39,7 @@ export class MenuComponent implements OnInit {
     this.getMenu();
   }
 
-  getMenu(): Menu[] {
+  getMenu() {
     // if (sessionStorage.menuLoaded != null) {
     //   if (!this.getmenusSuccses) {
     //     this._usersService.getMenu().then(menu =>
@@ -50,12 +50,18 @@ export class MenuComponent implements OnInit {
     //     );
     //   }
 
-      this.menu = this.menuService.getMenu;
-      // Se inicializa dinámicamente el Array de flags en false después de obtener la cantidad de modulos del menu
-      this.menu.forEach(module => this.panelOpenState.push(false));
-      // console.log(this.menu);
+      console.log("Se pide getMenu");
 
-      return this.menu;
+      this.menuService.getFullMenu()
+        .subscribe(data => {
+          console.log({data});
+          this.menu = this.menuService.getMenu;
+          // Se inicializa dinámicamente el Array de flags en false después de obtener la cantidad de modulos del menu
+          this.menu.forEach(module => this.panelOpenState.push(false));
+          // console.log(this.menu);
+
+          return this.menu;
+        })
     // }
   }
 

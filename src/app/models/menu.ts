@@ -1,8 +1,7 @@
 export class Menu {
   module: {
     id: number;
-    title: string;
-    icon_id: number;
+    name: string;
     is_active: boolean;
     created_at: string;
     updated_at: string;
@@ -10,11 +9,11 @@ export class Menu {
   pages:
     {
       id: number;
-      title: string;
+      name: string;
       description: string;
-      sysmodule_id: number;
+      icon_name: string;
       route: string;
-      order_menu: number;
+      ordering: number;
       is_active: boolean;
       bg_color: string;
       created_at: string;
@@ -25,8 +24,7 @@ export class Menu {
   constructor() {
     this.module = {
       id: 0,
-      title: "",
-      icon_id: 0,
+      name: "",
       is_active: false,
       created_at: "",
       updated_at: ""
@@ -34,11 +32,11 @@ export class Menu {
 
     this.pages = [{
       id: 0,
-      title: "",
+      name: "",
       description: "",
-      sysmodule_id: 0,
+      icon_name: "",
       route: "",
-      order_menu: 0,
+      ordering: 0,
       is_active: false,
       bg_color: "",
       created_at: "",

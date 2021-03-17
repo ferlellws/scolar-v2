@@ -6,11 +6,11 @@ import {Location} from '@angular/common';
 
 export interface Page {
   id: number;
-  title: string;
+  name: string;
   description: string;
-  sysmodule_id: number;
+  menu_module_id: number;
   route: string;
-  order_menu: number;
+  ordering: number;
   is_active: boolean;
   bg_color: string;
   created_at: string;
@@ -48,7 +48,7 @@ export class InfoPageComponent implements OnInit {
     setTimeout(() => { this.fAnimation = true; }, 200);
 
     if (this.oInfoPage) {
-      this.title = this.oInfoPage.title;
+      this.title = this.oInfoPage.name;
       this.description = this.oInfoPage.description;
       // this.bgColor = this.oInfoPage.bg_color;
     }
@@ -69,7 +69,7 @@ export class InfoPageComponent implements OnInit {
         this.title = "Home";
         this.description = "";
       } else {
-        this.title = this.oInfoPage.title;
+        this.title = this.oInfoPage.name;
         this.description = this.oInfoPage.description;
       }
       this.fAnimation = false;

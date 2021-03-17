@@ -11,9 +11,9 @@ export interface Page {
   id: number;
   title: string;
   description: string;
-  sysmodule_id: number;
+  menu_module_id: number;
   route: string;
-  order_menu: number;
+  ordering: number;
   is_active: boolean;
   bg_color: string;
   created_at: string;
