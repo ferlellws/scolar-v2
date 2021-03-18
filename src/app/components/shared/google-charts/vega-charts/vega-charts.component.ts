@@ -131,15 +131,15 @@ export class VegaChartsComponent implements OnInit {
       this.fontSize = 12;
       this.numberSize = 12;
       this.graphSize = 250;
-      this.width = this.width + 10
-      this.height = this.height + 20
-    } else {
+      this.width = 700
+      this.height = 600
+    } else if (dataTable.fg.length > 13) {
       //this.limit = 150;
       this.fontSize = 10;
       this.numberSize = 10;
       this.graphSize = 270;
-      this.width = this.width + 10
-      this.height = this.height + 20
+      this.width = 800
+      this.height = 700
     }
 
     const options = {

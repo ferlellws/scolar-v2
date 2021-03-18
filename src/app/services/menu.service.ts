@@ -305,9 +305,9 @@ export class MenuService {
         {
           id: 12,
           title: "Causales de Desviación",
-          description: "Visualizacion y descarga de historico statuses",
+          description: "Consolidado de Causales de Desviación",
           sysmodule_id: 1,
-          route: "desviation-causes",
+          route: "/desviation-causes",
           order_menu: 3,
           is_active: true,
           bg_color: "#F44336",
@@ -315,7 +315,7 @@ export class MenuService {
           updated_at: "2020-12-04T09:24:24.000Z"
         },
         {
-          id: 12,
+          id: 13,
           title: "Interrelaciones",
           description: "Visualizacion y descarga de historico statuses",
           sysmodule_id: 1,

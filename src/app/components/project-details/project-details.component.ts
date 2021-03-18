@@ -388,6 +388,7 @@ export class ProjectDetailsComponent implements OnInit {
         }
 
         this.weeksByProject.push(res);
+        this.nextWeek();
       });
 
   }
