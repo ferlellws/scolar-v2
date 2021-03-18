@@ -1,3 +1,4 @@
+import { MenuService } from './../../services/menu.service';
 import { Token } from '@angular/compiler/src/ml_parser/lexer';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -32,7 +33,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private authService: AuthService,
-    private mainService: MainService
+    private mainService: MainService,
+    private menuService: MenuService
   ) {
     // this.logInGroup = this.fb.group({
     //   hideRequired: this.hideRequiredControl,
@@ -112,6 +114,9 @@ export class LoginComponent implements OnInit {
         }
         this.disabledButton = false;
         this.logInGroup.reset();
+
+        // OBTENER MENU
+        this.menuService.getFullMenu();
       }, (err) => {
         // SI HAY UN ERROR
         let message: string = "";
