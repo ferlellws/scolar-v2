@@ -244,9 +244,7 @@ export class DesviationCausesFormComponent implements OnInit {
   }
 
   onReset(){
-    environment.consoleMessage("HOLAAAAA", ">>>>>CONTROLLERS")
     var controllers = Object.keys(this.labels);
-    environment.consoleMessage(controllers, ">>>>>CONTROLLERS")
     for (let index = 0; index < controllers.length; index++) {
       this.general.get(controllers[index])?.setValue(null);
     }

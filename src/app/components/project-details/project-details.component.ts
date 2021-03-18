@@ -7,6 +7,7 @@ import { ApplicationByProject } from 'src/app/models/application-by-project';
 import { AreaByProject } from 'src/app/models/area-by-project';
 import { Benefit } from 'src/app/models/benefit';
 import { CompanyByProject } from 'src/app/models/company-by-project';
+import { DesviationCause } from 'src/app/models/desviation-cause';
 import { Goal } from 'src/app/models/goal';
 import { Highlight } from 'src/app/models/highlight';
 import { Kpi } from 'src/app/models/kpi';
@@ -15,6 +16,7 @@ import { Observation } from 'src/app/models/observation';
 import { Risk } from 'src/app/models/risk';
 import { Week } from 'src/app/models/week';
 import { BenefitsService } from 'src/app/services/benefits.service';
+import { DesviationCausesService } from 'src/app/services/desviation-causes.service';
 import { GoalsService } from 'src/app/services/goals.service';
 import { HighlightsService } from 'src/app/services/highlights.service';
 import { KpisService } from 'src/app/services/kpis.service';
@@ -59,6 +61,8 @@ export class ProjectDetailsComponent implements OnInit {
   nextActivitiesByWeek: any[] = [];
   obseravtionsByWeek: any[] = [];
   year: number = -1;
+  desviationCausesGeneral: any;
+  desviationCauses: DesviationCause [] =[];
   
   meses = [
     {mes: "Enero", nReg: 0, year: -1},
@@ -77,6 +81,8 @@ export class ProjectDetailsComponent implements OnInit {
 
   indicator: Indicator | null = null;
   weekId!: number;  
+
+  desviationId: number = 0;  
 
   semanal_hours = 40;
   labelAssignment = "Sin asignar";
@@ -97,6 +103,7 @@ export class ProjectDetailsComponent implements OnInit {
     private goalsService:GoalsService,
     private nextActivitiesService:NextActivitiesService,
     private observationsService:ObservationsService,
+    private desviationCausesService: DesviationCausesService,
   ) { }
 
   ngOnInit(): void {
@@ -235,6 +242,10 @@ export class ProjectDetailsComponent implements OnInit {
         return observation.week!.id == this.weeksByProject[this.weekId].id
       })
 
+      var desviationGeneral: any = data.desviationsByProject;
+      this.desviationCausesGeneral = desviationGeneral.general_data;
+      this.desviationCauses = desviationGeneral.desviation_causes;
+      this.desviationId = this.desviationCauses.length - 1;
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
@@ -391,6 +402,15 @@ export class ProjectDetailsComponent implements OnInit {
         this.weeksByProject.push(res);
       });
 
+
+      this.desviationCausesService.emitNew.subscribe( data => {
+        this.desviationCausesGeneral.cost_variation += data.cost_variation;
+        this.desviationCausesGeneral.impacts_time += data.impacts_time;
+        this.desviationCausesGeneral.total++;
+        this.desviationCauses.push(data);
+        this.desviationId = this.desviationCauses.length - 1;
+      })
+
   }
 
   onValorem(){
@@ -496,6 +516,14 @@ export class ProjectDetailsComponent implements OnInit {
     }) 
   }
 
+  beforeDesviation(){
+    this.desviationId--;
+  }
+
+  nextDesviation(){
+    this.desviationId++;
+  }
+
   getToStringDate(date: any): string {
     if (date == '' || date == undefined || date == null){
       return '';
@@ -540,6 +568,12 @@ export class ProjectDetailsComponent implements OnInit {
     }
     
     this.project = data;
+  }
+
+  numberToCOP(num: number){
+    var res = new Intl.NumberFormat('en-US').format( num)
+    res = res + ' COP'
+    return res;
   }
   
 }

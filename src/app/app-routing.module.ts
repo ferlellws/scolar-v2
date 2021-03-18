@@ -35,6 +35,7 @@ import { WeeksByProjectsResolver } from './components/project-details/guards/wee
 import { GoalsByWeeksResolver } from './components/project-details/guards/goals-by-weeks.resolver';
 import { NextActivitiesByWeeksResolver } from './components/project-details/guards/next-activities-by-weeks.resolver';
 import { ObseravtionsByWeeksResolver } from './components/project-details/guards/observations-by-weeks.resolver';
+import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
 
 const routes: Routes = [
   {
@@ -134,7 +135,8 @@ const routes: Routes = [
       weeksByProject: WeeksByProjectsResolver,
       goalsByWeeks: GoalsByWeeksResolver,
       nextActivitiesByWeek: NextActivitiesByWeeksResolver,
-      obseravtionsByWeek: ObseravtionsByWeeksResolver
+      obseravtionsByWeek: ObseravtionsByWeeksResolver,
+      desviationsByProject: DesviationByProjectResolver
     }
   },
   {

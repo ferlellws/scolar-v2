@@ -9,7 +9,7 @@ export class DesviationCause {
     project_id?: number;
     project?: Project;
     delay_cause_by_source_id?: number;
-    delay_cause_by_sources?: DelayCauseBySource;
+    delay_cause_by_source?: DelayCauseBySource;
     delay_typification_id?: number;
     delay_typification?: DelayTypification;
     solution_state_id?: number;
