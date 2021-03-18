@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DelayTypification } from 'src/app/models/delay-typification';
+import { DesviationCause } from 'src/app/models/desviation-cause';
 import { Project } from 'src/app/models/project';
 import { TableData } from 'src/app/models/table-data';
 import { DelayTypificationsService } from 'src/app/services/delay-typifications.service';
@@ -13,6 +14,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
 import { environment } from 'src/environments/environment';
 import { PieChartsComponent } from '../shared/google-charts/pie-charts/pie-charts.component';
 import { VegaChartsComponent } from '../shared/google-charts/vega-charts/vega-charts.component';
+import { DesviationCausesModule } from './desviation-causes.module';
 
 @Component({
   selector: 'tecno-desviation-causes',
@@ -30,6 +32,11 @@ export class DesviationCausesComponent implements OnInit {
   dataGraphicArea!: any;
   dataTableTypification!: TableData;
   dataGraphicTypification!: any;
+
+  emptyGraphSource = false;
+  emptyGraphVicepresidency = false;
+  emptyGraphArea = false;
+  emptyGraphTypification = false;
 
   sourceGroup!: FormGroup;
   vicepresidencyGroup!: FormGroup;
@@ -115,10 +122,19 @@ export class DesviationCausesComponent implements OnInit {
       this.maxScaleTypifications = Math.max.apply(null,this.dataGraphicTypification.map((data: any) => data[1])) + 10
 
       this.projectsService.getProjectsSelect()
-      .subscribe((projects: Project[]) => {
-        this.projects = projects
-        for (let index = 0; index < this.projects.length; index++) {
-          var year = this.projects[index].reception_date
+        .subscribe((projects: Project[]) => {
+          this.projects = projects
+      });
+
+      this.delayTypificationsService.getDelayTypifications()
+        .subscribe((delayTypification: DelayTypification[]) => {
+          this.optionTypifications = delayTypification;
+        });
+
+      this.desviationCausesService.getDesviationCauses()
+      .subscribe((dCauses: DesviationCause[]) => {
+        for (let index = 0; index < dCauses.length; index++) {
+          var year = dCauses[index].date
           if((year != null && year != "")) {
             if(!(this.optionsYears.includes(year.split("-")[0]))) {
               this.optionsYears.push(year.split("-")[0]);
@@ -126,11 +142,6 @@ export class DesviationCausesComponent implements OnInit {
           }
         }
       });
-    
-      this.delayTypificationsService.getDelayTypifications()
-        .subscribe((delayTypification: DelayTypification[]) => {
-          this.optionTypifications = delayTypification;
-        });
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
@@ -156,13 +167,50 @@ export class DesviationCausesComponent implements OnInit {
     var typifications = this.arrayToString(group.get("typificationsForm")!.value);
 
     if(nameGroup == "sourceGroup") {
-      this.desviationCausesService.getDesviationCausesBySource(years, months, projects, typifications);
+      this.desviationCausesService.getDesviationCausesBySource(years, months, projects, typifications)
+        .subscribe(data => {
+          this.dataTableSource = data.data;
+          if(this.dataTableSource.dataTable.length == 0){
+            this.emptyGraphSource = true;
+          }else{
+            this.dataGraphicSource = PieChartsComponent.TableToChart(this.dataTableSource);
+            this.emptyGraphSource = false;
+          }
+        });
+      
     } else if (nameGroup == "vicepresidencyGroup") {
-      this.desviationCausesService.getDesviationCausesByVicepresidencies(years, months, projects, typifications);
+      this.desviationCausesService.getDesviationCausesByVicepresidencies(years, months, projects, typifications)
+        .subscribe(data => {
+          this.dataTableVicePresidency = data.data;
+          if(this.dataTableVicePresidency.dataTable.length == 0){
+            this.emptyGraphVicepresidency = true;
+          }else{
+            this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency);
+            this.emptyGraphVicepresidency = false;
+          }
+        });
     } else if (nameGroup == "areaGroup") {
-      this.desviationCausesService.getDesviationCausesByAreas(years, months, projects, typifications);
+      this.desviationCausesService.getDesviationCausesByAreas(years, months, projects, typifications)
+        .subscribe(data => {
+          this.dataTableArea = data.data;
+          if(this.dataTableArea.dataTable.length == 0){
+            this.emptyGraphArea = true;
+          }else{
+            this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea);
+            this.emptyGraphArea = false;
+          }
+        });
     } else if (nameGroup == "typificationGroup") {
-      this.desviationCausesService.getDesviationCausesByTypifications(years, months, projects, typifications);
+      this.desviationCausesService.getDesviationCausesByTypifications(years, months, projects, typifications)
+        .subscribe(data => {
+          this.dataTableTypification = data.data;
+          if(this.dataTableTypification.dataTable.length == 0){
+            this.emptyGraphTypification = true;
+          }else{
+            this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification);
+            this.emptyGraphTypification = false;
+          }
+        });
     }
     
   }
@@ -173,13 +221,33 @@ export class DesviationCausesComponent implements OnInit {
       group.get(keys[index])?.setValue(null);
     }
     if(nameGroup == "sourceGroup") {
-      this.desviationCausesService.getDesviationCausesBySource("", "", "", "");
+      this.desviationCausesService.getDesviationCausesBySource("", "", "", "")
+        .subscribe(data => {
+          this.dataTableSource = data.data;
+          this.dataGraphicSource = PieChartsComponent.TableToChart(this.dataTableSource);
+          this.emptyGraphSource = false;
+        });
     } else if (nameGroup == "vicepresidencyGroup") {
-      this.desviationCausesService.getDesviationCausesByVicepresidencies("", "", "", "");
+      this.desviationCausesService.getDesviationCausesByVicepresidencies("", "", "", "")
+        .subscribe(data => {
+          this.dataTableVicePresidency = data.data;
+          this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency);
+          this.emptyGraphVicepresidency = false;
+        });
     } else if (nameGroup == "areaGroup") {
-      this.desviationCausesService.getDesviationCausesByAreas("", "", "", "");
+      this.desviationCausesService.getDesviationCausesByAreas("", "", "", "")
+        .subscribe(data => {
+          this.dataTableArea = data.data;
+          this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea);
+          this.emptyGraphArea = false;
+        });
     } else if (nameGroup == "typificationGroup") {
-      this.desviationCausesService.getDesviationCausesByTypifications("", "", "", "");
+      this.desviationCausesService.getDesviationCausesByTypifications("", "", "", "")
+        .subscribe(data => {
+          this.dataTableTypification = data.data;
+          this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification);
+          this.emptyGraphTypification = false;
+        });
     }
   }
 

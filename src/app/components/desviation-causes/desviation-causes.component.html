@@ -48,7 +48,7 @@
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 
         <div class="row">
-            <div class="col-sm-12 col-md-6 graph">
+            <div *ngIf="!emptyGraphSource" class="col-sm-12 col-md-6 graph">
                 <tecno-pie-charts
                     [id]="'1'"
                     [title]="'Fuente de Atraso'"
@@ -117,7 +117,7 @@
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
         
         <div class="row">
-            <tecno-pie-charts class="col-sm-12 col-md-6 graph"
+            <tecno-pie-charts *ngIf="!emptyGraphVicepresidency" class="col-sm-12 col-md-6 graph"
                 [id]="'2'"
                 [title]="'Vicepresidencias'"
                 [pieHole]="0.6"
@@ -182,7 +182,7 @@
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 
         <div class="row">
-            <tecno-pie-charts class="col-sm-12 col-md-6 graph"
+            <tecno-pie-charts *ngIf="!emptyGraphArea" class="col-sm-12 col-md-6 graph"
                 [id]="'3'"
                 [title]="'Areas'"
                 [pieHole]="0.6"
@@ -223,7 +223,7 @@
             <mat-form-field class="col-sm-12 col-md-2">
                 <mat-label>Meses</mat-label>
                 <mat-select formControlName="monthsForm" multiple>
-                    <mat-option *ngFor="let month of optionsMonths; index as i" [value]="i">{{month}}</mat-option>
+                    <mat-option *ngFor="let month of optionsMonths; index as i" [value]="i+1">{{month}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
@@ -248,7 +248,7 @@
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
         
         <div class="row">
-            <tecno-vega-charts class="col-sm-12 col-md-6 graph"
+            <tecno-vega-charts *ngIf="!emptyGraphTypification" class="col-sm-12 col-md-6 graph"
                 [id]="'4'"
                 [title]="'Tipificaciones'"
                 [dataTable]="dataGraphicTypification"
@@ -258,7 +258,8 @@
             </tecno-vega-charts>
     
             <tecno-dynamic-table  class="col-sm-12 col-md-6 table"
-                [objectsData]="dataTableTypification">
+                [objectsData]="dataTableTypification"
+                emptyText="Ingrese causales de desviación">
             </tecno-dynamic-table>
         </div>
 
