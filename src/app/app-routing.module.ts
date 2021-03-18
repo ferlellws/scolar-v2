@@ -39,6 +39,7 @@ import { DesviationCausesBySourceResolver } from './components/desviation-causes
 import { DesviationCausesByTypificationsResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-typifications.resolver';
 import { DesviationCausesByVicepresidenciesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-vicepresidencies.resolver';
 import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
+import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
 
 const routes: Routes = [
   {
@@ -78,11 +79,30 @@ const routes: Routes = [
     }
   },
   { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
-  {
-    path: 'home',
+  { path: 'desviation-causes',
+  loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
+  canActivate: [AuthGuard],
+  canLoad: [AuthGuard],
+  resolve: {
+    desviationCausesBySource: DesviationCausesBySourceResolver,
+    desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
+    desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
+    desviationCausesByAreas: DesviationCausesByAreasResolver
+  }
+},
+{ path: 'general-users',
+  loadChildren: () => import('./components/general-users/general-users.module').then(m => m.GeneralUsersModule),
+  canActivate: [AuthGuard],
+  canLoad: [AuthGuard],
+  resolve: {
+    generalUsers: GeneralUsersResolver,
+  }
+},
+{
+  path: 'home',
     component: HomeComponent,
     canActivate: [AuthGuard],
-   },
+  },
   { path: 'login', component: LoginComponent },
   {
     path: 'managements',
@@ -233,17 +253,6 @@ const routes: Routes = [
   { path: '',
     redirectTo: '/login',
     pathMatch: 'full'
-  },
-  { path: 'desviation-causes',
-    loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
-    canActivate: [AuthGuard],
-    canLoad: [AuthGuard],
-    resolve: {
-      desviationCausesBySource: DesviationCausesBySourceResolver,
-      desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
-      desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
-      desviationCausesByAreas: DesviationCausesByAreasResolver
-    }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];

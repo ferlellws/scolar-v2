@@ -119,7 +119,7 @@ export class DesviationCausesComponent implements OnInit {
       this.dataTableTypification = data.desviationCausesByTypifications.data;
       this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification, ['sum_impacts_time']);
 
-      this.maxScaleTypifications = Math.max.apply(null,this.dataGraphicTypification.map((data: any) => data[1])) + 10
+      this.maxScaleTypifications = Math.max.apply(null,this.dataGraphicTypification.map((data: any) => data[1])) + 10;
 
       this.projectsService.getProjectsSelect()
         .subscribe((projects: Project[]) => {
@@ -185,7 +185,7 @@ export class DesviationCausesComponent implements OnInit {
           if(this.dataTableVicePresidency.dataTable.length == 0){
             this.emptyGraphVicepresidency = true;
           }else{
-            this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency);
+            this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency, ['sum_impacts_time']);
             this.emptyGraphVicepresidency = false;
           }
         });
@@ -196,7 +196,7 @@ export class DesviationCausesComponent implements OnInit {
           if(this.dataTableArea.dataTable.length == 0){
             this.emptyGraphArea = true;
           }else{
-            this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea);
+            this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea, ['sum_impacts_time']);
             this.emptyGraphArea = false;
           }
         });
@@ -207,7 +207,7 @@ export class DesviationCausesComponent implements OnInit {
           if(this.dataTableTypification.dataTable.length == 0){
             this.emptyGraphTypification = true;
           }else{
-            this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification);
+            this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification, ['sum_impacts_time']);
             this.emptyGraphTypification = false;
           }
         });
@@ -231,21 +231,21 @@ export class DesviationCausesComponent implements OnInit {
       this.desviationCausesService.getDesviationCausesByVicepresidencies("", "", "", "")
         .subscribe(data => {
           this.dataTableVicePresidency = data.data;
-          this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency);
+          this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency, ['sum_impacts_time']);
           this.emptyGraphVicepresidency = false;
         });
     } else if (nameGroup == "areaGroup") {
       this.desviationCausesService.getDesviationCausesByAreas("", "", "", "")
         .subscribe(data => {
           this.dataTableArea = data.data;
-          this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea);
+          this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea, ['sum_impacts_time']);
           this.emptyGraphArea = false;
         });
     } else if (nameGroup == "typificationGroup") {
       this.desviationCausesService.getDesviationCausesByTypifications("", "", "", "")
         .subscribe(data => {
           this.dataTableTypification = data.data;
-          this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification);
+          this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification, ['sum_impacts_time']);
           this.emptyGraphTypification = false;
         });
     }

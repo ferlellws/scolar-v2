@@ -217,6 +217,18 @@ export class MenuService {
           bg_color: "#F44336",
           created_at: "2020-12-04T09:24:24.000Z",
           updated_at: "2020-12-04T09:24:24.000Z"
+        },
+        {
+          id: 16,
+          title: "Usuarios",
+          description: "Usuarios y perfiles",
+          sysmodule_id: 1,
+          route: "/general-users",
+          order_menu: 15,
+          is_active: true,
+          bg_color: "#F44336",
+          created_at: "2020-12-04T09:24:24.000Z",
+          updated_at: "2020-12-04T09:24:24.000Z"
         }
       ]
     },

@@ -47,7 +47,7 @@ export class DesviationCausesService {
     this.inputParams.typifications = typifications
     environment.consoleMessage(this.inputParams, "INPUT PARAMS")
     
-    return this.http.get<DesviationCause>(`${this.API}/data_table_report`, this.httpOptions)
+    return this.http.get<DesviationCause>(`${this.API}/data_table_source_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -62,7 +62,7 @@ export class DesviationCausesService {
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
     environment.consoleMessage(this.inputParams, "INPUT PARAMS")
-    return this.http.get<DesviationCause>(`${this.API}/data_table_report`, this.httpOptions)
+    return this.http.get<DesviationCause>(`${this.API}/data_table_typifications_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -77,7 +77,7 @@ export class DesviationCausesService {
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
     environment.consoleMessage(this.inputParams, "INPUT PARAMS")
-    return this.http.get<DesviationCause>(`${this.API}/data_table_report`, this.httpOptions)
+    return this.http.get<DesviationCause>(`${this.API}/data_table_vicepresidencies_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -92,7 +92,7 @@ export class DesviationCausesService {
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
     environment.consoleMessage(this.inputParams, "INPUT PARAMS")
-    return this.http.get<DesviationCause>(`${this.API}/data_table_report`, this.httpOptions)
+    return this.http.get<DesviationCause>(`${this.API}/data_table_areas_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
