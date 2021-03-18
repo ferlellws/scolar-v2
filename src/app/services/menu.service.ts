@@ -27,8 +27,8 @@ export class MenuService {
   emitOption = new EventEmitter<any>();
 
   inputParams: any = {
-    user_email: JSON.parse(localStorage.user).email,
-    user_token: JSON.parse(localStorage.user).authentication_token
+    user_email: "",
+    user_token: ""
   };
 
   httpOptions!: any;
@@ -511,6 +511,17 @@ export class MenuService {
   // };
 
   constructor(private http: HttpClient) {
+
+
+    // this.getFullMenu();
+  }
+
+  getFullMenu() {
+    if (localStorage.user) {
+      this.inputParams.user_email = JSON.parse(localStorage.user).email;
+      this.inputParams.user_token = JSON.parse(localStorage.user).authentication_token;
+    }
+
     this.httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bareer ${localStorage.token}`
@@ -518,11 +529,6 @@ export class MenuService {
       params: this.inputParams
     };
 
-    this.getFullMenu();
-  }
-
-  getFullMenu() {
-    console.log("============================>>>>>");
 
     return this.http.get<Menu[]>(`${this.API}/index`, this.httpOptions)
       .pipe(
