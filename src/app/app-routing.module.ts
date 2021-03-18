@@ -40,6 +40,7 @@ import { DesviationCausesByTypificationsResolver } from './components/desviation
 import { DesviationCausesByVicepresidenciesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-vicepresidencies.resolver';
 import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
 import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
+import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
 
 const routes: Routes = [
   {
@@ -158,7 +159,8 @@ const routes: Routes = [
       weeksByProject: WeeksByProjectsResolver,
       goalsByWeeks: GoalsByWeeksResolver,
       nextActivitiesByWeek: NextActivitiesByWeeksResolver,
-      obseravtionsByWeek: ObseravtionsByWeeksResolver
+      obseravtionsByWeek: ObseravtionsByWeeksResolver,
+      desviationsByProject: DesviationByProjectResolver
     }
   },
   {

@@ -1,0 +1,196 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <h1 class="mat-headline"> {{ singularOption }} </h1>
+    <span class="example-spacer"></span>
+  
+    <button mat-icon-button mat-dialog-close *ngIf="showBtnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="example-container bg-color-white mat-elevation-z4">
+  
+    <form [formGroup]="general" style="width: 100%;">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title txt-accent">General</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                    <mat-label>{{labels.date}}</mat-label>
+                    <input required matInput [matDatepicker]="picker" formControlName="date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="this.general.get('date')?.invalid">
+                        {{ getMessageError(general ,'date') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-0 col-md-6">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                    <mat-label>{{labels.deliverable}}</mat-label>
+                    <textarea required  matInput formControlName="deliverable"></textarea>
+                    <mat-error *ngIf="this.general.get('deliverable')?.invalid">
+                        {{ getMessageError(general ,'deliverable') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title txt-accent">Atraso</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width">
+                    <mat-select required (openedChange)="_openSources($event)" formControlName="source">
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let sourceSelect of sources" [value]="sourceSelect.id" >{{sourceSelect.name}}</mat-option>
+                    </mat-select>
+                    <mat-label>{{labels.source}}</mat-label>
+                    <mat-error *ngIf="this.general.get('source')?.invalid">
+                        {{ getMessageError(general ,'source') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width">
+                    <mat-select required (openedChange)="_openCauses($event)" formControlName="cause">
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let causeSelect of causes" [value]="causeSelect.id" >{{causeSelect.name}}</mat-option>
+                    </mat-select>
+                    <mat-label>{{labels.cause}}</mat-label>
+                    <mat-error *ngIf="this.general.get('cause')?.invalid">
+                        {{ getMessageError(general ,'cause') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width">
+                    <mat-select required (openedChange)="_openDelayTypification($event)" formControlName="delay_typification">
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let delayTypification of delayTypifications" [value]="delayTypification.id" >{{delayTypification.name}}</mat-option>
+                    </mat-select>
+                    <mat-label>{{labels.delay_typification}}</mat-label>
+                    <mat-error *ngIf="this.general.get('delay_typification')?.invalid">
+                        {{ getMessageError(general ,'delay_typification') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                    <mat-label>{{labels.cause_delay}}</mat-label>
+                    <textarea required matInput formControlName="cause_delay"></textarea>
+                    <mat-error *ngIf="this.general.get('cause_delay')?.invalid">
+                        {{ getMessageError(general ,'cause_delay') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title txt-accent">Impacto</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width">
+                    <mat-select required formControlName="impacts_critical_path">
+                        <mat-option>-- None --</mat-option>
+                        <mat-option [value]="true" >Sí</mat-option>
+                        <mat-option [value]="false" >No</mat-option>
+                    </mat-select>
+                    <mat-label>{{labels.impacts_critical_path}}</mat-label>
+                    <mat-error *ngIf="this.general.get('impacts_critical_path')?.invalid">
+                        {{ getMessageError(general ,'impacts_critical_path') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <input matInput [min]="0" type="number" placeholder="{{labels.impacts_time}}" formControlName="impacts_time" required>
+                    <mat-label>{{labels.impacts_time}}</mat-label>
+                    <mat-error *ngIf="this.general.get('impacts_time')?.invalid">
+                        {{ getMessageError(general ,'impacts_time') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <input matInput [min]="0" type="number" placeholder="{{labels.cost_variation}}" formControlName="cost_variation" required>
+                    <mat-label>{{labels.cost_variation}}</mat-label>
+                    <mat-error *ngIf="this.general.get('cost_variation')?.invalid">
+                        {{ getMessageError(general ,'cost_variation') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                    <mat-label>{{labels.schedule_activity_impacted}}</mat-label>
+                    <textarea required matInput formControlName="schedule_activity_impacted"></textarea>
+                    <mat-error *ngIf="this.general.get('schedule_activity_impacted')?.invalid">
+                        {{ getMessageError(general ,'schedule_activity_impacted') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title txt-accent">Solución</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                    <mat-label>{{labels.proposed_solution}}</mat-label>
+                    <textarea required matInput formControlName="proposed_solution"></textarea>
+                    <mat-error *ngIf="this.general.get('proposed_solution')?.invalid">
+                        {{ getMessageError(general ,'proposed_solution') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <mat-form-field
+                    class="full-width">
+                    <mat-select required (openedChange)="_openSolutionState($event)" formControlName="solution_state">
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let solutionState of solutionStates" [value]="solutionState.id" >{{solutionState.name}}</mat-option>
+                    </mat-select>
+                    <mat-label>{{labels.solution_state}}</mat-label>
+                    <mat-error *ngIf="this.general.get('solution_state')?.invalid">
+                        {{ getMessageError(general ,'solution_state') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <div class="buttons">
+        <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+        <button class="button"
+            (click)="crear()"
+          mat-button color="primary"
+          [disabled]="general.invalid || fButtonDisabled">
+          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+        </button>
+    </div>
+</div>

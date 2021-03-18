@@ -7,6 +7,7 @@ import { ApplicationByProject } from 'src/app/models/application-by-project';
 import { AreaByProject } from 'src/app/models/area-by-project';
 import { Benefit } from 'src/app/models/benefit';
 import { CompanyByProject } from 'src/app/models/company-by-project';
+import { DesviationCause } from 'src/app/models/desviation-cause';
 import { Goal } from 'src/app/models/goal';
 import { Highlight } from 'src/app/models/highlight';
 import { Kpi } from 'src/app/models/kpi';
@@ -15,6 +16,7 @@ import { Observation } from 'src/app/models/observation';
 import { Risk } from 'src/app/models/risk';
 import { Week } from 'src/app/models/week';
 import { BenefitsService } from 'src/app/services/benefits.service';
+import { DesviationCausesService } from 'src/app/services/desviation-causes.service';
 import { GoalsService } from 'src/app/services/goals.service';
 import { HighlightsService } from 'src/app/services/highlights.service';
 import { KpisService } from 'src/app/services/kpis.service';
@@ -26,6 +28,7 @@ import { RisksService } from 'src/app/services/risks.service';
 import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
+import { DesviationCausesFormComponent } from './desviation-causes-form/desviation-causes-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
 
@@ -58,6 +61,8 @@ export class ProjectDetailsComponent implements OnInit {
   nextActivitiesByWeek: any[] = [];
   obseravtionsByWeek: any[] = [];
   year: number = -1;
+  desviationCausesGeneral: any;
+  desviationCauses: DesviationCause [] =[];
   
   meses = [
     {mes: "Enero", nReg: 0, year: -1},
@@ -76,6 +81,8 @@ export class ProjectDetailsComponent implements OnInit {
 
   indicator: Indicator | null = null;
   weekId!: number;  
+
+  desviationId: number = 0;  
 
   semanal_hours = 40;
   labelAssignment = "Sin asignar";
@@ -96,12 +103,19 @@ export class ProjectDetailsComponent implements OnInit {
     private goalsService:GoalsService,
     private nextActivitiesService:NextActivitiesService,
     private observationsService:ObservationsService,
+    private desviationCausesService: DesviationCausesService,
   ) { }
 
   ngOnInit(): void {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.modificationData(data.project);
+      var desviationGeneral: any = data.desviationsByProject;
+      environment.consoleMessage(data.desviationsByProject, ">>>>>>>>>>>>>>>>>>" )
+      this.desviationCausesGeneral = desviationGeneral.general_data;
+      this.desviationCauses = desviationGeneral.desviation_causes;
+      this.desviationId = this.desviationCauses.length - 1;
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);
 
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
@@ -234,7 +248,6 @@ export class ProjectDetailsComponent implements OnInit {
         return observation.week!.id == this.weeksByProject[this.weekId].id
       })
 
-      setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
     // this.projectsService.emitDataTable
@@ -391,6 +404,15 @@ export class ProjectDetailsComponent implements OnInit {
         this.nextWeek();
       });
 
+
+      this.desviationCausesService.emitNew.subscribe( data => {
+        this.desviationCausesGeneral.cost_variation += data.cost_variation;
+        this.desviationCausesGeneral.impacts_time += data.impacts_time;
+        this.desviationCausesGeneral.total++;
+        this.desviationCauses.push(data);
+        this.desviationId = this.desviationCauses.length - 1;
+      })
+
   }
 
   onValorem(){
@@ -451,6 +473,25 @@ export class ProjectDetailsComponent implements OnInit {
     );
   }
 
+  onDesviation(){
+    const dialogRef = this.dialog.open(DesviationCausesFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
+  }
+
   nextWeek(){
     this.weekId++;
     this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
@@ -475,6 +516,14 @@ export class ProjectDetailsComponent implements OnInit {
     this.obseravtionsByWeek = this.obseravtionsAll.filter((observation: Observation) => {
       return observation.week!.id == this.weeksByProject[this.weekId].id
     }) 
+  }
+
+  beforeDesviation(){
+    this.desviationId--;
+  }
+
+  nextDesviation(){
+    this.desviationId++;
   }
 
   getToStringDate(date: any): string {
@@ -521,6 +570,12 @@ export class ProjectDetailsComponent implements OnInit {
     }
     
     this.project = data;
+  }
+
+  numberToCOP(num: number){
+    var res = new Intl.NumberFormat('en-US').format( num)
+    res = res + ' COP'
+    return res;
   }
   
 }

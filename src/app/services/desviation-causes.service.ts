@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DesviationCause } from '../models/desviation-cause';
@@ -8,6 +8,9 @@ import { DesviationCause } from '../models/desviation-cause';
   providedIn: 'root'
 })
 export class DesviationCausesService {
+
+  emitNew = new EventEmitter<any>();
+
   private readonly API = `${environment.API}/desviation_causes`;
   
   inputParams: any = {
@@ -98,6 +101,15 @@ export class DesviationCausesService {
       tap((data: any) => {
         // this.emitDataTable.emit(data);
       })
+    )
+  }
+
+  getDesviationCausesByProject(id: number) {
+    
+    return this.http.get<any>(`${this.API}/by_project/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
     );
   }
 
@@ -111,10 +123,11 @@ export class DesviationCausesService {
     );
   }
 
-  addDesviationCauses(desviation_causes: DesviationCause) {
-    return this.http.post<DesviationCause>(this.API, { desviation_causes: desviation_causes }, this.httpOptions)
+  addDesviationCauses(desviation_cause: DesviationCause) {
+    return this.http.post<DesviationCause>(this.API, { desviation_cause: desviation_cause }, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          this.emitNew.emit(data)
         })
       );
   }
