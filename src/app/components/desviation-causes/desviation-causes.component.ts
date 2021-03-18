@@ -41,6 +41,8 @@ export class DesviationCausesComponent implements OnInit {
   projects: Project[] = [];
   optionsMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
+  maxScaleTypifications!: number;
+
   labelsTitle = {
     source: "Fuente",
     vicepresidency: "Vicepresidencia",
@@ -102,13 +104,15 @@ export class DesviationCausesComponent implements OnInit {
       this.dataGraphicSource = PieChartsComponent.TableToChart(this.dataTableSource);
 
       this.dataTableVicePresidency = data.desviationCausesByVicepresidencies.data;
-      this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency);
+      this.dataGraphicVicePresidency = PieChartsComponent.TableToChart(this.dataTableVicePresidency, ['sum_impacts_time']);
 
       this.dataTableArea = data.desviationCausesByAreas.data;
-      this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea);
+      this.dataGraphicArea = PieChartsComponent.TableToChart(this.dataTableArea, ['sum_impacts_time']);
 
       this.dataTableTypification = data.desviationCausesByTypifications.data;
       this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification, ['sum_impacts_time']);
+
+      this.maxScaleTypifications = Math.max.apply(null,this.dataGraphicTypification.map((data: any) => data[1])) + 10
 
       this.projectsService.getProjectsSelect()
       .subscribe((projects: Project[]) => {

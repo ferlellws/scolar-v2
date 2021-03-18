@@ -1,5 +1,5 @@
 import { GoogleChartService } from './../../../../services/google-chart.service';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostListener, Input, OnInit, SimpleChanges } from '@angular/core';
 import { TableData } from 'src/app/models/table-data';
 import { environment } from 'src/environments/environment';
 
@@ -22,8 +22,8 @@ export class PieChartsComponent implements OnInit {
   @Input() legend!: string;
   @Input() fMaterial!: boolean;
   @Input() dataTable!: any [];
-  @Input() width: string = "800px";
-  @Input() height: string = "500px";
+  @Input() width: string = "";
+  @Input() height: string = "";
   @Input() chartClass: string = "";
   @Input() pieHole: number = 0;
   @Input() positionLegend: string = 'right';
@@ -135,12 +135,22 @@ export class PieChartsComponent implements OnInit {
       is3D: this.is3D,
       pieSliceText: this.pieSliceText,
       pieSliceTextStyle: this.pieSliceTextStyle,
-      colors: this.colors
+      colors: this.colors,
+      chartArea: {
+        left: "100",
+        "width": "100%",
+        "height": "100%"
+      }
     };
 
     let chart = new this.gLib.visualization.PieChart(document.getElementById(this.id));
 
     chart.draw(data, options);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.drawChart();
   }
 
 }

@@ -29,17 +29,20 @@
     align-items: center;
 }
 .graph {
-   //overflow: hidden;
-   //display: flex;
-   //max-width: 100%;
-   //justify-content: center;
-
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .row {
     align-items: center;
 }
 
-.content {
-    //overflow-x: scroll;
+.table {
+    position: relative;
+    overflow-x: auto;
+}
+
+::ng-deep .mat-header-cell {
+    min-width: 230px;
 }

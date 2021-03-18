@@ -48,17 +48,21 @@
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 
         <div class="row">
-            <tecno-pie-charts class="col-sm-12 col-md-6 graph"
-                [id]="'1'"
-                [title]="'Fuente de Atraso'"
-                [pieHole]="0.6"
-                [dataTable]="dataGraphicSource">
-            </tecno-pie-charts>
+            <div class="col-sm-12 col-md-6 graph">
+                <tecno-pie-charts
+                    [id]="'1'"
+                    [title]="'Fuente de Atraso'"
+                    [pieHole]="0.6"
+                    [dataTable]="dataGraphicSource">
+                </tecno-pie-charts>
+            </div>
 
-            <tecno-dynamic-table class="col-sm-12 col-md-6"
-                [objectsData]="dataTableSource"
-                emptyText="Ingrese causales de desviación">
-            </tecno-dynamic-table>
+           <div class="col-sm-12 col-md-6 table">
+                <tecno-dynamic-table
+                    [objectsData]="dataTableSource"
+                    emptyText="Ingrese causales de desviación">
+                </tecno-dynamic-table>
+            </div>     
         </div>
 
         <mat-action-row>
@@ -119,8 +123,7 @@
                 [pieHole]="0.6"
                 [dataTable]="dataGraphicVicePresidency">
             </tecno-pie-charts>
-
-            <tecno-dynamic-table class="col-sm-12 col-md-6"
+            <tecno-dynamic-table class="col-sm-12 col-md-6 table"
                 [objectsData]="dataTableVicePresidency"
                 emptyText="Ingrese causales de desviación">
             </tecno-dynamic-table>
@@ -186,7 +189,7 @@
                 [dataTable]="dataGraphicArea">
             </tecno-pie-charts>
 
-            <tecno-dynamic-table class="col-sm-12 col-md-6"
+            <tecno-dynamic-table class="col-sm-12 col-md-6 table"
                 [objectsData]="dataTableArea"
                 emptyText="Ingrese causales de desviación">
             </tecno-dynamic-table>
@@ -249,12 +252,12 @@
                 [id]="'4'"
                 [title]="'Tipificaciones'"
                 [dataTable]="dataGraphicTypification"
-                [maxScale]= "123"
-                [width]= "700"
-                [height]= "600">
+                [maxScale]= "maxScaleTypifications"
+                [width]= "'600'"
+                [height]= "'500'">
             </tecno-vega-charts>
     
-            <tecno-dynamic-table  class="col-sm-12 col-md-6"
+            <tecno-dynamic-table  class="col-sm-12 col-md-6 table"
                 [objectsData]="dataTableTypification">
             </tecno-dynamic-table>
         </div>
