@@ -110,6 +110,12 @@ export class ProjectDetailsComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.modificationData(data.project);
+      var desviationGeneral: any = data.desviationsByProject;
+      environment.consoleMessage(data.desviationsByProject, ">>>>>>>>>>>>>>>>>>" )
+      this.desviationCausesGeneral = desviationGeneral.general_data;
+      this.desviationCauses = desviationGeneral.desviation_causes;
+      this.desviationId = this.desviationCauses.length - 1;
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);
 
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
@@ -242,11 +248,6 @@ export class ProjectDetailsComponent implements OnInit {
         return observation.week!.id == this.weeksByProject[this.weekId].id
       })
 
-      var desviationGeneral: any = data.desviationsByProject;
-      this.desviationCausesGeneral = desviationGeneral.general_data;
-      this.desviationCauses = desviationGeneral.desviation_causes;
-      this.desviationId = this.desviationCauses.length - 1;
-      setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
     // this.projectsService.emitDataTable
