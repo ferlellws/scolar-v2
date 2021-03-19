@@ -395,18 +395,22 @@
             <h3 class="h3-subtitle txt-primary">Total variación de costos</h3>
             <div mat-line class="line-text"> {{numberToCOP(desviationCausesGeneral.cost_variation)}} </div>
             <br>
-            <div class="row" *ngIf="desviationCauses.length != 0">
-                <mat-card-header class="col-sm-12 col-md-4"  style="align-items: center; padding-top: 10px;" >
-                    <mat-card-title  class="txt-accent" >Causal {{desviationId +1}} </mat-card-title>
-                </mat-card-header>
-                <div *ngIf="desviationCauses.length != 0" class="header-row col-sm-12 col-md-8" style=" display: flex; justify-content: space-around; flex-wrap: wrap;">
-                    <button [disabled]="desviationId == 0" class="buttons-options" mat-menu-item (click)="beforeDesviation()">
-                        <mat-icon [ngClass]="(desviationId == 0)? 'icons-cards':'icons-cards txt-primary'">navigate_before</mat-icon>
-                    </button>
-                    <button [disabled]="desviationId == desviationCauses.length - 1" class="buttons-options" mat-menu-item (click)="nextDesviation()">
-                        <mat-icon [ngClass]="(desviationId == desviationCauses.length - 1)? 'icons-cards':'icons-cards txt-primary'">navigate_next</mat-icon>
-                    </button> 
-                </div>   
+            <div *ngIf="desviationCauses.length != 0" >
+                <div class="line-text causal-header">
+                    <div class="cause-header-text-icon">
+                        <h2  class=" txt-accent">Causal {{desviationId +1}}</h2>
+                        <mat-icon matRipple (click)="onDesviationEdit(desviationCauses[desviationId].id!)">create</mat-icon>
+                    </div>
+                    <div *ngIf="desviationCauses.length != 0" class="causal-content">
+                        <button mat-button [disabled]="desviationId == 0" class="buttons-options-arrows" (click)="beforeDesviation()">
+                            <mat-icon [ngClass]="(desviationId == 0)? 'icons-cards':'icons-cards txt-primary'">navigate_before</mat-icon>
+                        </button>
+                        <button mat-button [disabled]="desviationId == desviationCauses.length - 1" class="buttons-options-arrows" (click)="nextDesviation()">
+                            <mat-icon [ngClass]="(desviationId == desviationCauses.length - 1)? 'icons-cards':'icons-cards txt-primary'">navigate_next</mat-icon>
+                        </button> 
+                    </div>   
+                </div>
+                
             
             
                 <mat-accordion>
