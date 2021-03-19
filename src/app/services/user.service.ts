@@ -1,22 +1,30 @@
 import { environment } from './../../environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { User } from '../models/user';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
 import { Menu } from '../models/menu';
+import { TableData } from '../models/table-data';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  httpOptions = {};
-  inputParams: any = {};
-
+  
   private readonly API = `${environment.API}/users`;
+  
+  emitDataTable = new EventEmitter<any>();
+  
+  inputParams: any = {
+    user_email: JSON.parse(localStorage.user).email,
+    user_token: JSON.parse(localStorage.user).authentication_token
+  };
+  
+  httpOptions = {};
+
 
   constructor(private http: HttpClient) {
 
@@ -33,6 +41,63 @@ export class UserService {
       .pipe(
         // catchError(this.handleError)
         tap(console.log)
+      );
+  }
+
+  getUsersTable(){
+    return this.http.get<TableData[]>(`${this.API}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getUsersId(id: number) {
+    return this.http.get<User>(`${this.API}/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  addUser(user: User) {
+    return this.http.post<User>(this.API, { user: user }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  updateUser(user: User, id: number) {
+    return this.http.put<User>(`${this.API}/${id}`, user, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  updateStatusUser(is_active: number, id: number) {
+
+    return this.http.put<User>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete<User>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
       );
   }
 

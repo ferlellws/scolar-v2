@@ -12,8 +12,12 @@ export class DesviationCausesService {
   emitNew = new EventEmitter<any>();
 
   private readonly API = `${environment.API}/desviation_causes`;
-
+  
   inputParams: any = {
+    years: "",
+    months: "",
+    projects: "",
+    typifications: "",
     user_email: JSON.parse(localStorage.user).email,
     user_token: JSON.parse(localStorage.user).authentication_token
   };
@@ -37,6 +41,67 @@ export class DesviationCausesService {
       // catchError(this.handleError)
       tap(console.log)
     );
+  }
+
+  getDesviationCausesBySource(years: any, months: any, projects: any, typifications: any) {
+    this.inputParams.years = years
+    this.inputParams.months = months
+    this.inputParams.projects = projects
+    this.inputParams.typifications = typifications
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
+    
+    return this.http.get<DesviationCause>(`${this.API}/data_table_source_report`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getDesviationCausesByTypifications(years: any, months: any, projects: any, typifications: any) {
+    this.inputParams.years = years
+    this.inputParams.months = months
+    this.inputParams.projects = projects
+    this.inputParams.typifications = typifications
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
+    return this.http.get<DesviationCause>(`${this.API}/data_table_typifications_report`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getDesviationCausesByVicepresidencies(years: any, months: any, projects: any, typifications: any) {
+    this.inputParams.years = years
+    this.inputParams.months = months
+    this.inputParams.projects = projects
+    this.inputParams.typifications = typifications
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
+    return this.http.get<DesviationCause>(`${this.API}/data_table_vicepresidencies_report`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getDesviationCausesByAreas(years: any, months: any, projects: any, typifications: any) {
+    this.inputParams.years = years
+    this.inputParams.months = months
+    this.inputParams.projects = projects
+    this.inputParams.typifications = typifications
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
+    return this.http.get<DesviationCause>(`${this.API}/data_table_areas_report`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    )
   }
 
   getDesviationCausesByProject(id: number) {

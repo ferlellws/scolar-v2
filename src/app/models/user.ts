@@ -5,6 +5,14 @@ export class User {
   last_name: string;
   email: string;
   password: string;
+  semanal_hours!: number;
+  job_id!: number;
+  //job!: Job;
+  profile_id!: number;
+  //profile!: Profile;
+  is_active: boolean;
+  is_delete: boolean;
+  
   // password_digest: string;
   // sysrole_id: string;
   // is_active: boolean;
@@ -20,6 +28,8 @@ export class User {
     this.last_name = "" || user.last_name;
     this.email = "" || user.email;
     this.password = "" || user.password;
+    this.is_active = true;
+    this.is_delete = false;
     // this.password_digest = "";
     // this.sysrole_id = "";
     // this.is_active = false;

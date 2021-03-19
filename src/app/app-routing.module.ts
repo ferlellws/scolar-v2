@@ -35,6 +35,11 @@ import { WeeksByProjectsResolver } from './components/project-details/guards/wee
 import { GoalsByWeeksResolver } from './components/project-details/guards/goals-by-weeks.resolver';
 import { NextActivitiesByWeeksResolver } from './components/project-details/guards/next-activities-by-weeks.resolver';
 import { ObseravtionsByWeeksResolver } from './components/project-details/guards/observations-by-weeks.resolver';
+import { DesviationCausesBySourceResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-source.resolver';
+import { DesviationCausesByTypificationsResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-typifications.resolver';
+import { DesviationCausesByVicepresidenciesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-vicepresidencies.resolver';
+import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
+import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
 import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
 
 const routes: Routes = [
@@ -75,11 +80,30 @@ const routes: Routes = [
     }
   },
   { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
-  {
-    path: 'home',
+  { path: 'desviation-causes',
+  loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
+  canActivate: [AuthGuard],
+  canLoad: [AuthGuard],
+  resolve: {
+    desviationCausesBySource: DesviationCausesBySourceResolver,
+    desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
+    desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
+    desviationCausesByAreas: DesviationCausesByAreasResolver
+  }
+},
+{ path: 'general-users',
+  loadChildren: () => import('./components/general-users/general-users.module').then(m => m.GeneralUsersModule),
+  canActivate: [AuthGuard],
+  canLoad: [AuthGuard],
+  resolve: {
+    generalUsers: GeneralUsersResolver,
+  }
+},
+{
+  path: 'home',
     component: HomeComponent,
     canActivate: [AuthGuard],
-   },
+  },
   { path: 'login', component: LoginComponent },
   {
     path: 'managements',
@@ -228,7 +252,10 @@ const routes: Routes = [
       vicePresidencies: VicePresidenciesResolver
     }
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

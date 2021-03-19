@@ -1,0 +1,48 @@
+.card-expansion {
+    padding-left: -15px;
+    border-bottom: 1px solid #c4c4cb;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+}
+
+.title-expansion {
+    margin-bottom: 0px;
+    font-weight: 500;
+}
+
+.mat-expansion-panel-header {
+    display: flex;
+    width: 100%;
+}
+
+.description {
+    align-items: center;
+}
+
+.button-filter{
+    width: auto;
+    max-height: 40px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 5px;
+    align-items: center;
+}
+.graph {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.row {
+    align-items: center;
+}
+
+.table {
+    position: relative;
+    overflow-x: auto;
+}
+
+::ng-deep .mat-header-cell {
+    min-width: 230px;
+}

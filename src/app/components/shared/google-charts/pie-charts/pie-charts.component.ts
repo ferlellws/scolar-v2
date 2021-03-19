@@ -1,6 +1,7 @@
 import { GoogleChartService } from './../../../../services/google-chart.service';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, HostListener, Input, OnInit, SimpleChanges } from '@angular/core';
 import { TableData } from 'src/app/models/table-data';
+import { environment } from 'src/environments/environment';
 
 export interface PieSliceTextStyle {
   color: string;
@@ -21,8 +22,8 @@ export class PieChartsComponent implements OnInit {
   @Input() legend!: string;
   @Input() fMaterial!: boolean;
   @Input() dataTable!: any [];
-  @Input() width: string = "800px";
-  @Input() height: string = "500px";
+  @Input() width: string = "";
+  @Input() height: string = "";
   @Input() chartClass: string = "";
   @Input() pieHole: number = 0;
   @Input() positionLegend: string = 'right';
@@ -91,6 +92,38 @@ export class PieChartsComponent implements OnInit {
     return result;
   }
 
+  static TableToChart(dataTable: TableData, keysSelected?: string[]){
+    var keysAll = Object.keys(dataTable.dataTable[0]);
+    var keys = [];
+    var headers = [];
+
+    if (keysSelected != null){
+      headers.push(dataTable.headers[0]);
+      keys.push(keysAll[0]);
+      for (let index = 0; index < keysSelected.length; index++) {
+        var indexFound = keysAll.indexOf(keysSelected[index]);
+        keys.push(keysAll[indexFound]);
+        headers.push(dataTable.headers[indexFound]);
+      }
+    }else{
+      keys = keysAll.slice(0, keysAll.length -1);
+      headers = dataTable.headers.slice(0, keysAll.length -1);
+    }
+
+    var result = [];
+    result.push(headers);
+
+    for (let index = 0; index < dataTable.dataTable.length; index++) {
+      var arrayAux =[];
+      for (let j = 0; j < keys.length; j++) {
+        arrayAux.push(dataTable.dataTable[index][keys[j]]);
+      }
+      result.push(arrayAux);
+    }
+    
+    return result;
+  }
+
   private drawChart() {
 
     let data = this.gLib.visualization.arrayToDataTable(this.dataTable);
@@ -102,12 +135,22 @@ export class PieChartsComponent implements OnInit {
       is3D: this.is3D,
       pieSliceText: this.pieSliceText,
       pieSliceTextStyle: this.pieSliceTextStyle,
-      colors: this.colors
+      colors: this.colors,
+      chartArea: {
+        left: "100",
+        "width": "100%",
+        "height": "100%"
+      }
     };
 
     let chart = new this.gLib.visualization.PieChart(document.getElementById(this.id));
 
     chart.draw(data, options);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.drawChart();
   }
 
 }
