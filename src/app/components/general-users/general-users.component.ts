@@ -51,7 +51,7 @@ export class GeneralUsersComponent implements OnInit {
   onCreate() {
     true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(GeneralUsersFormComponent, {
-      width: environment.widthFormsLittleModal,
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
@@ -64,7 +64,7 @@ export class GeneralUsersComponent implements OnInit {
   onEdit(data: number) {
     true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(GeneralUsersFormComponent, {
-      width: environment.widthFormsLittleModal,
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         id: data,

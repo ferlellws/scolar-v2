@@ -3,6 +3,7 @@ import { VicePresidency } from "./vice-presidency";
 
 export class Area {
     id?: number;
+    parent?: Area;
     vice_presidency_id?: number;
     vice_presidency?: VicePresidency;
     title!: string;

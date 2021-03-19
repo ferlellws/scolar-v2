@@ -63,7 +63,8 @@ export class UserService {
   }
 
   addUser(user: User) {
-    return this.http.post<User>(this.API, { user: user }, this.httpOptions)
+    environment.consoleMessage(user, "USEEEEEEEER");
+    return this.http.post<User>(`${environment.API}/sign_up`, { user: user }, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);

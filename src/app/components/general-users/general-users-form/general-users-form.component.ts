@@ -2,8 +2,16 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Area } from 'src/app/models/area';
+import { Position } from 'src/app/models/position';
+import { Profile } from 'src/app/models/profile';
 import { User } from 'src/app/models/user';
+import { VicePresidency } from 'src/app/models/vice-presidency';
+import { AreasService } from 'src/app/services/areas.service';
+import { PositionsService } from 'src/app/services/positions.service';
+import { ProfilesService } from 'src/app/services/profiles.service';
 import { UserService } from 'src/app/services/user.service';
+import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
 import { environment } from 'src/environments/environment';
 
 export interface DialogData {
@@ -29,15 +37,21 @@ export class GeneralUsersFormComponent implements OnInit {
   fButtonDisabled: boolean = false;
 
   user!: User;
-  selectJobs!: any [];
-  selectProfiles!: any [];
+  vicepresidencies: VicePresidency [] = [];
+  areas: Area[] = [];
+  subAreas: Area[] = [];
+  positions: Position[] = [];
+  profiles: Profile[] = [];
 
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private userService: UserService,
-    //private companyTypesService: CompanyTypesService,
     private snackBar: MatSnackBar,
+    private vicePresidenciesService: VicePresidenciesService,
+    private areasService: AreasService,
+    private positionsService:PositionsService,
+    private profilesService:ProfilesService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -55,30 +69,165 @@ export class GeneralUsersFormComponent implements OnInit {
                     Validators.max(40),
                     Validators.min(0)]
                   ],
-      job_id: [null, Validators.required],
-      profile_id: [null, Validators.required],
+      vicepresidency: [null, Validators.required],
+      area: [null, Validators.required],
+      subArea: [null],
+      position: [null, Validators.required],
+      profile: [null, Validators.required],
       is_active: true
     });
 
     //await this.getSelectCompanyTypes();
-    if (this.data.mode == 'edit') {
+    // if (this.data.mode == 'edit') {
 
-      this.userService.getUsersId(this.data.id)
-        .subscribe((res: User) => {
-          this.user = res;
-          this.usersGroup.patchValue({
-            first_name: this.user.first_name,
-            last_name: this.user.last_name,
-            email: this.user.email,
-            semanal_hours: this.user.semanal_hours,
-            job_id: this.user.job_id,
-            profile_id: this.user.profile_id,
-            is_active: this.user.is_active
+    //   this.userService.getUsersId(this.data.id)
+    //     .subscribe((res: User) => {
+    //       this.user = res;
+    //       this.usersGroup.patchValue({
+    //         first_name: this.user.first_name,
+    //         last_name: this.user.last_name,
+    //         email: this.user.email,
+    //         semanal_hours: this.user.semanal_hours,
+    //         vicepresidency: ,
+    //         area: ,
+    //         subArea: ,
+    //         position_id: this.user.position_id,
+    //         profile_id: this.user.profile_id,
+    //         is_active: this.user.is_active
+    //       });
+    //     });
+    // }
+  }
+    
+  openVicepresidencies(ev: boolean) {
+    this.areas = [];
+    if(ev) {
+      this.vicePresidenciesService.getVicePresidenciesSelect()
+        .subscribe((vicepresidencies: VicePresidency[]) => this.vicepresidencies = vicepresidencies);
+    } else {
+      this.usersGroup.get('area')!.setValue(null);
+      this.usersGroup.get('subArea')!.setValue(null);
+      this.usersGroup.get('position')!.setValue(null);
+
+      this.areasService.getAreasSelect()
+        .subscribe((areas: Area[]) => {
+          for (let index = 0; index < areas.length; index++) {
+            if(areas[index].vice_presidency?.id == this.usersGroup.get('vicepresidency')!.value && areas[index].parent == null) {
+              this.areas.push(areas[index]);
+            }
+          }
+        });
+
+      // this.areasService.getSubAreas()
+      //   .subscribe((subAreas: Area[]) => {
+      //     for (let index = 0; index < subAreas.length; index++) {
+      //       if(subAreas[index].parent != null) {
+      //         if(subAreas[index].parent!.id == this.usersGroup.get('area')!.value) {
+      //           this.subAreas.push(subAreas[index]);
+      //         }
+      //       }
+
+      //     }
+      //   });
+
+      // var area_id = this.usersGroup.get('area')!.value;
+      // if(this.usersGroup.get('subArea')!.value != null) {
+      //   area_id = this.usersGroup.get('subArea')!.value;
+      // }
+      // this.positionsService.getPositions(area_id)
+      //   .subscribe((positions: Position[]) => {
+      //     this.positions = positions
+      //   });
+    }
+  }
+
+  openAreas(ev: boolean) {
+    this.subAreas = [];
+    this.positions = [];
+    if(ev) {
+      this.usersGroup.get('area')!.setValue(null);
+      this.areasService.getAreasSelect()
+        .subscribe((areas: Area[]) =>{
+          for (let index = 0; index < areas.length; index++) {
+            if(areas[index] == this.usersGroup.get('vicepresidency')!.value) {
+              this.areas.push(areas[index]);
+            }
+          }
+        });
+    } else {
+      // this.usersGroup.get('subArea')!.setValue(null);
+      // this.usersGroup.get('position')!.setValue(null);
+
+      // this.areasService.getAreasSelect()
+      //   .subscribe((subAreas: Area[]) => {
+      //     for (let index = 0; index < subAreas.length; index++) {
+      //       if(subAreas[index].parent != null) {
+      //         if(subAreas[index].parent!.id == this.usersGroup.get('area')!.value) {
+      //           this.subAreas.push(subAreas[index]);
+      //         }
+      //       }
+      //     }
+      //   });
+      
+      // this.positionsService.getPositions(this.usersGroup.get('vicepresidency')!.value)
+      //   .subscribe((positions: Position[]) => {
+      //     for (let index = 0; index < positions.length; index++) {
+      //       if(positions[index] == this.usersGroup.get('vicepresidency')!.value) {
+      //         this.positions.push(positions[index]);
+      //       }
+      //     }
+      //   });
+    }
+  }
+
+  openSubAreas(ev: boolean) {
+    this.positions = [];
+    if(ev) {
+      this.usersGroup.get('subArea')!.setValue(null);
+      this.areasService.getSubAreas()
+        .subscribe((subAreas: Area[]) =>{
+          this.subAreas = [];
+          for (let index = 0; index < subAreas.length; index++) {
+            if(subAreas[index].parent != null) {
+              if(subAreas[index].parent!.id == this.usersGroup.get('area')!.value) {
+                this.subAreas.push(subAreas[index]);
+              }
+            }
+          }
+        });
+    } else {
+      // this.positionsService.getPositions(this.usersGroup.get('area')!.value)
+      //   .subscribe((positions: Position[]) => {
+      //     this.positions = positions;
+      //   });
+    }
+  }
+
+  openPosition(ev: boolean) {
+    if(ev) {
+      this.usersGroup.get('position')?.setValue(null);
+      if (this.usersGroup.get('area')!.value != null){
+        var area_id = this.usersGroup.get('area')!.value;
+        if(this.usersGroup.get('subArea')!.value != null) {
+          area_id = this.usersGroup.get('subArea')!.value;
+        }
+        this.positionsService.getPositions(area_id)
+          .subscribe((positions: Position[]) => {
+            this.positions = positions;
           });
+      } 
+    }
+  }
+
+  openProfiles(ev: boolean) {
+    if(ev) {
+      this.profilesService.getProfiles()
+        .subscribe((profiles: Profile[]) => {
+          this.profiles = profiles;
         });
     }
   }
-  
+
   onSubmit() {
     true;//environment.consoleMessage(this.usersGroup, "OnSubmit compañias: ");
     if (!this.isButtonReset) {
@@ -102,8 +251,18 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   createRegister() {
-    true;//environment.consoleMessage(this.usersGroup.value, "createRegister: ");
-    this.userService.addUser(this.usersGroup.value)
+    var newUser: User = {
+      first_name: this.usersGroup.get('first_name')!.value,
+      last_name: this.usersGroup.get('last_name')!.value,
+      email: this.usersGroup.get('email')!.value,
+      semanal_hours: this.usersGroup.get('semanal_hours')!.value,
+      position_id: this.usersGroup.get('position')!.value,
+      profile_id: this.usersGroup.get('profile')!.value,
+      password: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+      password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+    }
+  
+    this.userService.addUser(newUser)
       .subscribe((res) => {
         true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
