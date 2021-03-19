@@ -4,7 +4,7 @@ export const environment = {
   widthFormsLittleModal: '50%',
   // API: 'https://prodtpmanagement.com', // Produccion
   API: 'https://apitpprodtracing.com', // Pruebas
-  consoleMessage(dataShow: string, strLabel: string = "") {
+  consoleMessage(dataShow: any, strLabel: string = "") {
     return true
   }
 };
