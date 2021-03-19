@@ -491,6 +491,35 @@ export class ProjectDetailsComponent implements OnInit {
     );
   }
 
+  onDesviationEdit(id: number){
+    const dialogRef = this.dialog.open(DesviationCausesFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        idCausal: id, 
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          this.desviationCausesService.getDesviationCausesByProject(this.project.id).subscribe(deviations =>
+            {
+              var desviationGeneral: any = deviations;
+              environment.consoleMessage(deviations, ">>>>>>>>>>>>>>>>>>" )
+              this.desviationCausesGeneral = desviationGeneral.general_data;
+              this.desviationCauses = desviationGeneral.desviation_causes;
+              this.desviationId = this.desviationCauses.length - 1;
+            }
+          );
+        }
+      }
+    );
+  }
+
   nextWeek(){
     this.weekId++;
     this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
