@@ -155,7 +155,7 @@ export class DesviationCausesFormComponent implements OnInit {
 
   async crear(){
     true; //environment.consoleMessage("crear")
-    environment.consoleMessage(this.causesIDs, "causes >>")
+    // environment.consoleMessage(this.causesIDs, "causes >>")
     var desviation: DesviationCause = {
       project_id: this.data.idProject,
       date: this.parseDate(this.general.get('date')!.value),
@@ -172,7 +172,7 @@ export class DesviationCausesFormComponent implements OnInit {
 
       proposed_solution: this.general.get('proposed_solution')!.value,
       solution_state_id: this.general.get('solution_state')!.value,
-      
+
       is_active: true,
       is_delete: false,
       user_creates_id: JSON.parse(localStorage.user).id,
