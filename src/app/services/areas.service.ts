@@ -49,6 +49,22 @@ export class AreasService {
     );
   }
 
+  getAreasByVicePresidency(vicePresidencyId: number) {
+    return this.http.get<TableData[]>(`${this.API}/by_vice_presidency/${vicePresidencyId}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getSubAreasByArea(areaId: number) {
+    return this.http.get<TableData[]>(`${this.API}/subareas_by_area/${areaId}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getAreasSelect() {
     var httpOptions = {
       headers: new HttpHeaders({
@@ -66,6 +82,16 @@ export class AreasService {
 
   getAreasId(id: number) {
     return this.http.get<Area>(`${this.API}/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getParentSubArea(subAreaId: number) {
+    return this.http.get<Area>(`${this.API}/parent_sub_area/${subAreaId}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {

@@ -27,7 +27,7 @@ export interface DialogData {
 })
 export class GeneralUsersFormComponent implements OnInit {
   showBtnClose: boolean = true;
-  
+
   usersGroup!: FormGroup;
   pluralOption: string = "Usuarios";
   singularOption: string = "Usuario";
@@ -36,13 +36,15 @@ export class GeneralUsersFormComponent implements OnInit {
   //selectCompanyType!: CompanyType [];
   fButtonDisabled: boolean = false;
 
-  user!: any;
-  vicepresidencies: VicePresidency [] = [];
+  user!: User;
+  vicePresidencies: VicePresidency [] = [];
   areas: Area[] = [];
   subAreas: Area[] = [];
   positions: any[] = [];
   profiles: Profile[] = [];
   position_area_id: any[] = [];
+  areaId!: number;
+  subAreaId!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +58,7 @@ export class GeneralUsersFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    
+
     this.usersGroup = this.fb.group({
       first_name: [null, Validators.required],
       last_name: [null,Validators.required],
@@ -70,118 +72,180 @@ export class GeneralUsersFormComponent implements OnInit {
                     Validators.max(40),
                     Validators.min(0)]
                   ],
-      vicepresidency: [null, Validators.required],
+      vicePresidency: [null, Validators.required],
       area: [null, Validators.required],
       subArea: [null],
-      position: [null, Validators.required],
+      position_area_id: [null, Validators.required],
       profile: [null, Validators.required],
     });
-    
+
     if (this.data.mode == 'edit') {
-      this.openVicepresidencies(true);
-      this.openAreas(true);
-      this.openPosition(true);
-      this.openProfiles(true);
-      
+      environment.consoleMessage(">>>>>>>>>>>>>>>>> Edicion");
+      // this.openVicepresidencies(true, );
+      // this.openAreas(true);
+      // this.openPosition(true);
+      // this.openProfiles(true);
+
       await this.userService.getUsersId(this.data.id)
         .subscribe((res: any) => {
           environment.consoleMessage(res, "usuario");
           this.user = res;
-          
-          environment.consoleMessage(this.user.position_area.area, "area");
-          
-          this.vicePresidenciesService.getVicePresidency(this.user.position_area.area.vice_presidency_id)
-            .subscribe((vicepresidency: VicePresidency) => {
-              environment.consoleMessage(vicepresidency, "vicepresidencia");
-              
-              if (this.user.position_area.area.parent_id != null) {
-                this.areasService.getAreasId(this.user.position_area.area.parent_id)
-                  .subscribe((subArea: Area) => {
-                    environment.consoleMessage(subArea, "subárea");
 
-                    this.usersGroup.patchValue({
-                      first_name: this.user.first_name,
-                      last_name: this.user.last_name,
-                      email: this.user.email,
-                      semanal_hours: this.user.semanal_hours,
-                      profile: this.user.profile.id,
-                      vicepresidency: vicepresidency.id,
-                      area: this.user.position_area.area.id,
-                      subArea: subArea.id,
-                      position: this.user.position_area.position.id,
-                    });
-                  });
+          environment.consoleMessage(this.user.position_area, "area");
 
-              } else {
-                this.usersGroup.patchValue({
-                  first_name: this.user.first_name,
-                  last_name: this.user.last_name,
-                  email: this.user.email,
-                  semanal_hours: this.user.semanal_hours,
-                  profile: this.user.profile.id,
-                  vicepresidency: vicepresidency.id,
-                  area: this.user.position_area.area.id,
-                  subArea: null,
-                  position: this.user.position_area.position.id,
-                });
-              }
-          });
+          this.initializeSelects();
+
       });
     }
   }
-    
-  async openVicepresidencies(ev: boolean) {
+
+  initializeSelects() {
+    this.selectVicePresidencies(this.user.position_area.area.vice_presidency_id);
+  }
+
+  selectVicePresidencies(vicePresidencyId: number) {
+    environment.consoleMessage("->  Entra a selectVicePresidencies")
+    this.vicePresidenciesService.getVicePresidenciesSelect()
+      .subscribe((vicePresidencies: VicePresidency[]) => {
+        this.vicePresidencies = vicePresidencies;
+
+        this.selectAreasByVicePresidency(vicePresidencyId);
+        this.selectProfiles();
+
+        this.usersGroup.patchValue({
+          first_name: this.user.first_name,
+          last_name: this.user.last_name,
+          email: this.user.email,
+          semanal_hours: this.user.semanal_hours,
+          profile: this.user.profile?.id,
+          vicePresidency: this.user.position_area.area.vice_presidency_id
+        });
+
+      });
+  }
+
+  async selectAreasByVicePresidency(vicePresidencyId: number) {
+    this.areasService.getAreasByVicePresidency(vicePresidencyId)
+        .subscribe((areas: Area[]) => {
+          this.areas = areas;
+
+          if (this.areas.find(area => this.user.position_area.area.id === area.id)) {
+            console.log("Tiene area");
+            this.areaId = this.user.position_area.area.id;
+            this.selectSubAreasByArea(this.areaId);
+
+            // INICIALIZAR EL CAMPO AREA DEL FORMULARIO
+            this.usersGroup.patchValue({
+              area: this.areaId,
+            });
+
+            this.selectPositions(this.areaId);
+          } else {
+            if (this.user.position_area.area.id > 0) {
+              console.log("Tiene subarea");
+              this.subAreaId = this.user.position_area.area.id;
+
+              this.areasService.getParentSubArea(this.subAreaId)
+                .subscribe((area: Area) => {
+                  this.areaId = area.id;
+
+                  // INICIALIZAR EL CAMPO AREA DEL FORMULARIO
+                  this.usersGroup.patchValue({
+                    area: this.areaId,
+                  });
+
+                  this.selectSubAreasByArea(this.areaId);
+                  this.selectPositions(this.subAreaId);
+                })
+            }
+          }
+
+          environment.consoleMessage(this.areas, "Areas: Open");
+          environment.consoleMessage("+++++++++++Inicializa formulario");
+
+          // INICIALIZAR EL CAMPO SUBAREA DEL FORMULARIO
+          this.usersGroup.patchValue({
+            subArea: this.subAreaId,
+          });
+        });
+  }
+
+  async selectSubAreasByArea(areaId: number) {
+    await this.areasService.getSubAreasByArea(areaId)
+        .subscribe((subAreas: Area[]) =>{
+          this.subAreas = subAreas;
+          environment.consoleMessage(this.subAreas, "subAreas: Open");
+        });
+  }
+
+
+  async selectPositions(areaId: number) {
+    await this.positionsService.getPositionsByArea(areaId)
+    .subscribe((positions: any[]) => {
+      this.positions = positions;
+
+      environment.consoleMessage(this.positions, "positions: Open");
+      environment.consoleMessage(this.user.position_area.id, "position_area-id: ");
+
+      this.usersGroup.patchValue({
+        position_area_id: this.user.position_area.id
+      });
+    });
+  }
+
+
+  selectProfiles() {
+    this.profilesService.getProfiles()
+        .subscribe((profiles: Profile[]) => {
+          this.profiles = profiles;
+
+          environment.consoleMessage(this.user.profile?.id, "this.user.profile?.id: ")
+
+          this.usersGroup.patchValue({
+            profile: this.user.profile?.id,
+          });
+        });
+  }
+
+
+
+
+  async openVicepresidencies(ev: any) {
+    console.log(">>>openVicepresidencies: ", ev);
+
     this.areas = [];
     if(ev) {
       await this.vicePresidenciesService.getVicePresidenciesSelect()
-        .subscribe((vicepresidencies: VicePresidency[]) => this.vicepresidencies = vicepresidencies);
-    } else {
-      this.usersGroup.get('area')!.setValue(null);
-      this.usersGroup.get('subArea')!.setValue(null);
-      this.usersGroup.get('position')!.setValue(null);
-
-      await this.areasService.getAreasSelect()
-        .subscribe((areas: Area[]) => {
-          for (let index = 0; index < areas.length; index++) {
-            if(areas[index].vice_presidency?.id == this.usersGroup.get('vicepresidency')!.value && areas[index].parent == null) {
-              this.areas.push(areas[index]);
-            }
-          }
+        .subscribe((vicePresidencies: VicePresidency[]) => {
+          this.vicePresidencies = vicePresidencies;
+          // this.openAreas(false);
         });
     }
   }
 
-  async openAreas(ev: boolean) {
+  async openAreas(ev: any) {
     this.subAreas = [];
     this.positions = [];
+    console.log("Entra a openAreas: ", ev);
+
     if(ev) {
       this.usersGroup.get('area')!.setValue(null);
-      await this.areasService.getAreasSelect()
+      await this.areasService.getAreasByVicePresidency(this.usersGroup.get('vicePresidency')!.value)
         .subscribe((areas: Area[]) =>{
-          for (let index = 0; index < areas.length; index++) {
-            if (areas[index] == this.usersGroup.get('vicepresidency')!.value) {
-              this.areas.push(areas[index]);
-            }
-          }
+          this.areas = areas;
           environment.consoleMessage(this.areas, "Areas: Open");
         });
     }
   }
 
-  async openSubAreas(ev: boolean) {
+  async openSubAreas(ev: any) {
+    console.log("Entra a openSubAreas: ", ev);
     this.positions = [];
     if(ev) {
       this.usersGroup.get('subArea')!.setValue(null);
-      await this.areasService.getSubAreas()
+      await this.areasService.getSubAreasByArea(this.usersGroup.get('area')!.value)
         .subscribe((subAreas: Area[]) =>{
-          this.subAreas = [];
-          for (let index = 0; index < subAreas.length; index++) {
-            if(subAreas[index].parent != null) {
-              if(subAreas[index].parent!.id == this.usersGroup.get('area')!.value) {
-                this.subAreas.push(subAreas[index]);
-              }
-            }
-          }
+          this.subAreas = subAreas;
           environment.consoleMessage(this.subAreas, "SubAreas: Open");
         });
     }
@@ -189,18 +253,18 @@ export class GeneralUsersFormComponent implements OnInit {
 
   async openPosition(ev: boolean) {
     if(ev) {
-      this.usersGroup.get('position')?.setValue(null);
+      this.usersGroup.get('position_area_id')?.setValue(null);
       if (this.usersGroup.get('area')!.value != null){
         var area_id = this.usersGroup.get('area')!.value;
         if(this.usersGroup.get('subArea')!.value != null) {
           area_id = this.usersGroup.get('subArea')!.value;
         }
-        await this.positionsService.getPositions(area_id)
+        await this.positionsService.getPositionsByArea(area_id)
           .subscribe((positions: any[]) => {
             this.positions = positions
           });
           environment.consoleMessage(this.positions, "Position: Open");
-      } 
+      }
     }
   }
 
@@ -231,31 +295,31 @@ export class GeneralUsersFormComponent implements OnInit {
       last_name: null,
       email: null,
       semanal_hours: null,
-      vicepresidency: null,
+      vicePresidency: null,
       area: null,
       subArea: [null],
-      position: null,
+      position_area_id: null,
       profile: null,
     });
   }
 
   async createRegister() {
-    var newUser: User = {
+    let newUser = {
       first_name: this.usersGroup.get('first_name')!.value,
       last_name: this.usersGroup.get('last_name')!.value,
       email: this.usersGroup.get('email')!.value,
       semanal_hours: this.usersGroup.get('semanal_hours')!.value,
-      position_area_id: this.usersGroup.get('position')!.value,
+      position_area_id: this.usersGroup.get('position_area_id')!.value,
       profile_id: this.usersGroup.get('profile')!.value,
       password: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
       password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
     }
-  
+
     await this.userService.addUser(newUser)
       .subscribe((res) => {
         this.fButtonDisabled = false;
         if (res.is_success == true) {
-          this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.openSnackBar(true, res.messages, "");
           this.onReset();
         }
       }, (err) => {
@@ -272,21 +336,23 @@ export class GeneralUsersFormComponent implements OnInit {
         })
 
         this.openSnackBar(false, sErrors, "");
-        
+
       });
-    
+
   }
 
   updateRegister() {
-    
+    environment.consoleMessage(this.usersGroup.value, "this.usersGroup.value: ");
+    environment.consoleMessage(this.data.id, "this.data.id: ");
     this.userService.updateUser(
       this.usersGroup.value,
       this.data.id
     )
       .subscribe((res) => {
         this.fButtonDisabled = false;
-        if (res.status == 'updated') {
-          this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        if (res.is_success == true) {
+          this.openSnackBar(true, res.messages, "");
+          this.onReset();
         }
       }, (err) => {
         this.fButtonDisabled = false;

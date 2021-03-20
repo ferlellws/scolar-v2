@@ -18,7 +18,7 @@ export class PositionsService {
   };
 
   httpOptions!: any;
-  
+
   constructor(
     private http: HttpClient
     ) {
@@ -29,8 +29,8 @@ export class PositionsService {
         params: this.inputParams
       };
   }
-  
-  getPositions(area_id: number) {
+
+  getPositionsByArea(area_id: number) {
     return this.http.get<Position[]>(`${this.API}/by_area/${area_id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)

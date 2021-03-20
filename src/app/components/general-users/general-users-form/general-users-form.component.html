@@ -7,11 +7,11 @@
       <mat-icon>close</mat-icon>
     </button>
 </mat-toolbar>
-  
+
 <div class="example-container bg-color-white mat-elevation-z4">
   <form action="" [formGroup]="usersGroup" (ngSubmit)="onSubmit()"
     *ngIf="data.mode === 'create' || (data.mode === 'edit' && user); else loadingBlock">
-    
+
     <div class="row">
       <div class="col-sm-12 col-md-12">
           <h3 class="mat-title txt-accent">Información Personal</h3>
@@ -59,7 +59,7 @@
         </mat-form-field>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="row">
         <div class="col-sm-12 col-md-12">
@@ -70,12 +70,12 @@
       <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Vicepresidencia</mat-label>
-          <mat-select formControlName="vicepresidency" (openedChange)="openVicepresidencies($event)" required>
+          <mat-select formControlName="vicePresidency" (openedChange)="openVicepresidencies($event)" required>
             <mat-option>Seleccione una opción</mat-option>
-            <mat-option *ngFor="let vicepresidency of vicepresidencies" [value]="vicepresidency.id">{{ vicepresidency.title }}</mat-option>
+            <mat-option *ngFor="let vicePresidency of vicePresidencies" [value]="vicePresidency.id">{{ vicePresidency.title }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="this.usersGroup.get('vicepresidency')?.invalid">
-            {{ getMessageError('vicepresidency', "vicepresidencia") }}
+          <mat-error *ngIf="this.usersGroup.get('vicePresidency')?.invalid">
+            {{ getMessageError('vicePresidency', "vicepresidencia") }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -106,7 +106,7 @@
       <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Cargo</mat-label>
-          <mat-select formControlName="position" (openedChange)="openPosition($event)" required>
+          <mat-select formControlName="position_area_id" (openedChange)="openPosition($event)" required>
             <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let position of positions" [value]="position.position_area_id">{{ position.position.name }}</mat-option>
           </mat-select>
@@ -136,7 +136,7 @@
             {{ getMessageError('profile', " perfíl en el aplicativo") }}
           </mat-error>
         </mat-form-field>
-      </div>  
+      </div>
     </div>
 
     <div class="buttons">

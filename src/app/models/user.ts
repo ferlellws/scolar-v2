@@ -1,8 +1,9 @@
 import { Position } from "./position";
+import { PositionArea } from "./position-area";
 import { Profile } from "./profile";
 
 export class User {
-  id?: number;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
@@ -10,9 +11,10 @@ export class User {
   password_confirmation?: string;
   semanal_hours!: number;
   position?: Position;
-  profile?: Profile;
-  position_area_id?: number;
-  profile_id?: number;
+  profile_id!: number;
+  profile!: Profile;
+  position_area_id!: number;
+  position_area!: PositionArea;
   is_active?: boolean;
   is_delete?: boolean;
   user_creates?: string;

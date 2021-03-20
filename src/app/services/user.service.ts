@@ -13,16 +13,16 @@ import { TableData } from '../models/table-data';
   providedIn: 'root'
 })
 export class UserService {
-  
+
   private readonly API = `${environment.API}/users`;
-  
+
   emitDataTable = new EventEmitter<any>();
-  
+
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
     user_token: JSON.parse(localStorage.user).authentication_token
   };
-  
+
   httpOptions = {};
 
 
@@ -62,7 +62,7 @@ export class UserService {
     );
   }
 
-  addUser(user: User) {
+  addUser(user: any) {
     return this.http.post<User>(`${environment.API}/sign_up`, { user: user }, this.httpOptions)
       .pipe(
         tap((data: any) => {
