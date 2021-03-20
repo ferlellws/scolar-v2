@@ -40,12 +40,12 @@ export class GeneralUsersComponent implements OnInit {
     });
     
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
-    // this.userService.emitDataTable
-    //   .subscribe((res: any) => {
-    //     environment.consoleMessage(res, "<<<<<<<<<<<<<<<<<<<<l>>>>>>>>>>>>>>>>>>>>>");
-    //     this.dataTable = res.data;
-    //     this.dialog.closeAll();
-    //   })
+    this.userService.emitDataTable
+      .subscribe((res: any) => {
+        environment.consoleMessage(res, "<<<<<<<<<<<<<<<<<<<<l>>>>>>>>>>>>>>>>>>>>>");
+        this.dataTable = res.data;
+        this.dialog.closeAll();
+      })
   }
 
   onCreate() {

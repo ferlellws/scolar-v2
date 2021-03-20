@@ -40,8 +40,9 @@ export class GeneralUsersFormComponent implements OnInit {
   vicepresidencies: VicePresidency [] = [];
   areas: Area[] = [];
   subAreas: Area[] = [];
-  positions: Position[] = [];
+  positions: any[] = [];
   profiles: Profile[] = [];
+  position_area_id: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -142,8 +143,8 @@ export class GeneralUsersFormComponent implements OnInit {
           area_id = this.usersGroup.get('subArea')!.value;
         }
         this.positionsService.getPositions(area_id)
-          .subscribe((positions: Position[]) => {
-            this.positions = positions;
+          .subscribe((positions: any[]) => {
+            this.positions = positions
           });
       } 
     }
@@ -190,7 +191,7 @@ export class GeneralUsersFormComponent implements OnInit {
       last_name: this.usersGroup.get('last_name')!.value,
       email: this.usersGroup.get('email')!.value,
       semanal_hours: this.usersGroup.get('semanal_hours')!.value,
-      position_id: this.usersGroup.get('position')!.value,
+      position_area_id: this.usersGroup.get('position')!.value,
       profile_id: this.usersGroup.get('profile')!.value,
       password: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
       password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",

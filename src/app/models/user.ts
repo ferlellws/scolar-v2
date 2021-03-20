@@ -11,7 +11,7 @@ export class User {
   semanal_hours!: number;
   position?: Position;
   profile?: Profile;
-  position_id?: number;
+  position_area_id?: number;
   profile_id?: number;
   is_active?: boolean;
   is_delete?: boolean;
