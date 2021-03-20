@@ -55,7 +55,6 @@ export class GeneralUsersFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    true;//environment.consoleMessage(this.data, "++++++++++");
     this.usersGroup = this.fb.group({
       first_name: [null, Validators.required],
       last_name: [null,Validators.required],
@@ -74,29 +73,9 @@ export class GeneralUsersFormComponent implements OnInit {
       subArea: [null],
       position: [null, Validators.required],
       profile: [null, Validators.required],
-      is_active: true
     });
+    
 
-    //await this.getSelectCompanyTypes();
-    // if (this.data.mode == 'edit') {
-
-    //   this.userService.getUsersId(this.data.id)
-    //     .subscribe((res: User) => {
-    //       this.user = res;
-    //       this.usersGroup.patchValue({
-    //         first_name: this.user.first_name,
-    //         last_name: this.user.last_name,
-    //         email: this.user.email,
-    //         semanal_hours: this.user.semanal_hours,
-    //         vicepresidency: ,
-    //         area: ,
-    //         subArea: ,
-    //         position_id: this.user.position_id,
-    //         profile_id: this.user.profile_id,
-    //         is_active: this.user.is_active
-    //       });
-    //     });
-    // }
   }
     
   openVicepresidencies(ev: boolean) {
@@ -117,27 +96,6 @@ export class GeneralUsersFormComponent implements OnInit {
             }
           }
         });
-
-      // this.areasService.getSubAreas()
-      //   .subscribe((subAreas: Area[]) => {
-      //     for (let index = 0; index < subAreas.length; index++) {
-      //       if(subAreas[index].parent != null) {
-      //         if(subAreas[index].parent!.id == this.usersGroup.get('area')!.value) {
-      //           this.subAreas.push(subAreas[index]);
-      //         }
-      //       }
-
-      //     }
-      //   });
-
-      // var area_id = this.usersGroup.get('area')!.value;
-      // if(this.usersGroup.get('subArea')!.value != null) {
-      //   area_id = this.usersGroup.get('subArea')!.value;
-      // }
-      // this.positionsService.getPositions(area_id)
-      //   .subscribe((positions: Position[]) => {
-      //     this.positions = positions
-      //   });
     }
   }
 
@@ -154,29 +112,6 @@ export class GeneralUsersFormComponent implements OnInit {
             }
           }
         });
-    } else {
-      // this.usersGroup.get('subArea')!.setValue(null);
-      // this.usersGroup.get('position')!.setValue(null);
-
-      // this.areasService.getAreasSelect()
-      //   .subscribe((subAreas: Area[]) => {
-      //     for (let index = 0; index < subAreas.length; index++) {
-      //       if(subAreas[index].parent != null) {
-      //         if(subAreas[index].parent!.id == this.usersGroup.get('area')!.value) {
-      //           this.subAreas.push(subAreas[index]);
-      //         }
-      //       }
-      //     }
-      //   });
-      
-      // this.positionsService.getPositions(this.usersGroup.get('vicepresidency')!.value)
-      //   .subscribe((positions: Position[]) => {
-      //     for (let index = 0; index < positions.length; index++) {
-      //       if(positions[index] == this.usersGroup.get('vicepresidency')!.value) {
-      //         this.positions.push(positions[index]);
-      //       }
-      //     }
-      //   });
     }
   }
 
@@ -195,11 +130,6 @@ export class GeneralUsersFormComponent implements OnInit {
             }
           }
         });
-    } else {
-      // this.positionsService.getPositions(this.usersGroup.get('area')!.value)
-      //   .subscribe((positions: Position[]) => {
-      //     this.positions = positions;
-      //   });
     }
   }
 
@@ -229,7 +159,6 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   onSubmit() {
-    true;//environment.consoleMessage(this.usersGroup, "OnSubmit compañias: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -243,14 +172,19 @@ export class GeneralUsersFormComponent implements OnInit {
   onReset() {
     this.isButtonReset = true;
     this.usersGroup.patchValue({
-      title: null,
-      description: null,
-      company_type_id: null,
-      is_active: true
+      first_name: null,
+      last_name: null,
+      email: null,
+      semanal_hours: null,
+      vicepresidency: null,
+      area: null,
+      subArea: [null],
+      position: null,
+      profile: null,
     });
   }
 
-  createRegister() {
+  async createRegister() {
     var newUser: User = {
       first_name: this.usersGroup.get('first_name')!.value,
       last_name: this.usersGroup.get('last_name')!.value,
@@ -262,12 +196,12 @@ export class GeneralUsersFormComponent implements OnInit {
       password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
     }
   
-    this.userService.addUser(newUser)
+    await this.userService.addUser(newUser)
       .subscribe((res) => {
-        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
-        if (res.status == 'created') {
+        if (res.is_success == true) {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.onReset();
         }
       }, (err) => {
         this.fButtonDisabled = false;
@@ -283,18 +217,18 @@ export class GeneralUsersFormComponent implements OnInit {
         })
 
         this.openSnackBar(false, sErrors, "");
+        
       });
+    
   }
 
   updateRegister() {
-    true;//environment.consoleMessage(this.usersGroup, `updateRegister para registro con id ${this.data.id}: `);
-
+    
     this.userService.updateUser(
       this.usersGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -309,29 +243,10 @@ export class GeneralUsersFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
       });
-  }
-
-  onClickSelectJob() {
-    //this.getSelectJobs();
-  }
-
-  getSelectJobs() {
-    // this.companyTypesService.getCompaniesSelect()
-    //   .subscribe((res: CompanyType []) => this.selectCompanyType = res);
-  }
-
-  onClickSelectProfile() {
-    //this.getSelectJobs();
-  }
-
-  getSelectJProfiles() {
-    // this.companyTypesService.getCompaniesSelect()
-    //   .subscribe((res: CompanyType []) => this.selectCompanyType = res);
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {

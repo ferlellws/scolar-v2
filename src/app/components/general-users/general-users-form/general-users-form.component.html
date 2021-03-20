@@ -110,7 +110,7 @@
             <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let position of positions" [value]="position.id">{{ position.name }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="this.usersGroup.get('positiond')?.invalid">
+          <mat-error *ngIf="this.usersGroup.get('position')?.invalid">
             {{ getMessageError('position', " cargo en la compañía") }}
           </mat-error>
         </mat-form-field>
