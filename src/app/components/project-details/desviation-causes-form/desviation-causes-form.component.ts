@@ -20,6 +20,7 @@ import { environment } from 'src/environments/environment';
 
 export interface DialogData {
   idProject: number;
+  idCausal?: number; 
   mode: string;
   labelAction: string;
 }
@@ -45,6 +46,8 @@ export class DesviationCausesFormComponent implements OnInit {
   solutionStates: SolutionState[] = [];
   causesIDs: DelayCauseBySource[] = [];
 
+  desviationCause?: DesviationCause;
+
   constructor(
     private snackBar: MatSnackBar,
     private _fbG: FormBuilder,
@@ -56,9 +59,13 @@ export class DesviationCausesFormComponent implements OnInit {
     private _delayCauseBySourceBySourcesService: DelayCauseBySourceBySourcesService,
     private _delayTypificationsService: DelayTypificationsService,
     private _solutionStatesService: SolutionStatesService,
-  ) { }
+  ) {
+    if(data.mode == "edit"){
+      this.singularOption = "Editar causal de desviación"
+    }
+  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<any> {
     this.general = this._fbG.group({
       'date': [null, [Validators.required]],
       'deliverable': [null, [Validators.required]],
@@ -94,6 +101,61 @@ export class DesviationCausesFormComponent implements OnInit {
       proposed_solution: `Solución Propuesta`,
       solution_state: `Estado de la solución`,
     }
+
+    if(this.data.mode == "edit"){
+      await this._desviationCausesService.getDesviationCausesId(this.data.idCausal!)
+        .subscribe(desviation => {
+          desviation.date = desviation.date.substr(0,10);
+          this.desviationCause = desviation;
+          this.onResetDesviation();
+          environment.consoleMessage(this.desviationCause, ">>>>>>>> desviation")
+        });
+
+      await this._delaySourcesService.getDelaySources()
+        .subscribe((sources: DelaySource[]) => this.sources = sources);
+
+      await this._delayCauseBySourceBySourcesService.getDelayCauseBySources()
+      .subscribe((causeBySourceBySources: DelayCauseBySource[]) => {
+        this.causesIDs = [];
+        for (let index = 0; index < causeBySourceBySources.length; index++) {
+          if(causeBySourceBySources[index].delay_source!.id! == this.desviationCause?.delay_cause_by_source?.delay_source?.id){
+            this.causesIDs.push(causeBySourceBySources[index]);
+          }
+        }
+        this._delayCauseService.getDelayCauses()
+        .subscribe((causes: DelayCause[]) => {
+          var causesIDs: number[] = this.causesIDs.map(cause => cause.delay_cause!.id!)
+          this.causes = causes.filter(cause => causesIDs.includes(cause.id!));
+        })
+      });
+
+      await this._delayTypificationsService.getDelayTypifications()
+        .subscribe((typifications: DelayTypification[]) => this.delayTypifications = typifications);
+      
+      await this._solutionStatesService.getSolutionStates()
+      .subscribe(data => this.solutionStates = data);
+     
+    }
+
+  }
+
+  onResetDesviation(){
+    this.general.get("date")!.setValue(new Date(`${this.desviationCause!.date}:00:00`));
+    this.general.get("deliverable")!.setValue(this.desviationCause?.deliverable);
+
+    this.general.get("source")!.setValue(this.desviationCause!.delay_cause_by_source?.delay_source?.id);
+    this.general.get("cause")!.setValue(this.desviationCause!.delay_cause_by_source?.delay_cause?.id);
+    this.general.get("delay_typification")!.setValue(this.desviationCause!.delay_typification?.id);
+    this.general.get("cause_delay")!.setValue(this.desviationCause!.cause_delay);
+
+    this.general.get("impacts_critical_path")!.setValue(this.desviationCause!.impacts_critical_path);
+    this.general.get("impacts_time")!.setValue(this.desviationCause!.impacts_time);
+    this.general.get("cost_variation")!.setValue(this.desviationCause!.cost_variation);
+    this.general.get("schedule_activity_impacted")!.setValue(this.desviationCause!.schedule_activity_impacted);
+
+    this.general.get("proposed_solution")!.setValue(this.desviationCause!.proposed_solution);
+    this.general.get("solution_state")!.setValue(this.desviationCause!.solution_state?.id);
+    
   }
 
   _openSources(ev: boolean) {
@@ -121,7 +183,6 @@ export class DesviationCausesFormComponent implements OnInit {
 
   _openCauses(ev: boolean) {
     if (ev) {
-      this.general.get('cause')!.setValue(null);
       this._delayCauseBySourceBySourcesService.getDelayCauseBySources()
         .subscribe((causeBySourceBySources: DelayCauseBySource[]) => {
           this.causesIDs = [];
@@ -155,7 +216,7 @@ export class DesviationCausesFormComponent implements OnInit {
 
   async crear(){
     true; //environment.consoleMessage("crear")
-    environment.consoleMessage(this.causesIDs, "causes >>")
+    // environment.consoleMessage(this.causesIDs, "causes >>")
     var desviation: DesviationCause = {
       project_id: this.data.idProject,
       date: this.parseDate(this.general.get('date')!.value),
@@ -172,14 +233,14 @@ export class DesviationCausesFormComponent implements OnInit {
 
       proposed_solution: this.general.get('proposed_solution')!.value,
       solution_state_id: this.general.get('solution_state')!.value,
-      
+
       is_active: true,
       is_delete: false,
       user_creates_id: JSON.parse(localStorage.user).id,
     }
     await this._desviationCausesService.addDesviationCauses(desviation).subscribe((res) => {
       true; //environment.consoleMessage(res, "respuesta");
-      this.openSnackBar(true, "Seguimiento creado", "");
+      this.openSnackBar(true, "Cusal de desviación creada", "");
       this.emitClose.emit('close');
     }, (err) => {
       this.fButtonDisabled = false;
@@ -197,6 +258,71 @@ export class DesviationCausesFormComponent implements OnInit {
       this.openSnackBar(false, sErrors, "");
     });
     this.emitClose.emit("close");
+  }
+
+  async editar(){
+    var editado: any ={};
+    if(this.parseDate(this.general.get("date")!.value!) != this.desviationCause?.date){
+      editado.date = this.parseDate(this.general.get("date")!.value!)
+    } 
+    if(this.general.get("deliverable")!.value! != this.desviationCause?.deliverable){
+      editado.deliverable = this.general.get("deliverable")!.value! ;
+    }
+
+    if(this.general.get("source")!.value! != this.desviationCause?.delay_cause_by_source?.delay_source?.id || 
+      this.general.get("cause")!.value! != this.desviationCause?.delay_cause_by_source?.delay_cause?.id){
+      editado.delay_cause_by_source_id = this.causesIDs.
+        filter(cause => cause.delay_cause!.id! == this.general.get('cause')!.value)[0].id;
+    }
+
+    if(this.general.get("delay_typification")!.value! != this.desviationCause?.delay_typification?.id){
+      editado.delay_typification_id = this.general.get("delay_typification")!.value! ;
+    }
+
+    if(this.general.get("cause_delay")!.value! != this.desviationCause?.cause_delay){
+      editado.cause_delay = this.general.get("cause_delay")!.value!;
+    }
+
+    if(this.general.get("impacts_critical_path")!.value! != this.desviationCause?.impacts_critical_path){
+      editado.impacts_critical_path = this.general.get("impacts_critical_path")!.value!;
+    }
+
+    if(this.general.get("impacts_time")!.value! != this.desviationCause?.impacts_time){
+      editado.impacts_time = this.general.get("impacts_time")!.value!;
+    }
+
+    if(this.general.get("cost_variation")!.value! != this.desviationCause?.cost_variation){
+      editado.cost_variation = this.general.get("cost_variation")!.value!;
+    }
+
+    if(this.general.get("schedule_activity_impacted")!.value! != this.desviationCause?.schedule_activity_impacted){
+      editado.schedule_activity_impacted = this.general.get("schedule_activity_impacted")!.value!;
+    }
+
+    if(this.general.get("proposed_solution")!.value! != this.desviationCause?.proposed_solution){
+      editado.proposed_solution = this.general.get("proposed_solution")!.value!;
+    }
+
+    if(this.general.get("solution_state")!.value! != this.desviationCause?.solution_state?.id){
+      editado.solution_state_id = this.general.get("solution_state")!.value!;
+    }
+
+   
+
+    if(editado != {}){
+      editado.user_updates_id = JSON.parse(localStorage.user).id;
+      this._desviationCausesService.updateDesviationCausesId(editado, this.data.idCausal!)
+      .subscribe( data =>{
+        this.openSnackBar(true, "Cusal de desviación editada", "")
+        this.emitClose.emit('close');
+        }
+      );
+    }else{
+      this.openSnackBar(true, "Nada que editar", "");
+      this.emitClose.emit('close');
+    }
+    environment.consoleMessage(editado, ">>> EDITADO")
+    
   }
 
   getMessageError(formGroup: FormGroup, field: string): string {

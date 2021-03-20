@@ -37,6 +37,12 @@
    border-radius: 5px;
 }
 
+.buttons-options-arrows {
+    width: 70px!important;
+    min-width: unset!important;
+   border-radius: 5px;
+}
+
 .mat-expansion-panel-header {
     padding: 15px;
 }
@@ -57,4 +63,34 @@
     justify-content: flex-start;
     align-items: center;
     padding-left: 15px;
+}
+
+.causal-header{ 
+    display: flex; 
+    flex-wrap: nowrap;
+}
+
+.causal-content{ 
+    display: flex; 
+    justify-content: space-around; 
+    flex-wrap: wrap;
+    width: 60%;
+}
+
+.cause-header-text-icon{
+    display: flex; 
+    flex-wrap: wrap; 
+    align-items: center;
+    justify-content: space-between; 
+    width: 40%;
+}
+
+.cause-header-text-icon h2{
+    padding-top: 15px;
+    
+}
+
+.cause-header-text-icon mat-icon{
+    color: rgba(0, 0, 0, 0.54);
+    cursor: pointer;
 }

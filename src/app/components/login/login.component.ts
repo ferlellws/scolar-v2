@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MainService } from 'src/app/services/main.service';
-import { TokenService } from 'src/app/services/security/token.service';
 
 @Component({
   selector: 'tecno-login',
@@ -28,7 +27,6 @@ export class LoginComponent implements OnInit {
   emailToRemember: string = "";
 
   constructor(
-    private _tokenService: TokenService,
     private snackBar: MatSnackBar,
     private router: Router,
     private fb: FormBuilder,

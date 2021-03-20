@@ -27,11 +27,12 @@
             <mat-error *ngIf="this.logInGroup.get('password')?.invalid">
               {{ getMessageError('password', "contraseña") }}
             </mat-error>
-            <button mat-button matSuffix mat-icon-button
+            <div mat-button matSuffix mat-icon-button
               aria-label="Clear"
-              (click)="flagShowPass = !flagShowPass">
+              (click)="flagShowPass = !flagShowPass"
+              style="font-size: 1.2em;">
               <mat-icon class="icon-input">{{ flagShowPass ? "visibility_off" : "visibility"}}</mat-icon>
-            </button>
+            </div>
           </mat-form-field>
 
           <!-- REMEMBER CHECK -->

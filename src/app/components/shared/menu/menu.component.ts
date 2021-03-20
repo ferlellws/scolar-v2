@@ -6,7 +6,6 @@ import {
   MatTreeFlattener
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { UserService } from 'src/app/services/user.service';
 import { IconsService } from 'src/app/services/icons.service';
 import { Icon } from 'src/app/models/icon';
 import { MenuService } from 'src/app/services/menu.service';
