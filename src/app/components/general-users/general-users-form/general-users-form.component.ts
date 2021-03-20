@@ -36,7 +36,7 @@ export class GeneralUsersFormComponent implements OnInit {
   //selectCompanyType!: CompanyType [];
   fButtonDisabled: boolean = false;
 
-  user!: User;
+  user!: any;
   vicepresidencies: VicePresidency [] = [];
   areas: Area[] = [];
   subAreas: Area[] = [];
@@ -56,6 +56,7 @@ export class GeneralUsersFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    
     this.usersGroup = this.fb.group({
       first_name: [null, Validators.required],
       last_name: [null,Validators.required],
@@ -76,20 +77,70 @@ export class GeneralUsersFormComponent implements OnInit {
       profile: [null, Validators.required],
     });
     
+    if (this.data.mode == 'edit') {
+      this.openVicepresidencies(true);
+      this.openAreas(true);
+      this.openPosition(true);
+      this.openProfiles(true);
+      
+      await this.userService.getUsersId(this.data.id)
+        .subscribe((res: any) => {
+          environment.consoleMessage(res, "usuario");
+          this.user = res;
+          
+          environment.consoleMessage(this.user.position_area.area, "area");
+          
+          this.vicePresidenciesService.getVicePresidency(this.user.position_area.area.vice_presidency_id)
+            .subscribe((vicepresidency: VicePresidency) => {
+              environment.consoleMessage(vicepresidency, "vicepresidencia");
+              
+              if (this.user.position_area.area.parent_id != null) {
+                this.areasService.getAreasId(this.user.position_area.area.parent_id)
+                  .subscribe((subArea: Area) => {
+                    environment.consoleMessage(subArea, "subárea");
 
+                    this.usersGroup.patchValue({
+                      first_name: this.user.first_name,
+                      last_name: this.user.last_name,
+                      email: this.user.email,
+                      semanal_hours: this.user.semanal_hours,
+                      profile: this.user.profile.id,
+                      vicepresidency: vicepresidency.id,
+                      area: this.user.position_area.area.id,
+                      subArea: subArea.id,
+                      position: this.user.position_area.position.id,
+                    });
+                  });
+
+              } else {
+                this.usersGroup.patchValue({
+                  first_name: this.user.first_name,
+                  last_name: this.user.last_name,
+                  email: this.user.email,
+                  semanal_hours: this.user.semanal_hours,
+                  profile: this.user.profile.id,
+                  vicepresidency: vicepresidency.id,
+                  area: this.user.position_area.area.id,
+                  subArea: null,
+                  position: this.user.position_area.position.id,
+                });
+              }
+          });
+      });
+    }
   }
     
-  openVicepresidencies(ev: boolean) {
+  async openVicepresidencies(ev: boolean) {
     this.areas = [];
     if(ev) {
-      this.vicePresidenciesService.getVicePresidenciesSelect()
+      await this.vicePresidenciesService.getVicePresidenciesSelect()
         .subscribe((vicepresidencies: VicePresidency[]) => this.vicepresidencies = vicepresidencies);
     } else {
       this.usersGroup.get('area')!.setValue(null);
       this.usersGroup.get('subArea')!.setValue(null);
       this.usersGroup.get('position')!.setValue(null);
 
-      this.areasService.getAreasSelect()
+      await this.areasService.getAreasSelect()
         .subscribe((areas: Area[]) => {
           for (let index = 0; index < areas.length; index++) {
             if(areas[index].vice_presidency?.id == this.usersGroup.get('vicepresidency')!.value && areas[index].parent == null) {
@@ -100,27 +151,28 @@ export class GeneralUsersFormComponent implements OnInit {
     }
   }
 
-  openAreas(ev: boolean) {
+  async openAreas(ev: boolean) {
     this.subAreas = [];
     this.positions = [];
     if(ev) {
       this.usersGroup.get('area')!.setValue(null);
-      this.areasService.getAreasSelect()
+      await this.areasService.getAreasSelect()
         .subscribe((areas: Area[]) =>{
           for (let index = 0; index < areas.length; index++) {
-            if(areas[index] == this.usersGroup.get('vicepresidency')!.value) {
+            if (areas[index] == this.usersGroup.get('vicepresidency')!.value) {
               this.areas.push(areas[index]);
             }
           }
+          environment.consoleMessage(this.areas, "Areas: Open");
         });
     }
   }
 
-  openSubAreas(ev: boolean) {
+  async openSubAreas(ev: boolean) {
     this.positions = [];
     if(ev) {
       this.usersGroup.get('subArea')!.setValue(null);
-      this.areasService.getSubAreas()
+      await this.areasService.getSubAreas()
         .subscribe((subAreas: Area[]) =>{
           this.subAreas = [];
           for (let index = 0; index < subAreas.length; index++) {
@@ -130,11 +182,12 @@ export class GeneralUsersFormComponent implements OnInit {
               }
             }
           }
+          environment.consoleMessage(this.subAreas, "SubAreas: Open");
         });
     }
   }
 
-  openPosition(ev: boolean) {
+  async openPosition(ev: boolean) {
     if(ev) {
       this.usersGroup.get('position')?.setValue(null);
       if (this.usersGroup.get('area')!.value != null){
@@ -142,17 +195,18 @@ export class GeneralUsersFormComponent implements OnInit {
         if(this.usersGroup.get('subArea')!.value != null) {
           area_id = this.usersGroup.get('subArea')!.value;
         }
-        this.positionsService.getPositions(area_id)
+        await this.positionsService.getPositions(area_id)
           .subscribe((positions: any[]) => {
             this.positions = positions
           });
+          environment.consoleMessage(this.positions, "Position: Open");
       } 
     }
   }
 
-  openProfiles(ev: boolean) {
+  async openProfiles(ev: boolean) {
     if(ev) {
-      this.profilesService.getProfiles()
+      await this.profilesService.getProfiles()
         .subscribe((profiles: Profile[]) => {
           this.profiles = profiles;
         });
