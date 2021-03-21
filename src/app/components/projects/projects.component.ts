@@ -7,6 +7,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
+import { Project } from 'src/app/models/project';
 @Component({
   selector: 'tecno-projects',
   templateUrl: './projects.component.html',
@@ -18,6 +19,7 @@ export class ProjectsComponent implements OnInit {
 
   mode: string = "dashboard";
   dashboard: any[]= [];
+  dashboardOwn: any[]= [];
   
   
   constructor(
@@ -33,7 +35,18 @@ export class ProjectsComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;
-      this.dashboard = data.dashboard
+      environment.consoleMessage( data.projects, "l>>>>>>>>>>>>>>>>>>>>>");
+      this.dashboard = data.dashboard;
+      this.dashboardOwn = JSON.parse(JSON.stringify(data.dashboard));
+      environment.consoleMessage( this.dashboardOwn, "OWN antes>>>>>>>>>>>>>>>>>>>>>");
+      var idUser = JSON.parse(localStorage.user).id;
+      for (let index = 0; index < this.dashboardOwn.length; index++) {
+        var vice = this.dashboardOwn[index]
+        for (let j = 0; j < vice.areas.length; j++) {
+          vice.areas[j].projects = vice.areas[j].projects.filter((project: Project) => project.pmo_id == idUser || project.pmo_assitant_id == idUser )
+        }
+      }
+      environment.consoleMessage( this.dashboardOwn, " OWN >>>>>>>>>>>>>>>>>>>>>");
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
