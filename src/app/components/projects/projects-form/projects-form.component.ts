@@ -175,11 +175,9 @@ export class ProjectsFormComponent implements OnInit {
         'managements': [null, [Validators.required]],
         'pmos': [null, [Validators.required]],
         'pmoHours': [null, [Validators.required, Validators.max(40), Validators.min(0)]],
-        'pmoMinutes': [null, [Validators.required, Validators.max(59), Validators.min(0)]],
         'pmoAssists': [null],
         'stages': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
         'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
-        'pmoAssistMinutes': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(59), Validators.min(0)]],
         'budgetApproved': [null, [Validators.required]],
         'budgetExecuted': [null, [Validators.required]],
         'balance': [{value: null, disabled: true}, [Validators.required]],
@@ -191,7 +189,7 @@ export class ProjectsFormComponent implements OnInit {
         'controlDate': [],
         'states': [null, [Validators.required]],
         'phases': [null, [Validators.required]],
-        'sprint': [null, [Validators.required, Validators.min(0)]],
+        'sprint': [null, [Validators.min(0)]],
         'evaluation': [null],
         'testLog': [null, [Validators.required]],
       });
@@ -215,11 +213,9 @@ export class ProjectsFormComponent implements OnInit {
         managements: `Gestión`,
         pmos: `PMO asignado`,
         pmoHours: `Horas Semanales PMO`,
-        pmoMinutes: `Minutos Semanales PMO`,
         pmoAssists: `PMO  de apoyo asignado`,
         stages: `Etapa de Apoyo`,
         pmoAssistHours: `Horas Semanales PMO de apoyo`,
-        pmoAssistMinutes: `Minutos Semanales PMO de apoyo`,
         budgetApproved: `Presupuesto Aprobado`,
         budgetExecuted: `Presupuesto Ejecutado`,
         balance: `Saldo`,
@@ -258,7 +254,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
       await this._programsService.getProgramsSelect()
       .subscribe((programs: Program[]) => this.programs = programs);
-      await this._usersService.getManagers()
+      await this._usersService.getFunctionalLeaders()
       .subscribe((leads: User[]) => this.leads = leads);
       await this._prioritiesService.getPrioritiesSelect()
       .subscribe((priorities: Priority[]) => this.priorities = priorities);
@@ -319,15 +315,13 @@ export class ProjectsFormComponent implements OnInit {
       this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
       this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
       this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
-      this.descripcion.get('strategicGuidelines')?.setValue(this.project.strategic_guideline!.id);
+      this.descripcion.get('strategicGuidelines')?.setValue(this.project.strategic_guideline == null ? null : this.project.strategic_guideline.id);
       this.descripcion.get('managements')?.setValue(this.project.management!.id);
       this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
-      this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
-      this.descripcion.get('pmoMinutes')?.setValue(this.project.pmo_minutes);
+      this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours + (this.project.pmo_minutes / 60) );
       this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
       this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
-      this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours);
-      this.descripcion.get('pmoAssistMinutes')?.setValue(this.project.pmo_assistant_minutes);
+      this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours! + (this.project.pmo_assistant_minutes! / 60));
       this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
       this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
       this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
@@ -877,15 +871,12 @@ export class ProjectsFormComponent implements OnInit {
       this.deshabilitarAssist = false;
       this.descripcion.get('stages')!.enable();
       this.descripcion.get('pmoAssistHours')!.enable();
-      this.descripcion.get('pmoAssistMinutes')!.enable();
     } else {
       this.deshabilitarAssist = true;
       this.descripcion.get('stages')!.disable();
       this.descripcion.get('stages')!.setValue(null);
       this.descripcion.get('pmoAssistHours')!.disable();
       this.descripcion.get('pmoAssistHours')!.setValue(null);
-      this.descripcion.get('pmoAssistMinutes')!.disable();
-      this.descripcion.get('pmoAssistMinutes')!.setValue(null);
     }
     return this.deshabilitarAssist
   }
@@ -931,7 +922,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openLeads(ev: boolean) {
     if (ev) {
-      this._usersService.getManagers()
+      this._usersService.getFunctionalLeaders()
         .subscribe((leads: User[]) => this.leads = leads);
     }
   }
@@ -1085,15 +1076,31 @@ export class ProjectsFormComponent implements OnInit {
         this.project.functional_lead!.id != this.descripcion.get('leads')?.value ? editProject.functional_lead_id = this.descripcion.get('leads')!.value : true ;
         this.project.priority!.id != this.descripcion.get('priorities')?.value ? editProject.priority_id = this.descripcion.get('priorities')!.value : true ;
         this.project.typification!.id != this.descripcion.get('typifications')?.value ? editProject.typification_id = this.descripcion.get('typifications')!.value : true ;
-        this.project.strategic_guideline!.id != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
+        if (this.project.strategic_guideline != null){
+          this.project.strategic_guideline!.id != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
+        }else{
+          null != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
+        }
         this.project.management!.id != this.descripcion.get('managements')?.value ? editProject.management_id = this.descripcion.get('managements')!.value : true ;
         this.project.pmo!.id != this.descripcion.get('pmos')?.value ? editProject.pmo_id = this.descripcion.get('pmos')!.value : true ;
-        this.project.pmo_hours != this.descripcion.get('pmoHours')?.value ? editProject.pmo_hours = this.descripcion.get('pmoHours')!.value : true ;
-        this.project.pmo_minutes != this.descripcion.get('pmoMinutes')?.value ? editProject.pmo_minutes = this.descripcion.get('pmoMinutes')!.value : true ;
-        (this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id) != this.descripcion.get('pmoAssists')?.value ? editProject.pmo_assitant_id = this.descripcion.get('pmoAssists')?.value : true ;
+        this.project.pmo_hours != Math.trunc(this.descripcion.get('pmoHours')?.value) ? editProject.pmo_hours = Math.trunc(this.descripcion.get('pmoHours')!.value) : true ;
+        this.project.pmo_minutes != ((this.descripcion.get('pmoHours')!.value! - Math.trunc(this.descripcion.get('pmoHours')!.value)) *60)  ? editProject.pmo_minutes = ((this.descripcion.get('pmoHours')!.value! - Math.trunc(this.descripcion.get('pmoHours')!.value)) *60) : true ;
+        (this.project.pmo_assitant == null ? null: this.project.pmo_assitant.id) != this.descripcion.get('pmoAssists')?.value ? editProject.pmo_assitant_id = (this.descripcion.get('pmoAssists')?.value == undefined ? null: this.descripcion.get('pmoAssists')?.value) : true ;
         (this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id) != this.descripcion.get('stages')?.value ? editProject.pmo_assitant_stage_id = this.descripcion.get('stages')?.value : true ;
-        this.project.pmo_assistant_hours != this.descripcion.get('pmoAssistHours')?.value ? editProject.pmo_assistant_hours = this.descripcion.get('pmoAssistHours')!.value : true ;
-        this.project.pmo_assistant_minutes != this.descripcion.get('pmoAssistMinutes')?.value ? editProject.pmo_assistant_minutes = this.descripcion.get('pmoAssistMinutes')!.value : true ;
+        if (this.descripcion.get('pmoAssistHours')?.value == null){
+          this.project.pmo_assistant_hours != this.descripcion.get('pmoAssistHours')?.value ? editProject.pmo_assistant_hours = this.descripcion.get('pmoAssistHours')!.value : true ;
+        }else{
+          if (this.project.pmo_assistant_hours == null){
+            this.project.pmo_assistant_hours != this.descripcion.get('pmoAssistHours')?.value ? editProject.pmo_assistant_hours = Math.trunc(this.descripcion.get('pmoAssistHours')!.value) : true ;
+          }else{
+            this.project.pmo_assistant_hours != Math.trunc(this.descripcion.get('pmoAssistHours')?.value) ? editProject.pmo_assistant_hours = Math.trunc(this.descripcion.get('pmoAssistHours')!.value) : true ;
+          }
+        }
+        if((this.descripcion.get('pmoAssistHours')!.value == null)){
+          this.project.pmo_assistant_minutes != null ? editProject.pmo_assistant_minutes = null: true;
+        }else{
+          this.project.pmo_assistant_minutes != ((this.descripcion.get('pmoAssistHours')!.value! - Math.trunc(this.descripcion.get('pmoAssistHours')!.value)) *60)  ? editProject.pmo_assistant_minutes = ((this.descripcion.get('pmoAssistHours')!.value! - Math.trunc(this.descripcion.get('pmoAssistHours')!.value)) *60) : true ;
+        }
         this.project.budget_approved != this.descripcion.get('budgetApproved')?.value ? editProject.budget_approved = this.descripcion.get('budgetApproved')!.value : true ;
         this.project.budget_executed != this.descripcion.get('budgetExecuted')?.value ? editProject.budget_executed = this.descripcion.get('budgetExecuted')!.value : true ;
 
@@ -1184,12 +1191,12 @@ export class ProjectsFormComponent implements OnInit {
           strategic_guideline_id: this.descripcion.get('strategicGuidelines')!.value,
           management_id: this.descripcion.get('managements')!.value,
           pmo_id: this.descripcion.get('pmos')!.value,
-          pmo_hours: this.descripcion.get('pmoHours')!.value,
-          pmo_minutes: this.descripcion.get('pmoMinutes')!.value,
+          pmo_hours:  Math.trunc(this.descripcion.get('pmoHours')!.value),
+          pmo_minutes: ((this.descripcion.get('pmoHours')!.value! - Math.trunc(this.descripcion.get('pmoHours')!.value)) *60),
           pmo_assitant_id: this.descripcion.get('pmoAssists')!.value,
           pmo_assitant_stage_id: this.descripcion.get('stages')!.value,
-          pmo_assistant_hours: this.descripcion.get('pmoAssistHours')!.value,
-          pmo_assistant_minutes: this.descripcion.get('pmoAssistMinutes')!.value,
+          pmo_assistant_hours: (this.descripcion.get('pmoAssistHours')!.value! == undefined ? undefined : Math.trunc(this.descripcion.get('pmoAssistHours')!.value!)),
+          pmo_assistant_minutes: (this.descripcion.get('pmoAssistHours')!.value! == undefined ? undefined : ((this.descripcion.get('pmoAssistHours')!.value! - Math.trunc(this.descripcion.get('pmoAssistHours')!.value)) *60)),
           budget_approved: this.descripcion.get('budgetApproved')!.value,
           budget_executed: this.descripcion.get('budgetExecuted')!.value,
 
