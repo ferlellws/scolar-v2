@@ -171,7 +171,7 @@ export class ProjectsFormComponent implements OnInit {
         'leads': [null, [Validators.required]],
         'priorities': [null, [Validators.required]],
         'typifications': [null, [Validators.required]],
-        'strategicGuidelines': [null, [Validators.required]],
+        'strategicGuidelines': [null],
         'managements': [null, [Validators.required]],
         'pmos': [null, [Validators.required]],
         'pmoHours': [null, [Validators.required, Validators.max(40), Validators.min(0)]],
