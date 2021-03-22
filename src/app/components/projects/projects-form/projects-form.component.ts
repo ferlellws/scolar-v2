@@ -319,7 +319,7 @@ export class ProjectsFormComponent implements OnInit {
       this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
       this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
       this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
-      this.descripcion.get('strategicGuidelines')?.setValue(this.project.strategic_guideline!.id);
+      this.descripcion.get('strategicGuidelines')?.setValue(this.project.strategic_guideline == null ? null : this.project.strategic_guideline.id);
       this.descripcion.get('managements')?.setValue(this.project.management!.id);
       this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
       this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours);
