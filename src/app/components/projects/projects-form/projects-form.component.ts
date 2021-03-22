@@ -254,7 +254,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
       await this._programsService.getProgramsSelect()
       .subscribe((programs: Program[]) => this.programs = programs);
-      await this._usersService.getManagers()
+      await this._usersService.getFunctionalLeaders()
       .subscribe((leads: User[]) => this.leads = leads);
       await this._prioritiesService.getPrioritiesSelect()
       .subscribe((priorities: Priority[]) => this.priorities = priorities);
@@ -922,7 +922,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openLeads(ev: boolean) {
     if (ev) {
-      this._usersService.getManagers()
+      this._usersService.getFunctionalLeaders()
         .subscribe((leads: User[]) => this.leads = leads);
     }
   }
