@@ -286,7 +286,7 @@
 
             <h3 class="h3-subtitle txt-primary">Lineamiento Estratégico</h3>
             <div mat-line class="line-text" *ngIf="project.strategic_guideline != null"> {{project.strategic_guideline.name}} </div>
-            <div mat-line class="line-text" *ngIf="project.strategic_guideline == null"> {{labelAssignment}} </div>
+            <div mat-line class="line-text-font" *ngIf="project.strategic_guideline == null"> {{labelAssignment}} </div>
             
             <h3 class="h3-subtitle txt-primary">PMO asignado</h3>
             <div mat-line class="line-text"> {{project.pmo.first_name}} {{project.pmo.last_name}} </div>
@@ -341,7 +341,8 @@
             <div mat-line class="line-text"> {{project.states_by_phase.phase.title}} </div>
             
             <h3 class="h3-subtitle txt-primary">Sprint</h3>
-            <div mat-line class="line-text"> {{project.sprint}} </div>
+            <div mat-line class="line-text" *ngIf="project.sprint != null"> {{project.sprint}} </div>
+            <div mat-line class="line-text-font" *ngIf="project.sprint == null"> {{labelAssignment}} </div>
             
             <h3 class="h3-subtitle txt-primary">Evaluación de Proveedores</h3>
             <div mat-line *ngIf="project.evaluation == null" class="line-text-font"> {{labelAssignment}} </div>

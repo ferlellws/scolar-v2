@@ -496,8 +496,7 @@
                         <input matInput 
                         type="number" 
                         placeholder="{{labels.sprint}}" 
-                        formControlName="sprint" 
-                        required >
+                        formControlName="sprint">
                         <mat-label>{{labels.sprint}}</mat-label>
                         <mat-error *ngIf="this.seguimiento.get('sprint')?.invalid">
                             {{ getMessageError(seguimiento ,'sprint') }}

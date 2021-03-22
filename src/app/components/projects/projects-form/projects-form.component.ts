@@ -191,7 +191,7 @@ export class ProjectsFormComponent implements OnInit {
         'controlDate': [],
         'states': [null, [Validators.required]],
         'phases': [null, [Validators.required]],
-        'sprint': [null, [Validators.required, Validators.min(0)]],
+        'sprint': [null, [Validators.min(0)]],
         'evaluation': [null],
         'testLog': [null, [Validators.required]],
       });
@@ -1085,7 +1085,11 @@ export class ProjectsFormComponent implements OnInit {
         this.project.functional_lead!.id != this.descripcion.get('leads')?.value ? editProject.functional_lead_id = this.descripcion.get('leads')!.value : true ;
         this.project.priority!.id != this.descripcion.get('priorities')?.value ? editProject.priority_id = this.descripcion.get('priorities')!.value : true ;
         this.project.typification!.id != this.descripcion.get('typifications')?.value ? editProject.typification_id = this.descripcion.get('typifications')!.value : true ;
-        this.project.strategic_guideline!.id != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
+        if (this.project.strategic_guideline != null){
+          this.project.strategic_guideline!.id != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
+        }else{
+          null != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
+        }
         this.project.management!.id != this.descripcion.get('managements')?.value ? editProject.management_id = this.descripcion.get('managements')!.value : true ;
         this.project.pmo!.id != this.descripcion.get('pmos')?.value ? editProject.pmo_id = this.descripcion.get('pmos')!.value : true ;
         this.project.pmo_hours != this.descripcion.get('pmoHours')?.value ? editProject.pmo_hours = this.descripcion.get('pmoHours')!.value : true ;
