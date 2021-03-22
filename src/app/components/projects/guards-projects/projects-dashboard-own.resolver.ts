@@ -5,22 +5,18 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { VicePresidency } from 'src/app/models/vice-presidency';
 import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardProjectsResolver implements Resolve<boolean> {
-  
+export class ProjectsDashboardOwnResolver implements Resolve<boolean> {
+
   constructor(
     private vicepresidenciesService: VicePresidenciesService
   ) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-    ): Observable<any[]> |Promise<any>|any{
-      return this.vicepresidenciesService.getProjectsDashboard(false);
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.vicepresidenciesService.getProjectsDashboard(true);
   }
 }

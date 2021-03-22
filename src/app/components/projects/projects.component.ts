@@ -36,17 +36,8 @@ export class ProjectsComponent implements OnInit {
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;
       environment.consoleMessage( data.projects, "l>>>>>>>>>>>>>>>>>>>>>");
+      this.dashboardOwn = data.dashboardOwn;
       this.dashboard = data.dashboard;
-      this.dashboardOwn = JSON.parse(JSON.stringify(data.dashboard));
-      environment.consoleMessage( this.dashboardOwn, "OWN antes>>>>>>>>>>>>>>>>>>>>>");
-      var idUser = JSON.parse(localStorage.user).id;
-      for (let index = 0; index < this.dashboardOwn.length; index++) {
-        var vice = this.dashboardOwn[index]
-        for (let j = 0; j < vice.areas.length; j++) {
-          vice.areas[j].projects = vice.areas[j].projects.filter((project: Project) => project.pmo_id == idUser || project.pmo_assitant_id == idUser )
-        }
-      }
-      environment.consoleMessage( this.dashboardOwn, " OWN >>>>>>>>>>>>>>>>>>>>>");
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
