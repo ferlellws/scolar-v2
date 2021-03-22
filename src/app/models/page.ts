@@ -7,6 +7,8 @@ export class Page {
   description!: string;
   menu_module!: MenuModule;
   icon!: Icon;
+  icon_name!: string;
+  route!: string;
   ordering!: number;
   id_active!: boolean;
 }

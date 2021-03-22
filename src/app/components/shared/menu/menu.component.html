@@ -1,5 +1,7 @@
 <div class="menu-container">
   <mat-accordion *ngIf="menu.length">
+
+    <!-- MODULOS DEL MENU -->
     <mat-expansion-panel *ngFor="let m of menu; let i = index" [expanded]="i === moduleSelected"
       (opened)="onOpenOption(i)"
       (closed)="onCloseOption(i)"
@@ -9,14 +11,14 @@
         [class.pb-5]="!panelOpenState[i]"
         [class.without-height]="!panelOpenState[i]">
         <mat-panel-title>
-          <!-- <mat-icon>{{ getIcon(m.module.icon_id) }}</mat-icon> -->
-          <!-- <mat-icon>dashboard</mat-icon> -->
           <span>{{ m.module.name }}</span>
           <p *ngIf="!panelOpenState[i]" class="text-options">
             <span *ngFor="let option of m.pages; let j = index" >{{ option.name }}{{ j === (m.pages.length - 1) ? '' : ', ' }}</span>
           </p>
         </mat-panel-title>
       </mat-expansion-panel-header>
+
+      <!-- LINKS DE LAS PAGINAS -->
       <mat-selection-list [multiple]="false">
         <mat-list-option *ngFor="let page of m.pages"
           [routerLink]="[page.route]"

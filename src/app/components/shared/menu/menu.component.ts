@@ -73,7 +73,7 @@ export class MenuComponent implements OnInit {
   }
 
   getIcon(id: number) {
-    return this.icons.filter(icon => icon.id == id)[0].title;
+    return this.icons.filter(icon => icon.id == id)[0].name;
   }
 
   onLink(route: string) {
