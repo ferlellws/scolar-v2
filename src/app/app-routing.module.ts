@@ -1,17 +1,20 @@
+import { MenuModulesResolver } from './components/pages/guards/menu-modules.resolver';
+import { PagesResolver } from './components/pages/guards/pages.resolver';
 import { VicePresidenciesResolver } from './components/vice-presidencies/guards/vice-presidencies.resolver';
+import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+
+// GUARDS
 import { AuthGuard } from './guards/auth.guard';
-import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
+
+// RESOLVERS
+import { ProjectDetailsResolver } from './components/project-details/guards/project-details.resolver';
 import { CompaniesResolver } from './components/companies/guards-companies/companies.resolver';
 import { CompanyTypesResolver } from './components/company-types/guards-company-types/company-types.resolver';
 import { PhasesResolver } from './components/phases/guards-phases/phases.resolver';
 import { DashboardProjectsResolver } from './components/projects/guards-projects/dashboard-projects.resolver';
 import { ProjectsByVicepresidencyResolver } from './components/projects-by-vicepresidency/guards/projects-by-vicepresidency.resolver';
-import { ProjectDetailsResolver } from './components/project-details/guards/project-details.resolver';
 import { StatesResolver } from './components/states/guards-states/states.resolver';
 import { ApplicationsResolver } from './components/applications/guards-applications/applications.resolver';
 import { AreasResolver } from './components/areas/guards-areas/areas.resolver';
@@ -41,6 +44,11 @@ import { DesviationCausesByVicepresidenciesResolver } from './components/desviat
 import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
 import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
 import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
+
+// COMPONENTS
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -79,28 +87,33 @@ const routes: Routes = [
       companyTypes: CompanyTypesResolver
     }
   },
-  { path: 'demo-gephi', loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule) },
-  { path: 'desviation-causes',
-  loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
-  canActivate: [AuthGuard],
-  canLoad: [AuthGuard],
-  resolve: {
-    desviationCausesBySource: DesviationCausesBySourceResolver,
-    desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
-    desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
-    desviationCausesByAreas: DesviationCausesByAreasResolver
-  }
-},
-{ path: 'general-users',
-  loadChildren: () => import('./components/general-users/general-users.module').then(m => m.GeneralUsersModule),
-  canActivate: [AuthGuard],
-  canLoad: [AuthGuard],
-  resolve: {
-    generalUsers: GeneralUsersResolver,
-  }
-},
-{
-  path: 'home',
+  {
+    path: 'demo-gephi',
+    loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule)
+  },
+  {
+    path: 'desviation-causes',
+    loadChildren: () => import('./components/desviation-causes/desviation-causes.module').then(m => m.DesviationCausesModule) ,
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      desviationCausesBySource: DesviationCausesBySourceResolver,
+      desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
+      desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
+      desviationCausesByAreas: DesviationCausesByAreasResolver
+    }
+  },
+  {
+    path: 'general-users',
+    loadChildren: () => import('./components/general-users/general-users.module').then(m => m.GeneralUsersModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      generalUsers: GeneralUsersResolver,
+    }
+  },
+  {
+    path: 'home',
     component: HomeComponent,
     canActivate: [AuthGuard],
   },
@@ -112,6 +125,14 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     resolve: {
       managements: ManagementsResolver
+    }
+  },
+  {
+    path: 'pages',
+    loadChildren: () => import('./components/pages/pages.module').then(m => m.PagesModule),
+    resolve: {
+      pagesWithoutModule: PagesResolver,
+      pagesModules: MenuModulesResolver
     }
   },
   {
@@ -256,6 +277,7 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
+  { path: 'pages-profiles', loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

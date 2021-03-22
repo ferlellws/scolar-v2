@@ -4,11 +4,9 @@
 <div class="row">
     <mat-form-field class="col-sm-12 col-md-6">
         <mat-label>Areas Participantes</mat-label>
-        <mat-select [formControl]="areasForm" (selectionChange)="onChangeSelect()"  multiple>
+        <mat-select [formControl]="areasForm" (selectionChange)="onChangeSelect()" multiple>
             <mat-optgroup *ngFor="let vicepresidency of options" [label]="vicepresidency.title">
-                
-                  <mat-option *ngFor="let area of vicepresidency.areas" [value]="area.id">{{area.title}}</mat-option>
-                
+              <mat-option *ngFor="let area of vicepresidency.areas" [value]="area.id">{{area.title}}</mat-option>
             </mat-optgroup>
         </mat-select>
     </mat-form-field>

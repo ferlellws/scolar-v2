@@ -34,7 +34,7 @@ export class MenuService {
   httpOptions!: any;
 
   menuFull!: Menu[]
-  
+
   constructor(private http: HttpClient) { }
 
   getFullMenu() {
@@ -69,20 +69,11 @@ export class MenuService {
   set setOption(oOption: any) { this._oOption = oOption }
 
   getOptionByRoute(route: string) :any{
-    
-    let oOption: Page = {
-      id: 0,
-      name: '',
-      description: '',
-      route: '',
-      ordering: 0,
-      is_active: true,
-      bg_color: '',
-      created_at: '',
-      updated_at: '',
-    };
-    this._menu.filter(data => {
-      data.pages.forEach(page => {
+
+    let oOption!: Page;
+
+    this._menu.filter((data: any) => {
+      data.pages.forEach((page: Page) => {
         if (route === page.route) {
           oOption = page;
         }
