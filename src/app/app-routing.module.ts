@@ -1,5 +1,3 @@
-import { MenuModulesResolver } from './components/pages/guards/menu-modules.resolver';
-import { PagesResolver } from './components/pages/guards/pages.resolver';
 import { VicePresidenciesResolver } from './components/vice-presidencies/guards/vice-presidencies.resolver';
 import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
 import { NgModule } from '@angular/core';
@@ -44,6 +42,8 @@ import { DesviationCausesByVicepresidenciesResolver } from './components/desviat
 import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
 import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
 import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
+import { PagesResolver } from './components/pages/guards/pages.resolver';
+import { MenuModulesResolver } from './components/pages/guards/menu-modules.resolver';
 
 // COMPONENTS
 import { HomeComponent } from './components/home/home.component';
