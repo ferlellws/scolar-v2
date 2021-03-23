@@ -1418,4 +1418,21 @@ export class ProjectsFormComponent implements OnInit {
     });
   }
 
+  numberToCOP(n: number){
+     return new Intl.NumberFormat('en-US').
+      format(n)
+  }
+
+  getBudgetApproved(){
+    return this.numberToCOP(this.descripcion.get('budgetApproved')!.value!)
+  }
+
+  getBudgetExce(){
+    return this.numberToCOP(this.descripcion.get('budgetApproved')!.value!)
+  }
+
+  getBudgetExecuted(){
+    return this.numberToCOP(this.descripcion.get('budgetExecuted')!.value!)
+  }
+
 }

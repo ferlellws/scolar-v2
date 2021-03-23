@@ -44,11 +44,13 @@ import { DesviationCausesByVicepresidenciesResolver } from './components/desviat
 import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
 import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
 import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
+import { ProjectsDashboardOwnResolver } from './components/projects/guards-projects/projects-dashboard-own.resolver';
 
 // COMPONENTS
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ProjectsOwnResolver } from './components/projects/guards-projects/projects-own.resolver';
 
 const routes: Routes = [
   {
@@ -199,6 +201,8 @@ const routes: Routes = [
     resolve: {
       projects: ProjectsResolver,
       dashboard: DashboardProjectsResolver,
+      dashboardOwn: ProjectsDashboardOwnResolver,
+      projectsOwn: ProjectsOwnResolver,
     }
   },
   {

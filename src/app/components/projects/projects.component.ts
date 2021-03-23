@@ -7,6 +7,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
+import { Project } from 'src/app/models/project';
 @Component({
   selector: 'tecno-projects',
   templateUrl: './projects.component.html',
@@ -15,9 +16,12 @@ import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.compon
 export class ProjectsComponent implements OnInit {
 
   dataTable!: TableData;
+  dataTableOwn!: TableData;
 
   mode: string = "dashboard";
+  modeOwn: string = "dashboard";
   dashboard: any[]= [];
+  dashboardOwn: any[]= [];
   
   
   constructor(
@@ -33,7 +37,10 @@ export class ProjectsComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;
-      this.dashboard = data.dashboard
+      this.dataTableOwn = data.projectsOwn;
+      environment.consoleMessage( data.projectsOwn, "l>>>>>>>>>>>>>>>>>>>>>");
+      this.dashboardOwn = data.dashboardOwn;
+      this.dashboard = data.dashboard;
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
 
