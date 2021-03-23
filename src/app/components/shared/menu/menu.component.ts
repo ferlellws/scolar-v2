@@ -6,7 +6,6 @@ import {
   MatTreeFlattener
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { UserService } from 'src/app/services/user.service';
 import { IconsService } from 'src/app/services/icons.service';
 import { Icon } from 'src/app/models/icon';
 import { MenuService } from 'src/app/services/menu.service';
@@ -74,7 +73,7 @@ export class MenuComponent implements OnInit {
   }
 
   getIcon(id: number) {
-    return this.icons.filter(icon => icon.id == id)[0].title;
+    return this.icons.filter(icon => icon.id == id)[0].name;
   }
 
   onLink(route: string) {

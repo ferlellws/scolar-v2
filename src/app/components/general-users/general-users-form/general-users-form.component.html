@@ -7,13 +7,19 @@
       <mat-icon>close</mat-icon>
     </button>
 </mat-toolbar>
-  
+
 <div class="example-container bg-color-white mat-elevation-z4">
   <form action="" [formGroup]="usersGroup" (ngSubmit)="onSubmit()"
     *ngIf="data.mode === 'create' || (data.mode === 'edit' && user); else loadingBlock">
-    
+
     <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-12">
+          <h3 class="mat-title txt-accent">Información Personal</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Nombre</mat-label>
           <input matInput formControlName="first_name" required>
@@ -23,7 +29,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Apellido</mat-label>
           <input matInput formControlName="last_name" required>
@@ -32,10 +38,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Correo</mat-label>
           <input matInput formControlName="email" required>
@@ -45,7 +49,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Horas de trabajo semanal</mat-label>
           <input matInput [min]="0" [max]="40" type="number" formControlName="semanal_hours" required>
@@ -57,36 +61,81 @@
     </div>
 
     <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title txt-accent">Cargo en la compañía</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
-          <mat-label>Cargo en la compañía</mat-label>
-          <mat-select formControlName="job_id" (click)="onClickSelectJob()" required>
+          <mat-label>Vicepresidencia</mat-label>
+          <mat-select formControlName="vicePresidency" (openedChange)="openVicepresidencies($event)" required>
             <mat-option>Seleccione una opción</mat-option>
-            <mat-option *ngFor="let job of selectJobs" [value]="job.id">{{ job.name }}</mat-option>
+            <mat-option *ngFor="let vicePresidency of vicePresidencies" [value]="vicePresidency.id">{{ vicePresidency.title }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="this.usersGroup.get('job_id')?.invalid">
-            {{ getMessageError('job_id', " cargo en la compañía") }}
+          <mat-error *ngIf="this.usersGroup.get('vicePresidency')?.invalid">
+            {{ getMessageError('vicePresidency', "vicepresidencia") }}
           </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-3">
         <mat-form-field class="full-width">
-          <mat-label>Perfíl en el aplicativo</mat-label>
-          <mat-select formControlName="profile_id" (click)="onClickSelectProfile()" required>
+          <mat-label>Área</mat-label>
+          <mat-select formControlName="area" (openedChange)="openAreas($event)" required>
             <mat-option>Seleccione una opción</mat-option>
-            <mat-option *ngFor="let profile of selectProfiles" [value]="profile.id">{{ profile.name }}</mat-option>
+            <mat-option *ngFor="let area of areas" [value]="area.id">{{ area.title }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="this.usersGroup.get('profile_id')?.invalid">
-            {{ getMessageError('profile_id', " perfíl en el aplicativo") }}
+          <mat-error *ngIf="this.usersGroup.get('area')?.invalid">
+            {{ getMessageError('area', "área") }}
           </mat-error>
         </mat-form-field>
-      </div>  
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Sub-Área</mat-label>
+          <mat-select formControlName="subArea" (openedChange)="openSubAreas($event)">
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let subArea of subAreas" [value]="subArea.id">{{ subArea.title }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Cargo</mat-label>
+          <mat-select formControlName="position_area_id" (openedChange)="openPosition($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let position of positions" [value]="position.position_area_id">{{ position.position.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.usersGroup.get('position')?.invalid">
+            {{ getMessageError('position', " cargo en la compañía") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
     </div>
 
     <div class="row">
-      <div class="col-sm-12 col-md-12">
-        <mat-slide-toggle formControlName="is_active">Estado</mat-slide-toggle>
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title txt-accent">Perfil en el aplicativo</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Perfíl en el aplicativo</mat-label>
+          <mat-select formControlName="profile" (openedChange)="openProfiles($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let profile of profiles" [value]="profile.id">{{ profile.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.usersGroup.get('profile')?.invalid">
+            {{ getMessageError('profile', " perfíl en el aplicativo") }}
+          </mat-error>
+        </mat-form-field>
       </div>
     </div>
 
@@ -108,5 +157,4 @@
     </div>
   </ng-template>
 
-  <tecno-form-debug [form]="usersGroup"></tecno-form-debug>
 </div>

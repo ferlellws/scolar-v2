@@ -40,7 +40,7 @@
 
         <!-- MENU PERFIL NOMBRE -->
         <div class="btn-profile" [matMenuTriggerFor]="afterMenu">
-          {{ user.getPartialName() }}
+          {{ user.getPartialName!() }}
         </div>
         <mat-menu #afterMenu="matMenu" xPosition="after">
           <button mat-menu-item>Item 1</button>

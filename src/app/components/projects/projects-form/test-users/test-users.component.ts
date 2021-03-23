@@ -22,7 +22,7 @@ export class TestUsersComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this._usersService.getManagers()
+    await this._usersService.getFunctionalResources()
     .subscribe(users => this.users = users);
     var selectedIDs: number[] = this.usersSelected.map(user => user.id!);
     true;//environment.consoleMessage(selectedIDs, "selectedIDs")

@@ -13,16 +13,16 @@ import { TableData } from '../models/table-data';
   providedIn: 'root'
 })
 export class UserService {
-  
+
   private readonly API = `${environment.API}/users`;
-  
+
   emitDataTable = new EventEmitter<any>();
-  
+
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
     user_token: JSON.parse(localStorage.user).authentication_token
   };
-  
+
   httpOptions = {};
 
 
@@ -45,7 +45,7 @@ export class UserService {
   }
 
   getUsersTable(){
-    return this.http.get<TableData[]>(`${this.API}`, this.httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -62,8 +62,8 @@ export class UserService {
     );
   }
 
-  addUser(user: User) {
-    return this.http.post<User>(this.API, { user: user }, this.httpOptions)
+  addUser(user: any) {
+    return this.http.post<User>(`${environment.API}/sign_up`, { user: user }, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
@@ -111,6 +111,38 @@ export class UserService {
       params: this.inputParams
     }
     return this.http.get<User[]>(`${this.API}/managers`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getFunctionalLeaders() {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+
+    this.httpOptions = {
+      params: this.inputParams
+    }
+    return this.http.get<User[]>(`${this.API}/functional_leaders`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getFunctionalResources() {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+
+    this.httpOptions = {
+      params: this.inputParams
+    }
+    return this.http.get<User[]>(`${this.API}/functional_resources`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)

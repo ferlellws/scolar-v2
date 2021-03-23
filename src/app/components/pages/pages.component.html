@@ -1,0 +1,164 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 col-md-6 mt-20">
+
+      <div class="row">
+        <div class="col-sm-8 col-md-8">
+          <h2>Paginas sin módulo</h2>
+        </div>
+        <div class="col-sm-4 col-md-4 text-end">
+          <button mat-icon-button color="accent" aria-label="Agregar una pagina" (click)="fForm = true">
+            <mat-icon class="txt-accent">add_circle</mat-icon>
+          </button>
+        </div>
+      </div>
+      <mat-divider class="mb-20"></mat-divider>
+
+      <div class="row">
+        <div class="col col-12">
+          <mat-card class="example-card mb-20" *ngIf="fForm">
+            <!-- <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>Shiba Inu</mat-card-title>
+              <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+            </mat-card-header> -->
+            <mat-card-content>
+              <mat-form-field class="example-form-field full-width">
+                <mat-label>Nombre</mat-label>
+                <input matInput type="text" [(ngModel)]="value">
+                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+
+              <mat-form-field class="example-form-field full-width">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput placeholder="Ex. 100 Main St">1600 Amphitheatre Pkwy</textarea>
+                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+
+              <mat-form-field class="example-form-field full-width">
+                <mat-label>Clearable input</mat-label>
+                <input matInput type="text" [(ngModel)]="value">
+                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-button color="primary">Guardar</button>
+              <button mat-button color="primary" (click)="fForm = false">Cancelar</button>
+            </mat-card-actions>
+          </mat-card>
+
+          <div *ngIf="pagesWithoutModule.length > 0; else elseBlock">
+            <mat-accordion class="example-headers-align" multi>
+              <mat-expansion-panel *ngFor="let page of pagesWithoutModule">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ page.name }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    {{ page.name }}
+                    <mat-icon>{{ page.icon ? page.icon.name : "link_off" }}</mat-icon>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <mat-form-field>
+                  <mat-label>First name</mat-label>
+                  <input matInput>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Age</mat-label>
+                  <input matInput type="number" min="1">
+                </mat-form-field> -->
+
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+          <!-- SI NO EXISTEN REGISTROS -->
+          <ng-template #elseBlock>
+            <mat-card class="example-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <h1 class="mat-title txt-accent">No hay datos registrados</h1>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="pl-15" style="display: flex; align-items: center; font-size: larger;">
+                  <span style="padding-right: 5px;">Oprima el icono</span>
+                  <mat-icon class="txt-accent">add_circle</mat-icon>
+                  <span style="padding-left: 5px;">para agregar un nuevo registro</span>
+                </p>
+              </mat-card-content>
+            </mat-card>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 mt-20">
+      <div class="row">
+        <div class="col-sm-8 col-md-8">
+          <h2>Módulos</h2>
+        </div>
+        <div class="col-sm-4 col-md-4 text-end">
+          <button mat-icon-button color="accent" aria-label="Agregar una pagina">
+            <mat-icon class="txt-accent">add_circle</mat-icon>
+          </button>
+        </div>
+      </div>
+      <mat-divider class="mb-20"></mat-divider>
+
+      <div *ngIf="pagesWithoutModule.length > 0; else elseBlock">
+        <mat-accordion class="example-headers-align" multi cdkDropList (cdkDropListDropped)="dropModules($event)">
+          <mat-expansion-panel cdkDrag
+            *ngFor="let menuModule of pagesModules.menuModules"
+            class="cursor-move">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ menuModule.name }}
+              </mat-panel-title>
+              <!-- <mat-panel-description>
+                {{ menuModule.description }}
+              </mat-panel-description> -->
+            </mat-expansion-panel-header>
+
+            <!-- <mat-form-field>
+              <mat-label>First name</mat-label>
+              <input matInput>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Age</mat-label>
+              <input matInput type="number" min="1">
+            </mat-form-field> -->
+
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+
+        <!-- SI NO EXISTEN REGISTROS -->
+        <ng-template #elseBlock>
+          <mat-card class="example-card">
+            <mat-card-header>
+              <mat-card-title>
+                <h1 class="mat-title txt-accent">No hay datos registrados</h1>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="pl-15" style="display: flex; align-items: center; font-size: larger;">
+                <span style="padding-right: 5px;">Oprima el icono</span>
+                <mat-icon class="txt-accent">add_circle</mat-icon>
+                <span style="padding-left: 5px;">para agregar un nuevo registro</span>
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </ng-template>
+    </div>
+  </div>
+</div>

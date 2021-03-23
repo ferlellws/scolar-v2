@@ -6,15 +6,15 @@ import { ActivatedRoute } from '@angular/router';
 import { TableData } from 'src/app/models/table-data';
 
 // COMPONENTS
+import { GeneralUsersFormComponent } from './general-users-form/general-users-form.component';
+import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
 
 //SERVICES
+import { MainService } from 'src/app/services/main.service';
+import { UserService } from 'src/app/services/user.service';
 
 //MATERIAL
 import { MatDialog } from '@angular/material/dialog';
-import { MainService } from 'src/app/services/main.service';
-import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
-import { UserService } from 'src/app/services/user.service';
-import { GeneralUsersFormComponent } from './general-users-form/general-users-form.component';
 
 
 @Component({
@@ -35,23 +35,22 @@ export class GeneralUsersComponent implements OnInit {
   ngOnInit(): void {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
-      this.dataTable = data.companies;
-      setTimeout(() => {this.mainService.hideLoading()}, 1000);
+      this.dataTable = data.generalUsers;
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);      
     });
-
+    
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.userService.emitDataTable
       .subscribe((res: any) => {
-        true;//environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
+        environment.consoleMessage(res, "<<<<<<<<<<<<<<<<<<<<l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })
   }
 
   onCreate() {
-    true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(GeneralUsersFormComponent, {
-      width: environment.widthFormsLittleModal,
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
@@ -62,9 +61,8 @@ export class GeneralUsersComponent implements OnInit {
 
 
   onEdit(data: number) {
-    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(GeneralUsersFormComponent, {
-      width: environment.widthFormsLittleModal,
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         id: data,
@@ -75,7 +73,6 @@ export class GeneralUsersComponent implements OnInit {
   }
 
   onDelete(data: number) {
-    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onDelete: ");
     this.userService.getUsersId(data)
       .subscribe((res) => {
         const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -98,43 +95,6 @@ export class GeneralUsersComponent implements OnInit {
           }
         });
       })
-  }
-
-  onStatusChange(data: any) {
-    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onStatusChange: ");
-    let dataTableCopy!: TableData;
-
-    this.userService.getUsersId(data.id)
-      .subscribe((res) => {
-        const dialogRef = this.dialog.open(AlertDialogComponent, {
-          width: '250px',
-          data: {
-            title: 'Confirmación',
-            question: `Esta seguro de cambiar el estado del siguiente registro?`,
-            info: res.title,
-            value: data.value
-          }
-        });
-
-        dialogRef.afterClosed().subscribe((result: any) => {
-          true;//environment.consoleMessage(result, 'The dialog was closed');
-          if (result) {
-            this.userService.updateStatusUser(result.data, data.id)
-              .subscribe(res => {
-                true;//environment.consoleMessage(res, 'res: ');
-              })
-          } else {
-            dataTableCopy = {...this.dataTable};
-            dataTableCopy.dataTable.find((row, index) => {
-                if (row.idForOptions === data.id) {
-                  dataTableCopy.dataTable[index].checkOption = !data.value;
-                  this.dataTable = dataTableCopy;
-                }
-              });
-          }
-        });
-      })
-
   }
 
 }

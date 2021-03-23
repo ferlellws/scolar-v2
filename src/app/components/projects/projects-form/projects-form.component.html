@@ -149,7 +149,7 @@
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
                     class="full-width">
-                        <mat-select required (openedChange)="_openStrategicGuidelines($event)" formControlName="strategicGuidelines">
+                        <mat-select (openedChange)="_openStrategicGuidelines($event)" formControlName="strategicGuidelines">
                             <mat-option>-- None --</mat-option>
                             <mat-option *ngFor="let strategicGuideline of strategicGuidelines" [value]="strategicGuideline.id">{{strategicGuideline.name}}</mat-option>
                         </mat-select>
@@ -240,7 +240,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-12">
                     <mat-form-field
                         class="full-width"
                         style="width: 100%;">
@@ -248,18 +248,6 @@
                         <mat-label>{{labels.pmoHours}}</mat-label>
                         <mat-error *ngIf="this.descripcion.get('pmoHours')?.invalid">
                             {{ getMessageError(descripcion ,'pmoHours') }}
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
-                <div class="col-sm-12 col-md-6">
-                    <mat-form-field
-                        class="full-width"
-                        style="width: 100%;">
-                        <input matInput [min]="0" [max]="59" type="number" placeholder="{{labels.pmoMinutes}}" formControlName="pmoMinutes" required>
-                        <mat-label>{{labels.pmoMinutes}}</mat-label>
-                        <mat-error *ngIf="this.descripcion.get('pmoMinutes')?.invalid">
-                            {{ getMessageError(descripcion ,'pmoMinutes') }}
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -308,7 +296,7 @@
             </div>
                 
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-12">
                     <mat-form-field
                         class="full-width"
                         style="width: 100%;">
@@ -320,22 +308,6 @@
                         <mat-label>{{labels.pmoAssistHours}}</mat-label>
                         <mat-error *ngIf="this.descripcion.get('pmoAssistHours')?.invalid">
                             {{ getMessageError(descripcion ,'pmoAssistHours') }}
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
-                <div class="col-sm-12 col-md-6">
-                    <mat-form-field
-                        class="full-width"
-                        style="width: 100%;">
-                        <input matInput 
-                        [min]="0" [max]="59" type="number" 
-                        placeholder="{{labels.pmoAssistMinutes}}" 
-                        formControlName="pmoAssistMinutes" 
-                        required >
-                        <mat-label>{{labels.pmoAssistMinutes}}</mat-label>
-                        <mat-error *ngIf="this.descripcion.get('pmoAssistMinutes')?.invalid">
-                            {{ getMessageError(descripcion ,'pmoAssistMinutes') }}
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -359,6 +331,7 @@
                         formControlName="budgetApproved" 
                         required >
                         <mat-label>{{labels.budgetApproved}}</mat-label>
+                        <mat-hint align="start">{{getBudgetApproved()}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('budgetApproved')?.invalid">
                             {{ getMessageError(descripcion ,'budgetApproved') }}
                         </mat-error>
@@ -376,6 +349,7 @@
                         formControlName="budgetExecuted" 
                         required >
                         <mat-label>{{labels.budgetExecuted}}</mat-label>
+                        <mat-hint align="start">{{getBudgetExecuted()}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('budgetApproved')?.invalid">
                             {{ getMessageError(descripcion ,'budgetApproved') }}
                         </mat-error>
@@ -496,8 +470,7 @@
                         <input matInput 
                         type="number" 
                         placeholder="{{labels.sprint}}" 
-                        formControlName="sprint" 
-                        required >
+                        formControlName="sprint">
                         <mat-label>{{labels.sprint}}</mat-label>
                         <mat-error *ngIf="this.seguimiento.get('sprint')?.invalid">
                             {{ getMessageError(seguimiento ,'sprint') }}

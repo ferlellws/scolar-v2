@@ -1,8 +1,8 @@
-<div class="circle bg-{{colors[user.id % colors.length].name}}"
+<div class="circle bg-{{colors[user.id! % colors.length!].name}}"
   [ngStyle]="{
     'width.px': size,
     'height.px': size,
     'font-size.px': size/3
   }">
-  <span>{{ user.getInitialsName() }}</span>
+  <span>{{ user.getInitialsName!() }}</span>
 </div>
