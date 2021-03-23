@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 // MODULES
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SharedModule } from "../app/components/shared/shared.module";
+import { ParticlesModule } from 'ngx-particle';
 
 // MATERIAL
 import { MatTableModule } from '@angular/material/table';
@@ -50,6 +51,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ParticleBackgroundComponent } from './components/login/particle-background/particle-background.component';
 
 const MATERIALMODULES = [
   MatSortModule,
@@ -88,7 +90,8 @@ const MATERIALMODULES = [
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    LoginComponent
+    LoginComponent,
+    ParticleBackgroundComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +104,8 @@ const MATERIALMODULES = [
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ParticlesModule
   ],
   exports: [
     // MATERIAL
