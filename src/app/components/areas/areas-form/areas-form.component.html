@@ -11,7 +11,7 @@
   <form action="" [formGroup]="areasGroup" (ngSubmit)="onSubmit()"
     *ngIf="data.mode === 'create' || (data.mode === 'edit' && area); else loadingBlock">
     <div class="row">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-4">
         <mat-form-field class="full-width">
           <mat-label>{{ singularOption }}</mat-label>
           <input matInput formControlName="title" required>
@@ -21,7 +21,7 @@
         </mat-form-field>
       </div>
 
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-4">
         <mat-form-field class="full-width">
           <mat-label>Vicepresidencia</mat-label>
           <mat-select formControlName="vice_presidency_id" (click)="onClickSelectVicepresidency()" required>
@@ -33,6 +33,20 @@
           </mat-error>
         </mat-form-field>
       </div>
+
+      <div class="col-sm-12 col-md-4">
+        <mat-form-field class="full-width">
+          <mat-label>Área a la que pertenece</mat-label>
+          <mat-select formControlName="parent_id" (click)="onClickSelectAreas()">
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let areas of selectAreas" [value]="areas.id">{{ areas.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.areasGroup.get('parent_id')?.invalid">
+            {{ getMessageError('parent_id', " área a la que pertenece") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
     </div>
 
     <div class="row">
