@@ -16,8 +16,10 @@ import { Project } from 'src/app/models/project';
 export class ProjectsComponent implements OnInit {
 
   dataTable!: TableData;
+  dataTableOwn!: TableData;
 
   mode: string = "dashboard";
+  modeOwn: string = "dashboard";
   dashboard: any[]= [];
   dashboardOwn: any[]= [];
   
@@ -35,7 +37,8 @@ export class ProjectsComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;
-      environment.consoleMessage( data.projects, "l>>>>>>>>>>>>>>>>>>>>>");
+      this.dataTableOwn = data.projectsOwn;
+      environment.consoleMessage( data.projectsOwn, "l>>>>>>>>>>>>>>>>>>>>>");
       this.dashboardOwn = data.dashboardOwn;
       this.dashboard = data.dashboard;
       setTimeout(() => {this.mainService.hideLoading()}, 1000);

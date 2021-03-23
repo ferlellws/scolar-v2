@@ -3,16 +3,16 @@
     <div class="top-buttons">
       <p>
         <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">
-          <mat-button-toggle value="dashboard" (click)="mode = 'dashboard'">Tablero</mat-button-toggle>
-          <mat-button-toggle value="table" (click)="mode = 'table'">Tabla</mat-button-toggle>
+          <mat-button-toggle value="dashboard" (click)="modeOwn = 'dashboard'">Tablero</mat-button-toggle>
+          <mat-button-toggle value="table" (click)="modeOwn = 'table'">Tabla</mat-button-toggle>
         </mat-button-toggle-group>
       </p>
     </div>
     
-    <div class="cont-table mat-elevation-z5" *ngIf="mode == 'table'">
+    <div class="cont-table mat-elevation-z5" *ngIf="modeOwn == 'table'">
       <tecno-dynamic-table
         style="width: 100%;"
-        [objectsData]="dataTable"
+        [objectsData]="dataTableOwn"
         (emitEdit)="onEdit($event)"
         (emitStatusChange)="onStatusChange($event)"
         (emitDelete)="onDelete($event)"
@@ -21,7 +21,7 @@
         >
       </tecno-dynamic-table>
     </div>
-    <div class="cont-table" *ngIf="mode == 'dashboard'">
+    <div class="cont-table" *ngIf="modeOwn == 'dashboard'">
       <tecno-projects-dashboard [dashboard]="dashboardOwn" ></tecno-projects-dashboard>
     </div>
     
