@@ -30,7 +30,8 @@ export class ProjectsService {
     };
   }
 
-  getProjectsAll() {
+  getProjectsAll(own: number) {
+    this.httpOptions.params.own = own;
     return this.http.get<TableData[]>(`${this.API}/list`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)

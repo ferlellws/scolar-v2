@@ -29,10 +29,10 @@
                   <mat-icon>edit</mat-icon>
                   <span>Editar</span>
                 </button>
-                <button mat-menu-item (click)="onDeleteLogic(element['idForOptions'])">
+                <!-- <button mat-menu-item (click)="onDeleteLogic(element['idForOptions'])">
                   <mat-icon>{{ deleteIcon }}</mat-icon>
                   <span>{{ labelDelete }}</span>
-                </button>
+                </button> -->
                 <button mat-menu-item (click)="onDelete(element['idForOptions'])" *ngIf="!isUserProfile">
                   <mat-icon>delete_forever</mat-icon>
                   <span>Eliminar definitivamente</span>

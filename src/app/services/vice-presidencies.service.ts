@@ -72,8 +72,9 @@ export class VicePresidenciesService {
     );
   }
 
-  getProjectsDashboard() {
+  getProjectsDashboard(own: boolean) {
 
+    own  ? this.inputParams.own = 1 : this.inputParams.own = 0 ;
     return this.http.get<VicePresidency>(`${this.API}/projects`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)

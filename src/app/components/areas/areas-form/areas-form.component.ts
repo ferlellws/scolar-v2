@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { env } from 'node:process';
 import { Area } from 'src/app/models/area';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import { AreasService } from 'src/app/services/areas.service';
@@ -26,10 +27,11 @@ export class AreasFormComponent implements OnInit {
   singularOption: string = "Área";
   isButtonReset: boolean = false;
   selectVicepresidency!: VicePresidency [];
+  selectAreas!: Area [];
+  area!: any;
 
   fButtonDisabled: boolean = false;
 
-  area!: any;
 
   constructor(
     private fb: FormBuilder,
@@ -40,23 +42,24 @@ export class AreasFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    true;//environment.consoleMessage(this.data, "++++++++++");
     this.areasGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
       vice_presidency_id: [null, Validators.required],
+      parent_id: null,
       is_active: true
     });
     if (this.data.mode == 'edit') {
-
       await this.getSelectVicepresidencies();
       this.areasService.getAreasId(this.data.id)
         .subscribe((res: Area) => {
           this.area = res;
+          environment.consoleMessage(this.area, "AREA EDIT >>>>>>>>>>>");
           this.areasGroup.patchValue({
             title: this.area.title,
             description: this.area.description,
-            vice_presidency_id: this.area.vice_presidency.id,            
+            vice_presidency_id: this.area.vice_presidency.id,
+            parent_id: this.area.parent.id,
             is_active: this.area.is_active
           });
         });
@@ -64,7 +67,6 @@ export class AreasFormComponent implements OnInit {
   }
   
   onSubmit() {
-    true;//environment.consoleMessage(this.areasGroup, "OnSubmit areas: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -81,15 +83,15 @@ export class AreasFormComponent implements OnInit {
       title: null,
       description: null,
       vice_presidency_id: null,
+      parent_id: null,
       is_active: true
     });
   }
 
   createRegister() {
-    true;//environment.consoleMessage(this.areasGroup.value, "createRegister: ");
     this.areasService.addAreas(this.areasGroup.value)
       .subscribe((res) => {
-        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
+        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -104,7 +106,7 @@ export class AreasFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          true;//environment.consoleMessage(err, "Error: ");
+          environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -112,14 +114,11 @@ export class AreasFormComponent implements OnInit {
   }
 
   updateRegister() {
-    true;//environment.consoleMessage(this.areasGroup, `updateRegister para registro con id ${this.data.id}: `);
-
     this.areasService.updateAreasId(
       this.areasGroup.value,
       this.data.id
     )
       .subscribe((res) => {
-        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'updated') {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
@@ -134,7 +133,6 @@ export class AreasFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          true;//environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -142,13 +140,31 @@ export class AreasFormComponent implements OnInit {
   }
 
   onClickSelectVicepresidency() {
-    true;//environment.consoleMessage("", "Cargar info de managers");
     this.getSelectVicepresidencies();
   }
 
   getSelectVicepresidencies() {
-    this.vicePresidenciesService.getVicePresidenciesSelect()
-      .subscribe((res: VicePresidency []) => this.selectVicepresidency = res);
+    this.selectAreas = [];
+    return this.vicePresidenciesService.getVicePresidenciesSelect()
+      .subscribe((res: VicePresidency []) => {
+        this.selectVicepresidency = res;
+        this.getSelectAreas();
+      });
+  }
+
+  onClickSelectAreas() {
+    this.getSelectAreas();
+  }
+
+  getSelectAreas() {    
+    let vice: number = this.areasGroup.get('vice_presidency_id')!.value;
+    if(vice != null) {
+      this.areasService.getAreasByVicePresidency(vice)
+        .subscribe((area: Area[]) => {
+          this.selectAreas = area;
+          environment.consoleMessage(this.selectAreas, "SELECT AREAS");
+        });
+    }
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {

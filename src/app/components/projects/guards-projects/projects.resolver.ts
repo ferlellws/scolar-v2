@@ -17,6 +17,6 @@ export class ProjectsResolver implements Resolve<TableData> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<TableData> |Promise<any>|any{
-      return this.projectService.getProjectsAll();
+      return this.projectService.getProjectsAll(0);
   }
 }
