@@ -282,6 +282,11 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   { path: 'pages-profiles', loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule) },
+  { path: 'indicators-report',
+    loadChildren: () => import('./components/indicators-report/indicators-report.module').then(m => m.IndicatorsReportModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="header-row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+        <button class="buttons-options" mat-menu-item>
+            <mat-icon>paid</mat-icon>
+            <span>Presupuestos</span>
+        </button>
+        <button class="buttons-options" mat-menu-item>
+            <mat-icon>stream</mat-icon>
+            <span>Interrelaciones</span>
+        </button>
+        <button class="buttons-options" mat-menu-item>
+            <mat-icon>alt_route</mat-icon>
+            <span>Causales de desviación</span>
+        </button>
+    </div>
+</div>
+
+<mat-tab-group>
+    <mat-tab label="Indicadores Portafolio de Proyectos">
+        <br>
+        <mat-accordion>
+            <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                [expanded]="step === 0" (opened)="setStep(0)">
+
+                <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                    <mat-panel-title class="col-sm-12 col-md-5">
+                        <h3 class="txt-primary title-expansion ">Estados</h3>
+                    </mat-panel-title>
+                    <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos por estados y vicepresidencias</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                [expanded]="step === 1" (opened)="setStep(1)">
+
+                <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                    <mat-panel-title class="col-sm-12 col-md-5">
+                        <h3 class="txt-primary title-expansion ">Tipificación</h3>
+                    </mat-panel-title>
+                    <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos por tipificación y vicepresidencias</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                    <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                [expanded]="step === 2" (opened)="setStep(2)">
+
+                <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                    <mat-panel-title class="col-sm-12 col-md-5">
+                        <h3 class="txt-primary title-expansion ">Prioridad</h3>
+                    </mat-panel-title>
+                    <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos por prioridad y vicepresidencias</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                    <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                [expanded]="step === 2" (opened)="setStep(2)">
+
+                <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                    <mat-panel-title class="col-sm-12 col-md-5">
+                        <h3 class="txt-primary title-expansion ">Avance</h3>
+                    </mat-panel-title>
+                    <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos avance</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                    <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                [expanded]="step === 2" (opened)="setStep(2)">
+
+                <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                    <mat-panel-title class="col-sm-12 col-md-5">
+                        <h3 class="txt-primary title-expansion ">Áreas</h3>
+                    </mat-panel-title>
+                    <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos por áreas y vicepresidencias</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                    <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+        </mat-accordion>
+    </mat-tab>
+
+    <mat-tab label="Indicadores Proovedores">
+
+    </mat-tab>
+
+    <mat-tab label="Indicadores Gerentes de Proyectos">
+
+    </mat-tab>
+</mat-tab-group>

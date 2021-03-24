@@ -54,12 +54,18 @@ export class AreasFormComponent implements OnInit {
       this.areasService.getAreasId(this.data.id)
         .subscribe((res: Area) => {
           this.area = res;
+          let parentID;
           environment.consoleMessage(this.area, "AREA EDIT >>>>>>>>>>>");
+          if(this.area.parent == null) {
+            parentID = null
+          } else {
+            parentID = this.area.parent.id
+          }
           this.areasGroup.patchValue({
             title: this.area.title,
             description: this.area.description,
             vice_presidency_id: this.area.vice_presidency.id,
-            parent_id: this.area.parent.id,
+            parent_id: parentID,
             is_active: this.area.is_active
           });
         });
