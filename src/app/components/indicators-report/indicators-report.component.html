@@ -72,6 +72,36 @@
                     </mat-panel-title>
                     <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos avance</mat-panel-description>
                 </mat-expansion-panel-header>
+
+                
+                    <mat-accordion>
+                        <mat-expansion-panel *ngFor="let vp of vicepresidencies" class="row mat-elevation-z0 card-expansion">
+                            <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                                <mat-panel-title class="col-sm-12 col-md-2">
+                                    <h3 class="title-expansion ">{{vp}}</h3>
+                                </mat-panel-title>
+                                <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
+                                    <span>Avance Esperado: 70%</span>
+                                    <span>Avance Real: 50%</span>
+                                    <span>Desviación: 20%</span>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <tecno-dynamic-table
+                                [objectsData]="dataTable"
+                                emptyText="Ingrese datos">
+                            </tecno-dynamic-table>
+                            <tecno-column-charts
+                                id="1"
+                                [dataTable]="graph"
+                                bars="horizontal">
+                            </tecno-column-charts>
+                            <mat-action-row>
+                                <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                            </mat-action-row>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+
                 <mat-action-row>
                     <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
                     <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
@@ -79,7 +109,7 @@
             </mat-expansion-panel>
 
             <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
-                [expanded]="step === 2" (opened)="setStep(2)">
+                [expanded]="step === 3" (opened)="setStep(3)">
 
                 <mat-expansion-panel-header class="col-sm-12 col-md-12">
                     <mat-panel-title class="col-sm-12 col-md-5">
@@ -92,6 +122,22 @@
                     <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
                 </mat-action-row>
             </mat-expansion-panel>
+
+            <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                [expanded]="step === 3" (opened)="setStep(3)">
+
+                <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                    <mat-panel-title class="col-sm-12 col-md-5">
+                        <h3 class="txt-primary title-expansion ">Programas</h3>
+                    </mat-panel-title>
+                    <mat-panel-description class="col-sm-12 col-md-7 description">Proyectos por áreas y vicepresidencias</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                    <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
 
         </mat-accordion>
     </mat-tab>

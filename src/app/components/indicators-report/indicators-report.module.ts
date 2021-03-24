@@ -29,6 +29,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { SharedModule } from '../shared/shared.module';
 
 const materialModels = [
   MatSortModule,
@@ -67,7 +68,8 @@ const materialModels = [
   imports: [
     CommonModule,
     IndicatorsReportRoutingModule,
-    materialModels
+    materialModels,
+    SharedModule
   ],
   exports: [
     materialModels

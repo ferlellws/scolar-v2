@@ -20,10 +20,25 @@ export class ColumnChartsComponent implements OnInit {
   @Input() height: string = "500px";
   @Input() chartClass: string = "";
   @Input() colors: string [] = [
+    '#F44336',
+    '#E91E63',
+    '#9C27B0',
+    '#673AB7',
+    '#3F51B5',
     '#2196F3',
-    '#F44336'
+    '#03A9F4',
+    '#00BCD4',
+    '#009688',
+    '#4CAF50',
+    '#8BC34A',
+    '#CDDC39',
+    '#FFEB3B',
+    '#FFC107',
+    '#FF9800',
+    '#FF5722'
   ];
   @Input() positionLegend: string = 'right';
+  @Input() bars: string = "vertical"
 
   private gLib: any;
 
@@ -91,6 +106,7 @@ export class ColumnChartsComponent implements OnInit {
       curveType: this.curveType,
       colors: this.colors,
       legend: { position: this.positionLegend },
+      bars: this.bars
     };
 
     let chart;

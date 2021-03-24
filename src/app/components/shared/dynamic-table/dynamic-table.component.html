@@ -40,6 +40,14 @@
               </mat-menu>
             </td>
           </div>
+          <div *ngSwitchCase="'desviation'">
+            <td mat-cell *matCellDef="let element">
+              <div class="indicator-container">
+                <span>{{element[column].value}}</span>
+                <div class="circle" [ngStyle]="{'background-color': element[column].color}"></div>
+            </div>
+            </td>
+          </div>
           <div *ngSwitchDefault>
             <td mat-cell *matCellDef="let element">
               {{ element[column] }}
