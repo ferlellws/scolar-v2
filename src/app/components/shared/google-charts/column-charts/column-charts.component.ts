@@ -21,15 +21,15 @@ export class ColumnChartsComponent implements OnInit {
   @Input() chartClass: string = "";
   @Input() colors: string [] = [
     '#F44336',
-    '#E91E63',
-    '#9C27B0',
-    '#673AB7',
     '#3F51B5',
+    '#4CAF50',
+    '#9C27B0',
+    '#E91E63',
     '#2196F3',
+    '#673AB7',
     '#03A9F4',
     '#00BCD4',
     '#009688',
-    '#4CAF50',
     '#8BC34A',
     '#CDDC39',
     '#FFEB3B',
@@ -103,10 +103,14 @@ export class ColumnChartsComponent implements OnInit {
         title: this.title,
         subtitle: this.subtitle,
       },
+      backgroundColor: {
+        fill: 'red',
+        fillOpacity: 0.8
+      },
       curveType: this.curveType,
       colors: this.colors,
       legend: { position: this.positionLegend },
-      bars: this.bars
+      bars: this.bars,    
     };
 
     let chart;

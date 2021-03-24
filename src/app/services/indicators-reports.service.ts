@@ -30,7 +30,40 @@ export class IndicatorsReportsService {
   }
 
   getTableStatesByVicepresidencies() {
-    return this.http.get<TableData[]>(`${this.API}`, this.httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/statesByVicepresidencies`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getTableTypificationsByVicepresidencies() {
+    return this.http.get<TableData[]>(`${this.API}/typificationsByVicepresidencies`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getTablePriorities() {
+    return this.http.get<TableData[]>(`${this.API}/priorities`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getPrograms() {
+    return this.http.get<TableData[]>(`${this.API}/programs`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+
+  getTableCompanies() {
+    return this.http.get<TableData[]>(`${this.API}/companies`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
