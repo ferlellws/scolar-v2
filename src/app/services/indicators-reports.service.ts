@@ -30,7 +30,7 @@ export class IndicatorsReportsService {
   }
 
   getTableStatesByVicepresidencies() {
-    return this.http.get<TableData[]>(`${this.API}/statesByVicepresidencies`, this.httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/states_by_vicepresidencies`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -38,7 +38,7 @@ export class IndicatorsReportsService {
   }
 
   getTableTypificationsByVicepresidencies() {
-    return this.http.get<TableData[]>(`${this.API}/typificationsByVicepresidencies`, this.httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/typifications_by_vicepresidencies`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -63,7 +63,7 @@ export class IndicatorsReportsService {
 
 
   getTableCompanies() {
-    return this.http.get<TableData[]>(`${this.API}/companies`, this.httpOptions)
+    return this.http.get<TableData[]>(`${this.API}/companies_by_periods`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

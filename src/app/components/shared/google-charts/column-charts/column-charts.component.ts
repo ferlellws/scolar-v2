@@ -19,6 +19,7 @@ export class ColumnChartsComponent implements OnInit {
   @Input() width: string = "800px";
   @Input() height: string = "500px";
   @Input() chartClass: string = "";
+  @Input() fill: string = '#fafafa'
   @Input() colors: string [] = [
     '#F44336',
     '#3F51B5',
@@ -104,7 +105,7 @@ export class ColumnChartsComponent implements OnInit {
         subtitle: this.subtitle,
       },
       backgroundColor: {
-        fill: 'red',
+        fill: this.fill,
         fillOpacity: 0.8
       },
       curveType: this.curveType,
@@ -121,7 +122,7 @@ export class ColumnChartsComponent implements OnInit {
       chart = new this.gLib.visualization.ColumnChart(document.getElementById(this.id));
     }
 
-    chart.draw(data, options);
+    chart.draw(data, this.gLib.charts.Bar.convertOptions(options));
   }
 
 }

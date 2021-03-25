@@ -47,3 +47,20 @@ span {
     padding-right: 10px;
 }
 
+.description {
+    font-weight: 400;
+    color: #424242;
+}
+
+.spinner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+.expandible-responsive {
+    min-width: 900px;
+    position: relative;
+    overflow-x: auto;
+}

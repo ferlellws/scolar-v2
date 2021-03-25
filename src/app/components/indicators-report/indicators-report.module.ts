@@ -30,6 +30,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from '../shared/shared.module';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const materialModels = [
   MatSortModule,
@@ -60,7 +61,8 @@ const materialModels = [
   MatInputModule,
   MatButtonToggleModule,
   MatRippleModule,
-  MatTabsModule
+  MatTabsModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({
