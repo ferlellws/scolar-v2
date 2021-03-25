@@ -331,7 +331,7 @@
                         formControlName="budgetApproved" 
                         required >
                         <mat-label>{{labels.budgetApproved}}</mat-label>
-                        <mat-hint align="start">{{getBudgetApproved()}} COP</mat-hint>
+                        <mat-hint class="txt-primary" align="start">$ {{getBudgetApproved()}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('budgetApproved')?.invalid">
                             {{ getMessageError(descripcion ,'budgetApproved') }}
                         </mat-error>
@@ -349,7 +349,7 @@
                         formControlName="budgetExecuted" 
                         required >
                         <mat-label>{{labels.budgetExecuted}}</mat-label>
-                        <mat-hint align="start">{{getBudgetExecuted()}} COP</mat-hint>
+                        <mat-hint class="txt-primary" align="start">$ {{getBudgetExecuted()}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('budgetApproved')?.invalid">
                             {{ getMessageError(descripcion ,'budgetApproved') }}
                         </mat-error>
