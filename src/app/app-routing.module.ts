@@ -287,6 +287,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
   },
+  { path: 'projects-create', loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 
