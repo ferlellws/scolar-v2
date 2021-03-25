@@ -90,7 +90,8 @@ const materialModels = [
     MatInputModule,
   ],
   exports: [
-    materialModels
+    materialModels,
+    ProjectsFormComponent,
   ], 
   providers: [
     ProjectsResolver,
