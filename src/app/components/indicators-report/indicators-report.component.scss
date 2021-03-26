@@ -64,3 +64,16 @@ span {
     position: relative;
     overflow-x: auto;
 }
+
+.circle{
+    border-radius: 25px;
+    height: 25px;
+    width: 25px;
+    margin-left: 10px;
+}
+
+@media only screen and (max-width: 767px) {
+    .apoyo {
+        padding-top: 20px;
+    }
+}

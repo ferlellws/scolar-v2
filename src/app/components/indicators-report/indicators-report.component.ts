@@ -37,6 +37,12 @@ export class IndicatorsReportComponent implements OnInit {
   priorities: any;
   flagpriorities: boolean = false;
 
+  advanceVicepresidencies: any;
+  flagAdvanceVicepresidencies: boolean = false;
+
+  pmosOccupation: any;
+  flagPMOsOccupation: boolean = false;
+
   programs!: any;
   flagprograms: boolean = false;
 
@@ -239,6 +245,18 @@ export class IndicatorsReportComponent implements OnInit {
     }
   }
 
+  openVicepresidencies(step: number) {
+    this.setStep(step);
+
+    if(this.advanceVicepresidencies == null) {
+    this.indicatorsReportsService.getAdvancePercentagesByProjects()
+      .subscribe((data: any) => {
+        this.advanceVicepresidencies = data.advancePercentagesByProjects[0].vicepresidencies;
+        this.flagAdvanceVicepresidencies = true;
+      });
+    }
+  }
+
   openPrograms(step: number) {
     this.setStep(step);
 
@@ -270,6 +288,9 @@ export class IndicatorsReportComponent implements OnInit {
     if(this.indexTab == 1) {
       this.openIndicatorsCompanies();
     }
+    if(this.indexTab == 2) {
+      this.openPMOsOccupation();
+    }
   }
 
   openDesviatoinCauses() {
@@ -288,5 +309,16 @@ export class IndicatorsReportComponent implements OnInit {
         }
         this.flagcompanies = true;
       });
+  }
+
+  openPMOsOccupation(){
+    if(this.pmosOccupation == null) {
+      this.indicatorsReportsService.getPmoByOccupation()
+        .subscribe((data: any) => {
+          this.pmosOccupation = data.pmoByOccupation.PMOs;
+          this.flagPMOsOccupation = true;
+        }
+      );
+    }
   }
 }

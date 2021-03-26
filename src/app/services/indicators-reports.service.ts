@@ -69,4 +69,21 @@ export class IndicatorsReportsService {
       tap(console.log)
     );
   }
+
+  getAdvancePercentagesByProjects() {
+    return this.http.get<any[]>(`${this.API}/advance_percentages_by_projects`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getPmoByOccupation(){
+    return this.http.get<any>(`${this.API}/pmo_by_occupation`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
 }
