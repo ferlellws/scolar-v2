@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" style="border-top-left-radius: 5px; border-top-right-radius: 5px;" class="mat-elevation-z4">
+<mat-toolbar *ngIf="!isComponent" color="primary" style="border-top-left-radius: 5px; border-top-right-radius: 5px;" class="mat-elevation-z4">
     <h1 class="mat-headline"> {{ data.mode == 'create'? 'Crear Proyecto' : 'Editar Proyecto' }} </h1>
     <span class="example-spacer"></span>
     <button mat-icon-button mat-dialog-close>
@@ -331,7 +331,7 @@
                         formControlName="budgetApproved" 
                         required >
                         <mat-label>{{labels.budgetApproved}}</mat-label>
-                        <mat-hint align="start">{{getBudgetApproved()}} COP</mat-hint>
+                        <mat-hint class="txt-primary" align="start">$ {{getBudgetApproved()}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('budgetApproved')?.invalid">
                             {{ getMessageError(descripcion ,'budgetApproved') }}
                         </mat-error>
@@ -349,7 +349,7 @@
                         formControlName="budgetExecuted" 
                         required >
                         <mat-label>{{labels.budgetExecuted}}</mat-label>
-                        <mat-hint align="start">{{getBudgetExecuted()}} COP</mat-hint>
+                        <mat-hint class="txt-primary" align="start">$ {{getBudgetExecuted()}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('budgetApproved')?.invalid">
                             {{ getMessageError(descripcion ,'budgetApproved') }}
                         </mat-error>

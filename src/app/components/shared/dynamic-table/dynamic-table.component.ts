@@ -21,6 +21,7 @@ export class DynamicTableComponent implements OnInit {
   @Input()  maxHeight: string = '1000px';
   @Input()  isUserProfile: boolean = false;
   @Input()  emptyText: string = "default";
+  @Input()  elevation: string = "mat-elevation-z8";
 
   labelDelete: string = "Enviar a papelera 2";
   deleteIcon: string = "delete"

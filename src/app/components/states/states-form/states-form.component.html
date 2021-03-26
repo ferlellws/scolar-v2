@@ -12,12 +12,25 @@
   <form action="" [formGroup]="statesGroup" (ngSubmit)="onSubmit()"
     *ngIf="data.mode === 'create' || (data.mode === 'edit' && state); else loadingBlock">
     <div class="row">
-      <div class="col-sm-12 col-md-12">
+      <div class="col-sm-12 col-md-6">
         <mat-form-field class="full-width">
           <mat-label>{{ singularOption }}</mat-label>
           <input matInput formControlName="title" required>
           <mat-error *ngIf="this.statesGroup.get('title')?.invalid">
             {{ getMessageError('title', "estado") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-6">
+        <mat-form-field class="full-width">
+          <mat-label>Fase</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let status of selectStatus" [value]="status.id">{{ status.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.statesGroup.get('status')?.invalid">
+            {{ getMessageError('status', " status") }}
           </mat-error>
         </mat-form-field>
       </div>

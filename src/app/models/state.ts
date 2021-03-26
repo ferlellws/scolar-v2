@@ -4,6 +4,7 @@ export class State {
     id?: number;
     title: string;
     description: string;
+    status!: number;
     is_active: boolean;
     is_delete: boolean;
     user_creates?: User | number;

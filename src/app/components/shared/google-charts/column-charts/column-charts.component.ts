@@ -19,11 +19,27 @@ export class ColumnChartsComponent implements OnInit {
   @Input() width: string = "800px";
   @Input() height: string = "500px";
   @Input() chartClass: string = "";
+  @Input() fill: string = '#fafafa'
   @Input() colors: string [] = [
+    '#F44336',
+    '#3F51B5',
+    '#4CAF50',
+    '#9C27B0',
+    '#E91E63',
     '#2196F3',
-    '#F44336'
+    '#673AB7',
+    '#03A9F4',
+    '#00BCD4',
+    '#009688',
+    '#8BC34A',
+    '#CDDC39',
+    '#FFEB3B',
+    '#FFC107',
+    '#FF9800',
+    '#FF5722'
   ];
   @Input() positionLegend: string = 'right';
+  @Input() bars: string = "vertical"
 
   private gLib: any;
 
@@ -88,9 +104,14 @@ export class ColumnChartsComponent implements OnInit {
         title: this.title,
         subtitle: this.subtitle,
       },
+      backgroundColor: {
+        fill: this.fill,
+        fillOpacity: 0.8
+      },
       curveType: this.curveType,
       colors: this.colors,
       legend: { position: this.positionLegend },
+      bars: this.bars,    
     };
 
     let chart;
@@ -101,7 +122,7 @@ export class ColumnChartsComponent implements OnInit {
       chart = new this.gLib.visualization.ColumnChart(document.getElementById(this.id));
     }
 
-    chart.draw(data, options);
+    chart.draw(data, this.gLib.charts.Bar.convertOptions(options));
   }
 
 }
