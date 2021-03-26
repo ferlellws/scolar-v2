@@ -104,7 +104,7 @@
             class="full-width"
             style="width: 100%;">
             <mat-label>{{labels.statusDetail}}</mat-label>
-            <textarea matInput placeholder="{{labels.statusDetail}}" formControlName="status_detail" required></textarea>
+            <textarea matInput placeholder="Observacióin que se refleja en la parte derecha del gráfico" formControlName="status_detail" required></textarea>
             <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
               {{ getMessageError('status_detail', " detalle de estado") }}
             </mat-error>
@@ -116,7 +116,7 @@
             class="full-width"
             style="width: 100%;">
             <mat-label>{{labels.labelBlock}}</mat-label>
-            <textarea matInput placeholder="{{labels.labelBlock}}" formControlName="label_block"></textarea>
+            <textarea matInput placeholder="Observación que se refleja dentro de línea de tiempo" formControlName="label_block"></textarea>
         </mat-form-field>
       </div>
     </div>
