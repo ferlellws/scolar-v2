@@ -44,6 +44,7 @@
                     placeholder="{{labels.advance_spected}}" 
                     (change)="changeAdvance()"
                     formControlName="advance_spected" required>
+                    <span matSuffix>%</span>
                     <mat-label>{{labels.advance_spected}}</mat-label>
                     <mat-error *ngIf="this.general.get('advance_spected')?.invalid">
                         {{ getMessageError(general ,'advance_spected') }}
@@ -59,6 +60,7 @@
                     placeholder="{{labels.advance_real}}" 
                     (change)="changeAdvance()"
                     formControlName="advance_real" required>
+                    <span matSuffix>%</span>
                     <mat-label>{{labels.advance_real}}</mat-label>
                     <mat-error *ngIf="this.general.get('advance_real')?.invalid">
                         {{ getMessageError(general ,'advance_real') }}

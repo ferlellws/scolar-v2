@@ -11,6 +11,8 @@ export class TextListDateComponent implements OnInit {
   @Input() items: any[] = [];
   @Input() name: string = "";
   @Input() titleClass: string = "txt-primary";
+  @Input() placeHolderText: string = "";
+  @Input() placeHolderDate: string = "";
   @Output() emitChange: EventEmitter<any[]> = new EventEmitter();
   
   inpuText = '';

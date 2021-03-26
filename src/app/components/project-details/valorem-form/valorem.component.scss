@@ -64,3 +64,15 @@ mat-divider{
 .container-cards{
   padding-left: 25px;
 }
+
+.circle{
+  border-radius: 15px;
+  height: 15px;
+  width: 15px;
+}
+
+.selects {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

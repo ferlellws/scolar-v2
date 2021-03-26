@@ -304,7 +304,7 @@ export class IndicatorsReportComponent implements OnInit {
         if(this.companies.dataTable.length == 0) {
           this.emptyGraphCompanies = true;
         } else {
-          this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['pr1', 'pr2', 'pr3', 'pr4'])
+          this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['totalProjects'])
           this.emptyGraphCompanies = false;
         }
         this.flagcompanies = true;
