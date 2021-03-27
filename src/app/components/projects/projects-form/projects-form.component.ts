@@ -212,7 +212,7 @@ export class ProjectsFormComponent implements OnInit {
 
         priorities: `Prioridad`,
         typifications: `Tipificación`,
-        strategicGuidelines: `Lineamiento Estratégico`,
+        strategicGuidelines: `Lineamiento Estratégico (Reporte VALOREM)`,
         projectDescription: `Descripción`,
         leads: `Lider Funcional`,
         managements: `Gestión`,
