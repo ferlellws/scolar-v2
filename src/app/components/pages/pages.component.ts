@@ -25,7 +25,6 @@ export class PagesComponent implements OnInit {
     menuModules: MenuModule[];
     pages: Page[];
   };
-  value = 'Limpiar';
 
   constructor(
     private route: ActivatedRoute,
