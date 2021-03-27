@@ -124,7 +124,7 @@ export class ProjectsFormComponent implements OnInit {
   companiesObjects: CompanyByProject[] = [];
   testUsers: User[] = [];
   testUsersObjects: TestUser[] = [];
-  contador = 0; //borrar
+  isComponent = false;
 
   constructor(
     private _fbG: FormBuilder,
@@ -156,6 +156,11 @@ export class ProjectsFormComponent implements OnInit {
 
     private _mainCreateTablesService: MainCreateTablesService
     ) {
+
+      this.isComponent = Object.keys(data).length == 0;
+      if(this.isComponent){
+        data.mode = "create"
+      }
 
       this.general = this._fbG.group({
         'title': [null, [Validators.required]],
@@ -207,7 +212,7 @@ export class ProjectsFormComponent implements OnInit {
 
         priorities: `Prioridad`,
         typifications: `Tipificación`,
-        strategicGuidelines: `Lineamiento Estratégico`,
+        strategicGuidelines: `Lineamiento Estratégico (Reporte VALOREM)`,
         projectDescription: `Descripción`,
         leads: `Lider Funcional`,
         managements: `Gestión`,
@@ -823,9 +828,7 @@ export class ProjectsFormComponent implements OnInit {
               project_id: this.project.id,
               user_id: testUsersIDs[index],
               user_creates_id: JSON.parse(localStorage.user).id,
-              description: 'asd' + this.contador,
             }
-            this.contador++;
             await this._testUsersService.addTestUser(user).
             subscribe(data =>
               {
@@ -1299,14 +1302,37 @@ export class ProjectsFormComponent implements OnInit {
               var testUser: any = { //borar
                 project_id: id,
                 user_id : this.testUsers[index].id,
-                description : 'dsfkmlndsfklnsd' + this.contador,//borrar
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
-              this.contador++;//borrar
               mainTable.test_users?.push(testUser);
             }
             this._mainCreateTablesService.addMainTableProject(mainTable).subscribe(
-              data => console.log("dataMainTable", data)
+              data => 
+              {
+                environment.consoleMessage(data, "data")
+                environment.consoleMessage(this.isComponent, "isComponent")
+                if(this.isComponent){
+                  this.onReset(this.general);
+                  this.onReset(this.descripcion);
+                  this.onReset(this.seguimiento);
+                  this.benefits = [];
+                  this.benefitsObjects = [];
+                  this.highlights = [];
+                  this.highlightsObjects = [];
+                  this.risks = [];
+                  this.risksObjects = [];
+                  this.kpis = [];
+                  this.kpisObjects = [];
+                  this.applications = [];
+                  this.applicationsObjects = [];
+                  this.areasByProject = [];
+                  this.areasByProjectObjects = [];
+                  this.companies = [];
+                  this.companiesObjects = [];
+                  this.testUsers = [];
+                  this.testUsersObjects = [];
+                }
+              }
             );
           }
         }, (err) => {
@@ -1325,8 +1351,10 @@ export class ProjectsFormComponent implements OnInit {
           this.openSnackBar(false, sErrors, "");
         });;
         this.fButtonDisabled = false;
-        this.emitClose.emit('close');
-
+        if(!this.isComponent){
+          this.emitClose.emit('close');
+        }
+        this.stepper.reset();
       }else{
         console.log("no guardar");
       }

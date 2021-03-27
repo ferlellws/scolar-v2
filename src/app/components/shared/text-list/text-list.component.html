@@ -1,6 +1,18 @@
 <div class="row">
     <h3 class="mat-title col-sm-12 col-md-12 {{titleClass}}" style="font-weight: 500;">{{name}}</h3>
 </div>
+<div class="row" *ngFor="let item of items; index as i">
+    <div class="col-sm-12 col-md-12">
+        <mat-card >
+            <div class="card-content">
+                <span class="texto" style="font-weight: 500">{{i+1}}. 
+                    <span style="font-weight: 400;">{{item}}</span>
+                </span>
+                <mat-icon color="warn" (click)="delete(i)" matRipple class="delete">delete</mat-icon>
+            </div>
+        </mat-card>
+    </div>
+</div>
 <div class="row">
     <mat-form-field class="col-sm-12 col-md-11">
         <mat-label>Añadir {{name}}</mat-label>
@@ -16,16 +28,4 @@
         </button>
     </div>
     
-</div>
-<div class="row" *ngFor="let item of items; index as i">
-    <div class="col-sm-12 col-md-12">
-        <mat-card >
-            <div class="card-content">
-                <span class="texto" style="font-weight: 500">{{i+1}}. 
-                    <span style="font-weight: 400;">{{item}}</span>
-                </span>
-                <mat-icon color="warn" (click)="delete(i)" matRipple class="delete">delete</mat-icon>
-            </div>
-        </mat-card>
-    </div>
 </div>

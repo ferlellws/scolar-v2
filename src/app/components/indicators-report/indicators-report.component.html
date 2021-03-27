@@ -1,0 +1,302 @@
+<div class="row">
+    <div class="header-row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+        <button class="buttons-options" mat-menu-item>
+            <mat-icon>paid</mat-icon>
+            <span>Presupuestos</span>
+        </button>
+        <button class="buttons-options" mat-menu-item>
+            <mat-icon>stream</mat-icon>
+            <span>Interrelaciones</span>
+        </button>
+        <button class="buttons-options" mat-menu-item (click)="openDesviatoinCauses()">
+            <mat-icon>alt_route</mat-icon>
+            <span>Causales de desviación</span>
+        </button>
+    </div>
+</div>
+
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="Indicadores Portafolio de Proyectos">
+        <br>
+        <div class="expandible-responsive">
+            <mat-accordion>
+                <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                    [expanded]="step === 0" (opened)="openStates(0)">
+
+                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                        <mat-panel-title class="col-sm-12 col-md-5">
+                            <h3 class="txt-primary title-expansion ">Estados</h3>
+                        </mat-panel-title>
+                        <mat-panel-description class="col-sm-12 col-md-7">Cantidad de proyectos por estados y vicepresidencias</mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <br>
+                    <ng-template matExpansionPanelContent>
+                        <tecno-dynamic-table *ngIf="flagstates" class="tables"
+                            [objectsData]="statesByVicepresidenciesTable"
+                            emptyText="Ingrese datos">
+                        </tecno-dynamic-table>
+                        <div *ngIf="!flagstates" class="spinner">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                    </ng-template>
+                    <mat-action-row>
+                        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                    [expanded]="step === 1" (opened)="openTypifications(1)">
+
+                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                        <mat-panel-title class="col-sm-12 col-md-5">
+                            <h3 class="txt-primary title-expansion ">Tipificaciones</h3>
+                        </mat-panel-title>
+                        <mat-panel-description class="col-sm-12 col-md-7">Cantidad de proyectos por tipificación y vicepresidencias</mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <br>
+                    <ng-template matExpansionPanelContent>
+                        <tecno-dynamic-table *ngIf="flagtypifications"
+                            [objectsData]="typificationsByVicepresidencies"
+                            emptyText="Ingrese datos">
+                        </tecno-dynamic-table>
+                        <div *ngIf="!flagtypifications" class="spinner">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                    </ng-template>
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                    [expanded]="step === 2" (opened)="openPriorities(2)">
+
+                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                        <mat-panel-title class="col-sm-12 col-md-5">
+                            <h3 class="txt-primary title-expansion ">Prioridades</h3>
+                        </mat-panel-title>
+                        <mat-panel-description class="col-sm-12 col-md-7">Cantidad de proyectos por prioridad</mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <ng-template matExpansionPanelContent>
+                        <div *ngIf="flagpriorities" class="row">
+                            <div *ngIf="!emptyGraphPriorities" class="col-sm-12 col-md-6 graph">
+                                <tecno-pie-charts
+                                    [id]="'1'"
+                                    [title]="'Prioridad'"
+                                    [pieHole]="0.6"
+                                    [dataTable]="dataGraphicPriorities">
+                                </tecno-pie-charts>
+                            </div>
+                            <div class="col-sm-12 col-md-6 table">
+                                <tecno-dynamic-table
+                                    [objectsData]="priorities"
+                                    emptyText="Ingrese datos">
+                                </tecno-dynamic-table>
+                            </div>
+                        </div>
+                        <div *ngIf="!flagpriorities" class="spinner">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                    </ng-template>
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                    [expanded]="step === 3" (opened)="openVicepresidencies(3)">
+                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                        <mat-panel-title class="col-sm-12 col-md-5">
+                            <h3 class="txt-primary title-expansion ">Vicepresidencias</h3>
+                        </mat-panel-title>
+                        <mat-panel-description class="col-sm-12 col-md-7">Porcentajes de avance para cada Vicepresidencias y sus Proyectos</mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <ng-template matExpansionPanelContent>
+                        <div *ngIf="flagAdvanceVicepresidencies" class="row">
+                            <mat-accordion>
+                                <mat-expansion-panel *ngFor="let vp of advanceVicepresidencies" class="row mat-elevation-z0 card-expansion">
+                                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                                        <mat-panel-title class="col-sm-12 col-md-2">
+                                            <h3 class="title-expansion ">{{vp.name}}</h3>
+                                        </mat-panel-title>
+                                        <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
+                                            <span>Avance Esperado: {{vp.advance_spected}}</span>
+                                            <span>Avance Real: {{vp.advance_real}}</span>
+                                            <div style="display: flex; justify-content: center;">
+                                                <span>Desviación: {{vp.desviation.value}}</span>
+                                                <div class="circle" [ngStyle]="{'background-color': vp.desviation.color}"></div>
+                                            </div>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <tecno-dynamic-table
+                                        [objectsData]="vp.tableData"
+                                        emptyText="Ingrese datos">
+                                    </tecno-dynamic-table>
+                                    <mat-action-row>
+                                        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                                    </mat-action-row>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </div>
+                        <div *ngIf="!flagAdvanceVicepresidencies" class="spinner">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                    </ng-template>
+                        
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                    [expanded]="step === 4" (opened)="setStep(4)">
+
+                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                        <mat-panel-title class="col-sm-12 col-md-5">
+                            <h3 class="txt-primary title-expansion ">Áreas</h3>
+                        </mat-panel-title>
+                        <mat-panel-description class="col-sm-12 col-md-7">Cantidad de proyectos y porcentajes de avance por áreas y subáreas</mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                        <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
+                    [expanded]="step === 5" (opened)="openPrograms(5)">
+
+                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                        <mat-panel-title class="col-sm-12 col-md-5">
+                            <h3 class="txt-primary title-expansion ">Programas</h3>
+                        </mat-panel-title>
+                        <mat-panel-description class="col-sm-12 col-md-7">Porcentajes de avance para cada Programa, vicepresidencias relacionadas y sus proyectos</mat-panel-description>
+                    </mat-expansion-panel-header>
+                    
+                    <ng-template matExpansionPanelContent>
+                        <mat-accordion>
+                            <mat-expansion-panel *ngFor="let program of programs" class="row mat-elevation-z1 card-expansion" >
+                                <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding-left: 60px; padding-right: 60px;">
+                                    <mat-panel-title class="col-sm-12 col-md-2">
+                                        <h3 class="title-expansion">
+                                            
+                                            <span class="txt-accent">{{program.name}}</span>
+                                            </h3>
+                                    </mat-panel-title>
+                                    <mat-panel-description class="col-sm-12 col-md-10 description" style="display: flex; justify-content: space-between;">
+                                        <span>Avance Esperado: {{program.advance_spected}}</span>
+                                        <span>Avance Real: {{program.advance_real}}</span>
+                                        <span class="indicator-container">
+                                            <span>Desviación: {{program.desviation.value}}</span>
+                                            <div class="circle" [ngStyle]="{'background-color': program.desviation.color}"></div>
+                                        </span>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                
+                                <mat-accordion>
+                                    <mat-expansion-panel *ngFor="let vp of program.vicepresidencies" class="row mat-elevation-z0 card-expansion" style="padding: 0px;" >
+                                        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                                            <mat-panel-title class="col-sm-12 col-md-2">
+                                                <h3 class="title-expansion">
+                                                    <span>{{vp.name}}</span>
+                                                </h3>
+                                            </mat-panel-title>
+                                            <mat-panel-description class="col-sm-12 col-md-10 description" style="display: flex; justify-content: space-between;">
+                                                <span>Avance Esperado: {{vp.advance_spected}}</span>
+                                                <span>Avance Real: {{vp.advance_real}}</span>
+                                                <span class="indicator-container">
+                                                    <span>Desviación: {{vp.desviation.value}}</span>
+                                                    <div class="circle" [ngStyle]="{'background-color': vp.desviation.color}"></div>
+                                                </span>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+
+                                        <tecno-dynamic-table
+                                            [objectsData]="vp.tableData"
+                                            elevation="mat-elevation-z1"
+                                            emptyText="Ingrese datos">
+                                        </tecno-dynamic-table>
+                                        <br>
+                                        <mat-divider style="border-top-color: #e91e63;"></mat-divider>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </ng-template>
+
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Indicadores Proveedores">
+        <br>
+        <ng-template matTabContent>
+            <div *ngIf="flagcompanies" class="row" style="width: 100%">
+                <div *ngIf="!emptyGraphCompanies && indexTab==1" class="col-sm-12 col-md-6 graph">
+                    <tecno-column-charts
+                        [id]="'3'"
+                        [dataTable]="dataGraphicCompanies"
+                        width="100%"
+                        height="100%"
+                        bars="horizontal">
+                    </tecno-column-charts>
+                </div>
+                <div class="col-sm-12 col-md-6 table" style="padding-bottom: 20px;">
+                    <br>
+                    <tecno-dynamic-table
+                        [objectsData]="companies"
+                        emptyText="Ingrese datos">
+                    </tecno-dynamic-table>
+                </div>
+            </div>
+            <div *ngIf="!flagcompanies" class="spinner">
+                <mat-spinner></mat-spinner>
+            </div>
+        </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Indicadores Gerentes de Proyectos">
+        <ng-template matTabContent>
+            <div *ngIf="flagPMOsOccupation" class="row" style="width: 100%; margin-top: 20px;">
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let pmo of pmosOccupation" class="row mat-elevation-z0 card-expansion">
+                        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                            <mat-panel-title class="col-sm-12 col-md-5">
+                                <h3 class="txt-primary title-expansion ">{{pmo.name}}</h3>
+                            </mat-panel-title>
+                            <mat-panel-description class="col-sm-12 col-md-7">Ocupación total: {{pmo.occupation}}</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="-12 col-md-6">
+                                <h3 class="txt-accent">PMO principal</h3>
+                                <tecno-dynamic-table style="width: 100%;"
+                                    [objectsData]="pmo.PMO"
+                                    emptyText="Ingrese datos">
+                                </tecno-dynamic-table>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <h3 class="txt-accent apoyo">PMO de apoyo</h3>
+                                <tecno-dynamic-table style="width: 100%;"
+                                    [objectsData]="pmo.PMOAssistant"
+                                    emptyText="Ingrese datos">
+                                </tecno-dynamic-table>
+                            </div>
+
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+            <div *ngIf="!flagPMOsOccupation" class="spinner">
+                <mat-spinner></mat-spinner>
+            </div>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

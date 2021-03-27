@@ -36,8 +36,8 @@
 
       <div class="col-sm-12 col-md-4">
         <mat-form-field class="full-width">
-          <mat-label>Área a la que pertenece</mat-label>
-          <mat-select formControlName="parent_id" (click)="onClickSelectAreas()">
+          <mat-label>{{parentLabel}}</mat-label>
+          <mat-select formControlName="parent_id"  (openedChange)="onClickSelectAreas($event)">
             <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let areas of selectAreas" [value]="areas.id">{{ areas.title }}</mat-option>
           </mat-select>

@@ -28,6 +28,17 @@ export class StatesFormComponent implements OnInit {
 
   state!: State;
 
+  selectStatus: any = [
+    {
+      id: 0,
+      title: "Inactivo"
+    },
+    {
+      id: 1,
+      title: "Activo"
+    },
+  ]
+
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -40,6 +51,7 @@ export class StatesFormComponent implements OnInit {
     this.statesGroup = this.fb.group({
       title: [null, Validators.required],
       description: null,
+      status: null,
       is_active: true
     });
     
@@ -50,7 +62,8 @@ export class StatesFormComponent implements OnInit {
           this.state = res;
           this.statesGroup.patchValue({
             title: this.state.title,
-            description: this.state.description,            
+            description: this.state.description,
+            status: this.state.status,          
             is_active: this.state.is_active
           });
         });
@@ -106,8 +119,8 @@ export class StatesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    true;//environment.consoleMessage(this.statesGroup, `updateRegister para registro con id ${this.data.id}: `);
 
+    environment.consoleMessage(this.statesGroup.value, "UPDATEEEEEE");
     this.statesService.updateStatesId(
       this.statesGroup.value,
       this.data.id
@@ -154,6 +167,10 @@ export class StatesFormComponent implements OnInit {
     }
 
     return message;
+  }
+
+  onClickSelectStatus() {
+
   }
 
 }

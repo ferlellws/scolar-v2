@@ -1,6 +1,6 @@
 <div *ngIf="render" class="container-general">
   <div  class="container-list" [ngStyle]="{'max-height': maxHeight}">
-    <table mat-table id="{{customId}}" [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+    <table mat-table id="{{customId}}" [dataSource]="dataSource" class={{elevation}} style="width: 100%;">
 
       <ng-container *ngFor="let column of displayedColumns; index as i" matColumnDef="{{column}}">
         <!-- HEADERS -->
@@ -38,6 +38,14 @@
                   <span>Eliminar definitivamente</span>
                 </button>
               </mat-menu>
+            </td>
+          </div>
+          <div *ngSwitchCase="'desviation'">
+            <td mat-cell *matCellDef="let element">
+              <div class="indicator-container">
+                <span>{{element[column].value}}</span>
+                <div class="circle" [ngStyle]="{'background-color': element[column].color}"></div>
+              </div>
             </td>
           </div>
           <div *ngSwitchDefault>

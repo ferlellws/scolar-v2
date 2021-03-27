@@ -23,7 +23,7 @@ import { DesviationCausesModule } from './desviation-causes.module';
 })
 export class DesviationCausesComponent implements OnInit {
 
-  step = 0;
+  step = -1;
   dataTableSource!: TableData;
   dataGraphicSource!: any;
   dataTableVicePresidency!: TableData;
@@ -51,10 +51,11 @@ export class DesviationCausesComponent implements OnInit {
   maxScaleTypifications!: number;
 
   labelsTitle = {
-    source: "Fuente",
-    vicepresidency: "Vicepresidencia",
-    area: "Área",
-    typification: "Tipificación"
+    source: "Fuentes de atraso",
+    vicepresidency: "Vicepresidencias",
+    area: "Áreas",
+    typification: "Tipificaciones",
+    sourceByTypification: "Fuentes de atraso con Tipificaciones relacionadas"
   }
 
   labelsDescription = "Gráfico Impacto de Tiempo por"
@@ -68,6 +69,111 @@ export class DesviationCausesComponent implements OnInit {
     filter: "Filtrar"
   }
   
+  typificationsBySources = [
+    {
+      name: "Tecnología",
+      impacts_time: 23,
+      cost_variaton: "$123424000000078",
+      dataTable: {
+        headers: [
+          "Tipificación",
+          "Suma de Impacto Tiempo (Días)",
+          "Suma de Variación de Costos (COP)",
+        ],
+        dataTable: [
+          {
+            name: "Fallas de Calidad IT",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Fallas de Calidad Proveedor",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Falla en Especificaciones",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Atrasos en Contratación de Recursos",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+        ]
+      }
+    },
+    {
+      name: "Financiero",
+      impacts_time: 23,
+      cost_variaton: "$123424000000078",
+      dataTable: {
+        headers: [
+          "Tipificación",
+          "Suma de Impacto Tiempo (Días)",
+          "Suma de Variación de Costos (COP)",
+        ],
+        dataTable: [
+          {
+            name: "Fallas de Calidad IT",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Fallas de Calidad Proveedor",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Falla en Especificaciones",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Atrasos en Contratación de Recursos",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+        ]
+      }
+    },
+    {
+      name: "Gestión Humana",
+      impacts_time: 23,
+      cost_variaton: "$123424000000078",
+      dataTable: {
+        headers: [
+          "Tipificación",
+          "Suma de Impacto Tiempo (Días)",
+          "Suma de Variación de Costos (COP)",
+        ],
+        dataTable: [
+          {
+            name: "Fallas de Calidad IT",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Fallas de Calidad Proveedor",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Falla en Especificaciones",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+          {
+            name: "Atrasos en Contratación de Recursos",
+            impacts_time: "34",
+            cost_variaton: "$12312000",
+          },
+        ]
+      }
+    }
+  ]
+
   constructor(
     public dialog: MatDialog, 
     private route: ActivatedRoute,

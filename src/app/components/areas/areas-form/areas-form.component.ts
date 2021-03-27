@@ -31,6 +31,7 @@ export class AreasFormComponent implements OnInit {
   area!: any;
 
   fButtonDisabled: boolean = false;
+  parentLabel: string = "Área a la que pertenece";
 
 
   constructor(
@@ -54,14 +55,21 @@ export class AreasFormComponent implements OnInit {
       this.areasService.getAreasId(this.data.id)
         .subscribe((res: Area) => {
           this.area = res;
+          let parentID;
           environment.consoleMessage(this.area, "AREA EDIT >>>>>>>>>>>");
+          if(this.area.parent == null) {
+            parentID = null
+          } else {
+            parentID = this.area.parent.id
+          }
           this.areasGroup.patchValue({
             title: this.area.title,
             description: this.area.description,
             vice_presidency_id: this.area.vice_presidency.id,
-            parent_id: this.area.parent.id,
+            parent_id: parentID,
             is_active: this.area.is_active
           });
+          this.validateLabels();
         });
     }
   }
@@ -86,6 +94,7 @@ export class AreasFormComponent implements OnInit {
       parent_id: null,
       is_active: true
     });
+    this.validateLabels();
   }
 
   createRegister() {
@@ -152,8 +161,12 @@ export class AreasFormComponent implements OnInit {
       });
   }
 
-  onClickSelectAreas() {
-    this.getSelectAreas();
+  onClickSelectAreas(ev:boolean) {
+    if(ev){
+      this.getSelectAreas();
+    }else{
+      this.validateLabels();
+    }
   }
 
   getSelectAreas() {    
@@ -186,6 +199,16 @@ export class AreasFormComponent implements OnInit {
     }
 
     return message;
+  }
+
+  validateLabels(){
+    if(this.areasGroup.value.parent_id == null){
+      this.parentLabel = "Área a la que pertenece";
+      this.singularOption = "Área";
+    }else{
+      this.parentLabel = "Área";
+      this.singularOption = "Subárea";
+    }
   }
 
 }
