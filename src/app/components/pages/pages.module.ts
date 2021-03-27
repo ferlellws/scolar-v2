@@ -39,6 +39,7 @@ import { PagesResolver } from './guards/pages.resolver';
 
 // MODULES
 import { SharedModule } from '../shared/shared.module';
+import { PageFormComponent } from './page-form/page-form.component';
 
 const materialModules = [
   MatSortModule,
@@ -73,7 +74,8 @@ const materialModules = [
 
 @NgModule({
   declarations: [
-    PagesComponent
+    PagesComponent,
+    PageFormComponent
   ],
   imports: [
     CommonModule,
