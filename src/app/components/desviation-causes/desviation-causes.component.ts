@@ -73,7 +73,7 @@ export class DesviationCausesComponent implements OnInit {
     {
       name: "Tecnología",
       impacts_time: 23,
-      cost_variaton: "$123424000000078",
+      cost_variaton: "$1.456.000",
       dataTable: {
         headers: [
           "Tipificación",
@@ -84,22 +84,22 @@ export class DesviationCausesComponent implements OnInit {
           {
             name: "Fallas de Calidad IT",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Fallas de Calidad Proveedor",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Falla en Especificaciones",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Atrasos en Contratación de Recursos",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
         ]
       }
@@ -107,7 +107,7 @@ export class DesviationCausesComponent implements OnInit {
     {
       name: "Financiero",
       impacts_time: 23,
-      cost_variaton: "$123424000000078",
+      cost_variaton: "$1.456.000",
       dataTable: {
         headers: [
           "Tipificación",
@@ -118,22 +118,22 @@ export class DesviationCausesComponent implements OnInit {
           {
             name: "Fallas de Calidad IT",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Fallas de Calidad Proveedor",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Falla en Especificaciones",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Atrasos en Contratación de Recursos",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
         ]
       }
@@ -141,7 +141,7 @@ export class DesviationCausesComponent implements OnInit {
     {
       name: "Gestión Humana",
       impacts_time: 23,
-      cost_variaton: "$123424000000078",
+      cost_variaton: "$1.456.000",
       dataTable: {
         headers: [
           "Tipificación",
@@ -152,22 +152,22 @@ export class DesviationCausesComponent implements OnInit {
           {
             name: "Fallas de Calidad IT",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Fallas de Calidad Proveedor",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Falla en Especificaciones",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
           {
             name: "Atrasos en Contratación de Recursos",
             impacts_time: "34",
-            cost_variaton: "$12312000",
+            cost_variaton: "$1.456.000",
           },
         ]
       }

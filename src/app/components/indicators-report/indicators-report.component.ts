@@ -1,12 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableData } from 'src/app/models/table-data';
 import { IndicatorsReportsService } from 'src/app/services/indicators-reports.service';
 import { MainService } from 'src/app/services/main.service';
+import { StatesService } from 'src/app/services/states.service';
 import { environment } from 'src/environments/environment';
 import { ColumnChartsComponent } from '../shared/google-charts/column-charts/column-charts.component';
 import { PieChartsComponent } from '../shared/google-charts/pie-charts/pie-charts.component';
@@ -27,6 +29,23 @@ export class IndicatorsReportComponent implements OnInit {
     next: "Siguiente"
   }
 
+  labelButton = {
+    remove: "Limpiar Filtros",
+    filter: "Filtrar"
+  }
+
+  statesGroup!: FormGroup;
+  typificationsGroup!: FormGroup;
+  prioritiesGroup!: FormGroup;
+  vicepresidenciesGroup!: FormGroup;
+  areasGroup!: FormGroup;
+  programsGroup!: FormGroup;
+  companiesGroup!: FormGroup;
+  pmosGroup!: FormGroup;
+
+  optionsYears: any[] = [];
+  optionsStates: any[] = [];
+  optionsPMO: any[] = [];
 
   statesByVicepresidenciesTable: any;
   flagstates: boolean = false;
@@ -37,17 +56,20 @@ export class IndicatorsReportComponent implements OnInit {
   priorities: any;
   flagpriorities: boolean = false;
 
+  areas: any;
+  flagAreas: boolean = false;
+
   advanceVicepresidencies: any;
   flagAdvanceVicepresidencies: boolean = false;
-
-  pmosOccupation: any;
-  flagPMOsOccupation: boolean = false;
 
   programs!: any;
   flagprograms: boolean = false;
 
   companies: any;
   flagcompanies: boolean = false;
+
+  pmosOccupation: any;
+  flagPMOsOccupation: boolean = false;
   
   dataGraphicPriorities!: any;
   dataGraphicCompanies!: any;
@@ -57,138 +79,70 @@ export class IndicatorsReportComponent implements OnInit {
   // programs: any = [
   //   {
   //     name: "Hermes",
+  //     budget_approved: "$120.000",
+  //     budget_executed: "$80.000",
+  //     balance: "$40.000",
   //     advance_spected: "15%",
   //     advance_real: "12%",
   //     desviation: {
   //       color: "green",
   //       value: "3%"
   //     },
+  //     percentage_executed_budget: "67%",
   //     vicepresidencies: [
   //       {
   //         name: "Presidencia",
+  //         budget_approved: "$120.000",
+  //         budget_executed: "$80.000",
+  //         balance: "$40.000",
   //         advance_spected: "15%",
   //         advance_real: "12%",
   //         desviation: {
   //           color: "green",
   //           value: "3%"
   //         },
+  //         percentage_executed_budget: "67%",
   //         tableData: {
   //           headers: [
   //             "Proyecto",
+  //             "P.Aprovado",
+  //             "P. Ejecutado",
+  //             "Saldo P.",
   //             "Avance Esperado",
   //             "Avance Real",
   //             "Desviación",
+  //             "% P. Ejecutado"
   //           ],
   //           dataTable: [
   //             {
   //               name: "BCT",
+  //               budget_approved: "$120.000",
+  //               budget_executed: "$80.000",
+  //               balance: "$40.000",
   //               advance_spected: "15%",
   //               advance_real: "12%",
   //               desviation: {
   //                 color: "green",
   //                 value: "3%"
   //               },
+  //               percentage_executed_budget: "67%"
   //             },
-  //             {
-  //               name: "KOBAProject",
-  //               advance_spected: "15%",
-  //               advance_real: "50%",
-  //               desviation: {
-  //                 color: "red",
-  //                 value: "45%"
-  //               },
-  //             },
-  //           ]
-  //         }
-  //       },
-  //       {
-  //         name: "Vp Financiera",
-  //         advance_spected: "35%",
-  //         advance_real: "32%",
-  //         desviation: {
-  //           color: "red",
-  //           value: "1%"
-  //         },
-  //         tableData: {
-  //           headers: [
-  //             "Proyecto",
-  //             "Avance Esperado",
-  //             "Avance Real",
-  //             "Avance Real",
-  //             "Desviación",
-  //           ],
-  //           dataTable: [
-  //             {
-  //               name: "D1Web",
-  //               advance_spected: "15%",
-  //               advance_real: "12%",
-  //               desviation: {
-  //                 color: "green",
-  //                 value: "3%"
-  //               },
-  //             },
-  //             {
-  //               name: "Niff16",
-  //               advance_spected: "15%",
-  //               advance_real: "40%",
-  //               desviation: {
-  //                 color: "yellow",
-  //                 value: "45%"
-  //               },
-  //             },
-  //           ]
-  //         }
-  //       },
-  //     ],
-  //   },
-
-  //   {
-  //     name: "Compacto",
-  //     advance_spected: "15%",
-  //     advance_real: "12%",
-  //     desviation: {
-  //       color: "red",
-  //       value: "50%"
-  //     },
-  //     vicepresidencies: [
-  //       {
-  //         name: "Presidencia",
-  //         advance_spected: "15%",
-  //         advance_real: "12%",
-  //         desviation: {
-  //           color: "green",
-  //           value: "3%"
-  //         },
-  //         tableData: {
-  //           headers: [
-  //             "Proyecto",
-  //             "Avance Esperado",
-  //             "Avance Real",
-  //             "Avance Real",
-  //             "Desviación",
-  //           ],
-  //           dataTable: [
   //             {
   //               name: "BCT",
+  //               budget_approved: "$120.000",
+  //               budget_executed: "$80.000",
+  //               balance: "$40.000",
   //               advance_spected: "15%",
   //               advance_real: "12%",
   //               desviation: {
   //                 color: "green",
   //                 value: "3%"
   //               },
-  //             },
-  //             {
-  //               name: "KOBAProject",
-  //               advance_spected: "15%",
-  //               advance_real: "50%",
-  //               desviation: {
-  //                 color: "red",
-  //                 value: "45%"
-  //               },
+  //               percentage_executed_budget: "67%"
   //             },
   //           ]
   //         }
-  //       },
+  //       }
   //     ],
   //   }
   // ]
@@ -198,17 +152,59 @@ export class IndicatorsReportComponent implements OnInit {
     private router: Router,
     private mainService: MainService,
     public datepipe: DatePipe,
-    private indicatorsReportsService:IndicatorsReportsService,
-  ) { }
+    private indicatorsReportsService: IndicatorsReportsService,
+    private statesService: StatesService,
+    private fg: FormBuilder 
+  ) {
+    this.statesGroup = this.fg.group({
+      yearsForm: [null],
+    });
+    this.typificationsGroup = this.fg.group({
+      yearsForm: [null],
+    });
+    this.prioritiesGroup = this.fg.group({
+      yearsForm: [null],
+      statesForm: [null]
+    });
+    this.vicepresidenciesGroup = this.fg.group({
+      yearsForm: [null],
+      statesForm: [null]
+    });
+    this.areasGroup = this.fg.group({
+      yearsForm: [null],
+      statesForm: [null]
+    });
+    this.programsGroup = this.fg.group({
+      yearsForm: [null],
+      statesForm: [null],
+      pmosForm: [null]
+    });
+    this.companiesGroup = this.fg.group({
+      yearsForm: [null],
+      statesForm: [null]
+    });
+    this.pmosGroup = this.fg.group({
+      yearsForm: [null],
+      statesForm: [null]
+    });
+  }
 
   ngOnInit(): void {
+    this.statesService.getStatesSelect()
+      .subscribe((states: any) => {
+        this.optionsStates = states;
+      });
+  }
+
+  openDesviatoinCauses() {
+    this.router.navigate([`/desviation-causes/`]);
   }
 
   openStates(step: number) {
     this.setStep(step);
 
     if(this.statesByVicepresidenciesTable == null) {
-      this.indicatorsReportsService.getTableStatesByVicepresidencies()
+      this.indicatorsReportsService.getTableStatesByVicepresidencies("")
         .subscribe((data: any) => {
           this.statesByVicepresidenciesTable = data.statesByVicepresidenciesTable;
           this.flagstates = true;
@@ -218,8 +214,9 @@ export class IndicatorsReportComponent implements OnInit {
 
   openTypifications(step: number) {
     this.setStep(step);
+    
     if(this.typificationsByVicepresidencies == null) {
-      this.indicatorsReportsService.getTableTypificationsByVicepresidencies()
+      this.indicatorsReportsService.getTableTypificationsByVicepresidencies("")
         .subscribe((data: any) => {
           this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
           this.flagtypifications = true;
@@ -231,43 +228,243 @@ export class IndicatorsReportComponent implements OnInit {
     this.setStep(step);
 
     if(this.priorities == null) {
-    this.indicatorsReportsService.getTablePriorities()
-      .subscribe((data: any) => {
-        this.priorities = data.priorities;
-        if(this.priorities.dataTable.length == 0) {
-          this.emptyGraphPriorities = true;
-        } else {
-          this.dataGraphicPriorities = PieChartsComponent.TableToChart(this.priorities, ['total'])
-          this.emptyGraphPriorities = false;
-        }
-        this.flagpriorities = true;
-      });
-    }
+      this.indicatorsReportsService.getTablePriorities("", "")
+        .subscribe((data: any) => {
+          this.priorities = data.priorities;
+          if(this.priorities.dataTable.length == 0) {
+            this.emptyGraphPriorities = true;
+          } else {
+            this.dataGraphicPriorities = PieChartsComponent.TableToChart(this.priorities, ['total'])
+            this.emptyGraphPriorities = false;
+          }
+          this.flagpriorities = true;
+        });
+      }
   }
 
   openVicepresidencies(step: number) {
     this.setStep(step);
 
     if(this.advanceVicepresidencies == null) {
-    this.indicatorsReportsService.getAdvancePercentagesByProjects()
+      this.indicatorsReportsService.getAdvancePercentagesByProjects("", "")
+        .subscribe((data: any) => {
+          this.advanceVicepresidencies = data.advancePercentagesByProjects[0].vicepresidencies;
+          this.flagAdvanceVicepresidencies = true;
+        });
+      }
+  }
+
+  openAreas(step: number) {
+    this.setStep(step);
+
+    if(this.advanceVicepresidencies == null) {
+      this.indicatorsReportsService.getAreas("","")
       .subscribe((data: any) => {
-        this.advanceVicepresidencies = data.advancePercentagesByProjects[0].vicepresidencies;
-        this.flagAdvanceVicepresidencies = true;
+        this.flagAreas = true;    
       });
     }
   }
 
   openPrograms(step: number) {
     this.setStep(step);
-
-    // this.indicatorsReportsService.getPrograms()
-    //   .subscribe((data: any) => {
-    //     this.programs = data;
-    //     this.flagprograms = true;
-    //   });
-    //   this.flagprograms = true;
+    if(this.programs == null) {
+      this.indicatorsReportsService.getPrograms("", "", "")
+        .subscribe((data: any) => {
+          this.programs = data.programs;
+          this.flagprograms = true;
+        });
+    }
+  }
+  
+  openIndicatorsCompanies() {
+    if(this.pmosOccupation == null) {
+      this.indicatorsReportsService.getTableCompanies("", "")
+        .subscribe((data: any) => {
+          this.companies = data.typificationsByVicepresidenciesTable;
+          if(this.companies.dataTable.length == 0) {
+            this.emptyGraphCompanies = true;
+          } else {
+            this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['totalProjects'])
+            this.emptyGraphCompanies = false;
+          }
+          this.flagcompanies = true;
+        });
+    }
   }
 
+  openPMOsOccupation(){
+    if(this.pmosOccupation == null) {
+      this.indicatorsReportsService.getPmoByOccupation("", "")
+        .subscribe((data: any) => {
+          this.pmosOccupation = data.pmoByOccupation.PMOs;
+          this.flagPMOsOccupation = true;
+        }
+      );
+    }
+  }
+
+  filter(group: FormGroup, nameGroup: string) {
+    var years = this.arrayToString(group.get("yearsForm")!.value);
+
+    if (nameGroup == "statesGroup") {
+      this.indicatorsReportsService.getTableStatesByVicepresidencies(years)
+        .subscribe((data: any) => {
+          this.statesByVicepresidenciesTable = data.statesByVicepresidenciesTable;
+          this.flagstates = true;
+        });
+
+    } else if (nameGroup == "typificationsGroup") {
+      this.indicatorsReportsService.getTableTypificationsByVicepresidencies(years)
+        .subscribe((data: any) => {
+          this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
+          this.flagtypifications = true;
+        });
+
+    } else if (nameGroup == "prioritiesGroup") {
+      var states = this.arrayToString(group.get("statesForm")!.value);
+      this.indicatorsReportsService.getTablePriorities(years, states)
+        .subscribe((data: any) => {
+          this.priorities = data.priorities;
+          if(this.priorities.dataTable.length == 0) {
+            this.emptyGraphPriorities = true;
+          } else {
+            this.dataGraphicPriorities = PieChartsComponent.TableToChart(this.priorities, ['total'])
+            this.emptyGraphPriorities = false;
+          }
+          this.flagpriorities = true;
+        });
+
+    }  else if (nameGroup == "vicepresidenciesGroup") {
+      var states = this.arrayToString(group.get("statesForm")!.value);
+      this.indicatorsReportsService.getAdvancePercentagesByProjects(years, states)
+        .subscribe((data: any) => {
+          this.advanceVicepresidencies = data.advancePercentagesByProjects[0].vicepresidencies;
+          this.flagAdvanceVicepresidencies = true;
+        });
+
+    }  else if (nameGroup == "areasGroup") {
+      var states = this.arrayToString(group.get("statesForm")!.value);
+      this.indicatorsReportsService.getAreas(years,states)
+        .subscribe((data: any) => {
+          this.flagAreas = true;    
+        });
+
+    } else if (nameGroup == "programsGroup") {
+    var states = this.arrayToString(group.get("statesForm")!.value);
+    var pmos = this.arrayToString(group.get("pmosForm")!.value);
+    this.indicatorsReportsService.getPrograms(years, states, pmos)
+      .subscribe((data: any) => {
+        this.programs = data.programs;
+        this.flagprograms = true;
+      });
+
+    } else if (nameGroup == "companiesGroup") {
+      var states = this.arrayToString(group.get("statesForm")!.value);
+      this.indicatorsReportsService.getTableCompanies(years, states)
+      .subscribe((data: any) => {
+        this.companies = data.typificationsByVicepresidenciesTable;
+        if(this.companies.dataTable.length == 0) {
+          this.emptyGraphCompanies = true;
+        } else {
+          this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['totalProjects'])
+          this.emptyGraphCompanies = false;
+        }
+        this.flagcompanies = true;
+      });
+
+    } else if (nameGroup == "pmosGroup") {
+      var states = this.arrayToString(group.get("statesForm")!.value);
+      this.indicatorsReportsService.getPmoByOccupation(years, states)
+        .subscribe((data: any) => {
+          this.pmosOccupation = data.pmoByOccupation.PMOs;
+          this.flagPMOsOccupation = true;
+        }
+      );
+    }
+    
+  }
+
+  removeValueGroup(group: FormGroup, nameGroup: string) {
+    var keys: string[] = Object.keys(group.controls);
+    for (let index = 0; index < keys.length; index++) {
+      group.get(keys[index])?.setValue(null);
+    }
+
+    if(nameGroup == "statesGroup") {
+      this.indicatorsReportsService.getTableStatesByVicepresidencies("")
+        .subscribe((data: any) => {
+          this.statesByVicepresidenciesTable = data.statesByVicepresidenciesTable;
+          this.flagstates = true;
+        })
+    } else if(nameGroup == "typificationsGroup") {
+      this.indicatorsReportsService.getTableTypificationsByVicepresidencies("")
+        .subscribe((data: any) => {
+          this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
+          this.flagtypifications = true;
+        })
+    } else if(nameGroup == "prioritiesGroup") {
+      this.indicatorsReportsService.getTablePriorities("", "")
+        .subscribe((data: any) => {
+          this.priorities = data.priorities;
+          if(this.priorities.dataTable.length == 0) {
+            this.emptyGraphPriorities = true;
+          } else {
+            this.dataGraphicPriorities = PieChartsComponent.TableToChart(this.priorities, ['total'])
+            this.emptyGraphPriorities = false;
+          }
+          this.flagpriorities = true;
+        });
+    } else if(nameGroup == "vicepresidenciesGroup") {
+      this.indicatorsReportsService.getAdvancePercentagesByProjects("", "")
+      .subscribe((data: any) => {
+        this.advanceVicepresidencies = data.advancePercentagesByProjects[0].vicepresidencies;
+        this.flagAdvanceVicepresidencies = true;
+      });
+    } else if(nameGroup == "areasGroup") {
+      this.indicatorsReportsService.getAreas("","")
+        .subscribe((data: any) => {
+          this.flagAreas = true;    
+        });
+    } else if(nameGroup == "programsGroup") {
+      this.indicatorsReportsService.getPrograms("", "", "")
+      .subscribe((data: any) => {
+        this.programs = data.programs;
+        this.flagprograms = true;
+      });
+    } else if (nameGroup == "companiesGroup") {
+      this.indicatorsReportsService.getTableCompanies("", "")
+      .subscribe((data: any) => {
+        this.companies = data.typificationsByVicepresidenciesTable;
+        if(this.companies.dataTable.length == 0) {
+          this.emptyGraphCompanies = true;
+        } else {
+          this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['totalProjects'])
+          this.emptyGraphCompanies = false;
+        }
+        this.flagcompanies = true;
+      });
+    } else if (nameGroup == "pmosGroup") {
+      this.indicatorsReportsService.getPmoByOccupation("", "")
+        .subscribe((data: any) => {
+          this.pmosOccupation = data.pmoByOccupation.PMOs;
+          this.flagPMOsOccupation = true;
+        }
+      );
+    }
+  }
+
+  arrayToString(array: any[]) {
+    var data:string = "";
+    if(array != null) {
+      for (let index = 0; index < array.length; index++) {
+        data = data+array[index];
+        if(index < array.length-1) {
+          data = data+","
+        }
+      }
+    }
+    return data;
+  }
 
   setStep(index: number) {
     this.step = index;
@@ -290,35 +487,6 @@ export class IndicatorsReportComponent implements OnInit {
     }
     if(this.indexTab == 2) {
       this.openPMOsOccupation();
-    }
-  }
-
-  openDesviatoinCauses() {
-    this.router.navigate([`/desviation-causes/`]);
-  }
-
-  openIndicatorsCompanies() {
-    this.indicatorsReportsService.getTableCompanies()
-      .subscribe((data: any) => {
-        this.companies = data.typificationsByVicepresidenciesTable;
-        if(this.companies.dataTable.length == 0) {
-          this.emptyGraphCompanies = true;
-        } else {
-          this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['totalProjects'])
-          this.emptyGraphCompanies = false;
-        }
-        this.flagcompanies = true;
-      });
-  }
-
-  openPMOsOccupation(){
-    if(this.pmosOccupation == null) {
-      this.indicatorsReportsService.getPmoByOccupation()
-        .subscribe((data: any) => {
-          this.pmosOccupation = data.pmoByOccupation.PMOs;
-          this.flagPMOsOccupation = true;
-        }
-      );
     }
   }
 }

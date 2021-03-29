@@ -31,6 +31,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from '../shared/shared.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const materialModels = [
   MatSortModule,
@@ -70,7 +71,9 @@ const materialModels = [
   imports: [
     CommonModule,
     IndicatorsReportRoutingModule,
+    FormsModule,
     materialModels,
+    ReactiveFormsModule,
     SharedModule
   ],
   exports: [

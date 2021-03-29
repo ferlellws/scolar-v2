@@ -22,6 +22,7 @@ export class DynamicTableComponent implements OnInit {
   @Input()  isUserProfile: boolean = false;
   @Input()  emptyText: string = "default";
   @Input()  elevation: string = "mat-elevation-z8";
+  @Input()  displayedColumns: string [] = [];
 
   labelDelete: string = "Enviar a papelera 2";
   deleteIcon: string = "delete"
@@ -35,7 +36,7 @@ export class DynamicTableComponent implements OnInit {
   public cdRef!: ChangeDetectorRef;
 
   showFooter!: boolean;
-  displayedColumns!: string [];
+  //displayedColumns!: string [];
   dataSource =  new MatTableDataSource<any>();
   footer: any;
   render: boolean = false;
@@ -68,7 +69,7 @@ export class DynamicTableComponent implements OnInit {
         this.labelDelete = "Enviar a papelera";
         this.deleteIcon = "delete";
       }
-      this.displayedColumns = Object.keys(this.objectsData.dataTable[0]);
+      this.displayedColumns = this.displayedColumns.length == 0 ? Object.keys(this.objectsData.dataTable[0]) : this.displayedColumns;
       this.dataSource.data = this.objectsData.dataTable;
       this.footer = this.objectsData.footer;
       this.showFooter = this.footer != null;

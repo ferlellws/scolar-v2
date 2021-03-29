@@ -314,7 +314,7 @@
         </form>     -->
         <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
         
-        <!-- <mat-accordion>
+        <mat-accordion>
             <mat-expansion-panel *ngFor="let tbs of typificationsBySources" class="row mat-elevation-z1 card-expansion" style="padding: 0px;">
                 <mat-expansion-panel-header class="col-sm-12 col-md-12">
                     <mat-panel-title class="col-sm-12 col-md-5">
@@ -322,21 +322,21 @@
                     </mat-panel-title>
                     <mat-panel-description class="col-sm-12 col-md-6 description2" style="display: flex; justify-content: space-between;">
                         <span>Impacto en Tiempo: {{tbs.impacts_time}} días </span>
-                        <span>Variación de Costos: {{tbs.cost_variaton}} COP</span>
+                        <span>Variación de Costos: {{tbs.cost_variaton}}</span>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
-
-                <tecno-dynamic-table
-                    [objectsData]="tbs.dataTable"
-                    elevation="mat-elevation-z1"
-                    emptyText="Ingrese datos">
-                </tecno-dynamic-table>
-                
+                <div class="cont-table">
+                    <tecno-dynamic-table
+                        [objectsData]="tbs.dataTable"
+                        elevation="mat-elevation-z1"
+                        emptyText="Ingrese datos">
+                    </tecno-dynamic-table>
+                </div>
             </mat-expansion-panel>
-        </mat-accordion> -->
-        <h1 class="txt-accent title">
+        </mat-accordion>
+        <!-- <h1 class="txt-accent title">
             Página en construcción...
-        </h1>
+        </h1> -->
         <mat-action-row>
             <button mat-button color="warn" (click)="prevStep()">{{labelStep.back}}</button>
         </mat-action-row>

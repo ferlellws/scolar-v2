@@ -29,7 +29,9 @@ export class IndicatorsReportsService {
       };
   }
 
-  getTableStatesByVicepresidencies() {
+  getTableStatesByVicepresidencies(years: any) {
+    this.inputParams.years = years;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<TableData[]>(`${this.API}/states_by_vicepresidencies`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -37,7 +39,9 @@ export class IndicatorsReportsService {
     );
   }
 
-  getTableTypificationsByVicepresidencies() {
+  getTableTypificationsByVicepresidencies(years: any) {
+    this.inputParams.years = years;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<TableData[]>(`${this.API}/typifications_by_vicepresidencies`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -45,7 +49,10 @@ export class IndicatorsReportsService {
     );
   }
 
-  getTablePriorities() {
+  getTablePriorities(years: any, states: any) {
+    this.inputParams.years = years;
+    this.inputParams.states = states;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<TableData[]>(`${this.API}/priorities`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -53,24 +60,10 @@ export class IndicatorsReportsService {
     );
   }
 
-  getPrograms() {
-    return this.http.get<TableData[]>(`${this.API}/programs`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap(console.log)
-    );
-  }
-
-
-  getTableCompanies() {
-    return this.http.get<TableData[]>(`${this.API}/companies_by_periods`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap(console.log)
-    );
-  }
-
-  getAdvancePercentagesByProjects() {
+  getAdvancePercentagesByProjects(years: any, states: any) {
+    this.inputParams.years = years;
+    this.inputParams.states = states;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<any[]>(`${this.API}/advance_percentages_by_projects`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -78,7 +71,44 @@ export class IndicatorsReportsService {
     );
   }
 
-  getPmoByOccupation(){
+  getAreas(years: any, states: any) {
+    this.inputParams.years = years;
+    this.inputParams.states = states;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
+    return this.http.get<any[]>(`${this.API}/advance_percentages_by_projects`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getPrograms(years: any, states: any, pmos: any) {
+    this.inputParams.years = years;
+    this.inputParams.states = states;
+    this.inputParams.pmos = pmos;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
+    return this.http.get<TableData[]>(`${this.API}/programs`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getTableCompanies(years: any, states: any) {
+    this.inputParams.years = years;
+    this.inputParams.states = states;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
+    return this.http.get<TableData[]>(`${this.API}/companies_by_periods`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getPmoByOccupation(years: any, states: any){
+    this.inputParams.years = years;
+    this.inputParams.states = states;
+    environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<any>(`${this.API}/pmo_by_occupation`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
