@@ -118,6 +118,7 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
   },
   { path: 'login', component: LoginComponent },
   {
@@ -218,6 +219,7 @@ const routes: Routes = [
   {
     path: 'risk-levels',
     loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule),
+    canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
       riskLevels: RiskLevelsResolver
@@ -226,6 +228,7 @@ const routes: Routes = [
   {
     path: 'stages',
     loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule),
+    canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
       stages: StagesResolver
@@ -281,13 +284,23 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
-  { path: 'pages-profiles', loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule) },
+  { 
+    path: 'pages-profiles', 
+    loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+  },
   { path: 'indicators-report',
     loadChildren: () => import('./components/indicators-report/indicators-report.module').then(m => m.IndicatorsReportModule),
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
   },
-  { path: 'projects-create', loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule) },
+  { 
+    path: 'projects-create', 
+    loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 
