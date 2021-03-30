@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Actions } from 'src/app/models/actions';
 import { DelayTypification } from 'src/app/models/delay-typification';
 import { DesviationCause } from 'src/app/models/desviation-cause';
 import { Project } from 'src/app/models/project';
@@ -22,7 +23,7 @@ import { DesviationCausesModule } from './desviation-causes.module';
   styleUrls: ['./desviation-causes.component.scss']
 })
 export class DesviationCausesComponent implements OnInit {
-
+  actions!: Actions;
   step = -1;
   dataTableSource!: TableData;
   dataGraphicSource!: any;
@@ -211,6 +212,10 @@ export class DesviationCausesComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     await this.route.data.subscribe((data: any) =>{
       this.dataTableSource = data.desviationCausesBySource.data;

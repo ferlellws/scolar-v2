@@ -34,6 +34,7 @@ import { TextListComponent } from './text-list/text-list.component';
 import { TextListDateComponent } from './text-list-date/text-list-date.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 const COMPONENTS = [
   MenuComponent,
@@ -44,6 +45,7 @@ const COMPONENTS = [
   AlertDialogComponent,
   TextListComponent,
   TextListDateComponent,
+  UnauthorizedComponent
 ];
 
 const materialModules = [
@@ -74,7 +76,7 @@ const MODULES = [
     COMPONENTS,
     MessageComponent,
     TextListComponent,
-    TextListDateComponent
+    TextListDateComponent,
   ],
   imports: [
     CommonModule,

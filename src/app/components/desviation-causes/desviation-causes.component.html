@@ -1,4 +1,4 @@
-<mat-accordion>
+<mat-accordion *ngIf="actions.read">
 
     <mat-expansion-panel class="row mat-elevation-z0 card-expansion"
         [expanded]="step === 0" (opened)="setStep(0)">
@@ -343,3 +343,7 @@
     </mat-expansion-panel>
     
 </mat-accordion>
+
+<div *ngIf="!actions.read">
+    <tecno-unauthorized></tecno-unauthorized>
+</div>

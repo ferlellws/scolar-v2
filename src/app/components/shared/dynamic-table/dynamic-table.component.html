@@ -84,11 +84,5 @@
 </div>
 
 <div *ngIf="!actions.read" style="padding: 20px;">
-  <h1 class="mat-title txt-accent">Acceso restringido</h1>
-  <div *ngIf="emptyText == 'default'" style="display: flex; align-items: center; font-size: larger;">
-    <span style="padding-left: 5px;">Solicite acceso al administrador</span>
-  </div>
-  <div *ngIf="emptyText != 'default'" style="display: flex; align-items: center; font-size: larger;">
-    <span style="padding-right: 5px;">{{emptyText}}</span>
-  </div>
+  <tecno-unauthorized></tecno-unauthorized>
 </div>
