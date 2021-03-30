@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Actions } from 'src/app/models/actions';
 import { TableData } from 'src/app/models/table-data';
 import { MainService } from 'src/app/services/main.service';
 import { ProgramsService } from 'src/app/services/programs.service';
@@ -17,6 +18,7 @@ import { ProgramsFormComponent } from './programs-form/programs-form.component';
 export class ProgramsComponent implements OnInit {
 
   dataTable!: TableData;
+  actions!: Actions;
 
   constructor(
     public dialog: MatDialog,
@@ -26,6 +28,10 @@ export class ProgramsComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.programs;

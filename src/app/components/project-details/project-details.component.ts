@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Actions } from 'src/app/models/actions';
 import { ApplicationByProject } from 'src/app/models/application-by-project';
 import { AreaByProject } from 'src/app/models/area-by-project';
 import { Benefit } from 'src/app/models/benefit';
@@ -43,7 +44,7 @@ export interface Indicator {
 })
 
 export class ProjectDetailsComponent implements OnInit {
-
+  actions!: Actions;
   project: any;
   applicationsByProject: any[] = [];
   areasByProject: any[] = [];
@@ -87,6 +88,8 @@ export class ProjectDetailsComponent implements OnInit {
   semanal_hours = 40;
   labelAssignment = "Sin asignar";
   panelOpenState = false;
+  userID: any;
+  profileID: any;
 
   constructor(
     public dialog: MatDialog, 
@@ -107,6 +110,14 @@ export class ProjectDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
+    this.userID = JSON.parse(localStorage.user).id;
+    this.profileID = JSON.parse(localStorage.user).profile_id;
+    environment.consoleMessage(this.userID, "IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.modificationData(data.project);

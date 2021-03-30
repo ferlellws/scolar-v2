@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Actions } from 'src/app/models/actions';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -7,12 +8,15 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./projects-create.component.scss']
 })
 export class ProjectsCreateComponent implements OnInit {
-
-  constructor() { 
-    
-  }
+  actions!: Actions;
+  
+  constructor() {}
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
   }
 
 }
