@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { MatTableDataSource } from '@angular/material/table';
 import { TableData } from 'src/app/models/table-data';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Actions } from 'src/app/models/actions';
 
 @Component({
   selector: 'tecno-dynamic-table',
@@ -39,13 +40,17 @@ export class DynamicTableComponent implements OnInit {
   dataSource =  new MatTableDataSource<any>();
   footer: any;
   render: boolean = false;
+  actions!: Actions;
 
   constructor() {
 
    }
 
    ngOnInit(): void {
-    console.log("ObjData Dynamic",this.objectsData);
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.updateTable();    
   }
 
