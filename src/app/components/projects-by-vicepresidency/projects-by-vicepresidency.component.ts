@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Actions } from 'src/app/models/actions';
 import { MainService } from 'src/app/services/main.service';
 import { environment } from 'src/environments/environment';
 
@@ -11,6 +12,7 @@ import { environment } from 'src/environments/environment';
 export class ProjectsByVicepresidencyComponent implements OnInit {
 
   data: any;
+  actions!: Actions;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,7 +21,10 @@ export class ProjectsByVicepresidencyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.data = data.projects;

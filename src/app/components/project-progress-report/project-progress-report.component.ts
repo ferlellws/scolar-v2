@@ -4,6 +4,7 @@ import { MainService } from 'src/app/services/main.service';
 import { ProjectProgressReport } from 'src/app/models/project-progress-report';
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Actions } from 'src/app/models/actions';
 
 export interface DataInitial {
   externalCompanyStates: any;
@@ -16,7 +17,7 @@ export interface DataInitial {
   styleUrls: ['./project-progress-report.component.scss']
 })
 export class ProjectProgressReportComponent implements OnInit {
-
+  actions!: Actions;
   // dataProjectProgressReport: any = [
   //   [ '1. WEB Proveedores  (TopGroup)', '', '#F44336', null, new Date(2020, 6, 5), new Date(2020, 6, 10) ],
   //   [ '1. WEB Proveedores  (TopGroup)', '', '#4472c3', null, new Date(2020, 7, 5), new Date(2020, 8, 5) ],
@@ -90,6 +91,10 @@ export class ProjectProgressReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
 
     this.projectProgressReport.getDataInitial()
     .subscribe((data: DataInitial) => {

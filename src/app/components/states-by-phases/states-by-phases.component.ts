@@ -15,6 +15,7 @@ import { StateByPhasesService } from 'src/app/services/state-by-phases.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
+import { Actions } from 'src/app/models/actions';
 
 
 
@@ -26,7 +27,8 @@ import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.compon
 export class StatesByPhasesComponent implements OnInit {
 
   dataTable!: TableData;
-
+  actions!: Actions;
+  
   constructor(
     public dialog: MatDialog,    
     private route: ActivatedRoute,
@@ -35,6 +37,10 @@ export class StatesByPhasesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.stateByPhases;

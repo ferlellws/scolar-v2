@@ -15,6 +15,7 @@ import { StagesFormComponent } from './stages-form/stages-form.component';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
 import { MainService } from 'src/app/services/main.service';
 import { MatDialog } from '@angular/material/dialog';
+import { Actions } from 'src/app/models/actions';
 
 @Component({
   selector: 'tecno-stages',
@@ -24,6 +25,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class StagesComponent implements OnInit {
 
   dataTable!: TableData;
+  actions!: Actions;
 
   constructor(
     public dialog: MatDialog,
@@ -33,6 +35,10 @@ export class StagesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.stages;

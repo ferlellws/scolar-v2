@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Actions } from 'src/app/models/actions';
 import { TableData } from 'src/app/models/table-data';
 import { IndicatorsReportsService } from 'src/app/services/indicators-reports.service';
 import { MainService } from 'src/app/services/main.service';
@@ -21,6 +22,7 @@ import { PieChartsComponent } from '../shared/google-charts/pie-charts/pie-chart
 })
 export class IndicatorsReportComponent implements OnInit {
 
+  actions!: Actions;
   step = -1;
 
   indexTab = 0;
@@ -198,6 +200,10 @@ export class IndicatorsReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.statesService.getStatesSelect()
       .subscribe((states: any) => {
         this.optionsStates = states;
