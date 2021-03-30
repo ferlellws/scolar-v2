@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Actions } from 'src/app/models/actions';
 import { TableData } from 'src/app/models/table-data';
 import { GoogleChartService } from 'src/app/services/google-chart.service';
 
@@ -42,6 +43,8 @@ export class ColumnChartsComponent implements OnInit {
   @Input() bars: string = "vertical"
 
   private gLib: any;
+  actions!: Actions;
+
 
   constructor(private gChartService : GoogleChartService) {
     this.gLib = this.gChartService.getGoogle();
@@ -55,6 +58,10 @@ export class ColumnChartsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 

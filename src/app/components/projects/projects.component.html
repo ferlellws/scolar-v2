@@ -1,4 +1,4 @@
-<div class="master-container">
+<div *ngIf="actions.read" class="master-container">
   <mat-tab-group>
     <mat-tab label="Mis Proyectos">
       <div class="top-buttons">
@@ -60,7 +60,10 @@
     </mat-tab>
   </mat-tab-group>
   
-  <button mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
+  <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
     <mat-icon>add</mat-icon>
   </button> 
+</div>
+<div *ngIf="!actions.read">
+  <tecno-unauthorized></tecno-unauthorized>
 </div>
