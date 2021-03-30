@@ -16,42 +16,8 @@
 
       <div class="row">
         <div class="col col-12">
-          <mat-card class="example-card mb-20" *ngIf="fForm">
-            <!-- <mat-card-header>
-              <div mat-card-avatar class="example-header-image"></div>
-              <mat-card-title>Shiba Inu</mat-card-title>
-              <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-            </mat-card-header> -->
-            <mat-card-content>
-              <mat-form-field class="example-form-field full-width">
-                <mat-label>Nombre</mat-label>
-                <input matInput type="text" [(ngModel)]="value">
-                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </mat-form-field>
-
-              <mat-form-field class="example-form-field full-width">
-                <mat-label>Descripción</mat-label>
-                <textarea matInput placeholder="Ex. 100 Main St">1600 Amphitheatre Pkwy</textarea>
-                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </mat-form-field>
-
-              <mat-form-field class="example-form-field full-width">
-                <mat-label>Clearable input</mat-label>
-                <input matInput type="text" [(ngModel)]="value">
-                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </mat-form-field>
-            </mat-card-content>
-            <mat-card-actions align="end">
-              <button mat-button color="primary">Guardar</button>
-              <button mat-button color="primary" (click)="fForm = false">Cancelar</button>
-            </mat-card-actions>
-          </mat-card>
+          <!-- FORMULARIO PARA PAGINAS -->
+          <tecno-page-form [fForm]="fForm"></tecno-page-form>
 
           <div *ngIf="pagesWithoutModule.length > 0; else elseBlock">
             <mat-accordion class="example-headers-align" multi>
@@ -62,19 +28,18 @@
                   </mat-panel-title>
                   <mat-panel-description>
                     {{ page.name }}
-                    <mat-icon>{{ page.icon ? page.icon.name : "link_off" }}</mat-icon>
+                    <mat-icon>{{ page.icon ? page.icon_name : "link_off" }}</mat-icon>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <!-- <mat-form-field>
-                  <mat-label>First name</mat-label>
-                  <input matInput>
-                </mat-form-field>
-
-                <mat-form-field>
-                  <mat-label>Age</mat-label>
-                  <input matInput type="number" min="1">
-                </mat-form-field> -->
+                <!-- FORMULARIO PARA PAGINAS -->
+                <div class="row pt-20">
+                  <div class="col col-12">
+                    <mat-card-content>
+                      <tecno-page-form [fForm]="fForm"></tecno-page-form>
+                    </mat-card-content>
+                  </div>
+                </div>
 
               </mat-expansion-panel>
             </mat-accordion>

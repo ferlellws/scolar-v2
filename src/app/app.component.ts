@@ -115,6 +115,7 @@ export class AppComponent implements OnInit {
   logOut() {
     //falta salir de sesion en back
     sessionStorage.clear();
+    localStorage.clear();
     this.authService.onLogout();
     this.router.navigate(['/']);
     this.showToolbarSidenav = false;

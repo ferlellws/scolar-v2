@@ -1,5 +1,3 @@
-import { MenuModulesResolver } from './components/pages/guards/menu-modules.resolver';
-import { PagesResolver } from './components/pages/guards/pages.resolver';
 import { VicePresidenciesResolver } from './components/vice-presidencies/guards/vice-presidencies.resolver';
 import { ProjectsResolver } from './components/projects/guards-projects/projects.resolver';
 import { NgModule } from '@angular/core';
@@ -44,6 +42,8 @@ import { DesviationCausesByVicepresidenciesResolver } from './components/desviat
 import { DesviationCausesByAreasResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-by-areas.resolver';
 import { GeneralUsersResolver } from './components/general-users/guards-general-users/general-users.resolver';
 import { DesviationByProjectResolver } from './components/project-details/guards/desviation-by-project.resolver';
+import { PagesResolver } from './components/pages/guards/pages.resolver';
+import { MenuModulesResolver } from './components/pages/guards/menu-modules.resolver';
 import { ProjectsDashboardOwnResolver } from './components/projects/guards-projects/projects-dashboard-own.resolver';
 
 // COMPONENTS
@@ -118,6 +118,7 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
   },
   { path: 'login', component: LoginComponent },
   {
@@ -218,6 +219,7 @@ const routes: Routes = [
   {
     path: 'risk-levels',
     loadChildren: () => import('./components/risk-levels/risk-levels.module').then(m => m.RiskLevelsModule),
+    canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
       riskLevels: RiskLevelsResolver
@@ -226,6 +228,7 @@ const routes: Routes = [
   {
     path: 'stages',
     loadChildren: () => import('./components/stages/stages.module').then(m => m.StagesModule),
+    canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
       stages: StagesResolver
@@ -281,13 +284,23 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
-  { path: 'pages-profiles', loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule) },
+  { 
+    path: 'pages-profiles', 
+    loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+  },
   { path: 'indicators-report',
     loadChildren: () => import('./components/indicators-report/indicators-report.module').then(m => m.IndicatorsReportModule),
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
   },
-  { path: 'projects-create', loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule) },
+  { 
+    path: 'projects-create', 
+    loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+  },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

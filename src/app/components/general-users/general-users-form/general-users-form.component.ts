@@ -76,7 +76,7 @@ export class GeneralUsersFormComponent implements OnInit {
       area: [null, Validators.required],
       subArea: [null],
       position_area_id: [null, Validators.required],
-      profile: [null, Validators.required],
+      profile_id: [null, Validators.required],
     });
 
     if (this.data.mode == 'edit') {
@@ -117,7 +117,7 @@ export class GeneralUsersFormComponent implements OnInit {
           last_name: this.user.last_name,
           email: this.user.email,
           semanal_hours: this.user.semanal_hours,
-          profile: this.user.profile?.id,
+          profile_id: this.user.profile?.id,
           vicePresidency: this.user.position_area.area.vice_presidency_id
         });
 
@@ -202,7 +202,7 @@ export class GeneralUsersFormComponent implements OnInit {
           environment.consoleMessage(this.user.profile?.id, "this.user.profile?.id: ")
 
           this.usersGroup.patchValue({
-            profile: this.user.profile?.id,
+            profile_id: this.user.profile?.id,
           });
         });
   }
@@ -299,7 +299,7 @@ export class GeneralUsersFormComponent implements OnInit {
       area: null,
       subArea: [null],
       position_area_id: null,
-      profile: null,
+      profile_id: null,
     });
   }
 
@@ -310,7 +310,7 @@ export class GeneralUsersFormComponent implements OnInit {
       email: this.usersGroup.get('email')!.value,
       semanal_hours: this.usersGroup.get('semanal_hours')!.value,
       position_area_id: this.usersGroup.get('position_area_id')!.value,
-      profile_id: this.usersGroup.get('profile')!.value,
+      profile_id: this.usersGroup.get('profile_id')!.value,
       password: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
       password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
     }

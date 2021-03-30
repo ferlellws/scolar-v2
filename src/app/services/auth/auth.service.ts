@@ -64,7 +64,27 @@ export class AuthService {
     this.showToolbarSidenav.emit(this.authenticatedUser);
   }
 
-  userIsAuthenticated() {
+  async userIsAuthenticated(path: string) {
+    if (this.authenticatedUser){
+      let partes = path.split("/")
+      environment.consoleMessage(partes, "ruta: ");
+      let contador = 0;
+      let backRoute = "";
+      for (let index = 0; index < partes!.length; index++) {
+        if(partes![index][0] == ":"){
+          contador++;
+          backRoute += `/param${contador}`;
+        }else{
+          backRoute += `/${partes![index]}`
+        }
+      }
+      environment.consoleMessage(backRoute, "ruta: ");
+      console.log('antes del await');
+      
+      var coso = await this.accessPage(backRoute);
+      environment.consoleMessage(coso, "coso >>>>>>>>>")
+      localStorage.access_to_accions = JSON.stringify(coso.access_to_accions)
+    }
     return this.authenticatedUser;
   }
 
@@ -93,5 +113,24 @@ export class AuthService {
     }
 
     return this.userToken;
+  }
+
+  async accessPage(route: string): Promise<any> {
+    var inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token,
+      route: route
+    };
+
+    var Options = {
+      params: inputParams
+    }
+
+    const t =  this.http.get<any>(`${environment.API}/pages_profiles/access_permissions`, Options)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    ).toPromise();
+    return t;
   }
 }
