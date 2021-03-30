@@ -24,7 +24,7 @@
 
       <div class="col-sm-12 col-md-6">
         <mat-form-field class="full-width">
-          <mat-label>Status</mat-label>
+          <mat-label>Estatus</mat-label>
           <mat-select formControlName="status" required>
             <mat-option>Seleccione una opción</mat-option>
             <mat-option *ngFor="let status of selectStatus" [value]="status.id">{{ status.title }}</mat-option>

@@ -9,6 +9,7 @@ import { TableData } from 'src/app/models/table-data';
 import { IndicatorsReportsService } from 'src/app/services/indicators-reports.service';
 import { MainService } from 'src/app/services/main.service';
 import { StatesService } from 'src/app/services/states.service';
+import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { ColumnChartsComponent } from '../shared/google-charts/column-charts/column-charts.component';
 import { PieChartsComponent } from '../shared/google-charts/pie-charts/pie-charts.component';
@@ -41,11 +42,20 @@ export class IndicatorsReportComponent implements OnInit {
   areasGroup!: FormGroup;
   programsGroup!: FormGroup;
   companiesGroup!: FormGroup;
-  pmosGroup!: FormGroup;
 
   optionsYears: any[] = [];
   optionsStates: any[] = [];
-  optionsPMO: any[] = [];
+  optionsPMOs: any[] = [];
+  optionsStatus: any[] = [
+    {
+      id: "0",
+      name: "Inactivo"
+    },
+    {
+      id: "1",
+      name: "Activo"
+    }
+  ];
 
   statesByVicepresidenciesTable: any;
   flagstates: boolean = false;
@@ -154,6 +164,7 @@ export class IndicatorsReportComponent implements OnInit {
     public datepipe: DatePipe,
     private indicatorsReportsService: IndicatorsReportsService,
     private statesService: StatesService,
+    private usersService: UserService,
     private fg: FormBuilder 
   ) {
     this.statesGroup = this.fg.group({
@@ -161,10 +172,11 @@ export class IndicatorsReportComponent implements OnInit {
     });
     this.typificationsGroup = this.fg.group({
       yearsForm: [null],
+      statusForm: [null]
     });
     this.prioritiesGroup = this.fg.group({
       yearsForm: [null],
-      statesForm: [null]
+      statusForm: [null]
     });
     this.vicepresidenciesGroup = this.fg.group({
       yearsForm: [null],
@@ -183,16 +195,17 @@ export class IndicatorsReportComponent implements OnInit {
       yearsForm: [null],
       statesForm: [null]
     });
-    this.pmosGroup = this.fg.group({
-      yearsForm: [null],
-      statesForm: [null]
-    });
   }
 
   ngOnInit(): void {
     this.statesService.getStatesSelect()
       .subscribe((states: any) => {
         this.optionsStates = states;
+      });
+
+    this.usersService.getManagers()
+      .subscribe((pmos: any) => {
+        this.optionsPMOs = pmos;
       });
   }
 
@@ -216,7 +229,7 @@ export class IndicatorsReportComponent implements OnInit {
     this.setStep(step);
     
     if(this.typificationsByVicepresidencies == null) {
-      this.indicatorsReportsService.getTableTypificationsByVicepresidencies("")
+      this.indicatorsReportsService.getTableTypificationsByVicepresidencies("", "")
         .subscribe((data: any) => {
           this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
           this.flagtypifications = true;
@@ -277,7 +290,7 @@ export class IndicatorsReportComponent implements OnInit {
   }
   
   openIndicatorsCompanies() {
-    if(this.pmosOccupation == null) {
+    if(this.companies == null) {
       this.indicatorsReportsService.getTableCompanies("", "")
         .subscribe((data: any) => {
           this.companies = data.typificationsByVicepresidenciesTable;
@@ -314,15 +327,16 @@ export class IndicatorsReportComponent implements OnInit {
         });
 
     } else if (nameGroup == "typificationsGroup") {
-      this.indicatorsReportsService.getTableTypificationsByVicepresidencies(years)
+      var status = group.get('statusForm')!.value;
+      this.indicatorsReportsService.getTableTypificationsByVicepresidencies(years, status)
         .subscribe((data: any) => {
           this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
           this.flagtypifications = true;
         });
 
     } else if (nameGroup == "prioritiesGroup") {
-      var states = this.arrayToString(group.get("statesForm")!.value);
-      this.indicatorsReportsService.getTablePriorities(years, states)
+      var status:any = this.arrayToString(group.get("statusForm")!.value);
+      this.indicatorsReportsService.getTablePriorities(years, status)
         .subscribe((data: any) => {
           this.priorities = data.priorities;
           if(this.priorities.dataTable.length == 0) {
@@ -397,7 +411,7 @@ export class IndicatorsReportComponent implements OnInit {
           this.flagstates = true;
         })
     } else if(nameGroup == "typificationsGroup") {
-      this.indicatorsReportsService.getTableTypificationsByVicepresidencies("")
+      this.indicatorsReportsService.getTableTypificationsByVicepresidencies("", "")
         .subscribe((data: any) => {
           this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
           this.flagtypifications = true;

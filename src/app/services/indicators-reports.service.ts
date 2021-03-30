@@ -39,8 +39,9 @@ export class IndicatorsReportsService {
     );
   }
 
-  getTableTypificationsByVicepresidencies(years: any) {
+  getTableTypificationsByVicepresidencies(years: any, status: any) {
     this.inputParams.years = years;
+    this.inputParams.status = status;
     environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<TableData[]>(`${this.API}/typifications_by_vicepresidencies`, this.httpOptions)
     .pipe(
@@ -49,9 +50,9 @@ export class IndicatorsReportsService {
     );
   }
 
-  getTablePriorities(years: any, states: any) {
+  getTablePriorities(years: any, status: any) {
     this.inputParams.years = years;
-    this.inputParams.states = states;
+    this.inputParams.status = status;
     environment.consoleMessage(this.inputParams, "INPUT PARAMS");
     return this.http.get<TableData[]>(`${this.API}/priorities`, this.httpOptions)
     .pipe(
