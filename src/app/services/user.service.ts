@@ -110,7 +110,8 @@ export class UserService {
     this.httpOptions = {
       params: this.inputParams
     }
-    return this.http.get<User[]>(`${this.API}/managers`, this.httpOptions)
+    //return this.http.get<User[]>(`${this.API}/managers`, this.httpOptions)
+    return this.http.get<User[]>(`${environment.API}/people/managers`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)
@@ -126,7 +127,8 @@ export class UserService {
     this.httpOptions = {
       params: this.inputParams
     }
-    return this.http.get<User[]>(`${this.API}/functional_leaders`, this.httpOptions)
+    //return this.http.get<User[]>(`${this.API}/functional_leaders`, this.httpOptions)
+    return this.http.get<User[]>(`${environment.API}/people/functional_leaders`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)
@@ -142,7 +144,8 @@ export class UserService {
     this.httpOptions = {
       params: this.inputParams
     }
-    return this.http.get<User[]>(`${this.API}/functional_resources`, this.httpOptions)
+    //return this.http.get<User[]>(`${this.API}/functional_resources`, this.httpOptions)
+    return this.http.get<User[]>(`${environment.API}/people/functional_resources`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)
