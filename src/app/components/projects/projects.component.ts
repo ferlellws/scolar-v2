@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
 import { Project } from 'src/app/models/project';
+import { Actions } from 'src/app/models/actions';
 @Component({
   selector: 'tecno-projects',
   templateUrl: './projects.component.html',
@@ -22,7 +23,7 @@ export class ProjectsComponent implements OnInit {
   modeOwn: string = "dashboard";
   dashboard: any[]= [];
   dashboardOwn: any[]= [];
-  
+  actions!: Actions;
   
   constructor(
     public dialog: MatDialog,
@@ -33,7 +34,10 @@ export class ProjectsComponent implements OnInit {
   }
     
   ngOnInit(): void {
-
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;

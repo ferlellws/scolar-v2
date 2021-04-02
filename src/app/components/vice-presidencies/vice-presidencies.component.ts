@@ -15,6 +15,7 @@ import { VicePresidenciesService } from './../../services/vice-presidencies.serv
 import { MatDialog } from '@angular/material/dialog';
 import { MainService } from 'src/app/services/main.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
+import { Actions } from 'src/app/models/actions';
 
 @Component({
   selector: 'tecno-vice-presidencies',
@@ -23,6 +24,7 @@ import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.compon
 })
 export class VicePresidenciesComponent implements OnInit {
   dataTable!: TableData;
+  actions!: Actions;
  
   constructor(
     public dialog: MatDialog,
@@ -32,6 +34,10 @@ export class VicePresidenciesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.vicePresidencies;

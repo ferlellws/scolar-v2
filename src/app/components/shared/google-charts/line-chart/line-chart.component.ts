@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Actions } from 'src/app/models/actions';
 import { GoogleChartService } from 'src/app/services/google-chart.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class LineChartComponent implements OnInit {
   @Input() dataTable!: any [];
 
   private gLib: any;
+  actions!: Actions;
 
   constructor(private gChartService : GoogleChartService) {
     this.gLib = this.gChartService.getGoogle();
@@ -29,7 +31,10 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
   }
 
   private drawChart(){

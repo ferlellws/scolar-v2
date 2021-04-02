@@ -2,6 +2,7 @@ import { GoogleChartService } from './../../../../services/google-chart.service'
 import { Component, HostListener, Input, OnInit, SimpleChanges } from '@angular/core';
 import { TableData } from 'src/app/models/table-data';
 import { environment } from 'src/environments/environment';
+import { Actions } from 'src/app/models/actions';
 
 export interface PieSliceTextStyle {
   color: string;
@@ -54,6 +55,7 @@ export class PieChartsComponent implements OnInit {
   ];
 
   private gLib: any;
+  actions!: Actions;
 
   constructor(private gChartService : GoogleChartService) {
     this.gLib = this.gChartService.getGoogle();
@@ -67,6 +69,11 @@ export class PieChartsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
+
     console.log("dataTable: ", this.dataTable);
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }

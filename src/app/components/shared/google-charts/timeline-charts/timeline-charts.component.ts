@@ -5,6 +5,7 @@ import { GoogleChartService } from 'src/app/services/google-chart.service';
 import { MainService } from 'src/app/services/main.service';
 import { PieSliceTextStyle } from '../pie-charts/pie-charts.component';
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
+import { Actions } from 'src/app/models/actions';
 
 export interface DataInitial {
   externalCompanyStates: any;
@@ -70,6 +71,8 @@ export class TimelineChartsComponent implements OnInit {
   dateRangeEnd: any;
 
   private gLib: any;
+  actions!: Actions;
+
   options!: {
     title: string;
     legend: { position: string; };
@@ -100,6 +103,10 @@ export class TimelineChartsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     console.log("dataTable: ", this.dataTable);
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }

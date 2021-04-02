@@ -15,6 +15,7 @@ import { TypificationsService } from 'src/app/services/typifications.service';
 import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
 import { MainService } from 'src/app/services/main.service';
 import { MatDialog } from '@angular/material/dialog';
+import { Actions } from 'src/app/models/actions';
 @Component({
   selector: 'tecno-typifications',
   templateUrl: './typifications.component.html',
@@ -23,6 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class TypificationsComponent implements OnInit {
 
   dataTable!: TableData;
+  actions!: Actions;
 
   constructor(
     public dialog: MatDialog,
@@ -32,6 +34,10 @@ export class TypificationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.typifications;

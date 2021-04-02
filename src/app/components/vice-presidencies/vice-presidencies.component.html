@@ -11,7 +11,7 @@
     </tecno-dynamic-table>
   </div>
   
-  <button mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
+  <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
     <mat-icon>add</mat-icon>
   </button>  
 </div>
