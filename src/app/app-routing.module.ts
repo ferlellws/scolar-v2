@@ -51,6 +51,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ProjectsOwnResolver } from './components/projects/guards-projects/projects-own.resolver';
+import { PersonsResolver } from './components/persons/guards-persons/persons.resolver';
 
 const routes: Routes = [
   {
@@ -300,6 +301,14 @@ const routes: Routes = [
     loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule),
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
+  },
+  { path: 'persons',
+    loadChildren: () => import('./components/persons/persons.module').then(m => m.PersonsModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      persons: PersonsResolver
+    }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];

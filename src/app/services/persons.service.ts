@@ -9,7 +9,7 @@ import { Person } from '../models/person';
 })
 export class PersonsService {
 
-  private readonly API = `${environment.API}/people`;
+  private readonly API = `${environment.API}/users`;
 
   emitDataTable = new EventEmitter<any>();
 
@@ -19,7 +19,6 @@ export class PersonsService {
   };
 
   httpOptions = {};
-
 
   constructor(private http: HttpClient) {
 
@@ -31,15 +30,71 @@ export class PersonsService {
     };
   }
 
-  getManagers() {
-    this.inputParams = {
-      user_email: JSON.parse(localStorage.user).email,
-      user_token: JSON.parse(localStorage.user).authentication_token
-    };
+  getPersons() {
+    return this.http.get<Person[]>(this.API, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
 
-    this.httpOptions = {
-      params: this.inputParams
-    }
+  getTablaPeople() {
+    return this.http.get<Person[]>(`${this.API}/list`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  getPersonsId(id: number) {
+    return this.http.get<Person>(`${this.API}/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  addPerson(person: any) {
+    return this.http.post<Person>(`${environment.API}/people`, { person: person }, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  updatePerson(person: Person, id: number) {
+    return this.http.put<Person>(`${this.API}/${id}`, person, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  updateStatusPerson(is_active: number, id: number) {
+    return this.http.put<Person>(`${this.API}/${id}/change_status`,
+      {is_active: is_active},
+      this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete<Person>(`${this.API}/${id}`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitDataTable.emit(data);
+        })
+      );
+  }
+
+  getManagers() {
     return this.http.get<Person[]>(`${this.API}/managers`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
@@ -48,14 +103,6 @@ export class PersonsService {
   }
 
   getFunctionalLeaders() {
-    this.inputParams = {
-      user_email: JSON.parse(localStorage.user).email,
-      user_token: JSON.parse(localStorage.user).authentication_token
-    };
-
-    this.httpOptions = {
-      params: this.inputParams
-    }
     return this.http.get<Person[]>(`${this.API}/functional_leaders`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
@@ -64,14 +111,6 @@ export class PersonsService {
   }
   
   getFunctionalResources() {
-    this.inputParams = {
-      user_email: JSON.parse(localStorage.user).email,
-      user_token: JSON.parse(localStorage.user).authentication_token
-    };
-
-    this.httpOptions = {
-      params: this.inputParams
-    }
     return this.http.get<Person[]>(`${this.API}/functional_resources`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)

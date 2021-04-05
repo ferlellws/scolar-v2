@@ -9,6 +9,7 @@ import { Profile } from 'src/app/models/profile';
 import { User } from 'src/app/models/user';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import { AreasService } from 'src/app/services/areas.service';
+import { PersonsService } from 'src/app/services/persons.service';
 import { PositionsService } from 'src/app/services/positions.service';
 import { ProfilesService } from 'src/app/services/profiles.service';
 import { UserService } from 'src/app/services/user.service';
@@ -23,22 +24,21 @@ export interface DialogData {
 
 @Component({
   selector: 'tecno-general-users-form',
-  templateUrl: './general-users-form.component.html',
-  styleUrls: ['./general-users-form.component.scss']
+  templateUrl: './persons-form.component.html',
+  styleUrls: ['./persons-form.component.scss']
 })
-export class GeneralUsersFormComponent implements OnInit {
+export class PersonsFormComponent implements OnInit {
   showBtnClose: boolean = true;
 
-  usersGroup!: FormGroup;
-  pluralOption: string = "Usuarios";
-  singularOption: string = "Usuario";
+  personsGroup!: FormGroup;
+  pluralOption: string = "Personas";
+  singularOption: string = "Persona";
   isButtonReset: boolean = false;
 
-  //selectCompanyType!: CompanyType [];
   fButtonDisabled: boolean = false;
 
   user!: User;
-  persons: Person [] = [];
+  person!: Person;
   vicePresidencies: VicePresidency [] = [];
   areas: Area[] = [];
   subAreas: Area[] = [];
@@ -52,6 +52,7 @@ export class GeneralUsersFormComponent implements OnInit {
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private userService: UserService,
+    private personsService: PersonsService,
     private snackBar: MatSnackBar,
     private vicePresidenciesService: VicePresidenciesService,
     private areasService: AreasService,
@@ -61,25 +62,35 @@ export class GeneralUsersFormComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
 
-    this.usersGroup = this.fb.group({
-      person_id: [null],
+    this.personsGroup = this.fb.group({
+      first_name: [null, Validators.required],
+      last_name: [null,Validators.required],
       email: [null, [
+        Validators.required,
+        Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
+        Validators.email]
+      ],
+      semanal_hours: [null, [
                     Validators.required,
-                    Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
-                    Validators.email]
+                    Validators.max(40),
+                    Validators.min(0)]
                   ],
-      
+      vicePresidency: [null, Validators.required],
+      area: [null, Validators.required],
+      subArea: [null],
+      position_area_id: [null, Validators.required],
+      profile_id: [null, Validators.required],
     });
 
     if (this.data.mode == 'edit') {
-      environment.consoleMessage(">>>>>>>>>>>>>>>>> Edicion");
+      environment.consoleMessage(this.data.id, ">>>>>>>>>>>>>>>>> Edicion");
 
-      await this.userService.getUsersId(this.data.id)
+      await this.personsService.getPersonsId(this.data.id)
         .subscribe((res: any) => {
-          environment.consoleMessage(res, "usuario");
-          this.user = res;
+          environment.consoleMessage(res, "PERSONA");
+          this.person = res;
 
-          environment.consoleMessage(this.user.position_area, "area");
+          environment.consoleMessage(this.person.position_area, "area");
 
           this.initializeSelects();
 
@@ -88,7 +99,7 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   initializeSelects() {
-    this.selectVicePresidencies(this.user.position_area.area.vice_presidency_id);
+    this.selectVicePresidencies(this.person.position_area.area.vice_presidency_id);
   }
 
   selectVicePresidencies(vicePresidencyId: number) {
@@ -100,13 +111,13 @@ export class GeneralUsersFormComponent implements OnInit {
         this.selectAreasByVicePresidency(vicePresidencyId);
         this.selectProfiles();
 
-        this.usersGroup.patchValue({
-          first_name: this.user.first_name,
-          last_name: this.user.last_name,
-          email: this.user.email,
-          semanal_hours: this.user.semanal_hours,
-          profile_id: this.user.profile?.id,
-          vicePresidency: this.user.position_area.area.vice_presidency_id
+        this.personsGroup.patchValue({
+          first_name: this.person.first_name,
+          last_name: this.person.last_name,
+          email: this.person.email,
+          semanal_hours: this.person.semanal_hours,
+          profile_id: this.person.profile?.id,
+          vicePresidency: this.person.position_area.area.vice_presidency_id
         });
 
       });
@@ -117,28 +128,28 @@ export class GeneralUsersFormComponent implements OnInit {
         .subscribe((areas: Area[]) => {
           this.areas = areas;
 
-          if (this.areas.find(area => this.user.position_area.area.id === area.id)) {
+          if (this.areas.find(area => this.person.position_area.area.id === area.id)) {
             console.log("Tiene area");
-            this.areaId = this.user.position_area.area.id;
+            this.areaId = this.person.position_area.area.id;
             this.selectSubAreasByArea(this.areaId);
 
             // INICIALIZAR EL CAMPO AREA DEL FORMULARIO
-            this.usersGroup.patchValue({
+            this.personsGroup.patchValue({
               area: this.areaId,
             });
 
             this.selectPositions(this.areaId);
           } else {
-            if (this.user.position_area.area.id > 0) {
+            if (this.person.position_area.area.id > 0) {
               console.log("Tiene subarea");
-              this.subAreaId = this.user.position_area.area.id;
+              this.subAreaId = this.person.position_area.area.id;
 
               this.areasService.getParentSubArea(this.subAreaId)
                 .subscribe((area: Area) => {
                   this.areaId = area.id;
 
                   // INICIALIZAR EL CAMPO AREA DEL FORMULARIO
-                  this.usersGroup.patchValue({
+                  this.personsGroup.patchValue({
                     area: this.areaId,
                   });
 
@@ -152,7 +163,7 @@ export class GeneralUsersFormComponent implements OnInit {
           environment.consoleMessage("+++++++++++Inicializa formulario");
 
           // INICIALIZAR EL CAMPO SUBAREA DEL FORMULARIO
-          this.usersGroup.patchValue({
+          this.personsGroup.patchValue({
             subArea: this.subAreaId,
           });
         });
@@ -173,10 +184,10 @@ export class GeneralUsersFormComponent implements OnInit {
       this.positions = positions;
 
       environment.consoleMessage(this.positions, "positions: Open");
-      environment.consoleMessage(this.user.position_area.id, "position_area-id: ");
+      environment.consoleMessage(this.person.position_area.id, "position_area-id: ");
 
-      this.usersGroup.patchValue({
-        position_area_id: this.user.position_area.id
+      this.personsGroup.patchValue({
+        position_area_id: this.person.position_area.id
       });
     });
   }
@@ -187,10 +198,10 @@ export class GeneralUsersFormComponent implements OnInit {
         .subscribe((profiles: Profile[]) => {
           this.profiles = profiles;
 
-          environment.consoleMessage(this.user.profile?.id, "this.user.profile?.id: ")
+          environment.consoleMessage(this.person.profile?.id, "this.person.profile?.id: ")
 
-          this.usersGroup.patchValue({
-            profile_id: this.user.profile?.id,
+          this.personsGroup.patchValue({
+            profile_id: this.person.profile?.id,
           });
         });
   }
@@ -214,8 +225,8 @@ export class GeneralUsersFormComponent implements OnInit {
     console.log("Entra a openAreas: ", ev);
 
     if(ev) {
-      this.usersGroup.get('area')!.setValue(null);
-      await this.areasService.getAreasByVicePresidency(this.usersGroup.get('vicePresidency')!.value)
+      this.personsGroup.get('area')!.setValue(null);
+      await this.areasService.getAreasByVicePresidency(this.personsGroup.get('vicePresidency')!.value)
         .subscribe((areas: Area[]) =>{
           this.areas = areas;
           environment.consoleMessage(this.areas, "Areas: Open");
@@ -227,8 +238,8 @@ export class GeneralUsersFormComponent implements OnInit {
     console.log("Entra a openSubAreas: ", ev);
     this.positions = [];
     if(ev) {
-      this.usersGroup.get('subArea')!.setValue(null);
-      await this.areasService.getSubAreasByArea(this.usersGroup.get('area')!.value)
+      this.personsGroup.get('subArea')!.setValue(null);
+      await this.areasService.getSubAreasByArea(this.personsGroup.get('area')!.value)
         .subscribe((subAreas: Area[]) =>{
           this.subAreas = subAreas;
           environment.consoleMessage(this.subAreas, "SubAreas: Open");
@@ -238,11 +249,11 @@ export class GeneralUsersFormComponent implements OnInit {
 
   async openPosition(ev: boolean) {
     if(ev) {
-      this.usersGroup.get('position_area_id')?.setValue(null);
-      if (this.usersGroup.get('area')!.value != null){
-        var area_id = this.usersGroup.get('area')!.value;
-        if(this.usersGroup.get('subArea')!.value != null) {
-          area_id = this.usersGroup.get('subArea')!.value;
+      this.personsGroup.get('position_area_id')?.setValue(null);
+      if (this.personsGroup.get('area')!.value != null){
+        var area_id = this.personsGroup.get('area')!.value;
+        if(this.personsGroup.get('subArea')!.value != null) {
+          area_id = this.personsGroup.get('subArea')!.value;
         }
         await this.positionsService.getPositionsByArea(area_id)
           .subscribe((positions: any[]) => {
@@ -275,10 +286,9 @@ export class GeneralUsersFormComponent implements OnInit {
 
   onReset() {
     this.isButtonReset = true;
-    this.usersGroup.patchValue({
+    this.personsGroup.patchValue({
       first_name: null,
       last_name: null,
-      email: null,
       semanal_hours: null,
       vicePresidency: null,
       area: null,
@@ -289,14 +299,15 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   async createRegister() {
-    let newUser = {
-      //user_id: this.usersGroup.get('')!.value,
-      email: this.usersGroup.get('email')!.value,
-      password: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
-      password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+    let newPerson = {
+      first_name: this.personsGroup.get('first_name')!.value,
+      last_name: this.personsGroup.get('last_name')!.value,
+      semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+      position_area_id: this.personsGroup.get('position_area_id')!.value,
+      profile_id: this.personsGroup.get('profile_id')!.value,
     }
 
-    await this.userService.addUser(newUser)
+    await this.personsService.addPerson(newPerson)
       .subscribe((res) => {
         this.fButtonDisabled = false;
         if (res.is_success == true) {
@@ -323,10 +334,10 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage(this.usersGroup.value, "this.usersGroup.value: ");
-    environment.consoleMessage(this.data.id, "this.data.id: ");
-    this.userService.updateUser(
-      this.usersGroup.value,
+    //environment.consoleMessage(this.personsGroup.value, "this.personsGroup.value: ");
+    //environment.consoleMessage(this.data.id, "this.data.id: ");
+    this.personsService.updatePerson(
+      this.personsGroup.value,
       this.data.id
     )
       .subscribe((res) => {
@@ -365,12 +376,12 @@ export class GeneralUsersFormComponent implements OnInit {
   getMessageError(field: string, labelField: string): string {
     let message!: string;
 
-    if (this.usersGroup.get(field)?.errors?.required) {
+    if (this.personsGroup.get(field)?.errors?.required) {
       message = `Campo ${labelField} es requerido`
     }
 
     if(labelField == "correo") {
-      if (this.usersGroup.get(field)?.errors?.pattern) {
+      if (this.personsGroup.get(field)?.errors?.pattern) {
         message = `Por favor, ingrese un ${labelField} válido`
       }
     }
