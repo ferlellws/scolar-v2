@@ -9,7 +9,7 @@ import { Person } from '../models/person';
 })
 export class PersonsService {
 
-  private readonly API = `${environment.API}/users`;
+  private readonly API = `${environment.API}/people`;
 
   emitDataTable = new EventEmitter<any>();
 
@@ -39,7 +39,7 @@ export class PersonsService {
   }
 
   getTablaPeople() {
-    return this.http.get<Person[]>(`${this.API}/list`, this.httpOptions)
+    return this.http.get<Person[]>(`${this.API}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -57,9 +57,10 @@ export class PersonsService {
   }
 
   addPerson(person: any) {
-    return this.http.post<Person>(`${environment.API}/people`, { person: person }, this.httpOptions)
+    return this.http.post<Person>(`${this.API}`, { person: person }, this.httpOptions)
       .pipe(
         tap((data: any) => {
+          environment.consoleMessage(data,"INFOOOOOOOOOOO PERSON RES ADD");
           this.emitDataTable.emit(data);
         })
       );
@@ -112,6 +113,14 @@ export class PersonsService {
   
   getFunctionalResources() {
     return this.http.get<Person[]>(`${this.API}/functional_resources`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getWithoutAccess() {
+    return this.http.get<Person[]>(`${this.API}/without_access`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)

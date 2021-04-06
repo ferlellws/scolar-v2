@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatRadioGroup } from '@angular/material/radio';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Area } from 'src/app/models/area';
 import { Person } from 'src/app/models/person';
@@ -15,6 +16,7 @@ import { ProfilesService } from 'src/app/services/profiles.service';
 import { UserService } from 'src/app/services/user.service';
 import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
 import { environment } from 'src/environments/environment';
+import { AlertDialogComponent } from '../../shared/alert-dialog/alert-dialog.component';
 
 export interface DialogData {
   id: number;
@@ -29,6 +31,20 @@ export interface DialogData {
 })
 export class PersonsFormComponent implements OnInit {
   showBtnClose: boolean = true;
+
+  isChecked = false;
+  accessOption: any = [
+    {
+      id: 0,
+      name: "No"
+    },
+    {
+      id: 1,
+      name: "Si"
+    }
+  ]
+
+  accessGroup!: MatRadioGroup;
 
   personsGroup!: FormGroup;
   pluralOption: string = "Personas";
@@ -58,6 +74,7 @@ export class PersonsFormComponent implements OnInit {
     private areasService: AreasService,
     private positionsService:PositionsService,
     private profilesService:ProfilesService,
+    public dialog: MatDialog,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -80,8 +97,13 @@ export class PersonsFormComponent implements OnInit {
       subArea: [null],
       position_area_id: [null, Validators.required],
       profile_id: [null, Validators.required],
+      access: [null, Validators.required]
     });
 
+    this.personsGroup.patchValue({
+      access: this.accessOption[0].id
+    })
+    
     if (this.data.mode == 'edit') {
       environment.consoleMessage(this.data.id, ">>>>>>>>>>>>>>>>> Edicion");
 
@@ -299,43 +321,99 @@ export class PersonsFormComponent implements OnInit {
   }
 
   async createRegister() {
-    let newPerson = {
-      first_name: this.personsGroup.get('first_name')!.value,
-      last_name: this.personsGroup.get('last_name')!.value,
-      semanal_hours: this.personsGroup.get('semanal_hours')!.value,
-      position_area_id: this.personsGroup.get('position_area_id')!.value,
-      profile_id: this.personsGroup.get('profile_id')!.value,
-    }
+    var userID: any = null;
 
-    await this.personsService.addPerson(newPerson)
-      .subscribe((res) => {
-        this.fButtonDisabled = false;
-        if (res.is_success == true) {
-          this.openSnackBar(true, res.messages, "");
-          this.onReset();
-        }
-      }, (err) => {
-        this.fButtonDisabled = false;
-        let aErrors: any[] = [];
-        for(let i in err.error) {
-          aErrors = aErrors.concat(err.error[i])
-        }
+    if (this.personsGroup.get('access')!.value == 1) {
+      let newUser = {
+        email: this.personsGroup.get('email')!.value,
+        password: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+        password_confirmation: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+      }
 
-        let sErrors: string = "";
-        aErrors.forEach((err) => {
-          sErrors += "- " + err + "\n";
-          true;//environment.consoleMessage(err, "Error: ");
-        })
+      await this.userService.addUser(newUser)
+        .subscribe((res: any) => {
+          this.fButtonDisabled = false;
+          if (res.is_success == true) {
+            this.openSnackBar(true, res.messages, "");
+            //this.onReset();
+            userID = res.data.user_created_id;
+            environment.consoleMessage(userID,"USER ID");
 
-        this.openSnackBar(false, sErrors, "");
+            let newPerson:any  = {
+              first_name: this.personsGroup.get('first_name')!.value,
+              last_name: this.personsGroup.get('last_name')!.value,
+              email: this.personsGroup.get('email')!.value,
+              semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+              position_area_id: this.personsGroup.get('position_area_id')!.value,
+              profile_id: this.personsGroup.get('profile_id')!.value,
+              user_id: userID
+            }
 
-      });
+            this.personsService.addPerson(newPerson)
+              .subscribe((res) => {
+                this.fButtonDisabled = false;
+                if (res.is_success == true) {
+                  this.openSnackBar(true, res.messages, "");
+                  this.onReset();
+                }
+              }, (err) => {
+                this.fButtonDisabled = false;
+                let aErrors: any[] = [];
+                for(let i in err.error) {
+                  aErrors = aErrors.concat(err.error[i])
+                }
+                let sErrors: string = "";
+                aErrors.forEach((err) => {
+                  sErrors += "- " + err + "\n";
+                })
+                this.openSnackBar(false, sErrors, "");
+              });
+            }
+          }, (err) => {
+            this.fButtonDisabled = false;
+            let aErrors: any[] = [];
+            for(let i in err.error) {
+              aErrors = aErrors.concat(err.error[i])
+            } 
+            let sErrors: string = "";
+            aErrors.forEach((err) => {
+            sErrors += "- " + err + "\n";
+            })
+          this.openSnackBar(false, sErrors, "");
+          });
+      } else {
+        let newPerson:any  = {
+        first_name: this.personsGroup.get('first_name')!.value,
+        last_name: this.personsGroup.get('last_name')!.value,
+        email: this.personsGroup.get('email')!.value,
+        semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+        position_area_id: this.personsGroup.get('position_area_id')!.value,
+        profile_id: this.personsGroup.get('profile_id')!.value,
+      }
+        this.personsService.addPerson(newPerson)
+          .subscribe((res) => {
+            this.fButtonDisabled = false;
+            if (res.is_success == true) {
+              this.openSnackBar(true, res.messages, "");
+              this.onReset();
+            }
+          }, (err) => {
+            this.fButtonDisabled = false;
+            let aErrors: any[] = [];
+            for(let i in err.error) {
+              aErrors = aErrors.concat(err.error[i])
+            }
+            let sErrors: string = "";
+            aErrors.forEach((err) => {
+              sErrors += "- " + err + "\n";
+            })
+            this.openSnackBar(false, sErrors, "");
+          });
+      }
 
   }
 
   updateRegister() {
-    //environment.consoleMessage(this.personsGroup.value, "this.personsGroup.value: ");
-    //environment.consoleMessage(this.data.id, "this.data.id: ");
     this.personsService.updatePerson(
       this.personsGroup.value,
       this.data.id
@@ -376,7 +454,7 @@ export class PersonsFormComponent implements OnInit {
   getMessageError(field: string, labelField: string): string {
     let message!: string;
 
-    if (this.personsGroup.get(field)?.errors?.required) {
+    if (this.personsGroup.get(field)?.errors?.required && labelField != "correo") {
       message = `Campo ${labelField} es requerido`
     }
 
@@ -387,6 +465,27 @@ export class PersonsFormComponent implements OnInit {
     }
 
     return message;
+  }
+
+  accessPerson(data: any) {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Confirmación',
+        question: `¿Esta seguro que desea dar acceso al aplicativo KOBAProject a esta persona?`,
+        value: data.value
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      true;//environment.consoleMessage(result, 'The dialog was closed');
+      if (result) {
+        this.isChecked = !this.isChecked;
+        environment.consoleMessage(this.personsGroup.get('access')!.value,"ACCES");
+      } else {
+        this.isChecked = this.isChecked;
+      }
+    });
   }
 
 }

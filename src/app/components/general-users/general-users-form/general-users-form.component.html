@@ -14,14 +14,13 @@
 
     <div class="row">
       <mat-form-field class="col-sm-12 col-md-12">
-        <mat-label>Persona registrada</mat-label>
-        <mat-select formControlName="person_id" (openedChange)="openProfiles($event)" required>
-          <mat-option>Seleccione una opción</mat-option>
-          <mat-option *ngFor="let profile of profiles" [value]="profile.id">{{ profile.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="this.usersGroup.get('person_id')?.invalid">
-          {{ getMessageError('person_id', " persona registrada") }}
-        </mat-error>
+        <mat-label>Seleccione una persona registrada</mat-label>
+        <input type="text" matInput [formControl]="personControl" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let person of filterPersons | async" [value]="person">
+            {{person.full_name}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
     
       <div class="col-sm-12 col-md-12">

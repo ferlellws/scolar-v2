@@ -137,6 +137,18 @@
           </mat-error>
         </mat-form-field>
       </div>
+
+      <div *ngIf="this.personsGroup.get('email')!.value != null && !this.personsGroup.get('email')!.invalid" class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>¿Este usuario tiene acceso al aplicativo?</mat-label>
+          <mat-select formControlName="access" required>
+            <mat-option *ngFor="let access of accessOption" [value]="access.id">{{ access.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.personsGroup.get('access')?.invalid">
+            {{ getMessageError('access', " acceso al aplicativo") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
     </div>
 
     <div class="buttons">
