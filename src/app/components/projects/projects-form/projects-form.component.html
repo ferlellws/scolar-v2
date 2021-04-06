@@ -325,7 +325,7 @@
                         class="full-width"
                         style="width: 100%;">
                         <input matInput 
-                        (change)="changeBudget()"
+                        (input)="changeBudget()"
                         type="number" 
                         placeholder="{{labels.budgetApproved}}" 
                         formControlName="budgetApproved" 
@@ -343,7 +343,7 @@
                         class="full-width"
                         style="width: 100%;">
                         <input matInput 
-                        (change)="changeBudget()"
+                        (input)="changeBudget()"
                             type="number" 
                         placeholder="{{labels.budgetExecuted}}" 
                         formControlName="budgetExecuted" 
@@ -365,6 +365,8 @@
                         formControlName="balance" 
                         required >
                         <mat-label>{{labels.balance}}</mat-label>
+                        <mat-hint *ngIf="sobreExcecuted" style="color: #F44336;" align="start">$ {{balanceStr}} COP</mat-hint>
+                        <mat-hint *ngIf="!sobreExcecuted" class="txt-primary" align="start">$ {{balanceStr}} COP</mat-hint>
                         <mat-error *ngIf="this.descripcion.get('balance')?.invalid">
                             {{ getMessageError(descripcion ,'balance') }}
                         </mat-error>

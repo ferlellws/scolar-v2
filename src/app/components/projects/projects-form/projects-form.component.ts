@@ -125,6 +125,8 @@ export class ProjectsFormComponent implements OnInit {
   testUsers: User[] = [];
   testUsersObjects: TestUser[] = [];
   isComponent = false;
+  sobreExcecuted: boolean = false;
+  balanceStr: string = "0";
 
   constructor(
     private _fbG: FormBuilder,
@@ -329,7 +331,7 @@ export class ProjectsFormComponent implements OnInit {
       this.descripcion.get('pmoAssistHours')?.setValue(this.project.pmo_assistant_hours! + (this.project.pmo_assistant_minutes! / 60));
       this.descripcion.get('budgetApproved')?.setValue(this.project.budget_approved);
       this.descripcion.get('budgetExecuted')?.setValue(this.project.budget_executed);
-      this.descripcion.get('balance')?.setValue(this.project.budget_approved - this.project.budget_executed);
+      this.descripcion.get('balance')?.setValue(this.getBalance());
       this.validateAssist ();
     }
 
@@ -888,8 +890,7 @@ export class ProjectsFormComponent implements OnInit {
   changeBudget(){
     this.descripcion.get("balance")!.
     setValue(
-      new Intl.NumberFormat('en-US').
-      format(this.descripcion.get("budgetApproved")!.value - this.descripcion.get("budgetExecuted")!.value )
+      this.getBalance()
     );
 
   }
@@ -1455,8 +1456,14 @@ export class ProjectsFormComponent implements OnInit {
     return this.numberToCOP(this.descripcion.get('budgetApproved')!.value!)
   }
 
-  getBudgetExce(){
-    return this.numberToCOP(this.descripcion.get('budgetApproved')!.value!)
+  getBalance(){
+    if(this.descripcion.get('budgetApproved')!.value! - this.descripcion.get('budgetExecuted')!.value! < 0){
+      this.sobreExcecuted = true;
+    }else{
+      this.sobreExcecuted = false;
+    }
+    this.balanceStr = this.numberToCOP(this.descripcion.get('budgetApproved')!.value! - this.descripcion.get('budgetExecuted')!.value!)
+    return this.numberToCOP(this.descripcion.get('budgetApproved')!.value! - this.descripcion.get('budgetExecuted')!.value!)
   }
 
   getBudgetExecuted(){

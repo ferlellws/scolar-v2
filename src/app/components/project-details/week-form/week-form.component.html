@@ -42,7 +42,7 @@
                     <input matInput 
                     [min]="0" [max]="100" type="number" 
                     placeholder="{{labels.advance_spected}}" 
-                    (change)="changeAdvance()"
+                    (input)="changeAdvance()"
                     formControlName="advance_spected" required>
                     <span matSuffix>%</span>
                     <mat-label>{{labels.advance_spected}}</mat-label>
@@ -58,7 +58,7 @@
                     <input matInput 
                     [min]="0" [max]="100" type="number" 
                     placeholder="{{labels.advance_real}}" 
-                    (change)="changeAdvance()"
+                    (input)="changeAdvance()"
                     formControlName="advance_real" required>
                     <span matSuffix>%</span>
                     <mat-label>{{labels.advance_real}}</mat-label>
@@ -73,8 +73,8 @@
                 <div *ngIf="indicator != null" class="indicator-general-container">
                     <span class="txt-primary" style="font-size: smaller;">Indicaor de desviación</span>
                     <div class="indicator-container">
-                        <div class="circle" [ngStyle]="{'background-color': indicator.color}"></div>
                         <span>{{indicator.name}} ({{indicator.balance}}%)</span>
+                        <div class="circle" [ngStyle]="{'background-color': indicator.color}"></div>
                     </div>
                 </div>
             </div>

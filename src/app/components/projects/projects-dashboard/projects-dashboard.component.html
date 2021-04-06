@@ -7,14 +7,16 @@
             <mat-card-content>
     
                 <mat-list>
-                    <div *ngFor="let area of board.areas">
-                        <div mat-subheader class="txt-primary">{{area.area.title}}</div>
-                        <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
-                            <mat-list-item >
-                                <mat-icon mat-list-icon>preview</mat-icon>
-                                <div mat-line>{{project.title}}</div>
-                                <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
-                            </mat-list-item>
+                    <div *ngFor="let area of board.areas" >
+                        <div *ngIf="area.projects != null">
+                            <div mat-subheader class="txt-primary">{{area.area.title}}</div>
+                            <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
+                                <mat-list-item >
+                                    <mat-icon mat-list-icon>preview</mat-icon>
+                                    <div mat-line>{{project.title}}</div>
+                                    <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
+                                </mat-list-item>
+                            </div>
                         </div>
                     </div>
                   </mat-list>
