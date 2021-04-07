@@ -56,6 +56,7 @@ import { MainTableProject } from 'src/app/models/main-table-project';
 import { MainCreateTablesService } from 'src/app/services/main-create-tables.service';
 import { StrategicGuidelinesService } from 'src/app/services/strategic-guidelines.service';
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
+import { PersonsService } from 'src/app/services/persons.service';
 
 export interface DialogData {
   id: number;
@@ -136,6 +137,7 @@ export class ProjectsFormComponent implements OnInit {
     private _areasService: AreasService,
     private _programsService: ProgramsService,
     private _usersService: UserService,
+    private _personsService: PersonsService,
     private _prioritiesService: PrioritiesService,
     private _typificationsService: TypificationsService,
     private _managementsService: ManagementsService,
@@ -261,7 +263,7 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
       await this._programsService.getProgramsSelect()
       .subscribe((programs: Program[]) => this.programs = programs);
-      await this._usersService.getFunctionalLeaders()
+      await this._personsService.getFunctionalLeaders()
       .subscribe((leads: User[]) => this.leads = leads);
       await this._prioritiesService.getPrioritiesSelect()
       .subscribe((priorities: Priority[]) => this.priorities = priorities);
@@ -269,9 +271,9 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((typifications: Typification[]) => this.typifications = typifications);
       await  this._managementsService.getManagementsSelect()
       .subscribe((managements: Management[]) => this.managements = managements);
-      await this._usersService.getManagers()
+      await this._personsService.getManagers()
       .subscribe((pmos: User[]) => this.pmos = pmos);
-      await this._usersService.getManagers()
+      await this._personsService.getManagers()
         .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
       await this._stagesService.getStagesSelect()
         .subscribe((stages: Stage[]) => this.stages = stages);
@@ -961,14 +963,14 @@ export class ProjectsFormComponent implements OnInit {
 
   _openPMOS(ev: boolean) {
     if (ev) {
-      this._usersService.getManagers()
+      this._personsService.getManagers()
         .subscribe((pmos: User[]) => this.pmos = pmos);
     }
   }
 
   _openPMOAssists(ev: boolean) {
     if (ev) {
-      this._usersService.getManagers()
+      this._personsService.getManagers()
         .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
     }else{
       this.validateAssist();

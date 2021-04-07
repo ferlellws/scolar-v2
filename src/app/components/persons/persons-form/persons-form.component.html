@@ -1,0 +1,172 @@
+
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <h1 class="mat-headline">{{ data.labelAction }} {{ singularOption }} </h1>
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button mat-dialog-close *ngIf="showBtnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="example-container bg-color-white mat-elevation-z4">
+  <form action="" [formGroup]="personsGroup" (ngSubmit)="onSubmit()"
+    *ngIf="data.mode === 'create' || (data.mode === 'edit' && person); else loadingBlock">
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+          <h3 class="mat-title txt-accent">Información Personal</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="first_name" required>
+          <mat-error *ngIf="this.personsGroup.get('first_name')?.invalid">
+            {{ getMessageError('first_name', "nombre") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="last_name" required>
+          <mat-error *ngIf="this.personsGroup.get('last_name')?.invalid">
+            {{ getMessageError('last_name', "apellido") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Correo</mat-label>
+          <input matInput formControlName="email">
+          <mat-error *ngIf="this.personsGroup.get('email')?.invalid">
+            {{ getMessageError('email', "correo") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Horas de trabajo semanal</mat-label>
+          <input matInput [min]="0" [max]="40" type="number" formControlName="semanal_hours" required>
+          <mat-error *ngIf="this.personsGroup.get('semanal_hours')?.invalid">
+            {{ getMessageError('semanal_hours', "horas semanales") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title txt-accent">Cargo en la compañía</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Vicepresidencia</mat-label>
+          <mat-select formControlName="vicePresidency" (openedChange)="openVicepresidencies($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let vicePresidency of vicePresidencies" [value]="vicePresidency.id">{{ vicePresidency.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.personsGroup.get('vicePresidency')?.invalid">
+            {{ getMessageError('vicePresidency', "vicepresidencia") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Área</mat-label>
+          <mat-select formControlName="area" (openedChange)="openAreas($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let area of areas" [value]="area.id">{{ area.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.personsGroup.get('area')?.invalid">
+            {{ getMessageError('area', "área") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Sub-Área</mat-label>
+          <mat-select formControlName="subArea" (openedChange)="openSubAreas($event)">
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let subArea of subAreas" [value]="subArea.id">{{ subArea.title }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Cargo</mat-label>
+          <mat-select formControlName="position_area_id" (openedChange)="openPosition($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let position of positions" [value]="position.position_area_id">{{ position.position.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.personsGroup.get('position')?.invalid">
+            {{ getMessageError('position', " cargo en la compañía") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title txt-accent">Perfil en el aplicativo</h3>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Perfíl en el aplicativo</mat-label>
+          <mat-select formControlName="profile_id" (openedChange)="openProfiles($event)" required>
+            <mat-option>Seleccione una opción</mat-option>
+            <mat-option *ngFor="let profile of profiles" [value]="profile.id">{{ profile.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.personsGroup.get('profile_id')?.invalid">
+            {{ getMessageError('profile_id', " perfíl en el aplicativo") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="this.personsGroup.get('email')!.value != null && !this.personsGroup.get('email')!.invalid" class="col-sm-12 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>¿Este usuario tiene acceso al aplicativo?</mat-label>
+          <mat-select formControlName="access" required>
+            <mat-option *ngFor="let access of accessOption" [value]="access.id">{{ access.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="this.personsGroup.get('access')?.invalid">
+            {{ getMessageError('access', " acceso al aplicativo") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+      <button class="button"
+        mat-button color="primary"
+        [disabled]="personsGroup.invalid || fButtonDisabled">
+          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+      </button>
+    </div>
+  </form>
+
+  <ng-template #loadingBlock>
+    <div class="row">
+      <div class="col-12">
+        <mat-spinner color="accent" class="content-center"></mat-spinner>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

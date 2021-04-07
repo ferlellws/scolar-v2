@@ -1,29 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { ActivatedRoute } from '@angular/router';
-
-// MODELS
-import { TableData } from 'src/app/models/table-data';
-
-// COMPONENTS
-import { GeneralUsersFormComponent } from './general-users-form/general-users-form.component';
-import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
-
-//SERVICES
-import { MainService } from 'src/app/services/main.service';
-import { UserService } from 'src/app/services/user.service';
-
-//MATERIAL
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { Actions } from 'src/app/models/actions';
-
+import { TableData } from 'src/app/models/table-data';
+import { MainService } from 'src/app/services/main.service';
+import { PersonsService } from 'src/app/services/persons.service';
+import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
+import { AlertDialogComponent } from '../shared/alert-dialog/alert-dialog.component';
+import { PersonsFormComponent } from './persons-form/persons-form.component';
 
 @Component({
-  selector: 'tecno-general-users',
-  templateUrl: './general-users.component.html',
-  styleUrls: ['./general-users.component.scss']
+  selector: 'tecno-persons',
+  templateUrl: './persons.component.html',
+  styleUrls: ['./persons.component.scss']
 })
-export class GeneralUsersComponent implements OnInit {
+export class PersonsComponent implements OnInit {
+
   dataTable!: TableData;
   actions!: Actions;
   
@@ -31,6 +24,7 @@ export class GeneralUsersComponent implements OnInit {
     public dialog: MatDialog,    
     private route: ActivatedRoute,
     private userService: UserService,
+    private personsService: PersonsService,
     private mainService: MainService,
   ) { }
 
@@ -41,12 +35,13 @@ export class GeneralUsersComponent implements OnInit {
     }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
-      this.dataTable = data.generalUsers;
+      //this.dataTable = data.people;
+      this.dataTable = data.persons;
       setTimeout(() => {this.mainService.hideLoading()}, 1000);      
     });
-    
+
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
-    this.userService.emitDataTable
+    this.personsService.emitDataTable
       .subscribe((res: any) => {
         environment.consoleMessage(res, "<<<<<<<<<<<<<<<<<<<<l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
@@ -54,9 +49,10 @@ export class GeneralUsersComponent implements OnInit {
       })
   }
 
+
   onCreate() {
-    const dialogRef = this.dialog.open(GeneralUsersFormComponent, {
-      width: environment.widthFormsLittleModal,
+    const dialogRef = this.dialog.open(PersonsFormComponent, {
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         mode: 'create',
@@ -65,10 +61,9 @@ export class GeneralUsersComponent implements OnInit {
     });
   }
 
-
   onEdit(data: number) {
-    const dialogRef = this.dialog.open(GeneralUsersFormComponent, {
-      width: environment.widthFormsLittleModal,
+    const dialogRef = this.dialog.open(PersonsFormComponent, {
+      width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
       data: {
         id: data,
@@ -77,7 +72,7 @@ export class GeneralUsersComponent implements OnInit {
       }
     });
   }
-
+  
   onDelete(data: number) {
     this.userService.getUsersId(data)
       .subscribe((res) => {
@@ -102,5 +97,4 @@ export class GeneralUsersComponent implements OnInit {
         });
       })
   }
-
 }

@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { PersonsService } from 'src/app/services/persons.service';
 
 export interface DialogData {
   id: number;
@@ -37,6 +38,7 @@ export class VicePresidenciesFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private vicePresidenciesService: VicePresidenciesService,
     private usersService: UserService,
+    private personsService: PersonsService,
     private snackBar: MatSnackBar,
   ) { }
 
@@ -153,7 +155,7 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   getSelectManagers() {
-    this.usersService.getManagers()
+    this.personsService.getManagers()
       .subscribe((res: User []) => this.selectManagers = res);
   }
 

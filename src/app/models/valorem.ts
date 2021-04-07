@@ -14,7 +14,7 @@ export class Valorem {
     external_company_schedule_id?: number;
     external_company_schedule?: ValoremSchedule;
     status_detail!: string;
-    label_block?: string;
+    label_box?: string;
     start_date?: string;
     due_date?: string;
     is_active?: boolean;

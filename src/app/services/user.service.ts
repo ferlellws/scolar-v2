@@ -25,7 +25,6 @@ export class UserService {
 
   httpOptions = {};
 
-
   constructor(private http: HttpClient) {
 
     this.httpOptions = {
@@ -81,7 +80,6 @@ export class UserService {
   }
 
   updateStatusUser(is_active: number, id: number) {
-
     return this.http.put<User>(`${this.API}/${id}/change_status`,
       {is_active: is_active},
       this.httpOptions)

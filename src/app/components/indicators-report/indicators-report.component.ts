@@ -9,6 +9,7 @@ import { Actions } from 'src/app/models/actions';
 import { TableData } from 'src/app/models/table-data';
 import { IndicatorsReportsService } from 'src/app/services/indicators-reports.service';
 import { MainService } from 'src/app/services/main.service';
+import { PersonsService } from 'src/app/services/persons.service';
 import { StatesService } from 'src/app/services/states.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
@@ -167,6 +168,7 @@ export class IndicatorsReportComponent implements OnInit {
     private indicatorsReportsService: IndicatorsReportsService,
     private statesService: StatesService,
     private usersService: UserService,
+    private personsService: PersonsService,
     private fg: FormBuilder 
   ) {
     this.statesGroup = this.fg.group({
@@ -209,7 +211,7 @@ export class IndicatorsReportComponent implements OnInit {
         this.optionsStates = states;
       });
 
-    this.usersService.getManagers()
+    this.personsService.getManagers()
       .subscribe((pmos: any) => {
         this.optionsPMOs = pmos;
       });
