@@ -5,6 +5,7 @@ import { ProjectProgressReport } from 'src/app/models/project-progress-report';
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Actions } from 'src/app/models/actions';
+import { environment } from 'src/environments/environment';
 
 export interface DataInitial {
   externalCompanyStates: any;
@@ -103,6 +104,7 @@ export class ProjectProgressReportComponent implements OnInit {
       this.projectProgressReport.getDataProjectProgressReport(this.dataInitial.strategicGuidelines[0].id)
       .subscribe((data: ProjectProgressReport) => {
         this.dataProjectProgressReport = this.getFormatData(data);
+        environment.consoleMessage(this.dataProjectProgressReport, "DATAAAAAA");
       });
     });
 
