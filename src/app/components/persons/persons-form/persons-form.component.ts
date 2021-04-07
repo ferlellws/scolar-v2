@@ -83,7 +83,6 @@ export class PersonsFormComponent implements OnInit {
       first_name: [null, Validators.required],
       last_name: [null,Validators.required],
       email: [null, [
-        Validators.required,
         Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
         Validators.email]
       ],
@@ -115,6 +114,12 @@ export class PersonsFormComponent implements OnInit {
           environment.consoleMessage(this.person.position_area, "area");
 
           this.initializeSelects();
+          
+          if (this.person.user != null) {
+            this.personsGroup.patchValue({
+              access: this.accessOption[1].id
+            })
+          }
 
       });
     }
@@ -317,6 +322,7 @@ export class PersonsFormComponent implements OnInit {
       subArea: [null],
       position_area_id: null,
       profile_id: null,
+      email: null
     });
   }
 
@@ -334,8 +340,7 @@ export class PersonsFormComponent implements OnInit {
         .subscribe((res: any) => {
           this.fButtonDisabled = false;
           if (res.is_success == true) {
-            this.openSnackBar(true, res.messages, "");
-            //this.onReset();
+            
             userID = res.data.user_created_id;
             environment.consoleMessage(userID,"USER ID");
 
@@ -346,14 +351,16 @@ export class PersonsFormComponent implements OnInit {
               semanal_hours: this.personsGroup.get('semanal_hours')!.value,
               position_area_id: this.personsGroup.get('position_area_id')!.value,
               profile_id: this.personsGroup.get('profile_id')!.value,
-              user_id: userID
+              user_id: userID,
+              is_active: 1,
+              is_delete: 0
             }
 
             this.personsService.addPerson(newPerson)
               .subscribe((res) => {
                 this.fButtonDisabled = false;
-                if (res.is_success == true) {
-                  this.openSnackBar(true, res.messages, "");
+                if (res.status == "created") {
+                  this.openSnackBar(true, "Registro Creado", "");
                   this.onReset();
                 }
               }, (err) => {
@@ -383,18 +390,20 @@ export class PersonsFormComponent implements OnInit {
           });
       } else {
         let newPerson:any  = {
-        first_name: this.personsGroup.get('first_name')!.value,
-        last_name: this.personsGroup.get('last_name')!.value,
-        email: this.personsGroup.get('email')!.value,
-        semanal_hours: this.personsGroup.get('semanal_hours')!.value,
-        position_area_id: this.personsGroup.get('position_area_id')!.value,
-        profile_id: this.personsGroup.get('profile_id')!.value,
-      }
+          first_name: this.personsGroup.get('first_name')!.value,
+          last_name: this.personsGroup.get('last_name')!.value,
+          email: this.personsGroup.get('email')!.value,
+          semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+          position_area_id: this.personsGroup.get('position_area_id')!.value,
+          profile_id: this.personsGroup.get('profile_id')!.value,
+          is_active: 1,
+          is_delete: 0
+        }
         this.personsService.addPerson(newPerson)
           .subscribe((res) => {
             this.fButtonDisabled = false;
-            if (res.is_success == true) {
-              this.openSnackBar(true, res.messages, "");
+            if (res.status == "created") {
+              this.openSnackBar(true, "Registro Creado", "");
               this.onReset();
             }
           }, (err) => {
@@ -414,30 +423,226 @@ export class PersonsFormComponent implements OnInit {
   }
 
   updateRegister() {
-    this.personsService.updatePerson(
-      this.personsGroup.value,
-      this.data.id
-    )
-      .subscribe((res) => {
-        this.fButtonDisabled = false;
-        if (res.is_success == true) {
-          this.openSnackBar(true, res.messages, "");
-          this.onReset();
+    
+    this.userService.getUsers()
+      .subscribe(users => {
+        let flag = false;
+        let userID: any = null;
+        
+        if (this.personsGroup.get('email')!.value != null) {
+          for (let index = 0; index < users.length; index++) {
+            if (users[index].email == this.personsGroup.get('email')!.value) {
+              flag = true;
+              userID = users[index].id;
+              environment.consoleMessage("ES IGUAAAAAL");
+              break;
+            }
+          }
         }
-      }, (err) => {
-        this.fButtonDisabled = false;
-        let aErrors: any[] = [];
-        for(let i in err.error) {
-          aErrors = aErrors.concat(err.error[i])
+        environment.consoleMessage(flag,"FLAG");
+        environment.consoleMessage(userID,"ID");
+
+        if (this.personsGroup.get('access')!.value == 1 && flag == false) {
+          let newUser:any = {
+            email: this.personsGroup.get('email')!.value,
+            password: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+            password_confirmation: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
+          }
+
+          this.personsService.getPersonsId(this.data.id)
+            .subscribe(p => {
+              if(p.user == null) {
+                this.userService.addUser(newUser)
+                .subscribe((res: any) => {
+                  this.fButtonDisabled = false;
+                  if (res.is_success == true) {
+                    let newPerson:any  = {
+                      first_name: this.personsGroup.get('first_name')!.value,
+                      last_name: this.personsGroup.get('last_name')!.value,
+                      email: this.personsGroup.get('email')!.value,
+                      semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+                      position_area_id: this.personsGroup.get('position_area_id')!.value,
+                      profile_id: this.personsGroup.get('profile_id')!.value,
+                      user_id: res.data.user_created_id
+                    }
+                    this.personsService.updatePerson(
+                      newPerson,
+                      this.data.id
+                    )
+                    .subscribe((res) => {
+                      this.fButtonDisabled = false;
+                      if (res.status == "created") {
+                        this.openSnackBar(true, "Registro modificado", "");
+                        this.onReset();
+                      }
+                    }, (err) => {
+                      this.fButtonDisabled = false;
+                      let aErrors: any[] = [];
+                      for(let i in err.error) {
+                        aErrors = aErrors.concat(err.error[i])
+                      }
+                      let sErrors: string = "";
+                      aErrors.forEach((err) => {
+                        sErrors += "- " + err + "\n";
+                      })
+                      this.openSnackBar(false, sErrors, "");
+                    });
+                  }        
+                }, (err) => {
+                  this.fButtonDisabled = false;
+                  let aErrors: any[] = [];
+                  for(let i in err.error) {
+                    aErrors = aErrors.concat(err.error[i])
+                  }
+                  let sErrors: string = "";
+                  aErrors.forEach((err) => {
+                    sErrors += "- " + err + "\n";
+                  })
+                  this.openSnackBar(false, sErrors, "");
+                });
+              } else {
+                this.userService.updateUser(newUser, p.user.id)
+                .subscribe((res: any) => {
+                  this.fButtonDisabled = false;
+                  if (res.is_success == true) {
+                    let newPerson:any  = {
+                      first_name: this.personsGroup.get('first_name')!.value,
+                      last_name: this.personsGroup.get('last_name')!.value,
+                      email: this.personsGroup.get('email')!.value,
+                      semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+                      position_area_id: this.personsGroup.get('position_area_id')!.value,
+                      profile_id: this.personsGroup.get('profile_id')!.value,
+                      user_id: res.data.user_created_id
+                    }
+                    this.personsService.updatePerson(
+                      newPerson,
+                      this.data.id
+                    )
+                    .subscribe((res) => {
+                      this.fButtonDisabled = false;
+                      if (res.status == "created") {
+                        this.openSnackBar(true, "Registro modificado", "");
+                        this.onReset();
+                      }
+                    }, (err) => {
+                      this.fButtonDisabled = false;
+                      let aErrors: any[] = [];
+                      for(let i in err.error) {
+                        aErrors = aErrors.concat(err.error[i])
+                      }
+                      let sErrors: string = "";
+                      aErrors.forEach((err) => {
+                        sErrors += "- " + err + "\n";
+                      })
+                      this.openSnackBar(false, sErrors, "");
+                    });
+                  }        
+                }, (err) => {
+                  this.fButtonDisabled = false;
+                  let aErrors: any[] = [];
+                  for(let i in err.error) {
+                    aErrors = aErrors.concat(err.error[i])
+                  }
+                  let sErrors: string = "";
+                  aErrors.forEach((err) => {
+                    sErrors += "- " + err + "\n";
+                  })
+                  this.openSnackBar(false, sErrors, "");
+                });
+              }
+            });
+
+          
+        } else if (this.personsGroup.get('access')!.value == 1 && flag == true ) {
+          this.personsService.getPersonsId(this.data.id)
+            .subscribe(p => {
+              if(p.email == this.personsGroup.get('email')?.value) {
+                this.personsService.updatePerson(
+                this.personsGroup.value,
+                this.data.id
+              )
+                .subscribe((res) => {
+                  this.fButtonDisabled = false;
+                  if (res.status == "created") {
+                    this.openSnackBar(true, "Registro Modificado", "");
+                    this.onReset();
+                  }
+                });
+              } else {
+                this.openSnackBar(false, "Este correo ya fue asignado a otra persona", "");
+                this.fButtonDisabled = false;
+              }
+            })
+
+        } else if (this.personsGroup.get('access')!.value == 0 && flag == true) {
+          environment.consoleMessage("ENTRANDO A QUITAR PERMISOS");
+          let newPerson:any  = {
+            first_name: this.personsGroup.get('first_name')!.value,
+            last_name: this.personsGroup.get('last_name')!.value,
+            email: this.personsGroup.get('email')!.value,
+            semanal_hours: this.personsGroup.get('semanal_hours')!.value,
+            position_area_id: this.personsGroup.get('position_area_id')!.value,
+            profile_id: this.personsGroup.get('profile_id')!.value,
+            user_id: null
+          }
+          this.personsService.updatePerson(
+            newPerson,
+            this.data.id
+          )
+          .subscribe((res) => {
+            this.fButtonDisabled = false;
+            environment.consoleMessage(res, "RESSSSSSSSSSSSSSSSSSSSSSSSS");
+            if (res.status == "created") {
+              this.openSnackBar(true, "Registro modificado", "");
+              this.onReset();
+              environment.consoleMessage(userID, "PERRA VIDA");
+              this.userService.deleteUser(userID)
+                .subscribe(res =>{
+                  true;
+                })
+            }
+          }, (err) => {
+            this.fButtonDisabled = false;
+            let aErrors: any[] = [];
+            for(let i in err.error) {
+              aErrors = aErrors.concat(err.error[i])
+            }
+
+            let sErrors: string = "";
+            aErrors.forEach((err) => {
+              sErrors += "- " + err + "\n";
+            })
+
+            this.openSnackBar(false, sErrors, "");
+          });
         }
-
-        let sErrors: string = "";
-        aErrors.forEach((err) => {
-          sErrors += "- " + err + "\n";
-        })
-
-        this.openSnackBar(false, sErrors, "");
       });
+    
+
+    // this.personsService.updatePerson(
+    //   this.personsGroup.value,
+    //   this.data.id
+    // )
+    //   .subscribe((res) => {
+    //     this.fButtonDisabled = false;
+    //     if (res.is_success == true) {
+    //       this.openSnackBar(true, res.messages, "");
+    //       this.onReset();
+    //     }
+    //   }, (err) => {
+    //     this.fButtonDisabled = false;
+    //     let aErrors: any[] = [];
+    //     for(let i in err.error) {
+    //       aErrors = aErrors.concat(err.error[i])
+    //     }
+
+    //     let sErrors: string = "";
+    //     aErrors.forEach((err) => {
+    //       sErrors += "- " + err + "\n";
+    //     })
+
+    //     this.openSnackBar(false, sErrors, "");
+    //   });
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {

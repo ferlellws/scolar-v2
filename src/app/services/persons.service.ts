@@ -39,7 +39,7 @@ export class PersonsService {
   }
 
   getTablaPeople() {
-    return this.http.get<Person[]>(`${this.API}`, this.httpOptions)
+    return this.http.get<Person[]>(`${this.API}/index_with_data_table`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
@@ -53,6 +53,14 @@ export class PersonsService {
       tap((data: any) => {
         // this.emitDataTable.emit(data);
       })
+    );
+  }
+
+  getPersonByUser(id: number) {
+    return this.http.get<Person[]>(`${this.API}/person_by_user/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
     );
   }
 

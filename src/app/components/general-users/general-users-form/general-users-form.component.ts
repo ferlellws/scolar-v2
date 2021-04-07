@@ -39,12 +39,11 @@ export class GeneralUsersFormComponent implements OnInit {
   pluralOption: string = "Usuarios";
   singularOption: string = "Usuario";
   isButtonReset: boolean = false;
-
-  //selectCompanyType!: CompanyType [];
   fButtonDisabled: boolean = false;
 
   user!: User;
   persons: any [] = [];
+  personsUser: any;
   vicePresidencies: VicePresidency [] = [];
   areas: Area[] = [];
   subAreas: Area[] = [];
@@ -70,22 +69,20 @@ export class GeneralUsersFormComponent implements OnInit {
     this.personsService.getWithoutAccess()
       .subscribe((person: Person[]) => {
         this.persons = person;
+
+        this.filterPersons = this.personControl.valueChanges.pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value!.full_name),
+          map(name => name ? this._filter(name) : this.persons.slice())
+        );
       });
 
-    this.filterPersons = this.personControl.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.full_name),
-      map(name => name ? this._filter(name) : this.persons.slice())
-    );
-
     this.usersGroup = this.fb.group({
-      person_id: [null],
       email: [null, [
                     Validators.required,
                     Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
                     Validators.email]
                   ],
-      
     });
 
     if (this.data.mode == 'edit') {
@@ -96,10 +93,27 @@ export class GeneralUsersFormComponent implements OnInit {
           environment.consoleMessage(res, "usuario");
           this.user = res;
 
-          environment.consoleMessage(this.user.position_area, "area");
+          this.usersGroup.patchValue({
+            email: this.user.email
+          });
 
-          //this.initializeSelects();
+          this.personsService.getPersonByUser(this.data.id)
+            .subscribe(res => {
 
+              this.filterPersons = this.personControl.valueChanges.pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value!.full_name),
+                map(name => name ? this._filter(name) : this.persons.slice())
+              );
+
+              environment.consoleMessage(this.user.id, "IDuser");
+              this.personsUser = res;
+              environment.consoleMessage(this.personsUser, "FILTEEEEEEEEEEEER");
+              this.personControl.setValue(this.personsUser.full_name);
+              environment.consoleMessage(this.personControl.value, "FormControl");
+            });
+          
+          
       });
     }
   }
@@ -128,82 +142,150 @@ export class GeneralUsersFormComponent implements OnInit {
   onReset() {
     this.isButtonReset = true;
     this.usersGroup.patchValue({
-      first_name: null,
-      last_name: null,
       email: null,
-      semanal_hours: null,
-      vicePresidency: null,
-      area: null,
-      subArea: [null],
-      position_area_id: null,
-      profile_id: null,
     });
+    this.personControl.patchValue({
+      person: null,
+    })
   }
 
-  async createRegister() {
+  createRegister() {
     
     environment.consoleMessage(this.personControl.value, "FORMCONTROLLLLLL");
     environment.consoleMessage(this.personControl.value.id, "ID PERSON");
 
-    // let newUser = {
-    //   //user_id: this.usersGroup.get('')!.value,
-    //   email: this.usersGroup.get('email')!.value,
-    //   password: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
-    //   password_confirmation: this.usersGroup.get('first_name')!.value.split(' ')[0] + "" + this.usersGroup.get('last_name')!.value.split(' ')[0] + "Koba",
-    // }
+    if (typeof this.personControl.value == 'object') {
+      environment.consoleMessage("Es Objeto");
+      let newUser:any = {
+        email: this.usersGroup.get('email')!.value,
+        password: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
+        password_confirmation: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
+      }
 
-    // await this.userService.addUser(newUser)
-    //   .subscribe((res) => {
-    //     this.fButtonDisabled = false;
-    //     if (res.is_success == true) {
-    //       this.openSnackBar(true, res.messages, "");
-    //       this.onReset();
-    //     }
-    //   }, (err) => {
-    //     this.fButtonDisabled = false;
-    //     let aErrors: any[] = [];
-    //     for(let i in err.error) {
-    //       aErrors = aErrors.concat(err.error[i])
-    //     }
+      this.userService.addUser(newUser)
+        .subscribe((res) => {
+          this.fButtonDisabled = false;
+          if (res.is_success == true) {
+            this.openSnackBar(true, res.messages, "");
+            this.onReset();
 
-    //     let sErrors: string = "";
-    //     aErrors.forEach((err) => {
-    //       sErrors += "- " + err + "\n";
-    //     })
-
-    //     this.openSnackBar(false, sErrors, "");
-
-    //   });
-
+            let person:any = {
+              email: newUser.email,
+              user_id: res.data.user_created_id
+            }
+            this.personsService.updatePerson(person, this.personControl.value.id)
+            .subscribe(p => {
+              this.fButtonDisabled = false;
+              if (res.status == "created") {
+                this.openSnackBar(true, "Registro Creado", "");
+                this.onReset();
+              }
+            }, (err) => {
+              this.fButtonDisabled = false;
+              let aErrors: any[] = [];
+              for(let i in err.error) {
+                aErrors = aErrors.concat(err.error[i])
+              }
+              let sErrors: string = "";
+              aErrors.forEach((err) => {
+                sErrors += "- " + err + "\n";
+              })
+              this.openSnackBar(false, sErrors, "");
+            });
+          }
+        }, (err) => {
+          this.fButtonDisabled = false;
+          let aErrors: any[] = [];
+          for(let i in err.error) {
+            aErrors = aErrors.concat(err.error[i])
+          }
+          let sErrors: string = "";
+          aErrors.forEach((err) => {
+            sErrors += "- " + err + "\n";
+          })
+          this.openSnackBar(false, sErrors, "");
+        });
+      
+    } else {
+      environment.consoleMessage("No es Objeto");
+      this.fButtonDisabled = false;
+      this.openSnackBar(false, "Esta persona no está registrada", "");
+    }
+      
   }
 
   updateRegister() {
-    environment.consoleMessage(this.usersGroup.value, "this.usersGroup.value: ");
-    environment.consoleMessage(this.data.id, "this.data.id: ");
-    this.userService.updateUser(
-      this.usersGroup.value,
-      this.data.id
-    )
-      .subscribe((res) => {
-        this.fButtonDisabled = false;
-        if (res.is_success == true) {
-          this.openSnackBar(true, res.messages, "");
-          this.onReset();
-        }
-      }, (err) => {
-        this.fButtonDisabled = false;
-        let aErrors: any[] = [];
-        for(let i in err.error) {
-          aErrors = aErrors.concat(err.error[i])
-        }
+    
+    environment.consoleMessage(this.personControl.value, "FORMCONTROLLLLLL");
+    environment.consoleMessage(this.personControl.value.id, "ID PERSON");
 
-        let sErrors: string = "";
-        aErrors.forEach((err) => {
-          sErrors += "- " + err + "\n";
-        })
+    if (typeof this.personControl.value == 'object') {
+      let newUser:any = {
+        email: this.usersGroup.get('email')!.value,
+        password: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
+        password_confirmation: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
+      }
 
-        this.openSnackBar(false, sErrors, "");
-      });
+      this.userService.updateUser(newUser, this.data.id)
+        .subscribe((user) => {
+          this.fButtonDisabled = false;
+          if (user.is_success == true) {
+            let newPerson:any = {
+              email: newUser.email,
+              user_id: this.data.id
+            }
+            this.personsService.updatePerson(newPerson, this.personControl.value.id)
+              .subscribe(person => {
+                if (person.status == "created") {
+                  let newPerson2 : any = {
+                    user_id: null,
+                    email: null
+                  }
+                  this.personsService.updatePerson(newPerson2, this.personsUser.id)
+                  .subscribe(person => {
+                    if (person.status == "created") {
+                      this.openSnackBar(true, "Registro Actualizado", "");
+                      this.onReset();
+                    }
+                  });
+                }
+              });
+          }
+        }, (err) => {
+          this.fButtonDisabled = false;
+          let aErrors: any[] = [];
+          for(let i in err.error) {
+            aErrors = aErrors.concat(err.error[i])
+          }
+
+          let sErrors: string = "";
+          aErrors.forEach((err) => {
+            sErrors += "- " + err + "\n";
+          })
+
+          this.openSnackBar(false, sErrors, "");
+        });
+    } else {
+      let newUser: any = {
+        email: this.usersGroup.get('email')!.value
+      }
+      this.userService.updateUser(newUser, this.data.id)
+        .subscribe(user => {
+          this.fButtonDisabled = false;
+          if (user.is_success == true) {
+            let newPerson:any = {
+              email: newUser.email
+            }
+            this.personsService.updatePerson(newPerson, this.personsUser.id)
+              .subscribe(person => {
+                if (person.status == "created") {
+                  this.openSnackBar(true, user.messages, "");
+                  this.onReset();
+                }
+              });
+          }
+        });
+    }
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
@@ -224,7 +306,7 @@ export class GeneralUsersFormComponent implements OnInit {
       message = `Campo ${labelField} es requerido`
     }
 
-    if(labelField == "correo") {
+    if (labelField == "correo") {
       if (this.usersGroup.get(field)?.errors?.pattern) {
         message = `Por favor, ingrese un ${labelField} válido`
       }
