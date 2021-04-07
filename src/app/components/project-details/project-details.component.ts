@@ -122,7 +122,6 @@ export class ProjectDetailsComponent implements OnInit {
     this.route.data.subscribe((data: any) => {
       this.modificationData(data.project);
       var desviationGeneral: any = data.desviationsByProject;
-      environment.consoleMessage(data.desviationsByProject, ">>>>>>>>>>>>>>>>>>" )
       this.desviationCausesGeneral = desviationGeneral.general_data;
       this.desviationCauses = desviationGeneral.desviation_causes;
       this.desviationId = this.desviationCauses.length - 1;
@@ -238,6 +237,9 @@ export class ProjectDetailsComponent implements OnInit {
       })
 
       this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
+        if (this.weeksByProject.length == 0){
+          return false
+        }
         return goals.week!.id == this.weeksByProject[this.weekId].id
       })
 
@@ -247,6 +249,9 @@ export class ProjectDetailsComponent implements OnInit {
       })
 
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => {
+        if (this.weeksByProject.length == 0){
+          return false
+        }
         return next_activity.week!.id == this.weeksByProject[this.weekId].id
       })
 
@@ -256,6 +261,9 @@ export class ProjectDetailsComponent implements OnInit {
       })
 
       this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => {
+        if (this.weeksByProject.length == 0){
+          return false
+        }
         return observation.week!.id == this.weeksByProject[this.weekId].id
       })
 
