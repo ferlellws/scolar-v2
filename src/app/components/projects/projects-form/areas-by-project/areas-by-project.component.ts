@@ -30,19 +30,24 @@ export class AreasByProjectComponent implements OnInit {
 
   async ngOnInit() {
     await this._areasService.getAreasSelect()
-    .subscribe(areas => this.areas = areas);
-    await this._vicepresidenciesService.getVicePresidenciesSelect()
-    .subscribe(vicepresidencies => 
-      {
-        this.vicepresidencies = vicepresidencies;
-        this.options = this.clasifyAreas();
-        console.log(this.options);
-        this.areasForm.setValue(selectedIDs);
-        for (let index = 0; index < this.areasSelected.length; index++) {
-          this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
-          .filter(vicepresidency => this.areasSelected[index].vice_presidency!.id == vicepresidency.id)[0].title;
-        }
-      });
+    .subscribe(areas => {
+      this.areas = areas;
+      environment.consoleMessage(this.areas, "areas >> abp")
+      this._vicepresidenciesService.getVicePresidenciesSelect()
+      .subscribe(vicepresidencies => 
+        {
+          this.vicepresidencies = vicepresidencies;
+          this.options = this.clasifyAreas();
+          environment.consoleMessage(this.options, "this.options >> abp")
+          console.log(this.options);
+          this.areasForm.setValue(selectedIDs);
+          for (let index = 0; index < this.areasSelected.length; index++) {
+            this.areasSelected[index].vicepresidencyTitle = this.vicepresidencies
+            .filter(vicepresidency => this.areasSelected[index].vice_presidency!.id == vicepresidency.id)[0].title;
+          }
+        });
+    });
+    
     var selectedIDs: number[] = this.areasSelected.map(area => area.id!);
     true;//environment.consoleMessage(selectedIDs, "selectedIDs areas")
    
