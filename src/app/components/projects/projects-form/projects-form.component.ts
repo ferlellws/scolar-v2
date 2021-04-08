@@ -178,13 +178,13 @@ export class ProjectsFormComponent implements OnInit {
 
       this.descripcion = this._fbG.group({
         'projectDescription': [null, [Validators.required]],
-        'leads': [null, [Validators.required]],
+        'leads': [null],
         'priorities': [null, [Validators.required]],
         'typifications': [null, [Validators.required]],
         'strategicGuidelines': [null],
         'managements': [null, [Validators.required]],
-        'pmos': [null, [Validators.required]],
-        'pmoHours': [null, [Validators.required, Validators.max(40), Validators.min(0)]],
+        'pmos': [null],
+        'pmoHours': [null, [Validators.max(40), Validators.min(0)]],
         'pmoAssists': [null],
         'stages': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
         'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
