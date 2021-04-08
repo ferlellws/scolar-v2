@@ -594,7 +594,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   modificationData(data: any) {
     true; //environment.consoleMessage(data, "PROJ");
-    data.percentage = ((((data.pmo_hours*60)+(data.pmo_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
+    data.percentage = ((((data.pmo_hours*60)+(data.pmo_minutes)) / (this.semanal_hours*60)) * 100).toFixed(2)
     data.balance = new Intl.NumberFormat('en-US').format( data.budget_approved  - data.budget_executed );
     data.budget_executed = new Intl.NumberFormat('en-US').format( data.budget_executed);
     data.budget_approved = new Intl.NumberFormat('en-US').format( data.budget_approved);
@@ -614,7 +614,7 @@ export class ProjectDetailsComponent implements OnInit {
     } else { data.test_log = "Si" }
 
     if (data.pmo_assitant != null) {
-      data.percentageAssistant = ((((data.pmo_assistant_hours*60)+(data.pmo_assistant_minutes)) / (this.semanal_hours*60)) * 100).toFixed(3)
+      data.percentageAssistant = ((((data.pmo_assistant_hours*60)+(data.pmo_assistant_minutes)) / (this.semanal_hours*60)) * 100).toFixed(2)
     }
     
     this.project = data;

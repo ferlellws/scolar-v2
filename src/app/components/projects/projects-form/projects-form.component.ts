@@ -830,7 +830,7 @@ export class ProjectsFormComponent implements OnInit {
           if(!testUsersObjectsIDs.includes(testUsersIDs[index])){
             var user: any = { //borrar
               project_id: this.project.id,
-              user_id: testUsersIDs[index],
+              person_id: testUsersIDs[index],
               user_creates_id: JSON.parse(localStorage.user).id,
             }
             await this._testUsersService.addTestUser(user).
@@ -1304,7 +1304,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.testUsers.length; index++) {
               var testUser: any = { //borar
                 project_id: id,
-                user_id : this.testUsers[index].id,
+                person_id : this.testUsers[index].id,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.test_users?.push(testUser);

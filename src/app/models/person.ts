@@ -1,11 +1,13 @@
 import { Position } from "@angular/compiler";
 import { PositionArea } from "./position-area";
 import { Profile } from "./profile";
+import { Project } from "./project";
 import { User } from "./user";
 
 export class Person {
     id: number;
     user?: User;
+    project?: Project;
     first_name: string;
     last_name: string;
     email: string;
