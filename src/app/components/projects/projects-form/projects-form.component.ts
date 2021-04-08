@@ -57,6 +57,7 @@ import { MainCreateTablesService } from 'src/app/services/main-create-tables.ser
 import { StrategicGuidelinesService } from 'src/app/services/strategic-guidelines.service';
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 import { PersonsService } from 'src/app/services/persons.service';
+import { Person } from 'src/app/models/person';
 
 export interface DialogData {
   id: number;
@@ -123,7 +124,7 @@ export class ProjectsFormComponent implements OnInit {
   areasByProjectObjects: AreaByProject[] = [];
   companies: Company[] = [];
   companiesObjects: CompanyByProject[] = [];
-  testUsers: User[] = [];
+  testUsers: Person[] = [];
   testUsersObjects: TestUser[] = [];
   isComponent = false;
   sobreExcecuted: boolean = false;
@@ -421,7 +422,7 @@ export class ProjectsFormComponent implements OnInit {
       {
         this.testUsersObjects = data.filter(user => user.project!.id == id);
         true;//environment.consoleMessage(this.testUsersObjects, "testUsersObjects " );
-        this.testUsers = this.testUsersObjects.map(user => user.user! );
+        this.testUsers = this.testUsersObjects.map(user => user.person! );
         true;//environment.consoleMessage(this.testUsers, "testUsers " );
       }
     );
@@ -812,7 +813,7 @@ export class ProjectsFormComponent implements OnInit {
 
   }
 
-  async onTestUsers(testUsers: User[]): Promise<any>{
+  async onTestUsers(testUsers: Person[]): Promise<any>{
 
     if (this.data.mode == 'create'){
       this.testUsers = testUsers;
@@ -825,12 +826,12 @@ export class ProjectsFormComponent implements OnInit {
         true;//environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects despues");
         this.testUsers = testUsers;
         var testUsersIDs: number[] = testUsers.map(user => user.id!);
-        var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.user!.id!);
+        var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.person!.id!);
         for (let index = 0; index < testUsersIDs.length; index++) {
           if(!testUsersObjectsIDs.includes(testUsersIDs[index])){
             var user: any = { //borrar
               project_id: this.project.id,
-              user_id: testUsersIDs[index],
+              person_id: testUsersIDs[index],
               user_creates_id: JSON.parse(localStorage.user).id,
             }
             await this._testUsersService.addTestUser(user).
@@ -850,7 +851,7 @@ export class ProjectsFormComponent implements OnInit {
       //eliminacion
       else if(testUsers.length < this.testUsersObjects.length){
         var testUsersIDs: number[] = testUsers.map(user => user.id!);
-        var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.user!.id!);
+        var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.person!.id!);
         for (let index = 0; index < testUsersObjectsIDs.length; index++) {
           if(!testUsersIDs.includes(testUsersObjectsIDs[index])) {
             await this._testUsersService.deleteTestUser(this.testUsersObjects[index].id!)//posible error por orden
@@ -1304,7 +1305,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.testUsers.length; index++) {
               var testUser: any = { //borar
                 project_id: id,
-                user_id : this.testUsers[index].id,
+                person_id : this.testUsers[index].id,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.test_users?.push(testUser);

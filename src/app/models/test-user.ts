@@ -1,10 +1,11 @@
+import { Person } from "./person";
 import { Project } from "./project";
 import { User } from "./user";
 
 export class TestUser {
     id?: number;
-    user_id?: number;
-    user?: User;
+    person_id?: number;
+    person?: Person;
     project_id?: number;
     project?: Project;
     is_active?: boolean;

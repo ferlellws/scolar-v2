@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { User } from 'src/app/models/user';
+import { Person } from 'src/app/models/person';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,10 +12,10 @@ import { environment } from 'src/environments/environment';
 export class TestUsersComponent implements OnInit {
 
   usersForm = new FormControl();
-  users: User[] = [];
-  @Input() usersSelected : User[] = [];
+  users: Person[] = [];
+  @Input() usersSelected : Person[] = [];
 
-  @Output() emitChange: EventEmitter<User[]> = new EventEmitter();
+  @Output() emitChange: EventEmitter<Person[]> = new EventEmitter();
 
   constructor(
     private _usersService: UserService,
