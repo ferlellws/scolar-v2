@@ -1,6 +1,6 @@
 <div *ngIf="actions.read" class="master-container">
   <mat-tab-group>
-    <mat-tab label="Mis Proyectos">
+    <mat-tab *ngIf="user.profile_id != 4" label="Mis Proyectos">
       <div class="top-buttons">
         <p>
           <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">

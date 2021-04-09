@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Actions } from 'src/app/models/actions';
 import { ProductDelivered } from 'src/app/models/product-delivered';
 import { ProductOverdue } from 'src/app/models/product-overdue';
 import { ProductToBeDelivered } from 'src/app/models/product-to-be-delivered';
@@ -30,8 +31,11 @@ export interface DialogData {
   styleUrls: ['./valorem.component.scss']
 })
 export class ValoremFormComponent implements OnInit {
-  showBtnClose: boolean = true;
+  actions!: Actions;
+  bttnStatus: string = "create";
+  idRegEdit: any;
   
+  showBtnClose: boolean = true;
   valoremGroup!: FormGroup;
   pluralOption: string = "Reportes Valorem";
   singularOption: string = "Reporte Valorem";
@@ -74,12 +78,15 @@ export class ValoremFormComponent implements OnInit {
     }
   } 
 
-  async ngOnInit(): Promise<void> { 
+  async ngOnInit(): Promise<void> {
+    this.bttnStatus = "create"
+    this.actions = JSON.parse(localStorage.access_to_accions);
+    if (this.actions == null){
+      this.actions = new Actions();
+    }
     
     this.getReports();
 
-    true;//environment.consoleMessage(this.data, "++++++++++");
-    
     this.valoremGroup = this.fb.group({
       external_company_state_id: [null, Validators.required],
       external_company_schedule_id: [null, Validators.required],
@@ -89,28 +96,14 @@ export class ValoremFormComponent implements OnInit {
       due_date: [null, Validators.required],
       is_active: true
     });
-
-    if (this.data.mode == 'edit') {
-      true;//environment.consoleMessage(this.data.idValorem);
-      // Peticion del Formulario segun id del proyecto?
-      this.valoremService.getValoremId(this.data.idValorem)
-        .subscribe((res: Valorem) => {
-          this.valorem = res;
-          this.valoremGroup.patchValue({
-            external_company_state_id: this.valorem.external_company_state_id,
-            external_company_schedule_id: this.valorem.external_company_schedule_id,
-            status_detail: this.valorem.status_detail,
-            label_box: this.valorem.label_box,
-            start_date: this.valorem.start_date,
-            due_date: this.valorem.due_date,
-            is_active: this.valorem.is_active
-          });
-        });
-    }
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    environment.consoleMessage(changes, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+  }
+
   
   onSubmit() {
-    true;//environment.consoleMessage(this.valoremGroup, "OnSubmit Valorem: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -137,11 +130,14 @@ export class ValoremFormComponent implements OnInit {
     this.productsOverdue = [];
   }
 
+  onCancel() {
+    this.onReset();
+    this.data.mode = 'create'
+  }
+
   getReports() {
-    true;//environment.consoleMessage("", ">>>>>>>>>  Entro a Registro  <<<<<<<<");
     this.valoremService.getValoremSelect()
       .subscribe((res: Valorem[]) => {
-        true;//environment.consoleMessage(res, ">>>>>>>>>  Valorem Creados  <<<<<<<<");
         this.items = res.filter((valorem) =>{
           return valorem.project?.id == this.data.idProject
         })
@@ -154,7 +150,6 @@ export class ValoremFormComponent implements OnInit {
   }
 
   async createRegister() {
-    true;//environment.consoleMessage(this.valoremGroup)
     this.valoremGroup.setValue({
       external_company_state_id: this.valoremGroup.value.external_company_state_id,
       external_company_schedule_id: this.valoremGroup.value.external_company_schedule_id,
@@ -169,11 +164,8 @@ export class ValoremFormComponent implements OnInit {
     this.valorem.project_id = this.data.idProject;
     this.valorem.external_company_id = 1;
     
-    true;//environment.consoleMessage(this.valorem, "VALOREM");
-
     await this.valoremService.addValorem(this.valorem)
     .subscribe((res) => {
-      true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
       this.fButtonDisabled = false;
       if (res != null) {
         this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -189,11 +181,9 @@ export class ValoremFormComponent implements OnInit {
           e_c_overdue_products: this.productsOverdue
         };
 
-        true;//environment.consoleMessage(main_tables, "MAIN TABLE: ");
-
         this.valoremService.addProductsDetails(main_tables)
           .subscribe((res) => {
-            true;//environment.consoleMessage(res, "Registro Productos Creado: ");
+            true;
           })
 
         this.getReports();
@@ -217,17 +207,17 @@ export class ValoremFormComponent implements OnInit {
   }
 
   updateRegister() {
-    true;//environment.consoleMessage(this.valoremGroup, `updateRegister para registro con id ${this.data.idValorem}: `);
-
-    this.valoremService.updateValoremId(
-      this.valoremGroup.value,
-      this.data.idValorem
-    )
+    environment.consoleMessage("EDIIIIIIIIIIIIIIIIIIIT");
+    this.valoremService.updateValoremId(this.valoremGroup.value, this.idRegEdit)
       .subscribe((res) => {
-        true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
-        if (res.status == 'updated') {
+        environment.consoleMessage(res, "RESSSSSSSSSSSSSSSS");
+        if (res.length != 0) {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+
+          this.getReports();
+          this.onReset();
+          this.data.mode = 'create'
         }
       }, (err) => {
         this.fButtonDisabled = false;
@@ -239,22 +229,18 @@ export class ValoremFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          true;//environment.consoleMessage(err, "Error: ");
         })
-
         this.openSnackBar(false, sErrors, "");
       });
   }
 
   onClickSelectStatusValorem(ev: boolean) {
     if(ev){
-      true;//environment.consoleMessage("", "Cargar info de Status");
       this.getSelectStatusValorem();
     }
   }
 
   onClickSelectScheduleValorem() {
-    true;//environment.consoleMessage("", "Cargar info de Schedules");
     this.getSelectScheduleValorem();
   }
 
@@ -270,17 +256,14 @@ export class ValoremFormComponent implements OnInit {
 
   onProductDelivered(productDelivered: ProductDelivered[]){
     this.productsDelivered = productDelivered;
-    true;//environment.consoleMessage(this.productsDelivered, "Productos Entregados Padre")
   }
 
   onProductToBeDelivered(productToBeDelivered: ProductToBeDelivered[]){
     this.productsToBeDelivered = productToBeDelivered;
-    true;//environment.consoleMessage(this.productsToBeDelivered, "Productos Por Entregar Padre")
   }
 
   onProductOverdue(productOverdue: ProductOverdue[]){
     this.productsOverdue = productOverdue;
-    true;//environment.consoleMessage(this.productsOverdue, "Productos Atrasados Padre")
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
@@ -322,4 +305,36 @@ export class ValoremFormComponent implements OnInit {
     }
   }
 
+
+  editReg(id:any) {
+    this.idRegEdit = id;
+    this.data.mode = 'edit'
+    let reg  = this.items.filter(v => v.id == id)
+
+    this.valoremStatesService.getValoremStatesSelect()
+      .subscribe((res: ValoremState []) => {
+        this.selectStatusValorem = res
+        this.valoremGroup.get('external_company_state_id')?.setValue(reg[0].external_company_state?.id);
+      });
+    
+    this.valoremSchedulesService.getValoremSchedulesSelect()
+      .subscribe((res: ValoremSchedule []) => {
+        this.selectScheduleValorem = res
+        this.valoremGroup.get('external_company_schedule_id')?.setValue(reg[0].external_company_schedule?.id);
+      });
+    
+    this.valoremGroup.get('start_date')?.setValue(new Date(reg[0].start_date + ":00:00"));
+    this.valoremGroup.get('due_date')?.setValue(new Date(reg[0].due_date + ":00:00"));
+    this.valoremGroup.get('status_detail')?.setValue(reg[0].status_detail);
+    this.valoremGroup.get('label_box')?.setValue(reg[0].label_box);
+  }
+
+  deleteReg(id:any) {
+    environment.consoleMessage(id, "ID DELETE");
+    this.valoremService.deleteValorem(id)
+      .subscribe(res => {
+        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.getReports();
+      });
+  }
 }

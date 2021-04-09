@@ -116,7 +116,7 @@ export class ValoremService {
       );
   }
 
-  deleteCompany(id: number) {
+  deleteValorem(id: number) {
     return this.http.delete<Valorem>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {

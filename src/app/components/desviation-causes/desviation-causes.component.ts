@@ -70,110 +70,111 @@ export class DesviationCausesComponent implements OnInit {
     filter: "Filtrar"
   }
   
-  typificationsBySources = [
-    {
-      name: "Tecnología",
-      impacts_time: 23,
-      cost_variaton: "$1.456.000",
-      dataTable: {
-        headers: [
-          "Tipificación",
-          "Suma de Impacto Tiempo (Días)",
-          "Suma de Variación de Costos (COP)",
-        ],
-        dataTable: [
-          {
-            name: "Fallas de Calidad IT",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Fallas de Calidad Proveedor",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Falla en Especificaciones",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Atrasos en Contratación de Recursos",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-        ]
-      }
-    },
-    {
-      name: "Financiero",
-      impacts_time: 23,
-      cost_variaton: "$1.456.000",
-      dataTable: {
-        headers: [
-          "Tipificación",
-          "Suma de Impacto Tiempo (Días)",
-          "Suma de Variación de Costos (COP)",
-        ],
-        dataTable: [
-          {
-            name: "Fallas de Calidad IT",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Fallas de Calidad Proveedor",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Falla en Especificaciones",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Atrasos en Contratación de Recursos",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-        ]
-      }
-    },
-    {
-      name: "Gestión Humana",
-      impacts_time: 23,
-      cost_variaton: "$1.456.000",
-      dataTable: {
-        headers: [
-          "Tipificación",
-          "Suma de Impacto Tiempo (Días)",
-          "Suma de Variación de Costos (COP)",
-        ],
-        dataTable: [
-          {
-            name: "Fallas de Calidad IT",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Fallas de Calidad Proveedor",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Falla en Especificaciones",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-          {
-            name: "Atrasos en Contratación de Recursos",
-            impacts_time: "34",
-            cost_variaton: "$1.456.000",
-          },
-        ]
-      }
-    }
-  ]
+  typificationsBySources: any;
+  // typificationsBySources = [
+  //   {
+  //     name: "Tecnología",
+  //     impacts_time: 23,
+  //     cost_variaton: "$1.456.000",
+  //     dataTable: {
+  //       headers: [
+  //         "Tipificación",
+  //         "Suma de Impacto Tiempo (Días)",
+  //         "Suma de Variación de Costos (COP)",
+  //       ],
+  //       dataTable: [
+  //         {
+  //           name: "Fallas de Calidad IT",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Fallas de Calidad Proveedor",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Falla en Especificaciones",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Atrasos en Contratación de Recursos",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     name: "Financiero",
+  //     impacts_time: 23,
+  //     cost_variaton: "$1.456.000",
+  //     dataTable: {
+  //       headers: [
+  //         "Tipificación",
+  //         "Suma de Impacto Tiempo (Días)",
+  //         "Suma de Variación de Costos (COP)",
+  //       ],
+  //       dataTable: [
+  //         {
+  //           name: "Fallas de Calidad IT",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Fallas de Calidad Proveedor",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Falla en Especificaciones",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Atrasos en Contratación de Recursos",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     name: "Gestión Humana",
+  //     impacts_time: 23,
+  //     cost_variaton: "$1.456.000",
+  //     dataTable: {
+  //       headers: [
+  //         "Tipificación",
+  //         "Suma de Impacto Tiempo (Días)",
+  //         "Suma de Variación de Costos (COP)",
+  //       ],
+  //       dataTable: [
+  //         {
+  //           name: "Fallas de Calidad IT",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Fallas de Calidad Proveedor",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Falla en Especificaciones",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //         {
+  //           name: "Atrasos en Contratación de Recursos",
+  //           impacts_time: "34",
+  //           cost_variaton: "$1.456.000",
+  //         },
+  //       ]
+  //     }
+  //   }
+  // ]
 
   constructor(
     public dialog: MatDialog, 

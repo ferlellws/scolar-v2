@@ -357,9 +357,6 @@
                                                 </mat-accordion>
                                             </mat-expansion-panel>
                                         </mat-accordion>
-                                        <mat-action-row>
-                                            <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
-                                        </mat-action-row>
                                     </mat-expansion-panel>
                                 </mat-accordion>
                                 <!-- AQUÍ VA EL <mat-accordion> GENERAL -->
@@ -554,13 +551,14 @@
                             [id]="'3'"
                             [dataTable]="dataGraphicCompanies"
                             width="100%"
-                            height="100%"
+                            [height]="heightGraphic"
                             bars="horizontal">
                         </tecno-column-charts>
                     </div>
                     <div class="col-sm-12 col-md-5 cont-table" style="padding-bottom: 20px;">
                         <br>
                         <tecno-dynamic-table
+                            style="width: 100%;"
                             [objectsData]="companies"
                             emptyText="Ingrese datos">
                         </tecno-dynamic-table>

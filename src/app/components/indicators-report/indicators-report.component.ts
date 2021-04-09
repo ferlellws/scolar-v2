@@ -38,6 +38,8 @@ export class IndicatorsReportComponent implements OnInit {
     filter: "Filtrar"
   }
 
+  heightGraphic: string = "0px";
+
   statesGroup!: FormGroup;
   typificationsGroup!: FormGroup;
   prioritiesGroup!: FormGroup;
@@ -303,12 +305,17 @@ export class IndicatorsReportComponent implements OnInit {
     if(this.companies == null) {
       this.indicatorsReportsService.getTableCompanies("", "")
         .subscribe((data: any) => {
+          let compAux = data.typificationsByVicepresidenciesTable.dataTable.filter((c:any) => c.totalProjects != 0);
+          
           this.companies = data.typificationsByVicepresidenciesTable;
+          this.companies.dataTable = compAux;
+
           if(this.companies.dataTable.length == 0) {
             this.emptyGraphCompanies = true;
           } else {
             this.dataGraphicCompanies = ColumnChartsComponent.TableToChart(this.companies, ['totalProjects'])
             this.emptyGraphCompanies = false;
+            this.heightGraphic = this.companies.dataTable.length*32 + "px";
           }
           this.flagcompanies = true;
         });
