@@ -76,7 +76,7 @@ export class IndicatorsReportsService {
     this.inputParams.years = years;
     this.inputParams.states = states;
     environment.consoleMessage(this.inputParams, "INPUT PARAMS");
-    return this.http.get<any[]>(`${this.API}/advance_percentages_by_projects`, this.httpOptions)
+    return this.http.get<any[]>(`${this.API}/areas_projects`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

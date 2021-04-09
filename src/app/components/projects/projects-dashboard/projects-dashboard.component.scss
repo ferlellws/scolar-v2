@@ -1,14 +1,3 @@
-.cards-container{
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    overflow: auto;
-}
-mat-card{
-    min-width: 400px;
-    margin-right: 20px;
-    margin-bottom: 10px;
-}
 
 .project{
     cursor: pointer;

@@ -1,31 +1,88 @@
-<div class="cards-container" *ngIf="dashboard.length > 0">
-    <div style="display: flex; flex-direction: column; min-width: 450px;" *ngFor="let board of dashboard; index as i" f>
-        <mat-card class="mat-elevation-z4">
-            <mat-card-header  class="project" matRipple (click)="onVicepresindency(board.vice_presidency.id)">
-                <mat-card-title class="txt-accent">{{board.vice_presidency.title}}</mat-card-title>          
-            </mat-card-header>
-            <mat-card-content>
-    
-                <mat-list>
-                    <div *ngFor="let area of board.areas" >
-                        <div *ngIf="area.projects != null">
-                            <div mat-subheader class="txt-primary">{{area.area.title}}</div>
-                            <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
-                                <mat-list-item >
-                                    <mat-icon mat-list-icon>preview</mat-icon>
-                                    <div mat-line>{{project.title}}</div>
-                                    <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
-                                </mat-list-item>
+<div class="row" style=" max-width: 100%; min-width: 100%; width: 100%;">
+    <div class="col-sm-12 col-md-6 col-lg-4" >
+        <div style="display: flex; flex-direction: column; width: 100%;  margin: 5px;" *ngFor="let board of dashboard; index as i;" >
+            <mat-card class="mat-elevation-z4" *ngIf="i % 3 == 0" style="max-width: 100% !important; width: 100%">
+                <mat-card-header  class="project" matRipple (click)="onVicepresindency(board.vice_presidency.id)">
+                    <mat-card-title class="txt-accent">{{board.vice_presidency.title}}</mat-card-title>          
+                </mat-card-header>
+                <mat-card-content>
+        
+                    <mat-list>
+                        <div *ngFor="let area of board.areas" >
+                            <div *ngIf="area.projects != null">
+                                <div mat-subheader class="txt-primary">{{area.area.title}}</div>
+                                <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
+                                    <mat-list-item >
+                                        <mat-icon mat-list-icon>preview</mat-icon>
+                                        <div mat-line>{{project.title}}</div>
+                                        <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
+                                    </mat-list-item>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                  </mat-list>
-                
-            </mat-card-content>
-        </mat-card>
+                      </mat-list>
+                    
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4" >
+        <div style="display: flex; flex-direction: column; width: 100%;  margin: 5px;" *ngFor="let board of dashboard; index as i;" >
+            <mat-card class="mat-elevation-z4" *ngIf="i % 3 == 1" style="max-width: 100% !important; width: 100%">
+                <mat-card-header  class="project" matRipple (click)="onVicepresindency(board.vice_presidency.id)">
+                    <mat-card-title class="txt-accent">{{board.vice_presidency.title}}</mat-card-title>          
+                </mat-card-header>
+                <mat-card-content>
+        
+                    <mat-list>
+                        <div *ngFor="let area of board.areas" >
+                            <div *ngIf="area.projects != null">
+                                <div mat-subheader class="txt-primary">{{area.area.title}}</div>
+                                <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
+                                    <mat-list-item >
+                                        <mat-icon mat-list-icon>preview</mat-icon>
+                                        <div mat-line>{{project.title}}</div>
+                                        <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
+                                    </mat-list-item>
+                                </div>
+                            </div>
+                        </div>
+                      </mat-list>
+                    
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4" >
+        <div style="display: flex; flex-direction: column; width: 100%;  margin: 5px;" *ngFor="let board of dashboard; index as i;" >
+            <mat-card class="mat-elevation-z4" *ngIf="i % 3 == 2" style="max-width: 100% !important; width: 100%">
+                <mat-card-header  class="project" matRipple (click)="onVicepresindency(board.vice_presidency.id)">
+                    <mat-card-title class="txt-accent">{{board.vice_presidency.title}}</mat-card-title>          
+                </mat-card-header>
+                <mat-card-content>
+        
+                    <mat-list>
+                        <div *ngFor="let area of board.areas" >
+                            <div *ngIf="area.projects != null">
+                                <div mat-subheader class="txt-primary">{{area.area.title}}</div>
+                                <div class="project" matRipple (click)="onProject(project.id)" *ngFor="let project of area.projects">
+                                    <mat-list-item >
+                                        <mat-icon mat-list-icon>preview</mat-icon>
+                                        <div mat-line>{{project.title}}</div>
+                                        <div mat-line> {{project.states_by_phase.state.title}} - {{project.states_by_phase.phase.title}} </div>
+                                    </mat-list-item>
+                                </div>
+                            </div>
+                        </div>
+                      </mat-list>
+                    
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
     
 </div>
+    
 
 <div *ngIf="dashboard.length == 0" style="padding: 20px;">
     <h1 class="mat-title txt-accent">No hay datos registrados</h1>

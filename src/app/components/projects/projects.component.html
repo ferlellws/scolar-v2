@@ -22,11 +22,8 @@
           >
         </tecno-dynamic-table>
       </div>
-      <div class="cont-table" *ngIf="modeOwn == 'dashboard'">
-        <tecno-projects-dashboard [dashboard]="dashboardOwn" ></tecno-projects-dashboard>
-      </div>
       
-      
+      <tecno-projects-dashboard *ngIf="modeOwn == 'dashboard'" [dashboard]="dashboardOwn" ></tecno-projects-dashboard>
        
     </mat-tab>
   

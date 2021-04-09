@@ -145,3 +145,7 @@ span {
         font-size: 10px;
     }
 }
+
+::ng-deep .parametersPanel .mat-expansion-panel-body {
+    padding: 0;
+}

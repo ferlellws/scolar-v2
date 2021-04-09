@@ -283,7 +283,85 @@
                                     </div>
                                 </form>    
                                 <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
-
+                                <mat-accordion>
+                                    <mat-expansion-panel *ngFor="let vp of areas" class="row mat-elevation-z0 card-expansion" >
+                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 12px;">
+                                            <mat-panel-title class="col-sm-12 col-md-2">
+                                                <h3 class="title-expansion ">{{vp.name}}</h3>
+                                            </mat-panel-title>
+                                            <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
+                                                <span>Avance Esperado: {{vp.advance_spected}}</span>
+                                                <span>Avance Real: {{vp.advance_real}}</span>
+                                                <div style="display: flex; justify-content: center; align-items: center;">
+                                                    <span>Desviación: {{vp.desviation.value}}</span>
+                                                    <div class="circle" [ngStyle]="{'background-color': vp.desviation.color}"></div>
+                                                </div>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                        <mat-accordion>
+                                            <mat-expansion-panel *ngFor="let area of vp.areas[0]" class="row mat-elevation-z0 card-expansion">
+                                                <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 0% !important;">
+                                                    <mat-panel-title class="col-sm-12 col-md-2">
+                                                        <h3 class="title-expansion ">{{area.name}}</h3>
+                                                    </mat-panel-title>
+                                                    <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
+                                                        <span>Avance Esperado: {{area.advance_spected}}</span>
+                                                        <span>Avance Real: {{area.advance_real}}</span>
+                                                        <div style="display: flex; justify-content: center; align-items: center;">
+                                                            <span>Desviación: {{area.desviation.value}}</span>
+                                                            <div class="circle" [ngStyle]="{'background-color': area.desviation.color}"></div>
+                                                        </div>
+                                                    </mat-panel-description>
+                                                </mat-expansion-panel-header>
+                                                <mat-accordion>
+                                                    <!-- sin subarea -->
+                                                    <mat-expansion-panel class="row mat-elevation-z0 card-expansion">
+                                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 0% !important;">
+                                                            <mat-panel-title class="col-sm-12 col-md-2">
+                                                                <h3 class="title-expansion ">{{area.withoutSub.name}}</h3>
+                                                            </mat-panel-title>
+                                                            <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
+                                                                <span>Avance Esperado: {{area.withoutSub.advance_spected}}</span>
+                                                                <span>Avance Real: {{area.withoutSub.advance_real}}</span>
+                                                                <div style="display: flex; justify-content: center; align-items: center;">
+                                                                    <span>Desviación: {{area.withoutSub.desviation.value}}</span>
+                                                                    <div class="circle" [ngStyle]="{'background-color': area.withoutSub.desviation.color}"></div>
+                                                                </div>
+                                                            </mat-panel-description>
+                                                        </mat-expansion-panel-header>
+                                                        <tecno-dynamic-table
+                                                            [objectsData]="area.withoutSub.tableData"
+                                                            emptyText="Ingrese datos">
+                                                        </tecno-dynamic-table>
+                                                    </mat-expansion-panel>
+                                                    <!-- con subarea -->
+                                                    <mat-expansion-panel *ngFor="let subarea of area.subareas" class="row mat-elevation-z0 card-expansion">
+                                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 0% !important;">
+                                                            <mat-panel-title class="col-sm-12 col-md-2">
+                                                                <h3 class="title-expansion ">{{subarea.name}}</h3>
+                                                            </mat-panel-title>
+                                                            <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
+                                                                <span>Avance Esperado: {{subarea.advance_spected}}</span>
+                                                                <span>Avance Real: {{subarea.advance_real}}</span>
+                                                                <div style="display: flex; justify-content: center; align-items: center;">
+                                                                    <span>Desviación: {{subarea.desviation.value}}</span>
+                                                                    <div class="circle" [ngStyle]="{'background-color': subarea.desviation.color}"></div>
+                                                                </div>
+                                                            </mat-panel-description>
+                                                        </mat-expansion-panel-header>
+                                                        <tecno-dynamic-table
+                                                            [objectsData]="subarea.tableData"
+                                                            emptyText="Ingrese datos">
+                                                        </tecno-dynamic-table>
+                                                    </mat-expansion-panel>
+                                                </mat-accordion>
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                        <mat-action-row>
+                                            <button mat-button color="primary" (click)="nextStep()">{{labelStep.next}}</button>
+                                        </mat-action-row>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
                                 <!-- AQUÍ VA EL <mat-accordion> GENERAL -->
 
                             </div>
