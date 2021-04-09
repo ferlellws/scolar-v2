@@ -24,6 +24,7 @@ export class ProjectsComponent implements OnInit {
   dashboard: any[]= [];
   dashboardOwn: any[]= [];
   actions!: Actions;
+  user!: any;
   
   constructor(
     public dialog: MatDialog,
@@ -34,6 +35,7 @@ export class ProjectsComponent implements OnInit {
   }
     
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.user);
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
       this.actions = new Actions();
