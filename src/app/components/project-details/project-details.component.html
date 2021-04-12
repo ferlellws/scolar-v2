@@ -3,10 +3,10 @@
         <div class="header-row col-sm-12 col-md-12" style="flex-wrap: wrap;">
             <h1 class="col-sm-12 col-md-6 txt-accent" style="font-weight: 500; font-size: xx-large;">{{project.title}}</h1>
             <div *ngIf="actions.create && (project.pmo.id == userID || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead.id == userID || profileID == 2)" class="header-row col-sm-12 col-md-6" style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
-                <!-- <button class="buttons-options" mat-menu-item (click)="onProjectEdit()">
+                <button class="buttons-options" mat-menu-item (click)="onProjectEdit()">
                     <mat-icon>editchart</mat-icon>
                     <span>Editar Proyecto</span>
-                </button> -->
+                </button>
 
                 <button class="buttons-options" mat-menu-item (click)="onDesviation()">
                     <mat-icon>alt_route</mat-icon>
@@ -18,10 +18,10 @@
                     <span>Seguimiento Semanal</span>
                 </button>
                 
-                <!-- <button class="buttons-options" mat-menu-item (click)="onValorem()">
+                <button class="buttons-options" mat-menu-item (click)="onValorem(project.id)">
                     <mat-icon>addchart</mat-icon>
                     <span>Reporte Valorem</span>
-                </button> -->
+                </button>
             </div>
         </div>
     </div>

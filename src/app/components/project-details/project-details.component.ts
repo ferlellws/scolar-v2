@@ -1,6 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Actions } from 'src/app/models/actions';
@@ -110,13 +110,20 @@ export class ProjectDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initialInfo();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    environment.consoleMessage(changes, "Cambio        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+  }
+
+  initialInfo() {
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
       this.actions = new Actions();
     }
     this.userID = JSON.parse(localStorage.user).id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
-    environment.consoleMessage(this.userID, "IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
@@ -431,27 +438,30 @@ export class ProjectDetailsComponent implements OnInit {
         this.desviationCauses.push(data);
         this.desviationId = this.desviationCauses.length - 1;
       })
+}
 
-  }
+  onValorem(project_id: number){
 
-  onValorem(){
-    true;//environment.consoleMessage("onValorem");
-    const dialogRef = this.dialog.open(ValoremFormComponent, {
-      width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
-      data: {
-        mode: 'create',
-        labelAction: 'Crear',
-        idProject: this.project.id
-      }
-    });
-    dialogRef.componentInstance.emitClose.subscribe( data =>
-      {
-        if (data == 'close'){
-          dialogRef.close();
-        }
-      }
-    );
+    this.router.navigate([`/project-progress-create/${project_id}`]);
+
+
+    // const dialogRef = this.dialog.open(ValoremFormComponent, {
+    //   width: environment.widthFormsModal,
+    //   disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+    //   data: {
+    //     mode: 'create',
+    //     labelAction: 'Crear',
+    //     idProject: this.project.id
+    //   }
+    // });
+    // dialogRef.componentInstance.emitClose.subscribe( data =>
+    //   {
+    //     if (data == 'close'){
+    //       dialogRef.close();
+    //     }
+    //   }
+    // );
+
   }
 
   onProjectEdit(){
@@ -468,9 +478,9 @@ export class ProjectDetailsComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          window.location.reload();
         }
-      }
-    );
+      });
   }
 
   onWeek(){
@@ -506,6 +516,7 @@ export class ProjectDetailsComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          
         }
       }
     );

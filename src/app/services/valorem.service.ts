@@ -65,6 +65,16 @@ export class ValoremService {
     );
   }
 
+  getValoremIdProject(id: number) {
+    return this.http.get<Valorem>(`${this.API}/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   addValorem(valorem: Valorem) {
     return this.http.post<Valorem>(this.API, { external_company_tracing: valorem }, this.httpOptions)
       .pipe(

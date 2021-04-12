@@ -53,7 +53,6 @@ export class ProjectsComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.projectService.emitDataTable
       .subscribe((res: any) => {
-        true;//environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       });

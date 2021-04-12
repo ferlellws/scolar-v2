@@ -52,6 +52,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ProjectsOwnResolver } from './components/projects/guards-projects/projects-own.resolver';
 import { PersonsResolver } from './components/persons/guards-persons/persons.resolver';
+import { ProjectProgressCreateResolver } from './components/project-progress-create/guards-project-progress-create/project-progress-create.resolver';
 
 const routes: Routes = [
   {
@@ -308,6 +309,14 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     resolve: {
       persons: PersonsResolver
+    }
+  },
+  { path: 'project-progress-create/:id',
+    loadChildren: () => import('./components/project-progress-create/project-progress-create.module').then(m => m.ProjectProgressCreateModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      projectProgressCreateResolver: ProjectProgressCreateResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
