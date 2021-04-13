@@ -40,8 +40,11 @@
                                 </div>
                                 </div>
                                 <div class="row">
-                                <span style="font-weight: 500; ">Detalle de Estado:
+                                <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Estado:
                                     <span style="font-weight: 400; ">{{item.status_detail}}</span>
+                                </span>
+                                <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Cronograma:
+                                    <span style="font-weight: 400; ">{{item.label_box}}</span>
                                 </span>
                                 </div>
                             </mat-card>
@@ -197,7 +200,8 @@
                 
             </div>
         </div>
-
+        
+        <mat-divider></mat-divider>
         <form *ngIf="actions.create" [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
@@ -229,7 +233,7 @@
                 <button *ngIf="flagModeProdDelivery == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdDelivery()">Cancelar Edición</button>
                 <button class="button" mat-button color="primary" (click)="onResetProdDelivery()">Limpiar</button>
                 <button class="button"
-                    (click)="flagModeProdDelivery == 'create' ? createProdDelivey() : updateProdDelivery()"
+                    (click)="flagModeProdDelivery == 'create' ? createProdDelivery() : updateProdDelivery()"
                     mat-button color="primary"
                     [disabled]="productDeliveryGroup.invalid || fButtonDisabledProdDelivery">
                     {{ flagModeProdDelivery == 'create' ? 'Crear' : 'Editar'}}
@@ -277,6 +281,7 @@
             </div>
         </div>
 
+        <mat-divider></mat-divider>
         <form *ngIf="actions.create" [formGroup]="productInProgressGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
@@ -315,7 +320,6 @@
                 </button>
             </div>
         </form>
-        <mat-divider style="border-top-color:#3f51b5"></mat-divider>
     </mat-tab>
 
 
@@ -357,6 +361,7 @@
             </div>
         </div>
 
+        <mat-divider></mat-divider>
         <form *ngIf="actions.create" [formGroup]="productOverdueGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
@@ -395,7 +400,7 @@
                 </button>
             </div>
         </form>
-        <mat-divider style="border-top-color:#3f51b5"></mat-divider>
+        
     </mat-tab>
 
 </mat-tab-group>

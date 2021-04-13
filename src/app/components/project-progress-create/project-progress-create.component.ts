@@ -23,6 +23,7 @@ import { environment } from 'src/environments/environment';
 import { DialogData } from '../applications/applications-form/applications-form.component';
 import { ProjectProgressReport } from 'src/app/models/project-progress-report';
 import { Project } from 'src/app/models/project';
+import { TimelineChartsComponent } from '../shared/google-charts/timeline-charts/timeline-charts.component';
 
 @Component({
   selector: 'tecno-project-progress-create',
@@ -200,10 +201,10 @@ export class ProjectProgressCreateComponent implements OnInit {
                   for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
                     data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
                   }
-                  for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
+                  for (let index = 0; index < data.ecOverdueProducts.length; index++) {
                     data.ecOverdueProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
                   }
-                  for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
+                  for (let index = 0; index < data.ecProductsInProgresses.length; index++) {
                     data.ecProductsInProgresses.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
                   }
                   this.dataDeliveryStatuses = data;
@@ -410,7 +411,7 @@ export class ProjectProgressCreateComponent implements OnInit {
   editProductDelivery(id:any){
     this.idEditProdDelivery = id;
     this.flagModeProdDelivery = 'edit';
-    let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
+    let reg = this.productsDelivered.filter(pd => pd.id == id);
     this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
     this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
   }
@@ -419,7 +420,9 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.productsDeliveredService.deleteProductDelivered(id)
       .subscribe(res => {
         this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.onResetProdDelivery();
         this.getReports();
+        this.flagModeProdDelivery = 'create'
       })
   }
 
@@ -428,8 +431,11 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.flagModeProdDelivery = 'create'
   }
 
-  createProdDelivey() {
+  createProdDelivery() {
     let productDelivery = this.productDeliveryGroup.value;
+    productDelivery.project_id = this.project.id;
+    productDelivery.external_company_id = 1;
+    environment.consoleMessage(productDelivery, "Obj Prod Delivery");
 
     this.productsDeliveredService.addProductDelivered(productDelivery)
       .subscribe(res => {
@@ -479,7 +485,9 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.productsOverdueService.deleteProductOverdue(id)
       .subscribe(res => {
         this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.onResetProdOverdue();
         this.getReports();
+        this.flagModeProdOverdue = 'create'
       })
   }
 
@@ -490,6 +498,9 @@ export class ProjectProgressCreateComponent implements OnInit {
 
   createProdOverdue() {
     let productOverdue = this.productOverdueGroup.value;
+    productOverdue.project_id = this.project.id;
+    productOverdue.external_company_id = 1;
+    environment.consoleMessage(productOverdue, "Obj Prod Overdue");
 
     this.productsOverdueService.addProductOverdue(productOverdue)
       .subscribe(res => {
@@ -505,7 +516,7 @@ export class ProjectProgressCreateComponent implements OnInit {
   updateProdOverdue() {
     let productOverdue = this.productOverdueGroup.value;
 
-    this.productsOverdueService.updateProductOverdueId(productOverdue, this.idEditProdDelivery)
+    this.productsOverdueService.updateProductOverdueId(productOverdue, this.idEditProdOverdue)
     .subscribe((res) => {
       this.fButtonDisabledProdOverdue = false;
       if (res.length != 0) {
@@ -538,7 +549,9 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.productsToBeDeliveredService.deleteProductToBeDelivered(id)
       .subscribe(res => {
         this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.onResetProdInProgress();
         this.getReports();
+        this.flagModeProdInProgress = 'create'
       })
   }
 
@@ -549,6 +562,9 @@ export class ProjectProgressCreateComponent implements OnInit {
 
   createProdInProgress() {
     let productInProgress = this.productInProgressGroup.value;
+    productInProgress.project_id = this.project.id;
+    productInProgress.external_company_id = 1;
+    environment.consoleMessage(productInProgress, "Obj Prod InProgress");
 
     this.productsToBeDeliveredService.addProductToBeDelivered(productInProgress)
       .subscribe(res => {
@@ -564,7 +580,7 @@ export class ProjectProgressCreateComponent implements OnInit {
   updateProdInProgress() {
     let productInProgress = this.productInProgressGroup.value;
 
-    this.productsToBeDeliveredService.updateProductToBeDeliveredId(productInProgress, this.idEditProdDelivery)
+    this.productsToBeDeliveredService.updateProductToBeDeliveredId(productInProgress, this.idEditProdInProgress)
     .subscribe((res) => {
       this.fButtonDisabledProdInProgess = false;
       if (res.length != 0) {

@@ -9,7 +9,7 @@ import { ProductDelivered } from '../models/product-delivered';
 })
 export class ProductsDeliveredService {
 
-  private readonly API = `${environment.API}/products_delivered`;
+  private readonly API = `${environment.API}/ec_delivered_products`;
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -54,7 +54,7 @@ export class ProductsDeliveredService {
   }
 
   addProductDelivered(productDelivered: ProductDelivered) {
-    return this.http.post<ProductDelivered>(this.API, { product_delivered: productDelivered }, this.httpOptions)
+    return this.http.post<ProductDelivered>(this.API, { ec_delivered_product: productDelivered }, this.httpOptions)
       .pipe(
         tap((data: any) => {
         })

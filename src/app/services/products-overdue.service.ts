@@ -9,7 +9,7 @@ import { ProductOverdue } from '../models/product-overdue';
 })
 export class ProductsOverdueService {
 
-  private readonly API = `${environment.API}/products_overdue`;
+  private readonly API = `${environment.API}/ec_overdue_products`;
 
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
@@ -54,7 +54,7 @@ export class ProductsOverdueService {
   }
 
   addProductOverdue(productOverdue: ProductOverdue) {
-    return this.http.post<ProductOverdue>(this.API, { product_overdue: productOverdue }, this.httpOptions)
+    return this.http.post<ProductOverdue>(this.API, { ec_overdue_product: productOverdue }, this.httpOptions)
       .pipe(
         tap((data: any) => {
         })

@@ -1,11 +1,12 @@
 import { ProjectProgressReport } from './../../../../models/project-progress-report';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TableData } from 'src/app/models/table-data';
 import { GoogleChartService } from 'src/app/services/google-chart.service';
 import { MainService } from 'src/app/services/main.service';
 import { PieSliceTextStyle } from '../pie-charts/pie-charts.component';
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 import { Actions } from 'src/app/models/actions';
+import { environment } from 'src/environments/environment';
 
 export interface DataInitial {
   externalCompanyStates: any;
@@ -19,14 +20,6 @@ export interface DataInitial {
   styleUrls: ['./timeline-charts.component.scss']
 })
 export class TimelineChartsComponent implements OnInit {
-
-  // constructor() {
-
-  // }
-
-  // ngOnInit() {
-
-  // }
 
   @Input() id!: string;
   @Input() title: string = '';
@@ -173,6 +166,13 @@ export class TimelineChartsComponent implements OnInit {
       // add marker for current date
       this.addMarker(new Date(), '#F44336');
       // this.addMarker(new Date(2020, 8, 31), 'green');
+    });
+
+    this.gLib.visualization.events.addListener(chart, 'select', function () {
+      var selection = chart.getSelection();
+      if (selection.length > 0) {
+        //environment.consoleMessage(dataTable.getValue(selection[0].row, 4), "INFO TIMELINE CLICK <<<<<<<<");
+      }
     });
 
   //   this.gLib.visualization.events.addListener(chart, 'ready', function () {
