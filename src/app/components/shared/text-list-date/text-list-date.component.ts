@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -19,9 +20,13 @@ export class TextListDateComponent implements OnInit {
   datePicker: any;  
   
   constructor(
+    public datepipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
+    for (let index = 0; index < this.items.length; index++) {
+      this.items[index].date = this.getToStringDate(new Date(`${(this.items[index].date).substring(0,10)}:00:00`));
+    }
   }
 
   add(){
@@ -36,6 +41,24 @@ export class TextListDateComponent implements OnInit {
   delete(index: number){
     this.items.splice(index, 1);
     this.emitChange.emit(this.items);
+  }
+
+  getToStringDate(date: any): string {
+    if (date == '' || date == undefined || date == null){
+      return '';
+    }
+    if (date + "" != "Invalid Date" ){
+      let d!: Date;
+      try {
+        d = new Date(date);
+      } catch {
+        d = new Date();
+      } finally {
+          return `${this.datepipe.transform( d, 'dd-MM-yyyy')}`;
+      }
+    } else {
+      return "";
+    }
   }
 
 }

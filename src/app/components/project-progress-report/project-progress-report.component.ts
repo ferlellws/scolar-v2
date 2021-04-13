@@ -104,7 +104,6 @@ export class ProjectProgressReportComponent implements OnInit {
       this.projectProgressReport.getDataProjectProgressReport(this.dataInitial.strategicGuidelines[0].id)
       .subscribe((data: ProjectProgressReport) => {
         this.dataProjectProgressReport = this.getFormatData(data);
-        environment.consoleMessage(this.dataProjectProgressReport, "DATAAAAAA");
       });
     });
 

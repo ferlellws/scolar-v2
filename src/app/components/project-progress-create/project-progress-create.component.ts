@@ -22,6 +22,7 @@ import { ValoremService } from 'src/app/services/valorem.service';
 import { environment } from 'src/environments/environment';
 import { DialogData } from '../applications/applications-form/applications-form.component';
 import { ProjectProgressReport } from 'src/app/models/project-progress-report';
+import { Project } from 'src/app/models/project';
 
 @Component({
   selector: 'tecno-project-progress-create',
@@ -31,33 +32,44 @@ import { ProjectProgressReport } from 'src/app/models/project-progress-report';
 export class ProjectProgressCreateComponent implements OnInit {
 
   actions!: Actions;
-  bttnStatus: string = "create";
-  idRegEdit: any;
-  
+  idRegEdit!: number;
+  idEditProdDelivery!: number;
+  idEditProdOverdue!: number;
+  idEditProdInProgress!: number;
+  flagModeProdDelivery: string = 'create';
+  flagModeProdOverdue: string = 'create';
+  flagModeProdInProgress: string = 'create';
+  labels: any;
+  valorem!: Valorem;
+  dataInitial!: DataInitial;
+  dataProjectProgressReport!: any;
+  dataDeliveryStatuses!: any;
+  project!: Project;
+  isButtonReset: boolean = false;
+  isButtonResetProdDelivery: boolean = false;
+  isButtonResetProdInProgress: boolean = false;
+  isButtonResetProdOverdue: boolean = false;
   showBtnClose: boolean = true;
+  fButtonDisabled: boolean = false;
+  fButtonDisabledProdDelivery: boolean = false;
+  fButtonDisabledProdOverdue: boolean = false;
+  fButtonDisabledProdInProgess: boolean = false;
   valoremGroup!: FormGroup;
+  productDeliveryGroup!: FormGroup;
+  productInProgressGroup!: FormGroup;
+  productOverdueGroup!: FormGroup;
   pluralOption: string = "Reportes Valorem";
   singularOption: string = "Reporte Valorem";
-  isButtonReset: boolean = false;
-
-  selectStatusValorem: ValoremState [] = [];
-  selectScheduleValorem: ValoremSchedule [] = [];
-  
-  fButtonDisabled: boolean = false;
-
-  labels: any;
-
-  valorem!: Valorem;
+  bttnStatus: string = "create";
   productsDelivered: ProductDelivered[] = [];
   productsToBeDelivered: ProductToBeDelivered[] = [];
   productsOverdue: ProductOverdue[] = [];
-
   items: Valorem[] = [];
-
+  selectStatusValorem: ValoremState [] = [];
+  selectScheduleValorem: ValoremSchedule [] = [];
+  
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
 
-  dataInitial!: DataInitial;
-  dataProjectProgressReport!: any;
 
   constructor(
     private fb: FormBuilder,
@@ -86,6 +98,9 @@ export class ProjectProgressCreateComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.data.mode = 'create'
     this.bttnStatus = "create"
+    this.flagModeProdDelivery = "create"
+    this.flagModeProdOverdue = "create"
+    this.flagModeProdInProgress = "create"
 
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
@@ -103,11 +118,30 @@ export class ProjectProgressCreateComponent implements OnInit {
       due_date: [null, Validators.required],
       is_active: true
     });
+
+    this.productDeliveryGroup = this.fb.group({
+      description: [null, Validators.required],
+      date: [null, Validators.required],
+    });
+
+    this.productInProgressGroup = this.fb.group({
+      description: [null, Validators.required],
+      date: [null, Validators.required],
+    });
+
+    this.productOverdueGroup = this.fb.group({
+      description: [null, Validators.required],
+      date: [null, Validators.required],
+    });
+    
   }
   
   onSubmit() {
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
+      this.fButtonDisabledProdDelivery = true;
+      this.fButtonDisabledProdInProgess = true;
+      this.fButtonDisabledProdOverdue = true;
       if (this.data.mode == 'create') {
         this.createRegister();
       } else {
@@ -127,9 +161,6 @@ export class ProjectProgressCreateComponent implements OnInit {
       due_date: null,
       is_active: true
     });
-    this.productsDelivered = [];
-    this.productsToBeDelivered = [];
-    this.productsOverdue = [];
   }
 
   onCancel() {
@@ -138,31 +169,52 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   getReports() {
-    this.valoremService.getValoremSelect()
-      .subscribe((res: Valorem[]) => {
-        this.items = res.filter((valorem) =>{
-          return valorem.project?.id == 2;
-        })
-        this.items.map(data => {
-          data.start_date = this.getToStringDate(new Date(`${(data.start_date!).substring(0,10)}:00:00`));
-          data.due_date = this.getToStringDate(new Date(`${(data.due_date!).substring(0,10)}:00:00`));
-          if (data.start_date != null) {
-            this.valoremGroup.get('due_date')?.setValue(data.due_date);
-          }
+    this.route.data.subscribe(project =>{
+      this.project = project.projectProgressCreateResolver;
+      //environment.consoleMessage(this.project,"Project <<<<<<<<<<<<<<<<");
+      this.valoremService.getValoremSelect()
+        .subscribe((res: Valorem[]) => {
+          this.items = res.filter((valorem) =>{
+            return valorem.project?.id == this.project.id;
+          })
+          this.items.map(data => {
+            data.start_date = this.getToStringDate(new Date(`${(data.start_date!).substring(0,10)}:00:00`));
+            if (data.start_date != null && this.data.mode == 'create') {
+              this.valoremGroup.get('start_date')?.setValue(new Date(`${(data.due_date!).substring(0,10)}:00:00`));
+            }
+            data.due_date = this.getToStringDate(new Date(`${(data.due_date!).substring(0,10)}:00:00`));
+            
+          });
+
+          this.projectProgressReport.getDataInitial()
+          .subscribe((data: DataInitial) => {
+            this.dataInitial = data;
+
+            this.projectProgressReport.getDataProjectProgressReportByProjectId(this.project.strategic_guideline!.id)
+              .subscribe((data: ProjectProgressReport) => {
+                this.dataProjectProgressReport = this.getFormatData(data);
+
+                this.projectProgressReport.getDeliveryStatuses()
+                .subscribe((data: any) => {
+                  environment.consoleMessage(data, "Productos <<<<<<<<<<<<<<<<<<<<");
+                  for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
+                    data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
+                  }
+                  for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
+                    data.ecOverdueProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
+                  }
+                  for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
+                    data.ecProductsInProgresses.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
+                  }
+                  this.dataDeliveryStatuses = data;
+                  this.productsDelivered = this.dataDeliveryStatuses.ecDeliveredProducts;
+                  this.productsOverdue = this.dataDeliveryStatuses.ecOverdueProducts;
+                  this.productsToBeDelivered = this.dataDeliveryStatuses.ecProductsInProgresses;
+                });
+              });
+          });
         });
-
-        this.projectProgressReport.getDataInitial()
-        .subscribe((data: DataInitial) => {
-          this.dataInitial = data;
-
-          this.projectProgressReport.getDataProjectProgressReportByProjectId(this.dataInitial.strategicGuidelines[0].id)
-            .subscribe((data: ProjectProgressReport) => {
-              this.dataProjectProgressReport = this.getFormatData(data);
-              environment.consoleMessage(this.dataProjectProgressReport, "DATAAAAAA");
-            });
-        });
-
-      });
+    });
   }
 
   getFormatData(dataReport: ProjectProgressReport): any {
@@ -198,7 +250,7 @@ export class ProjectProgressCreateComponent implements OnInit {
     });
     
     this.valorem = this.valoremGroup.value;
-    this.valorem.project_id = 2;
+    this.valorem.project_id = this.project.id;
     this.valorem.external_company_id = 1;
     
     await this.valoremService.addValorem(this.valorem)
@@ -206,23 +258,6 @@ export class ProjectProgressCreateComponent implements OnInit {
       this.fButtonDisabled = false;
       if (res != null) {
         this.openSnackBar(true, "Registro creado satisfactoriamente", "");
-        var id = res.id;
-
-        this.productsDelivered.map(data => {data.external_company_tracing_id = id});
-        this.productsToBeDelivered.map(data => {data.external_company_tracing_id = id});
-        this.productsOverdue.map(data => {data.external_company_tracing_id = id});
-        
-        var main_tables: any = {
-          e_c_delivered_products: this.productsDelivered,
-          e_c_products_in_progresses: this.productsToBeDelivered,
-          e_c_overdue_products: this.productsOverdue
-        };
-
-        this.valoremService.addProductsDetails(main_tables)
-          .subscribe((res) => {
-            true;
-          })
-
         this.getReports();
         this.onReset();
       }
@@ -244,11 +279,9 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage("EDIIIIIIIIIIIIIIIIIIIT");
     this.valoremService.updateValoremId(this.valoremGroup.value, this.idRegEdit)
       .subscribe((res) => {
         this.fButtonDisabled = false;
-        environment.consoleMessage(res, "RESSSSSSSSSSSSSSSS");
         if (res.length != 0) {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
 
@@ -291,18 +324,6 @@ export class ProjectProgressCreateComponent implements OnInit {
       .subscribe((res: ValoremSchedule []) => this.selectScheduleValorem = res);
   }
 
-  onProductDelivered(productDelivered: ProductDelivered[]){
-    this.productsDelivered = productDelivered;
-  }
-
-  onProductToBeDelivered(productToBeDelivered: ProductToBeDelivered[]){
-    this.productsToBeDelivered = productToBeDelivered;
-  }
-
-  onProductOverdue(productOverdue: ProductOverdue[]){
-    this.productsOverdue = productOverdue;
-  }
-
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
     var panelClass = "succes-snack-bar";
     if(!succes){
@@ -318,6 +339,10 @@ export class ProjectProgressCreateComponent implements OnInit {
     let message!: string;
 
     if (this.valoremGroup.get(field)?.errors?.required) {
+      message = `Campo ${labelField} es requerido`
+    }
+
+    if (this.productDeliveryGroup.get(field)?.errors?.required) {
       message = `Campo ${labelField} es requerido`
     }
 
@@ -342,12 +367,11 @@ export class ProjectProgressCreateComponent implements OnInit {
     }
   }
 
-
   editReg(id:any) {
     this.idRegEdit = id;
-    this.data.mode = 'edit'
-    let reg  = this.items.filter(v => v.id == id)
-
+    this.data.mode = 'edit';
+    let reg  = this.items.filter(v => v.id == id);
+   
     this.valoremStatesService.getValoremStatesSelect()
       .subscribe((res: ValoremState []) => {
         this.selectStatusValorem = res
@@ -367,7 +391,6 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   deleteReg(id:any) {
-    environment.consoleMessage(id, "ID DELETE");
     this.valoremService.deleteValorem(id)
       .subscribe(res => {
         this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
@@ -375,5 +398,120 @@ export class ProjectProgressCreateComponent implements OnInit {
       });
   }
 
-  
+  onResetProdDelivery() {
+    this.isButtonResetProdDelivery = true;
+    this.productDeliveryGroup.patchValue({
+      description: null,
+      date: null
+    });
+  }
+
+  editProductDelivery(id:any){
+    this.idEditProdDelivery = id;
+    this.flagModeProdDelivery = 'edit';
+    let reg = this.productsDelivered.filter(pd => pd.id == id);
+    this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
+    this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+  }
+
+  deleteProductDelivery(id:any){
+    this.productsDeliveredService.deleteProductDelivered(id)
+      .subscribe(res => {
+        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.getReports();
+      })
+  }
+
+  onCancelProdDelivery() {
+    this.onResetProdDelivery();
+    this.flagModeProdDelivery = 'create'
+  }
+
+  createProdDelivey() {
+    let productDelivery = this.productDeliveryGroup.value;
+
+    this.productsDeliveredService.addProductDelivered(productDelivery)
+      .subscribe(res => {
+        this.fButtonDisabledProdDelivery = false;
+        if (res != null) {
+          this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.getReports();
+          this.onResetProdDelivery();
+        }
+      });
+  }
+
+  updateProdDelivery() {
+    let productDelivery = this.productDeliveryGroup.value;
+
+    this.productsDeliveredService.updateProductDeliveredId(productDelivery, this.idEditProdDelivery)
+    .subscribe((res) => {
+      this.fButtonDisabled = false;
+      if (res.length != 0) {
+        this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        this.getReports();
+        this.onResetProdDelivery();
+        this.flagModeProdDelivery = 'create'
+      }
+    });
+  }  
+
+  onResetProdInProgress() {
+    this.isButtonResetProdInProgress = true;
+    this.productInProgressGroup.patchValue({
+      description: null,
+      date: null
+    });
+  }
+
+  editProdInProgress(id:any){
+    this.idEditProdInProgress = id;
+    this.flagModeProdInProgress = 'edit';
+    let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
+    this.productInProgressGroup.get('description')?.setValue(reg[0].description);
+    this.productInProgressGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+  }
+
+  deleteProdInProgress(id:any){
+    this.productsToBeDeliveredService.deleteProductToBeDelivered(id)
+      .subscribe(res => {
+        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.getReports();
+      })
+  }
+
+  onCancelProdInProgress() {
+    this.onResetProdInProgress();
+    this.flagModeProdInProgress = 'create'
+  }
+
+  createProdInProgress() {
+    let productInProgress = this.productDeliveryGroup.value;
+
+    this.productsDeliveredService.addProductDelivered(productInProgress)
+      .subscribe(res => {
+        this.fButtonDisabledProdDelivery = false;
+        if (res != null) {
+          this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.getReports();
+          this.onResetProdDelivery();
+        }
+      });
+  }
+
+  updateProdInProgress() {
+    let productInProgress = this.productDeliveryGroup.value;
+
+    this.productsDeliveredService.updateProductDeliveredId(productInProgress, this.idEditProdDelivery)
+    .subscribe((res) => {
+      this.fButtonDisabled = false;
+      if (res.length != 0) {
+        this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        this.getReports();
+        this.onResetProdDelivery();
+        this.flagModeProdDelivery = 'create'
+      }
+    });
+  }
+
 }

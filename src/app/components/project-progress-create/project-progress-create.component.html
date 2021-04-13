@@ -1,132 +1,294 @@
-<div class="example-container">
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-        <h2 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Reportes creados gráfica Linea de Tiempo</h2>
-        </div>
-    </div>
-
-    <div class="container-cards">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <div class="row" *ngFor="let item of items; index as i">
-                
-                    <mat-card class="col-sm-12 col-md-12 card-content">
-                        <div class="row">
-                        <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
-                        </div>
-                        <div class="row">
-                        <span class="col-sm-12 col-md-2" style="font-weight: 500;">Estado:
-                            <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
-                        </span>
-                        <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
-                            <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
-                        </span>
-                        <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
-                            <span style="font-weight: 400; ">{{item.start_date}}</span>
-                        </span>
-                        <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
-                            <span style="font-weight: 400; ">{{item.due_date}}</span>
-                        </span>
-                        <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                            <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editReg(item.id)">create</mat-icon>
-                            <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteReg(item.id)">delete</mat-icon>
-                        </div>
-                        </div>
-                        <div class="row">
-                        <span style="font-weight: 500; ">Detalle de Estado:
-                            <span style="font-weight: 400; ">{{item.status_detail}}</span>
-                        </span>
-                        </div>
-                    </mat-card>
+<h1 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Reporte Valorem: {{project.title}}</h1>
+<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            Línea de Tiempo
+        </ng-template>
+        <div class="example-container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Reportes Creados</h3>
                 </div>
             </div>
+        
+            <div class="container-cards">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="row" *ngFor="let item of items; index as i">
+                        
+                            <mat-card class="col-sm-12 col-md-12 card-content">
+                                <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
+                                </div>
+                                <div class="row">
+                                <span class="col-sm-12 col-md-2" style="font-weight: 500;">Estado:
+                                    <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
+                                    <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
+                                </span>
+                                <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
+                                    <span style="font-weight: 400; ">{{item.start_date}}</span>
+                                </span>
+                                <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
+                                    <span style="font-weight: 400; ">{{item.due_date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editReg(item.id)">create</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteReg(item.id)">delete</mat-icon>
+                                </div>
+                                </div>
+                                <div class="row">
+                                <span style="font-weight: 500; ">Detalle de Estado:
+                                    <span style="font-weight: 400; ">{{item.status_detail}}</span>
+                                </span>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        
+            <form *ngIf="actions.create" [formGroup]="valoremGroup">
+                <div class="row" style="padding-right: 12px !important;">
+                    <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo Reporte</h3>
+                    <div class="col-sm-12 col-md-4">
+                        <mat-form-field class="full-width">
+                        <mat-label>Estado</mat-label>
+                        <mat-select formControlName="external_company_state_id" (openedChange)="onClickSelectStatusValorem($event)" required>
+                            <mat-option>Seleccione una opción</mat-option>
+                            <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">
+                            <div class="selects">
+                                <div class="circle" [ngStyle]="{'background-color': valoremState.color}"></div>
+                                <span>{{ valoremState.name }}</span>
+                            </div>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="this.valoremGroup.get('external_company_state_id')?.invalid">
+                            {{ getMessageError('external_company_state_id', " estado") }}
+                        </mat-error>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-sm-12 col-md-4">
+                        <mat-form-field class="full-width">
+                        <mat-label>Cronograma</mat-label>
+                        <mat-select formControlName="external_company_schedule_id" (click)="onClickSelectScheduleValorem()" required>
+                            <mat-option>Seleccione una opción</mat-option>
+                            <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">
+                            <div class="selects">
+                                <div class="circle" [ngStyle]="{'background-color': companyType.color}"></div>
+                                <span>{{ companyType.name}}</span>
+                            </div>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="this.valoremGroup.get('external_company_schedule_id')?.invalid">
+                            {{ getMessageError('external_company_schedule_id', " cronograma") }}
+                        </mat-error>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-sm-12 col-md-4">
+                        <mat-form-field class="full-width">
+                        <mat-label>Fecha de Inicio y Finalización</mat-label>
+                        <mat-date-range-input [formGroup]="valoremGroup" [rangePicker]="picker" required>
+                            <input matStartDate formControlName="start_date" placeholder="Inicio">
+                            <input matEndDate formControlName="due_date" placeholder="Fin">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                        <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid || this.valoremGroup.get('due_date')?.invalid">
+                            {{ getMessageError('start_date', " fecha de inicio y finalización") }}
+                        </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+        
+                <div class="row" style="padding-right: 12px !important;">
+                    <div class="col-sm-12 col-md-8">
+                        <mat-form-field
+                            class="full-width"
+                            style="width: 100%;">
+                            <mat-label>{{labels.statusDetail}}</mat-label>
+                            <textarea matInput placeholder="Observacióin que se refleja en la parte derecha del gráfico" formControlName="status_detail" required></textarea>
+                            <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
+                            {{ getMessageError('status_detail', " detalle de estado") }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-sm-12 col-md-4">
+                        <mat-form-field
+                            class="full-width"
+                            style="width: 100%;">
+                            <mat-label>{{labels.labelBox}}</mat-label>
+                            <textarea matInput placeholder="Observación que se refleja dentro de línea de tiempo" formControlName="label_box"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+        
+                <div class="buttons">
+                    <button *ngIf="data.mode == 'edit'" class="button" mat-button color="primary" (click)="onCancel()">Cancelar Edición</button>
+                    <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+                    <button class="button"
+                        (click)="data.mode == 'create' ? createRegister() : updateRegister()"
+                        mat-button color="primary"
+                        [disabled]="valoremGroup.invalid || fButtonDisabled">
+                        {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+                    </button>
+                </div>
+            </form>
             
+            <mat-divider></mat-divider>
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Gráfica Línea de Tiempo</h3>
+            <tecno-timeline-charts *ngIf="dataProjectProgressReport"
+                [id]="'project-timeline'"
+                [title]="'Porcentajes Estados Requerimientos'"
+                [dataInitial]="dataInitial"
+                [dataTable]="dataProjectProgressReport"
+                [chartClass]="'content-center mt-30'">
+            </tecno-timeline-charts>    
+        
+            <ng-template #loadingBlock>
+                <div class="row">
+                <div class="col-12">
+                    <mat-spinner color="accent" class="content-center"></mat-spinner>
+                </div>
+                </div>
+            </ng-template>
         </div>
-    </div>
-    <mat-divider></mat-divider>
+    </mat-tab>
 
-    <form
-        action="" 
-        [formGroup]="valoremGroup" 
-        >
-        <div class="row" style="padding-right: 12px !important;">
-            <h2 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo Reporte gráfica Linea de Tiempo</h2>
-            <div class="col-sm-12 col-md-4">
-                <mat-form-field class="full-width">
-                <mat-label>Estado</mat-label>
-                <mat-select formControlName="external_company_state_id" (openedChange)="onClickSelectStatusValorem($event)" required>
-                    <mat-option>Seleccione una opción</mat-option>
-                    <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">
-                    <div class="selects">
-                        <div class="circle" [ngStyle]="{'background-color': valoremState.color}"></div>
-                        <span>{{ valoremState.name }}</span>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            Productos
+        </ng-template>
+        <div class="row" style="padding-top: 12px; padding-left: 2px;">
+            <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Productos Entregados</h3>
+            </div>
+        </div>
+        <div class="container-cards">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecDeliveredProducts; index as i">
+                        <mat-card class="col-sm-12 col-md-12 card-content">
+                            <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                    <span style="font-weight: 400;">{{item.description}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                    <span style="font-weight: 400; ">{{item.date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
+                                </div>
+                            </div>
+                        </mat-card>
                     </div>
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="this.valoremGroup.get('external_company_state_id')?.invalid">
-                    {{ getMessageError('external_company_state_id', " estado") }}
-                </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-sm-12 col-md-4">
-                <mat-form-field class="full-width">
-                <mat-label>Cronograma</mat-label>
-                <mat-select formControlName="external_company_schedule_id" (click)="onClickSelectScheduleValorem()" required>
-                    <mat-option>Seleccione una opción</mat-option>
-                    <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">
-                    <div class="selects">
-                        <div class="circle" [ngStyle]="{'background-color': companyType.color}"></div>
-                        <span>{{ companyType.name}}</span>
-                    </div>
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="this.valoremGroup.get('external_company_schedule_id')?.invalid">
-                    {{ getMessageError('external_company_schedule_id', " cronograma") }}
-                </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-sm-12 col-md-4">
-                <mat-form-field class="full-width">
-                <mat-label>Fecha de Inicio y Finalización</mat-label>
-                <mat-date-range-input [formGroup]="valoremGroup" [rangePicker]="picker" required>
-                    <input matStartDate formControlName="start_date" placeholder="Inicio">
-                    <input matEndDate formControlName="due_date" placeholder="Fin">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-                <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid || this.valoremGroup.get('due_date')?.invalid">
-                    {{ getMessageError('start_date', " fecha de inicio y finalización") }}
-                </mat-error>
-                </mat-form-field>
+                </div>
+                
             </div>
         </div>
 
-        <div class="row" style="padding-right: 12px !important;">
-            <div class="col-sm-12 col-md-8">
-                <mat-form-field
-                    class="full-width"
-                    style="width: 100%;">
-                    <mat-label>{{labels.statusDetail}}</mat-label>
-                    <textarea matInput placeholder="Observacióin que se refleja en la parte derecha del gráfico" formControlName="status_detail" required></textarea>
-                    <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
-                    {{ getMessageError('status_detail', " detalle de estado") }}
-                    </mat-error>
-                </mat-form-field>
+        <form *ngIf="actions.create" [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
+            <div class="row" style="padding-right: 12px !important;">
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo Producto Entregado</h3>
+                <div class="col-sm-12 col-md-8">
+                    <mat-form-field
+                        class="full-width"
+                        style="width: 100%;">
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput required formControlName="description"></textarea>
+                        <mat-error *ngIf="this.productDeliveryGroup.get('description')?.invalid">
+                            {{ getMessageError('description', " descripción") }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                        <mat-label>Fecha produto entregado</mat-label>
+                        <input required matInput [matDatepicker]="picker" formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="this.productDeliveryGroup.get('date')?.invalid">
+                            {{ getMessageError('date' ,'fecha') }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
             </div>
 
-            <div class="col-sm-12 col-md-4">
-                <mat-form-field
-                    class="full-width"
-                    style="width: 100%;">
-                    <mat-label>{{labels.labelBox}}</mat-label>
-                    <textarea matInput placeholder="Observación que se refleja dentro de línea de tiempo" formControlName="label_box"></textarea>
-                </mat-form-field>
+            <div class="buttons">
+                <button *ngIf="flagModeProdDelivery == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdDelivery()">Cancelar Edición</button>
+                <button class="button" mat-button color="primary" (click)="onResetProdDelivery()">Limpiar</button>
+                <button class="button"
+                    (click)="flagModeProdDelivery == 'create' ? createProdDelivey() : updateProdDelivery()"
+                    mat-button color="primary"
+                    [disabled]="productDeliveryGroup.invalid || fButtonDisabledProdDelivery">
+                    {{ flagModeProdDelivery == 'create' ? 'Crear' : 'Editar'}}
+                </button>
             </div>
-        </div>
+        </form>
+        <mat-divider style="border-top-color:#3f51b5"></mat-divider>
 
-        <div class="buttons">
+        <!-- <div class="example-container">
+            <ng-template mat-tab-label>
+                Productos
+            </ng-template>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <tecno-text-list-date
+                    titleClass="txt-accent"
+                    class="external-component"
+                    name="Productos Entregados"
+                    [items]="dataDeliveryStatuses.ecDeliveredProducts"
+                    (emitChange)="onProductDelivered($event)"
+                    placeHolderText="Agregar producto que da valor a la compañía (se ve reflejado en el Inicio del Reporte Valorem)"
+                    placeHolderDate="Fecha en la cual se entregó el producto">
+                    </tecno-text-list-date>
+                </div>
+            </div>
+
+            <br>
+            <mat-divider></mat-divider>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <tecno-text-list-date
+                    titleClass="txt-accent"
+                    class="external-component"
+                    name="Productos por Entregar"
+                    [items]="dataDeliveryStatuses.ecProductsInProgresses"
+                    (emitChange)="onProductToBeDelivered($event)"
+                    placeHolderText="Agregar producto por entregar (se ve reflejado en el Inicio del Reporte Valorem)"
+                    placeHolderDate="Fecha en la cual se planea entregar el producto">
+                    </tecno-text-list-date>
+                </div>
+            </div>
+
+            <br>
+            <mat-divider></mat-divider>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <tecno-text-list-date
+                    titleClass="txt-accent"
+                    class="external-component"
+                    name="Productos Atrasados"
+                    [items]="dataDeliveryStatuses.ecOverdueProducts"
+                    (emitChange)="onProductOverdue($event)"
+                    placeHolderText="Agregar producto atrasado que se desea escalar en comité directivo (se ve reflejado en el Inicio del Reporte Valorem)"
+                    placeHolderDate="Fecha en la cual se planeaba entregar el producto">
+                    </tecno-text-list-date>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div class="buttons">
             <button *ngIf="data.mode == 'edit'" class="button" mat-button color="primary" (click)="onCancel()">Cancelar Edición</button>
             <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
             <button class="button"
@@ -135,72 +297,7 @@
                 [disabled]="valoremGroup.invalid || fButtonDisabled">
                 {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
             </button>
-        </div>
+        </div> -->
 
-
-        <tecno-timeline-charts *ngIf="dataProjectProgressReport"
-            [id]="'project-timeline'"
-            [title]="'Porcentajes Estados Requerimientos'"
-            [dataInitial]="dataInitial"
-            [dataTable]="dataProjectProgressReport"
-            [chartClass]="'content-center mt-30'">
-        </tecno-timeline-charts>
-
-        <br><br><br><br><br>
-        <mat-divider></mat-divider>
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <tecno-text-list-date
-                titleClass="txt-primary"
-                class="external-component"
-                name="Productos Entregados"
-                [items]="productsDelivered"
-                (emitChange)="onProductDelivered($event)"
-                placeHolderText="Agregar producto que da valor a la compañía (se ve reflejado en el Inicio del Reporte Valorem)"
-                placeHolderDate="Fecha en la cual se entregó el producto">
-                </tecno-text-list-date>
-            </div>
-        </div>
-
-        <br>
-        <mat-divider></mat-divider>
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <tecno-text-list-date
-                titleClass="txt-primary"
-                class="external-component"
-                name="Productos por Entregar"
-                [items]="productsToBeDelivered"
-                (emitChange)="onProductToBeDelivered($event)"
-                placeHolderText="Agregar producto por entregar (se ve reflejado en el Inicio del Reporte Valorem)"
-                placeHolderDate="Fecha en la cual se planea entregar el producto">
-                </tecno-text-list-date>
-            </div>
-        </div>
-
-        <br>
-        <mat-divider></mat-divider>
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <tecno-text-list-date
-                titleClass="txt-primary"
-                class="external-component"
-                name="Productos Atrasados"
-                [items]="productsOverdue"
-                (emitChange)="onProductOverdue($event)"
-                placeHolderText="Agregar producto atrasado que se desea escalar en comité directivo (se ve reflejado en el Inicio del Reporte Valorem)"
-                placeHolderDate="Fecha en la cual se planeaba entregar el producto">
-                </tecno-text-list-date>
-            </div>
-        </div>
-        
-    </form>
-
-    <ng-template #loadingBlock>
-        <div class="row">
-        <div class="col-12">
-            <mat-spinner color="accent" class="content-center"></mat-spinner>
-        </div>
-        </div>
-    </ng-template>
-</div>
+    </mat-tab>
+</mat-tab-group>

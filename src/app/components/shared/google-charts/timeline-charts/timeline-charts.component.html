@@ -2,13 +2,13 @@
   <div class="container-fluid mt-30" *ngIf="dataTable.dataChart.length > 0; else elseBlock">
     <div class="row">
       <div class="col-sm-12 col-md-1 text-sm-start text-md-end"><strong>Estados</strong></div>
-      <div class="col-sm-12 col-md-10">
+      <div class="col-sm-12 col-md-10" style="padding-left: 30px;">
         <div class="row border">
-          <div class="col-sm-12 col-md-2" *ngFor="let externalCompanyState of dataInitial.externalCompanyStates">
+          <div class="row col-sm-12 col-md-2" *ngFor="let externalCompanyState of dataInitial.externalCompanyStates">
             <div class="traffic-light" [ngStyle]="{
               'background-color': externalCompanyState.color
             }"></div>
-            {{ externalCompanyState.name }}
+            <span style="padding-left: 5px;">{{ externalCompanyState.name }}</span>
           </div>
         </div>
       </div>
@@ -16,13 +16,13 @@
   
     <div class="row mt-10">
       <div class="col-sm-12 col-md-1 text-sm-start text-md-end"><strong>Cronograma</strong></div>
-      <div class="col-sm-12 col-md-10">
+      <div class="col-sm-12 col-md-10" style="padding-left: 30px;">
         <div class="row border">
-          <div class="col-sm-12 col-md-2" *ngFor="let externalCompanySchedule of dataInitial.externalCompanySchedules">
+          <div class="row col-sm-12 col-md-2" *ngFor="let externalCompanySchedule of dataInitial.externalCompanySchedules">
             <div class="status bg-feasibility" [ngStyle]="{
               'background-color': externalCompanySchedule.color
             }"></div>
-            {{ externalCompanySchedule.name }}
+            <span style="padding-left: 5px;">{{ externalCompanySchedule.name }}</span>
           </div>
           <!-- <div class="col-sm-12 col-md-2"><div class="status bg-planning"></div>Planeación</div>
           <div class="col-sm-12 col-md-2"><div class="status bg-pilot"></div>Piloto</div>
