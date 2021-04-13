@@ -4,6 +4,7 @@
         <ng-template mat-tab-label>
             Línea de Tiempo
         </ng-template>
+        
         <div class="example-container">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
@@ -163,11 +164,11 @@
 
     <mat-tab>
         <ng-template mat-tab-label>
-            Productos
+            Productos Entregados
         </ng-template>
         <div class="row" style="padding-top: 12px; padding-left: 2px;">
             <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Productos Entregados</h3>
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
             </div>
         </div>
         <div class="container-cards">
@@ -199,7 +200,7 @@
 
         <form *ngIf="actions.create" [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
-                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo Producto Entregado</h3>
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
                 <div class="col-sm-12 col-md-8">
                     <mat-form-field
                         class="full-width"
@@ -213,7 +214,7 @@
                 </div>
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
-                        <mat-label>Fecha produto entregado</mat-label>
+                        <mat-label>Fecha en la que se entregó el producto</mat-label>
                         <input required matInput [matDatepicker]="picker" formControlName="date">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
@@ -235,69 +236,166 @@
                 </button>
             </div>
         </form>
-        <mat-divider style="border-top-color:#3f51b5"></mat-divider>
-
-        <!-- <div class="example-container">
-            <ng-template mat-tab-label>
-                Productos
-            </ng-template>
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <tecno-text-list-date
-                    titleClass="txt-accent"
-                    class="external-component"
-                    name="Productos Entregados"
-                    [items]="dataDeliveryStatuses.ecDeliveredProducts"
-                    (emitChange)="onProductDelivered($event)"
-                    placeHolderText="Agregar producto que da valor a la compañía (se ve reflejado en el Inicio del Reporte Valorem)"
-                    placeHolderDate="Fecha en la cual se entregó el producto">
-                    </tecno-text-list-date>
-                </div>
-            </div>
-
-            <br>
-            <mat-divider></mat-divider>
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <tecno-text-list-date
-                    titleClass="txt-accent"
-                    class="external-component"
-                    name="Productos por Entregar"
-                    [items]="dataDeliveryStatuses.ecProductsInProgresses"
-                    (emitChange)="onProductToBeDelivered($event)"
-                    placeHolderText="Agregar producto por entregar (se ve reflejado en el Inicio del Reporte Valorem)"
-                    placeHolderDate="Fecha en la cual se planea entregar el producto">
-                    </tecno-text-list-date>
-                </div>
-            </div>
-
-            <br>
-            <mat-divider></mat-divider>
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <tecno-text-list-date
-                    titleClass="txt-accent"
-                    class="external-component"
-                    name="Productos Atrasados"
-                    [items]="dataDeliveryStatuses.ecOverdueProducts"
-                    (emitChange)="onProductOverdue($event)"
-                    placeHolderText="Agregar producto atrasado que se desea escalar en comité directivo (se ve reflejado en el Inicio del Reporte Valorem)"
-                    placeHolderDate="Fecha en la cual se planeaba entregar el producto">
-                    </tecno-text-list-date>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- <div class="buttons">
-            <button *ngIf="data.mode == 'edit'" class="button" mat-button color="primary" (click)="onCancel()">Cancelar Edición</button>
-            <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
-            <button class="button"
-                (click)="data.mode == 'create' ? createRegister() : updateRegister()"
-                mat-button color="primary"
-                [disabled]="valoremGroup.invalid || fButtonDisabled">
-                {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
-            </button>
-        </div> -->
-
+        
     </mat-tab>
+
+    <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            Productos Por Entregar
+        </ng-template>
+        <div class="row" style="padding-top: 12px; padding-left: 2px;">
+            <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+            </div>
+        </div>
+        <div class="container-cards">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecProductsInProgresses; index as i">
+                        <mat-card class="col-sm-12 col-md-12 card-content">
+                            <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                    <span style="font-weight: 400;">{{item.description}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                    <span style="font-weight: 400; ">{{item.date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editProdInProgress(item.id)">create</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteProdInProgress(item.id)">delete</mat-icon>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <form *ngIf="actions.create" [formGroup]="productInProgressGroup" style="padding-left: 10px;">
+            <div class="row" style="padding-right: 12px !important;">
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
+                <div class="col-sm-12 col-md-8">
+                    <mat-form-field
+                        class="full-width"
+                        style="width: 100%;">
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput required formControlName="description"></textarea>
+                        <mat-error *ngIf="this.productInProgressGroup.get('description')?.invalid">
+                            {{ getMessageError('description', " descripción") }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                        <mat-label>Fecha en la que se entregará el producto</mat-label>
+                        <input required matInput [matDatepicker]="picker" formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="this.productInProgressGroup.get('date')?.invalid">
+                            {{ getMessageError('date' ,'fecha') }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button *ngIf="flagModeProdInProgress == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdInProgress()">Cancelar Edición</button>
+                <button class="button" mat-button color="primary" (click)="onResetProdInProgress()">Limpiar</button>
+                <button class="button"
+                    (click)="flagModeProdInProgress == 'create' ? createProdInProgress() : updateProdInProgress()"
+                    mat-button color="primary"
+                    [disabled]="productInProgressGroup.invalid || fButtonDisabledProdInProgess">
+                    {{ flagModeProdInProgress == 'create' ? 'Crear' : 'Editar'}}
+                </button>
+            </div>
+        </form>
+        <mat-divider style="border-top-color:#3f51b5"></mat-divider>
+    </mat-tab>
+
+
+    <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            Productos Atrasados
+        </ng-template>
+        <div class="row" style="padding-top: 12px; padding-left: 2px;">
+            <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+            </div>
+        </div>
+        <div class="container-cards">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecOverdueProducts; index as i">
+                        <mat-card class="col-sm-12 col-md-12 card-content">
+                            <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                    <span style="font-weight: 400;">{{item.description}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                    <span style="font-weight: 400; ">{{item.date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editProdOverdue(item.id)">create</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteProdOverdue(item.id)">delete</mat-icon>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <form *ngIf="actions.create" [formGroup]="productOverdueGroup" style="padding-left: 10px;">
+            <div class="row" style="padding-right: 12px !important;">
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
+                <div class="col-sm-12 col-md-8">
+                    <mat-form-field
+                        class="full-width"
+                        style="width: 100%;">
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput required formControlName="description"></textarea>
+                        <mat-error *ngIf="this.productOverdueGroup.get('description')?.invalid">
+                            {{ getMessageError('description', " descripción") }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                        <mat-label>Fecha en la que se debía entregar el producto</mat-label>
+                        <input required matInput [matDatepicker]="picker" formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="this.productOverdueGroup.get('date')?.invalid">
+                            {{ getMessageError('date' ,'fecha') }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button *ngIf="flagModeProdOverdue == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdOverdue()">Cancelar Edición</button>
+                <button class="button" mat-button color="primary" (click)="onResetProdOverdue()">Limpiar</button>
+                <button class="button"
+                    (click)="flagModeProdOverdue == 'create' ? createProdOverdue() : updateProdOverdue()"
+                    mat-button color="primary"
+                    [disabled]="productOverdueGroup.invalid || fButtonDisabledProdOverdue">
+                    {{ flagModeProdOverdue == 'create' ? 'Crear' : 'Editar'}}
+                </button>
+            </div>
+        </form>
+        <mat-divider style="border-top-color:#3f51b5"></mat-divider>
+    </mat-tab>
+
 </mat-tab-group>

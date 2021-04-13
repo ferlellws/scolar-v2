@@ -43,7 +43,7 @@ export class ProjectProgressCreateComponent implements OnInit {
   valorem!: Valorem;
   dataInitial!: DataInitial;
   dataProjectProgressReport!: any;
-  dataDeliveryStatuses!: any;
+  dataDeliveryStatuses: any = {};
   project!: Project;
   isButtonReset: boolean = false;
   isButtonResetProdDelivery: boolean = false;
@@ -196,7 +196,7 @@ export class ProjectProgressCreateComponent implements OnInit {
 
                 this.projectProgressReport.getDeliveryStatuses()
                 .subscribe((data: any) => {
-                  environment.consoleMessage(data, "Productos <<<<<<<<<<<<<<<<<<<<");
+                  //environment.consoleMessage(data, "Productos <<<<<<<<<<<<<<<<<<<<");
                   for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
                     data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
                   }
@@ -398,6 +398,7 @@ export class ProjectProgressCreateComponent implements OnInit {
       });
   }
 
+  //Para Productos Entregados.........................
   onResetProdDelivery() {
     this.isButtonResetProdDelivery = true;
     this.productDeliveryGroup.patchValue({
@@ -409,7 +410,7 @@ export class ProjectProgressCreateComponent implements OnInit {
   editProductDelivery(id:any){
     this.idEditProdDelivery = id;
     this.flagModeProdDelivery = 'edit';
-    let reg = this.productsDelivered.filter(pd => pd.id == id);
+    let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
     this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
     this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
   }
@@ -446,7 +447,7 @@ export class ProjectProgressCreateComponent implements OnInit {
 
     this.productsDeliveredService.updateProductDeliveredId(productDelivery, this.idEditProdDelivery)
     .subscribe((res) => {
-      this.fButtonDisabled = false;
+      this.fButtonDisabledProdDelivery = false;
       if (res.length != 0) {
         this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
         this.getReports();
@@ -456,6 +457,67 @@ export class ProjectProgressCreateComponent implements OnInit {
     });
   }  
 
+
+  //Para Productos Atrasados.........................
+  onResetProdOverdue() {
+    this.isButtonResetProdOverdue = true;
+    this.productOverdueGroup.patchValue({
+      description: null,
+      date: null
+    });
+  }
+
+  editProdOverdue(id:any){
+    this.idEditProdOverdue = id;
+    this.flagModeProdOverdue = 'edit';
+    let reg = this.productsOverdue.filter(pd => pd.id == id);
+    this.productOverdueGroup.get('description')?.setValue(reg[0].description);
+    this.productOverdueGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+  }
+
+  deleteProdOverdue(id:any){
+    this.productsOverdueService.deleteProductOverdue(id)
+      .subscribe(res => {
+        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        this.getReports();
+      })
+  }
+
+  onCancelProdOverdue() {
+    this.onResetProdOverdue();
+    this.flagModeProdOverdue = 'create'
+  }
+
+  createProdOverdue() {
+    let productOverdue = this.productOverdueGroup.value;
+
+    this.productsOverdueService.addProductOverdue(productOverdue)
+      .subscribe(res => {
+        this.fButtonDisabledProdInProgess = false;
+        if (res != null) {
+          this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.getReports();
+          this.onResetProdOverdue();
+        }
+      });
+  }
+
+  updateProdOverdue() {
+    let productOverdue = this.productOverdueGroup.value;
+
+    this.productsOverdueService.updateProductOverdueId(productOverdue, this.idEditProdDelivery)
+    .subscribe((res) => {
+      this.fButtonDisabledProdOverdue = false;
+      if (res.length != 0) {
+        this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        this.getReports();
+        this.onResetProdOverdue();
+        this.flagModeProdOverdue = 'create'
+      }
+    });
+  }
+
+  //Para Productos Por Entregar.........................
   onResetProdInProgress() {
     this.isButtonResetProdInProgress = true;
     this.productInProgressGroup.patchValue({
@@ -486,30 +548,30 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   createProdInProgress() {
-    let productInProgress = this.productDeliveryGroup.value;
+    let productInProgress = this.productInProgressGroup.value;
 
-    this.productsDeliveredService.addProductDelivered(productInProgress)
+    this.productsToBeDeliveredService.addProductToBeDelivered(productInProgress)
       .subscribe(res => {
-        this.fButtonDisabledProdDelivery = false;
+        this.fButtonDisabledProdInProgess = false;
         if (res != null) {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
           this.getReports();
-          this.onResetProdDelivery();
+          this.onResetProdInProgress();
         }
       });
   }
 
   updateProdInProgress() {
-    let productInProgress = this.productDeliveryGroup.value;
+    let productInProgress = this.productInProgressGroup.value;
 
-    this.productsDeliveredService.updateProductDeliveredId(productInProgress, this.idEditProdDelivery)
+    this.productsToBeDeliveredService.updateProductToBeDeliveredId(productInProgress, this.idEditProdDelivery)
     .subscribe((res) => {
-      this.fButtonDisabled = false;
+      this.fButtonDisabledProdInProgess = false;
       if (res.length != 0) {
         this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
         this.getReports();
-        this.onResetProdDelivery();
-        this.flagModeProdDelivery = 'create'
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create'
       }
     });
   }
