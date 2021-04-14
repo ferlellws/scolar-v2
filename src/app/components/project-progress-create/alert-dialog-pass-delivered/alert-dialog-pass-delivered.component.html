@@ -1,0 +1,15 @@
+<div class="m-24">
+  <h2 class="txt-accent">Confirmación para pasar a productos entregados</h2>
+  <div class="row" style="max-width: 100%;">
+    <span class="txt-primary title">Descripción: </span>
+    <span class="description">{{infoProduct.description}}</span>
+
+    <span class="txt-primary title">Fecha: </span>
+    <span class="description">{{infoProduct.date}}</span>
+  </div>
+
+  <div mat-dialog-actions style="justify-content: flex-end;">
+      <button mat-button class="txt-accent" (click)="onNoClick()">Cancelar</button>
+      <button mat-button color="primary" (click)="onSiClick()">Pasar a Productos Entregados</button>
+  </div>
+</div>

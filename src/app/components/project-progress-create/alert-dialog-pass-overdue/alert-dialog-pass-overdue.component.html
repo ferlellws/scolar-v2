@@ -1,0 +1,27 @@
+<div class="m-24">
+  <h2 class="txt-accent">Confirmación para pasar a productos atrasados</h2>
+  <form [formGroup]="productInProgressGroup">
+    <div class="row" style="max-width: 100%;">
+      <span class="txt-primary title">Descripción: </span>
+      <span class="description">{{infoProduct.description}}</span>
+
+      <span class="txt-primary title">Fecha: </span>
+      <span class="description">{{infoProduct.date}}</span>
+      
+      <mat-form-field
+          class="full-width"
+          style="width: 100%;">
+          <mat-label>Causa del atraso</mat-label>
+          <textarea matInput required formControlName="cause_of_delay"></textarea>
+          <mat-error *ngIf="this.productInProgressGroup.get('cause_of_delay')?.invalid">
+              {{ getMessageError('cause_of_delay', " causa del atraso") }}
+          </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div mat-dialog-actions style="justify-content: flex-end;">
+      <button mat-button class="txt-accent" (click)="onNoClick()">Cancelar</button>
+      <button mat-button color="primary" [disabled]="productInProgressGroup.invalid" (click)="onSiClick()">Pasar a Productos Atrasados</button>
+  </div>
+</div>

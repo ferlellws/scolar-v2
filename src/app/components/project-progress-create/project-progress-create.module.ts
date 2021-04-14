@@ -31,6 +31,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
+import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
+
 
 const materialModels = [
   MatSortModule,
@@ -62,11 +66,18 @@ const materialModels = [
   MatButtonToggleModule,
   MatRippleModule,
   MatMenuModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatTooltipModule,
+  MatFormFieldModule,
+  MatDialogModule
 ];
 
 @NgModule({
-  declarations: [ProjectProgressCreateComponent],
+  declarations: [
+    ProjectProgressCreateComponent,
+    AlertConfirmPassOverdueComponent,
+    AlertConfirmPassDeliveredComponent
+  ],
   imports: [
     CommonModule,
     ProjectProgressCreateRoutingModule,

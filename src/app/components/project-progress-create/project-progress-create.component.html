@@ -19,33 +19,33 @@
                         
                             <mat-card class="col-sm-12 col-md-12 card-content">
                                 <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
+                                    <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
+                                    </div>
+                                    <div class="row">
+                                    <span class="col-sm-12 col-md-2" style="font-weight: 500;">Estado:
+                                        <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
+                                    </span>
+                                    <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
+                                        <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
+                                    </span>
+                                    <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
+                                        <span style="font-weight: 400; ">{{item.start_date}}</span>
+                                    </span>
+                                    <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
+                                        <span style="font-weight: 400; ">{{item.due_date}}</span>
+                                    </span>
+                                    <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                        <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editReg(item.id)">create</mat-icon>
+                                        <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteReg(item.id)">delete</mat-icon>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                <span class="col-sm-12 col-md-2" style="font-weight: 500;">Estado:
-                                    <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
-                                    <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
-                                </span>
-                                <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
-                                    <span style="font-weight: 400; ">{{item.start_date}}</span>
-                                </span>
-                                <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
-                                    <span style="font-weight: 400; ">{{item.due_date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editReg(item.id)">create</mat-icon>
-                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteReg(item.id)">delete</mat-icon>
-                                </div>
-                                </div>
-                                <div class="row">
-                                <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Estado:
-                                    <span style="font-weight: 400; ">{{item.status_detail}}</span>
-                                </span>
-                                <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Cronograma:
-                                    <span style="font-weight: 400; ">{{item.label_box}}</span>
-                                </span>
+                                    <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Estado:
+                                        <span style="font-weight: 400; word-break: break-all;">{{item.status_detail}}</span>
+                                    </span>
+                                    <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Cronograma:
+                                        <span style="font-weight: 400; word-break: break-all;">{{item.label_box}}</span>
+                                    </span>
                                 </div>
                             </mat-card>
                         </div>
@@ -169,39 +169,7 @@
         <ng-template mat-tab-label>
             Productos Entregados
         </ng-template>
-        <div class="row" style="padding-top: 12px; padding-left: 2px;">
-            <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
-            </div>
-        </div>
-        <div class="container-cards">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecDeliveredProducts; index as i">
-                        <mat-card class="col-sm-12 col-md-12 card-content">
-                            <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
-                            </div>
-                            <div class="row">
-                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400;">{{item.description}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
-                                    <span style="font-weight: 400; ">{{item.date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create</mat-icon>
-                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
-                                </div>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
         
-        <mat-divider></mat-divider>
         <form *ngIf="actions.create" [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
@@ -229,6 +197,13 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <span style="padding-right: 10px;">{{label_visible}}</span>
+                    <mat-slide-toggle formControlName="is_visible"></mat-slide-toggle>
+                </div>
+            </div>
+
             <div class="buttons">
                 <button *ngIf="flagModeProdDelivery == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdDelivery()">Cancelar Edición</button>
                 <button class="button" mat-button color="primary" (click)="onResetProdDelivery()">Limpiar</button>
@@ -241,14 +216,7 @@
             </div>
         </form>
         
-    </mat-tab>
-
-    <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Productos Por Entregar
-        </ng-template>
+        <mat-divider></mat-divider>
         <div class="row" style="padding-top: 12px; padding-left: 2px;">
             <div class="col-sm-12 col-md-12">
             <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
@@ -257,21 +225,22 @@
         <div class="container-cards">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecProductsInProgresses; index as i">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecDeliveredProducts; index as i">
                         <mat-card class="col-sm-12 col-md-12 card-content">
                             <div class="row">
                                 <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
                             </div>
                             <div class="row">
                                 <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400;">{{item.description}}</span>
+                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
                                 </span>
                                 <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
                                     <span style="font-weight: 400; ">{{item.date}}</span>
                                 </span>
                                 <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editProdInProgress(item.id)">create</mat-icon>
-                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteProdInProgress(item.id)">delete</mat-icon>
+                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create
+                                    </mat-icon>
+                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
                                 </div>
                             </div>
                         </mat-card>
@@ -280,8 +249,15 @@
                 
             </div>
         </div>
+    </mat-tab>
 
-        <mat-divider></mat-divider>
+    <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            Productos Por Entregar
+        </ng-template>
+        
         <form *ngIf="actions.create" [formGroup]="productInProgressGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
@@ -308,18 +284,75 @@
                     </mat-form-field>
                 </div>
             </div>
+            <!-- <div *ngIf="flagModeProdInProgress == 'passToOverdue'" class="row" style="padding-right: 12px !important;">
+                <div class="col-sm-12 col-md-12">
+                    <mat-form-field
+                        class="full-width"
+                        style="width: 100%;">
+                        <mat-label>Causa del atraso</mat-label>
+                        <textarea matInput required formControlName="cause"></textarea>
+                        <mat-error *ngIf="this.productInProgressGroup.get('cause')?.invalid">
+                            {{ getMessageError('cause', " causa del atraso") }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <span style="padding-right: 10px;">{{label_visible}}</span>
+                    <mat-slide-toggle formControlName="is_visible"></mat-slide-toggle>
+                </div>
+            </div>
 
             <div class="buttons">
                 <button *ngIf="flagModeProdInProgress == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdInProgress()">Cancelar Edición</button>
-                <button class="button" mat-button color="primary" (click)="onResetProdInProgress()">Limpiar</button>
+                <!-- <button *ngIf="flagModeProdInProgress == 'passToOverdue'" class="button" mat-button color="primary" (click)="onCancelPassToOverdue()">Cancelar</button>-->
+                <button class="button" mat-button color="primary" (click)="onResetProdInProgress()">Limpiar</button> 
                 <button class="button"
                     (click)="flagModeProdInProgress == 'create' ? createProdInProgress() : updateProdInProgress()"
                     mat-button color="primary"
                     [disabled]="productInProgressGroup.invalid || fButtonDisabledProdInProgess">
+                    <!-- {{ flagModeProdInProgress == 'create' ? 'Crear' : flagModeProdInProgress == 'edit' ? 'Editar' : 'Pasar a Productos Atrasados'}} -->
                     {{ flagModeProdInProgress == 'create' ? 'Crear' : 'Editar'}}
                 </button>
             </div>
         </form>
+
+        <mat-divider></mat-divider>
+        <div class="row" style="padding-top: 12px; padding-left: 2px;">
+            <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+            </div>
+        </div>
+        <div class="container-cards">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecProductsInProgresses; index as i">
+                        <mat-card class="col-sm-12 col-md-12 card-content">
+                            <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-2"style="font-weight: 500; ">Fecha:
+                                    <span style="font-weight: 400; ">{{item.date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-2" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" matTooltip="Pasar a Productos Entregados" style="cursor:pointer; color: #43a047;" (click)="passToDelivered(item.id)">done_all</mat-icon>
+                                    <mat-icon *ngIf="actions.update" matTooltip="Pasar a Productos Atrasados" style="cursor:pointer; color: #ef6c00;" (click)="passToOverdue(item.id)">running_with_errors</mat-icon>
+                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProdInProgress(item.id)">create</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProdInProgress(item.id)">delete</mat-icon>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </mat-tab>
 
 
@@ -329,39 +362,7 @@
         <ng-template mat-tab-label>
             Productos Atrasados
         </ng-template>
-        <div class="row" style="padding-top: 12px; padding-left: 2px;">
-            <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
-            </div>
-        </div>
-        <div class="container-cards">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecOverdueProducts; index as i">
-                        <mat-card class="col-sm-12 col-md-12 card-content">
-                            <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
-                            </div>
-                            <div class="row">
-                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400;">{{item.description}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
-                                    <span style="font-weight: 400; ">{{item.date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" class="txt-primary" style="cursor:pointer" (click)="editProdOverdue(item.id)">create</mat-icon>
-                                    <mat-icon *ngIf="actions.delete" style="color: red; cursor:pointer" (click)="deleteProdOverdue(item.id)">delete</mat-icon>
-                                </div>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-
-        <mat-divider></mat-divider>
+        
         <form *ngIf="actions.create" [formGroup]="productOverdueGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
@@ -388,6 +389,26 @@
                     </mat-form-field>
                 </div>
             </div>
+            <div class="row" style="padding-right: 12px !important;">
+                <div class="col-sm-12 col-md-12">
+                    <mat-form-field
+                        class="full-width"
+                        style="width: 100%;">
+                        <mat-label>Causa del atraso</mat-label>
+                        <textarea matInput required formControlName="cause_of_delay"></textarea>
+                        <mat-error *ngIf="this.productOverdueGroup.get('cause_of_delay')?.invalid">
+                            {{ getMessageError('cause_of_delay', " causa del atraso") }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <span style="padding-right: 10px;">{{label_visible}}</span>
+                    <mat-slide-toggle formControlName="is_visible"></mat-slide-toggle>
+                </div>
+            </div>
 
             <div class="buttons">
                 <button *ngIf="flagModeProdOverdue == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdOverdue()">Cancelar Edición</button>
@@ -401,6 +422,43 @@
             </div>
         </form>
         
+        <mat-divider></mat-divider>
+        <div class="row" style="padding-top: 12px; padding-left: 2px;">
+            <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+            </div>
+        </div>
+        <div class="container-cards">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecOverdueProducts; index as i">
+                        <mat-card class="col-sm-12 col-md-12 card-content">
+                            <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                    <span style="font-weight: 400; ">{{item.date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProdOverdue(item.id)">create</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProdOverdue(item.id)">delete</mat-icon>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <span  class="col-sm-12 col-md-11"style="font-weight: 500; ">Causa del atraso:
+                                    <span style="font-weight: 400; ">{{item.cause_of_delay}}</span>
+                                </span>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </mat-tab>
 
 </mat-tab-group>

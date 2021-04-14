@@ -66,7 +66,7 @@ export class ValoremService {
   }
 
   getValoremIdProject(id: number) {
-    return this.http.get<Valorem>(`${this.API}/${id}`, this.httpOptions)
+    return this.http.get<Valorem>(`${this.API}/chart_progress_by_project${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {

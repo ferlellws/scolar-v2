@@ -1,10 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { env } from 'node:process';
 import { Actions } from 'src/app/models/actions';
 import { ProductDelivered } from 'src/app/models/product-delivered';
 import { ProductOverdue } from 'src/app/models/product-overdue';
@@ -23,7 +22,8 @@ import { environment } from 'src/environments/environment';
 import { DialogData } from '../applications/applications-form/applications-form.component';
 import { ProjectProgressReport } from 'src/app/models/project-progress-report';
 import { Project } from 'src/app/models/project';
-import { TimelineChartsComponent } from '../shared/google-charts/timeline-charts/timeline-charts.component';
+import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
+import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
 
 @Component({
   selector: 'tecno-project-progress-create',
@@ -37,10 +37,12 @@ export class ProjectProgressCreateComponent implements OnInit {
   idEditProdDelivery!: number;
   idEditProdOverdue!: number;
   idEditProdInProgress!: number;
+  idPassToOverdueProdInProgress!: number;
   flagModeProdDelivery: string = 'create';
   flagModeProdOverdue: string = 'create';
   flagModeProdInProgress: string = 'create';
   labels: any;
+  label_visible: string;
   valorem!: Valorem;
   dataInitial!: DataInitial;
   dataProjectProgressReport!: any;
@@ -93,7 +95,8 @@ export class ProjectProgressCreateComponent implements OnInit {
       dueDate: 'Fecha de Finalización',
       statusDetail: 'Detalle de Estado',
       labelBox: 'Detalle de Cronograma',
-    }
+    },
+    this.label_visible = '¿Se visualiza en el reporte Valorem?'
   } 
 
   async ngOnInit(): Promise<void> {
@@ -123,16 +126,21 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.productDeliveryGroup = this.fb.group({
       description: [null, Validators.required],
       date: [null, Validators.required],
+      is_visible: [true, Validators.required]
     });
 
     this.productInProgressGroup = this.fb.group({
       description: [null, Validators.required],
       date: [null, Validators.required],
+      cause_of_delay: [null],
+      is_visible: true
     });
 
     this.productOverdueGroup = this.fb.group({
       description: [null, Validators.required],
       date: [null, Validators.required],
+      cause_of_delay: [null, Validators.required],
+      is_visible: true
     });
     
   }
@@ -404,7 +412,8 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.isButtonResetProdDelivery = true;
     this.productDeliveryGroup.patchValue({
       description: null,
-      date: null
+      date: null,
+      is_visible: true,
     });
   }
 
@@ -414,6 +423,7 @@ export class ProjectProgressCreateComponent implements OnInit {
     let reg = this.productsDelivered.filter(pd => pd.id == id);
     this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
     this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+    this.productDeliveryGroup.get('is_visible')?.setValue(reg[0].is_visible);
   }
 
   deleteProductDelivery(id:any){
@@ -450,7 +460,6 @@ export class ProjectProgressCreateComponent implements OnInit {
 
   updateProdDelivery() {
     let productDelivery = this.productDeliveryGroup.value;
-
     this.productsDeliveredService.updateProductDeliveredId(productDelivery, this.idEditProdDelivery)
     .subscribe((res) => {
       this.fButtonDisabledProdDelivery = false;
@@ -469,7 +478,9 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.isButtonResetProdOverdue = true;
     this.productOverdueGroup.patchValue({
       description: null,
-      date: null
+      date: null,
+      cause_of_delay: null,
+      is_visible: true,
     });
   }
 
@@ -479,6 +490,8 @@ export class ProjectProgressCreateComponent implements OnInit {
     let reg = this.productsOverdue.filter(pd => pd.id == id);
     this.productOverdueGroup.get('description')?.setValue(reg[0].description);
     this.productOverdueGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+    this.productOverdueGroup.get('cause_of_delay')?.setValue(reg[0].cause_of_delay)
+    this.productOverdueGroup.get('is_visible')?.setValue(reg[0].is_visible);
   }
 
   deleteProdOverdue(id:any){
@@ -533,7 +546,8 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.isButtonResetProdInProgress = true;
     this.productInProgressGroup.patchValue({
       description: null,
-      date: null
+      date: null,
+      is_visible: true,
     });
   }
 
@@ -543,6 +557,7 @@ export class ProjectProgressCreateComponent implements OnInit {
     let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
     this.productInProgressGroup.get('description')?.setValue(reg[0].description);
     this.productInProgressGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+    this.productInProgressGroup.get('is_visible')?.setValue(reg[0].is_visible);
   }
 
   deleteProdInProgress(id:any){
@@ -592,4 +607,66 @@ export class ProjectProgressCreateComponent implements OnInit {
     });
   }
 
+  passToDelivered(id:any) {
+    environment.consoleMessage("Bttn Pasar a entegados");
+    this.flagModeProdInProgress = 'passToOverdue';
+    this.idPassToOverdueProdInProgress = id;
+    let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
+
+    const dialogRef = this.dialog.open(AlertConfirmPassDeliveredComponent, {
+        width: '750px',
+        data: {
+          idProduct: id,
+          project_id: this.project.id,
+          description: reg[0].description,
+          date: reg[0].date,
+          is_visible: reg[0].is_visible
+        }
+    });
+    dialogRef.componentInstance.emitClose.subscribe((data: any) => {
+      environment.consoleMessage(data, "QUE ES ESTO???");
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    });
+  }
+
+  passToOverdue(id:any) {
+    environment.consoleMessage("Bttn  Pasar a atrasados");
+    this.flagModeProdInProgress = 'passToOverdue';
+    this.idPassToOverdueProdInProgress = id;
+    let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
+
+    const dialogRef = this.dialog.open(AlertConfirmPassOverdueComponent, {
+        width: '750px',
+        data: {
+          idProduct: id,
+          project_id: this.project.id,
+          description: reg[0].description,
+          date: reg[0].date,
+          is_visible: reg[0].is_visible
+        }
+      });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    }
+    );
+  }
+
+  updateToOverdue(){
+    environment.consoleMessage("Acción Pasar a atrasados");
+  }
+  onCancelPassToOverdue() {
+    environment.consoleMessage("Bttn Cancelar paso a atrasado");
+    this.onResetProdInProgress();
+    this.flagModeProdInProgress = 'create'
+  }
 }
