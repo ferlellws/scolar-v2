@@ -170,7 +170,41 @@
             Productos Entregados
         </ng-template>
         
-        <form *ngIf="actions.create" [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
+        <mat-divider></mat-divider>
+        <div class="row" style="padding-top: 12px; padding-left: 2px;">
+            <div class="col-sm-12 col-md-12">
+            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+            </div>
+        </div>
+        <div class="container-cards">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecDeliveredProducts; index as i">
+                        <mat-card class="col-sm-12 col-md-12 card-content">
+                            <div class="row">
+                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
+                                </span>
+                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                    <span style="font-weight: 400; ">{{item.date}}</span>
+                                </span>
+                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create
+                                    </mat-icon>
+                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- <form *ngIf="actions.create" [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
             <div class="row" style="padding-right: 12px !important;">
                 <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo</h3>
                 <div class="col-sm-12 col-md-8">
@@ -214,41 +248,11 @@
                     {{ flagModeProdDelivery == 'create' ? 'Crear' : 'Editar'}}
                 </button>
             </div>
-        </form>
-        
-        <mat-divider></mat-divider>
-        <div class="row" style="padding-top: 12px; padding-left: 2px;">
-            <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
-            </div>
-        </div>
-        <div class="container-cards">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecDeliveredProducts; index as i">
-                        <mat-card class="col-sm-12 col-md-12 card-content">
-                            <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
-                            </div>
-                            <div class="row">
-                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
-                                    <span style="font-weight: 400; ">{{item.date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create
-                                    </mat-icon>
-                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
-                                </div>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
+        </form> -->
+
+        <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
+            <mat-icon>add</mat-icon>
+        </button>
     </mat-tab>
 
     <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->

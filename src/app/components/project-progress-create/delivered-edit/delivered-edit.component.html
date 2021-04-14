@@ -1,0 +1,59 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <h2 class="mat-headline">{{ labelTitle }}</h2>
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div style="padding: 20px">
+    <ng-template mat-tab-label>
+        Productos Entregados
+    </ng-template>
+
+    <form [formGroup]="productDeliveryGroup" style="padding-left: 10px;">
+        <div class="row" style="padding-right: 12px !important;">
+            <div class="col-sm-12 col-md-8">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <mat-label>Descripción</mat-label>
+                    <textarea matInput required formControlName="description"></textarea>
+                    <mat-error *ngIf="this.productDeliveryGroup.get('description')?.invalid">
+                        {{ getMessageError('description', " descripción") }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                    <mat-label>Fecha en la que se entregó el producto</mat-label>
+                    <input required matInput [matDatepicker]="picker" formControlName="date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="this.productDeliveryGroup.get('date')?.invalid">
+                        {{ getMessageError('date' ,'fecha') }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <span style="padding-right: 10px;">{{label_visible}}</span>
+                <mat-slide-toggle formControlName="is_visible"></mat-slide-toggle>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button *ngIf="flagModeProdDelivery == 'edit'" class="button" mat-button color="accent" (click)="onCancelProdDelivery()">Cancelar Edición</button>
+            <button class="button" mat-button color="primary" (click)="onResetProdDelivery()">Limpiar</button>
+            <button class="button"
+                (click)="flagModeProdDelivery == 'create' ? createProdDelivery() : updateProdDelivery()"
+                mat-button color="primary"
+                [disabled]="productDeliveryGroup.invalid || fButtonDisabledProdDelivery">
+                {{ flagModeProdDelivery == 'create' ? 'Crear' : 'Editar'}}
+            </button>
+        </div>
+    </form>
+</div>

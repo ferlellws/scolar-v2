@@ -34,6 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
 import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
+import { DeliveredEditComponent } from './delivered-edit/delivered-edit.component';
 
 
 const materialModels = [
@@ -76,7 +77,8 @@ const materialModels = [
   declarations: [
     ProjectProgressCreateComponent,
     AlertConfirmPassOverdueComponent,
-    AlertConfirmPassDeliveredComponent
+    AlertConfirmPassDeliveredComponent,
+    DeliveredEditComponent
   ],
   imports: [
     CommonModule,

@@ -24,6 +24,7 @@ import { ProjectProgressReport } from 'src/app/models/project-progress-report';
 import { Project } from 'src/app/models/project';
 import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
 import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
+import { DeliveredEditComponent } from './delivered-edit/delivered-edit.component';
 
 @Component({
   selector: 'tecno-project-progress-create',
@@ -407,6 +408,24 @@ export class ProjectProgressCreateComponent implements OnInit {
       });
   }
 
+  onCreate() {
+    const dialogRef = this.dialog.open(DeliveredEditComponent, {
+      width: environment.widthFormsLittleModal,
+      data: {
+        project_id: this.project.id,
+        mode: 'create'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    });
+  }
+
   //Para Productos Entregados.........................
   onResetProdDelivery() {
     this.isButtonResetProdDelivery = true;
@@ -418,12 +437,32 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   editProductDelivery(id:any){
-    this.idEditProdDelivery = id;
-    this.flagModeProdDelivery = 'edit';
+    // this.idEditProdDelivery = id;
+    // this.flagModeProdDelivery = 'edit';
     let reg = this.productsDelivered.filter(pd => pd.id == id);
-    this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
-    this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
-    this.productDeliveryGroup.get('is_visible')?.setValue(reg[0].is_visible);
+    // this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
+    // this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
+    // this.productDeliveryGroup.get('is_visible')?.setValue(reg[0].is_visible);
+
+    const dialogRef = this.dialog.open(DeliveredEditComponent, {
+      width: environment.widthFormsLittleModal,
+      data: {
+        idProduct: id,
+        project_id: this.project.id,
+        description: reg[0].description,
+        date: reg[0].date,
+        is_visible: reg[0].is_visible,
+        mode: 'edit'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    });
   }
 
   deleteProductDelivery(id:any){
@@ -657,8 +696,7 @@ export class ProjectProgressCreateComponent implements OnInit {
         this.flagModeProdInProgress = 'create';
         dialogRef.close();
       }
-    }
-    );
+    });
   }
 
   updateToOverdue(){
