@@ -53,10 +53,24 @@ export class AlertConfirmPassOverdueComponent {
           .subscribe(toBeDelivered =>{
             if(res != null) {
               this.openSnackBar(true, "El producto se ha registrado como atraado", "");
+              this.emitClose.emit('close');
             }
           })
-      })
-    this.emitClose.emit('close');
+      }
+      ,(err) => {
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+  
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+          true;//environment.consoleMessage(err, "Error: ");
+        })
+  
+        this.openSnackBar(false, "Ya existe un registro en Productos Atrasados con esta descripción", "");
+      });
   }
 
   onNoClick(): void {

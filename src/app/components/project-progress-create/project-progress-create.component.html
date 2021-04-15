@@ -179,7 +179,7 @@
         <div class="container-cards">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecDeliveredProducts; index as i">
+                    <div class="row" *ngFor="let item of productsDelivered; index as i">
                         <mat-card class="col-sm-12 col-md-12 card-content">
                             <div class="row">
                                 <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
@@ -224,7 +224,7 @@
         <div class="container-cards">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecProductsInProgresses; index as i">
+                    <div class="row" *ngFor="let item of productsToBeDelivered; index as i">
                         <mat-card class="col-sm-12 col-md-12 card-content">
                             <div class="row">
                                 <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
@@ -271,7 +271,7 @@
         <div class="container-cards">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of dataDeliveryStatuses.ecOverdueProducts; index as i">
+                    <div class="row" *ngFor="let item of productsOverdue; index as i">
                         <mat-card class="col-sm-12 col-md-12 card-content">
                             <div class="row">
                                 <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>

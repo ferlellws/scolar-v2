@@ -52,8 +52,8 @@ export class ProjectProgressReportService {
       );
   }
 
-  getDataProjectProgressReportByProjectId(strategicGuidelineId: number) {
-    return this.http.get<ProjectProgressReport[]>(`${this.API}/chart_project_progress_report/${strategicGuidelineId}`, this.httpOptions)
+  getDataProjectProgressReportByProjectId(id: number) {
+    return this.http.get<ProjectProgressReport[]>(`${this.API}/chart_progress_by_project/${id}`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)
@@ -62,6 +62,14 @@ export class ProjectProgressReportService {
 
   getDeliveryStatuses() {
     return this.http.get<any[]>(`${this.API}/delivery_statuses`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getDeliveryStatusesVisible() {
+    return this.http.get<any[]>(`${this.API}/delivery_statuses_is_visible`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)

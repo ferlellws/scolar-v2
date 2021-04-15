@@ -91,7 +91,7 @@ const MATERIALMODULES = [
     AppComponent,
     PageNotFoundComponent,
     LoginComponent,
-    ParticleBackgroundComponent
+    ParticleBackgroundComponent,
   ],
   imports: [
     BrowserModule,

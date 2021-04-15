@@ -100,9 +100,23 @@ export class InProgressFormComponent implements OnInit {
         this.fButtonDisabledProdInProgress = false;
         if (res != null) {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.emitClose.emit('close');
         }
-      });
-    this.emitClose.emit('close');
+      },(err) => {
+        this.fButtonDisabledProdInProgress = false;
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+          true;//environment.consoleMessage(err, "Error: ");
+        })
+
+        this.openSnackBar(false, sErrors, "");
+      }); 
   }
 
   updateProdInProgress() {
@@ -113,8 +127,22 @@ export class InProgressFormComponent implements OnInit {
       this.fButtonDisabledProdInProgress = false;
       if (res.length != 0) {
         this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        this.emitClose.emit('close');
       }
-    });
-    this.emitClose.emit('close');
+    },(err) => {
+      this.fButtonDisabledProdInProgress = false;
+      let aErrors: any[] = [];
+      for(let i in err.error) {
+        aErrors = aErrors.concat(err.error[i])
+      }
+
+      let sErrors: string = "";
+      aErrors.forEach((err) => {
+        sErrors += "- " + err + "\n";
+        true;//environment.consoleMessage(err, "Error: ");
+      })
+
+      this.openSnackBar(false, sErrors, "");
+    }); 
   }
 }

@@ -47,10 +47,24 @@ export class AlertConfirmPassDeliveredComponent {
           .subscribe(toBeDelivered =>{
             if(delivered != null) {
               this.openSnackBar(true, "El producto se ha registrado como entregado", "");
+              this.emitClose.emit('close');
             }
           })
+      }
+      ,(err) => {
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+  
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+          true;//environment.consoleMessage(err, "Error: ");
+        })
+  
+        this.openSnackBar(false, "Ya existe un registro en Productos Entregados con esta descripción", "");
       });
-      this.emitClose.emit('close');
   }
 
   onNoClick(): void {

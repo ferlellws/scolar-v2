@@ -109,7 +109,7 @@ export class ProjectProgressReportComponent implements OnInit {
       });
     });
 
-    this.projectProgressReport.getDeliveryStatuses()
+    this.projectProgressReport.getDeliveryStatusesVisible()
     .subscribe((data: DataInitial) => {
       this.dataDeliveryStatuses = data;
       this.dataDeliveryStatuses.ecDeliveredProducts = this.dataDeliveryStatuses.ecDeliveredProducts.filter((r:any) => r.is_visible == 1);

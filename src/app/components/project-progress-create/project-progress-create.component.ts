@@ -202,26 +202,48 @@ export class ProjectProgressCreateComponent implements OnInit {
           .subscribe((data: DataInitial) => {
             this.dataInitial = data;
 
-            this.projectProgressReport.getDataProjectProgressReportByProjectId(this.project.strategic_guideline!.id)
-              .subscribe((data: ProjectProgressReport) => {
-                this.dataProjectProgressReport = this.getFormatData(data);
+            this.projectProgressReport.getDataProjectProgressReport(this.project.strategic_guideline!.id)
+              .subscribe((data: any) => {
+                let filterReg:any = [];
+                let dataAll:any = {}
+                for (let index = 0; index < data.dataChart.length; index++) {
+                  if(data.dataChart[index].projectName == this.project.title){ 
+                    filterReg.push(data.dataChart[index]);
+                  }                  
+                }
+                dataAll = {
+                  strategicGuideline: data.strategicGuideline,
+                  dataChart: filterReg
+                }
+
+                this.dataProjectProgressReport = this.getFormatData(dataAll);
 
                 this.projectProgressReport.getDeliveryStatuses()
-                .subscribe((data: any) => {
-                  for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
-                    data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
-                  }
-                  for (let index = 0; index < data.ecOverdueProducts.length; index++) {
-                    data.ecOverdueProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
-                  }
-                  for (let index = 0; index < data.ecProductsInProgresses.length; index++) {
-                    data.ecProductsInProgresses.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
-                  }
-                  this.dataDeliveryStatuses = data;
-                  this.productsDelivered = this.dataDeliveryStatuses.ecDeliveredProducts;
-                  this.productsOverdue = this.dataDeliveryStatuses.ecOverdueProducts;
-                  this.productsToBeDelivered = this.dataDeliveryStatuses.ecProductsInProgresses;
-                });
+                  .subscribe((data: any) => {
+                    this.productsDelivered = [];
+                    this.productsOverdue = [];
+                    this.productsToBeDelivered = [];
+                    for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
+                      if(data.ecDeliveredProducts[index].project.id == this.project.id) {
+                        //environment.consoleMessage(data.ecDeliveredProducts[index],"Productos Entregados");
+                        data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
+                        this.productsDelivered.push(data.ecDeliveredProducts[index]);
+                      }
+                    }
+                    for (let index = 0; index < data.ecOverdueProducts.length; index++) {
+                      if(data.ecOverdueProducts[index].project.id == this.project.id) {
+                        data.ecOverdueProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
+                        this.productsOverdue.push(data.ecOverdueProducts[index]);
+                      }
+                    }
+                    for (let index = 0; index < data.ecProductsInProgresses.length; index++) {
+                      if(data.ecProductsInProgresses[index].project.id == this.project.id) {
+                        data.ecProductsInProgresses.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
+                        this.productsToBeDelivered.push(data.ecProductsInProgresses[index]);
+                      }
+                    }
+                    //environment.consoleMessage(this.productsDelivered,"Productos Entregados final");
+                  });
               });
           });
         });

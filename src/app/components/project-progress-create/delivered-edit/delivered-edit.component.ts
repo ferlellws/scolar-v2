@@ -95,9 +95,23 @@ export class DeliveredEditComponent implements OnInit {
         this.fButtonDisabledProdDelivery = false;
         if (res != null) {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.emitClose.emit('close');
         }
-      });
-    this.emitClose.emit('close');
+      },(err) => {
+        this.fButtonDisabledProdDelivery = false;
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+          true;//environment.consoleMessage(err, "Error: ");
+        })
+
+        this.openSnackBar(false, sErrors, "");
+      });    
   }
 
   updateProdDelivery() {
@@ -107,9 +121,24 @@ export class DeliveredEditComponent implements OnInit {
       this.fButtonDisabledProdDelivery = false;
       if (res.length != 0) {
         this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
+        this.emitClose.emit('close');
       }
+    },(err) => {
+      this.fButtonDisabledProdDelivery = false;
+      let aErrors: any[] = [];
+      for(let i in err.error) {
+        aErrors = aErrors.concat(err.error[i])
+      }
+
+      let sErrors: string = "";
+      aErrors.forEach((err) => {
+        sErrors += "- " + err + "\n";
+        true;//environment.consoleMessage(err, "Error: ");
+      })
+
+      this.openSnackBar(false, sErrors, "");
     });
-    this.emitClose.emit('close');
+    
   }  
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
