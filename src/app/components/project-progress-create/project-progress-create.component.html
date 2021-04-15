@@ -1,4 +1,4 @@
-<div *ngIf="actions.read && (project.pmo!.id == userID || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead!.id == userID || profileID == 2)">
+<div *ngIf="actions.read && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || (project.functional_lead == null ? null : project.functional_lead!.id == userID) || profileID == 2)">
     <h1 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Reporte Valorem: {{project.title}}</h1>
     <mat-tab-group>
         <mat-tab>
@@ -308,6 +308,6 @@
 
     </mat-tab-group>
 </div>
-<div *ngIf="!actions.read || (project.pmo!.id == userID || !(project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead!.id == userID || profileID == 2)">
+<div *ngIf="!actions.read || !((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || (project.functional_lead == null ? null : project.functional_lead!.id == userID) || profileID == 2)">
     <tecno-unauthorized></tecno-unauthorized>
 </div>
