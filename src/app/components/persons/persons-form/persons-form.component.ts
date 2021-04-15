@@ -104,17 +104,10 @@ export class PersonsFormComponent implements OnInit {
     })
     
     if (this.data.mode == 'edit') {
-      environment.consoleMessage(this.data.id, ">>>>>>>>>>>>>>>>> Edicion");
-
       await this.personsService.getPersonsId(this.data.id)
         .subscribe((res: any) => {
-          environment.consoleMessage(res, "PERSONA");
           this.person = res;
-
-          environment.consoleMessage(this.person.position_area, "area");
-
           this.initializeSelects();
-          
           if (this.person.user != null) {
             this.personsGroup.patchValue({
               access: this.accessOption[1].id
@@ -130,7 +123,6 @@ export class PersonsFormComponent implements OnInit {
   }
 
   selectVicePresidencies(vicePresidencyId: number) {
-    environment.consoleMessage("->  Entra a selectVicePresidencies")
     this.vicePresidenciesService.getVicePresidenciesSelect()
       .subscribe((vicePresidencies: VicePresidency[]) => {
         this.vicePresidencies = vicePresidencies;
@@ -186,9 +178,6 @@ export class PersonsFormComponent implements OnInit {
             }
           }
 
-          environment.consoleMessage(this.areas, "Areas: Open");
-          environment.consoleMessage("+++++++++++Inicializa formulario");
-
           // INICIALIZAR EL CAMPO SUBAREA DEL FORMULARIO
           this.personsGroup.patchValue({
             subArea: this.subAreaId,
@@ -200,7 +189,6 @@ export class PersonsFormComponent implements OnInit {
     await this.areasService.getSubAreasByArea(areaId)
         .subscribe((subAreas: Area[]) =>{
           this.subAreas = subAreas;
-          environment.consoleMessage(this.subAreas, "subAreas: Open");
         });
   }
 
@@ -209,10 +197,6 @@ export class PersonsFormComponent implements OnInit {
     await this.positionsService.getPositionsByArea(areaId)
     .subscribe((positions: any[]) => {
       this.positions = positions;
-
-      environment.consoleMessage(this.positions, "positions: Open");
-      environment.consoleMessage(this.person.position_area.id, "position_area-id: ");
-
       this.personsGroup.patchValue({
         position_area_id: this.person.position_area.id
       });
@@ -224,9 +208,6 @@ export class PersonsFormComponent implements OnInit {
     this.profilesService.getProfiles()
         .subscribe((profiles: Profile[]) => {
           this.profiles = profiles;
-
-          environment.consoleMessage(this.person.profile?.id, "this.person.profile?.id: ")
-
           this.personsGroup.patchValue({
             profile_id: this.person.profile?.id,
           });
@@ -256,7 +237,6 @@ export class PersonsFormComponent implements OnInit {
       await this.areasService.getAreasByVicePresidency(this.personsGroup.get('vicePresidency')!.value)
         .subscribe((areas: Area[]) =>{
           this.areas = areas;
-          environment.consoleMessage(this.areas, "Areas: Open");
         });
     }
   }
@@ -269,7 +249,6 @@ export class PersonsFormComponent implements OnInit {
       await this.areasService.getSubAreasByArea(this.personsGroup.get('area')!.value)
         .subscribe((subAreas: Area[]) =>{
           this.subAreas = subAreas;
-          environment.consoleMessage(this.subAreas, "SubAreas: Open");
         });
     }
   }
@@ -286,7 +265,6 @@ export class PersonsFormComponent implements OnInit {
           .subscribe((positions: any[]) => {
             this.positions = positions
           });
-          environment.consoleMessage(this.positions, "Position: Open");
       }
     }
   }
@@ -340,10 +318,7 @@ export class PersonsFormComponent implements OnInit {
         .subscribe((res: any) => {
           this.fButtonDisabled = false;
           if (res.is_success == true) {
-            
             userID = res.data.user_created_id;
-            environment.consoleMessage(userID,"USER ID");
-
             let newPerson:any  = {
               first_name: this.personsGroup.get('first_name')!.value,
               last_name: this.personsGroup.get('last_name')!.value,
@@ -434,13 +409,10 @@ export class PersonsFormComponent implements OnInit {
             if (users[index].email == this.personsGroup.get('email')!.value) {
               flag = true;
               userID = users[index].id;
-              environment.consoleMessage("ES IGUAAAAAL");
               break;
             }
           }
         }
-        environment.consoleMessage(flag,"FLAG");
-        environment.consoleMessage(userID,"ID");
 
         if (this.personsGroup.get('access')!.value == 1 && flag == false) {
           let newUser:any = {
@@ -575,7 +547,6 @@ export class PersonsFormComponent implements OnInit {
             })
 
         } else if (this.personsGroup.get('access')!.value == 0 && flag == true) {
-          environment.consoleMessage("ENTRANDO A QUITAR PERMISOS");
           let newPerson:any  = {
             first_name: this.personsGroup.get('first_name')!.value,
             last_name: this.personsGroup.get('last_name')!.value,
@@ -591,11 +562,9 @@ export class PersonsFormComponent implements OnInit {
           )
           .subscribe((res) => {
             this.fButtonDisabled = false;
-            environment.consoleMessage(res, "RESSSSSSSSSSSSSSSSSSSSSSSSS");
             if (res.status == "created") {
               this.openSnackBar(true, "Registro modificado", "");
               this.onReset();
-              environment.consoleMessage(userID, "PERRA VIDA");
               this.userService.deleteUser(userID)
                 .subscribe(res =>{
                   true;
@@ -686,7 +655,6 @@ export class PersonsFormComponent implements OnInit {
       true;//environment.consoleMessage(result, 'The dialog was closed');
       if (result) {
         this.isChecked = !this.isChecked;
-        environment.consoleMessage(this.personsGroup.get('access')!.value,"ACCES");
       } else {
         this.isChecked = this.isChecked;
       }

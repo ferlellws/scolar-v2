@@ -284,7 +284,6 @@ export class IndicatorsReportComponent implements OnInit {
       this.indicatorsReportsService.getAreas("","")
       .subscribe((data: any) => {
         this.areas = data;
-        environment.consoleMessage(this.areas, "areassssssssssss")
         this.flagAreas = true;    
       });
     }

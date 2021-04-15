@@ -8,6 +8,7 @@ import { Actions } from 'src/app/models/actions';
 import { environment } from 'src/environments/environment';
 
 export interface DataInitial {
+  start_date: any;
   externalCompanyStates: any;
   externalCompanySchedules: any;
   strategicGuidelines: StrategicGuidelines[]
@@ -85,6 +86,7 @@ export class ProjectProgressReportComponent implements OnInit {
   dataProjectProgressReport!: any;
   dataInitial!: DataInitial;
   dataDeliveryStatuses!: any;
+  datepipe: any;
 
   constructor(
     private mainService: MainService,
@@ -110,9 +112,40 @@ export class ProjectProgressReportComponent implements OnInit {
     this.projectProgressReport.getDeliveryStatuses()
     .subscribe((data: DataInitial) => {
       this.dataDeliveryStatuses = data;
+      this.dataDeliveryStatuses.ecDeliveredProducts = this.dataDeliveryStatuses.ecDeliveredProducts.filter((r:any) => r.is_visible == 1);
+      this.dataDeliveryStatuses.ecProductsInProgresses = this.dataDeliveryStatuses.ecProductsInProgresses.filter((r:any) => r.is_visible == 1);
+      this.dataDeliveryStatuses.ecOverdueProducts = this.dataDeliveryStatuses.ecOverdueProducts.filter((r:any) => r.is_visible == 1);
+      
+      for (let index = 0; index < this.dataDeliveryStatuses.ecDeliveredProducts.length; index++) {
+        this.dataDeliveryStatuses.ecDeliveredProducts[index].date = this.dataDeliveryStatuses.ecDeliveredProducts[index].date!.substring(0,10);
+      }
+      for (let index = 0; index < this.dataDeliveryStatuses.ecProductsInProgresses.length; index++) {
+        this.dataDeliveryStatuses.ecProductsInProgresses[index].date = this.dataDeliveryStatuses.ecProductsInProgresses[index].date!.substring(0,10);
+      }
+      for (let index = 0; index < this.dataDeliveryStatuses.ecOverdueProducts.length; index++) {
+        this.dataDeliveryStatuses.ecOverdueProducts[index].date = this.dataDeliveryStatuses.ecOverdueProducts[index].date!.substring(0,10);
+      }
     });
 
     setTimeout(() => {this.mainService.hideLoading()}, 1000);
+  }
+  
+  getToStringDate(date: any): string {
+    if (date == '' || date == undefined || date == null){
+      return '';
+    }
+    if (date + "" != "Invalid Date" ){
+      let d!: Date;
+      try {
+        d = new Date(date);
+      } catch {
+        d = new Date();
+      } finally {
+          return `${this.datepipe.transform( d, 'yyyy-MM-dd')}`;
+      }
+    } else {
+      return "";
+    }
   }
 
   onTabChanged(event: MatTabChangeEvent) {

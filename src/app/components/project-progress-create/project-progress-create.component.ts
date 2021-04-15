@@ -25,6 +25,9 @@ import { Project } from 'src/app/models/project';
 import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
 import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
 import { DeliveredEditComponent } from './delivered-edit/delivered-edit.component';
+import { InProgressFormComponent } from './in-progress-form/in-progress-form.component';
+import { OverdueFormComponent } from './overdue-form/overdue-form.component';
+import { ValoremFormComponent } from './valorem-form/valorem-form.component';
 
 @Component({
   selector: 'tecno-project-progress-create',
@@ -181,7 +184,6 @@ export class ProjectProgressCreateComponent implements OnInit {
   getReports() {
     this.route.data.subscribe(project =>{
       this.project = project.projectProgressCreateResolver;
-      //environment.consoleMessage(this.project,"Project <<<<<<<<<<<<<<<<");
       this.valoremService.getValoremSelect()
         .subscribe((res: Valorem[]) => {
           this.items = res.filter((valorem) =>{
@@ -206,7 +208,6 @@ export class ProjectProgressCreateComponent implements OnInit {
 
                 this.projectProgressReport.getDeliveryStatuses()
                 .subscribe((data: any) => {
-                  //environment.consoleMessage(data, "Productos <<<<<<<<<<<<<<<<<<<<");
                   for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
                     data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
                   }
@@ -378,26 +379,44 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   editReg(id:any) {
-    this.idRegEdit = id;
-    this.data.mode = 'edit';
     let reg  = this.items.filter(v => v.id == id);
    
-    this.valoremStatesService.getValoremStatesSelect()
-      .subscribe((res: ValoremState []) => {
-        this.selectStatusValorem = res
-        this.valoremGroup.get('external_company_state_id')?.setValue(reg[0].external_company_state?.id);
-      });
-    
-    this.valoremSchedulesService.getValoremSchedulesSelect()
-      .subscribe((res: ValoremSchedule []) => {
-        this.selectScheduleValorem = res
-        this.valoremGroup.get('external_company_schedule_id')?.setValue(reg[0].external_company_schedule?.id);
-      });
-    
-    this.valoremGroup.get('start_date')?.setValue(new Date(reg[0].start_date + ":00:00"));
-    this.valoremGroup.get('due_date')?.setValue(new Date(reg[0].due_date + ":00:00"));
-    this.valoremGroup.get('status_detail')?.setValue(reg[0].status_detail);
-    this.valoremGroup.get('label_box')?.setValue(reg[0].label_box);
+    const dialogRef = this.dialog.open(ValoremFormComponent, {
+      width: environment.widthFormsModal,
+      data: {
+        valoremId: id,
+        project_id: this.project.id,
+        external_company_state_id: reg[0].external_company_state?.id,
+        external_company_schedule_id: reg[0].external_company_schedule?.id,
+        status_detail: reg[0].status_detail,
+        label_box: reg[0].label_box,
+        start_date: reg[0].start_date,
+        due_date: reg[0].due_date,
+        is_active: reg[0].is_active,
+        mode: 'edit'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onReset();
+        dialogRef.close();
+        this.valoremService.getValoremSelect()
+        .subscribe((res: Valorem[]) => {
+          this.items = res.filter((valorem) =>{
+            return valorem.project?.id == this.project.id;
+          });
+          this.items.map(data => {
+            data.start_date = this.getToStringDate(new Date(`${(data.start_date!).substring(0,10)}:00:00`));
+            if (data.start_date != null && this.data.mode == 'create') {
+              this.valoremGroup.get('start_date')?.setValue(new Date(`${(data.due_date!).substring(0,10)}:00:00`));
+            }
+            data.due_date = this.getToStringDate(new Date(`${(data.due_date!).substring(0,10)}:00:00`));
+            
+          });
+        });
+      }
+    });
   }
 
   deleteReg(id:any) {
@@ -408,8 +427,44 @@ export class ProjectProgressCreateComponent implements OnInit {
       });
   }
 
-  onCreate() {
+  onCreateDelivered() {
     const dialogRef = this.dialog.open(DeliveredEditComponent, {
+      width: environment.widthFormsLittleModal,
+      data: {
+        project_id: this.project.id,
+        mode: 'create'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    });
+  }
+
+  onCreateInProgress() {
+    const dialogRef = this.dialog.open(InProgressFormComponent, {
+      width: environment.widthFormsLittleModal,
+      data: {
+        project_id: this.project.id,
+        mode: 'create'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    });
+  }
+
+  onCreateOverdue() {
+    const dialogRef = this.dialog.open(OverdueFormComponent, {
       width: environment.widthFormsLittleModal,
       data: {
         project_id: this.project.id,
@@ -437,12 +492,7 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   editProductDelivery(id:any){
-    // this.idEditProdDelivery = id;
-    // this.flagModeProdDelivery = 'edit';
     let reg = this.productsDelivered.filter(pd => pd.id == id);
-    // this.productDeliveryGroup.get('description')?.setValue(reg[0].description);
-    // this.productDeliveryGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
-    // this.productDeliveryGroup.get('is_visible')?.setValue(reg[0].is_visible);
 
     const dialogRef = this.dialog.open(DeliveredEditComponent, {
       width: environment.widthFormsLittleModal,
@@ -459,7 +509,9 @@ export class ProjectProgressCreateComponent implements OnInit {
       if (data == 'close'){
         this.getReports();
         this.onResetProdInProgress();
+        this.onResetProdDelivery();
         this.flagModeProdInProgress = 'create';
+        this.flagModeProdDelivery = 'create';
         dialogRef.close();
       }
     });
@@ -484,7 +536,6 @@ export class ProjectProgressCreateComponent implements OnInit {
     let productDelivery = this.productDeliveryGroup.value;
     productDelivery.project_id = this.project.id;
     productDelivery.external_company_id = 1;
-    environment.consoleMessage(productDelivery, "Obj Prod Delivery");
 
     this.productsDeliveredService.addProductDelivered(productDelivery)
       .subscribe(res => {
@@ -524,13 +575,30 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   editProdOverdue(id:any){
-    this.idEditProdOverdue = id;
-    this.flagModeProdOverdue = 'edit';
     let reg = this.productsOverdue.filter(pd => pd.id == id);
-    this.productOverdueGroup.get('description')?.setValue(reg[0].description);
-    this.productOverdueGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
-    this.productOverdueGroup.get('cause_of_delay')?.setValue(reg[0].cause_of_delay)
-    this.productOverdueGroup.get('is_visible')?.setValue(reg[0].is_visible);
+
+    const dialogRef = this.dialog.open(OverdueFormComponent, {
+      width: environment.widthFormsLittleModal,
+      data: {
+        idProduct: id,
+        project_id: this.project.id,
+        description: reg[0].description,
+        date: reg[0].date,
+        cause_of_delay: reg[0].cause_of_delay,
+        is_visible: reg[0].is_visible,
+        mode: 'edit'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.onResetProdDelivery();
+        this.flagModeProdInProgress = 'create';
+        this.flagModeProdDelivery = 'create';
+        dialogRef.close();
+      }
+    });    
   }
 
   deleteProdOverdue(id:any){
@@ -552,7 +620,6 @@ export class ProjectProgressCreateComponent implements OnInit {
     let productOverdue = this.productOverdueGroup.value;
     productOverdue.project_id = this.project.id;
     productOverdue.external_company_id = 1;
-    environment.consoleMessage(productOverdue, "Obj Prod Overdue");
 
     this.productsOverdueService.addProductOverdue(productOverdue)
       .subscribe(res => {
@@ -591,12 +658,27 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   editProdInProgress(id:any){
-    this.idEditProdInProgress = id;
-    this.flagModeProdInProgress = 'edit';
     let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
-    this.productInProgressGroup.get('description')?.setValue(reg[0].description);
-    this.productInProgressGroup.get('date')?.setValue(new Date(reg[0].date + ":00:00"));
-    this.productInProgressGroup.get('is_visible')?.setValue(reg[0].is_visible);
+
+    const dialogRef = this.dialog.open(InProgressFormComponent, {
+      width: environment.widthFormsLittleModal,
+      data: {
+        idProduct: id,
+        project_id: this.project.id,
+        description: reg[0].description,
+        date: reg[0].date,
+        is_visible: reg[0].is_visible,
+        mode: 'edit'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close'){
+        this.getReports();
+        this.onResetProdInProgress();
+        this.flagModeProdInProgress = 'create';
+        dialogRef.close();
+      }
+    });
   }
 
   deleteProdInProgress(id:any){
@@ -618,7 +700,6 @@ export class ProjectProgressCreateComponent implements OnInit {
     let productInProgress = this.productInProgressGroup.value;
     productInProgress.project_id = this.project.id;
     productInProgress.external_company_id = 1;
-    environment.consoleMessage(productInProgress, "Obj Prod InProgress");
 
     this.productsToBeDeliveredService.addProductToBeDelivered(productInProgress)
       .subscribe(res => {
@@ -647,7 +728,6 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   passToDelivered(id:any) {
-    environment.consoleMessage("Bttn Pasar a entegados");
     this.flagModeProdInProgress = 'passToOverdue';
     this.idPassToOverdueProdInProgress = id;
     let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
@@ -663,7 +743,6 @@ export class ProjectProgressCreateComponent implements OnInit {
         }
     });
     dialogRef.componentInstance.emitClose.subscribe((data: any) => {
-      environment.consoleMessage(data, "QUE ES ESTO???");
       if (data == 'close'){
         this.getReports();
         this.onResetProdInProgress();
@@ -674,7 +753,6 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   passToOverdue(id:any) {
-    environment.consoleMessage("Bttn  Pasar a atrasados");
     this.flagModeProdInProgress = 'passToOverdue';
     this.idPassToOverdueProdInProgress = id;
     let reg = this.productsToBeDelivered.filter(pd => pd.id == id);
@@ -700,10 +778,9 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   updateToOverdue(){
-    environment.consoleMessage("Acción Pasar a atrasados");
   }
+  
   onCancelPassToOverdue() {
-    environment.consoleMessage("Bttn Cancelar paso a atrasado");
     this.onResetProdInProgress();
     this.flagModeProdInProgress = 'create'
   }

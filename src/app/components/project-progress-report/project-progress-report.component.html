@@ -3,17 +3,22 @@
 
   <h2 class="mat-subtitle txt-primary" style="font-weight: 500;">Estado de entregas</h2>
 
-  <div class="container" *ngIf="dataDeliveryStatuses">
+  <div class="row" *ngIf="dataDeliveryStatuses">
     <div class="row justify-content-center">
-      <div class="col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-12">
         <mat-card class="bg-blue text-white">
           <mat-card-header>
             <mat-card-title>Productos entregados</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <ol>
-              <li *ngFor="let ecDeliveredProduct of dataDeliveryStatuses.ecDeliveredProducts">
-                {{ ecDeliveredProduct.description }}
+              <li class="row" *ngFor="let ecDeliveredProduct of dataDeliveryStatuses.ecDeliveredProducts index as i">
+                <span class="col-sm-12 col-md-8">
+                  {{i+1}}. {{ ecDeliveredProduct.description }}
+                </span>
+                <span class="col-sm-12 col-md-4">
+                  Fecha: {{ ecDeliveredProduct.date }}
+                </span>
               </li>
             </ol>
           </mat-card-content>
@@ -21,32 +26,41 @@
       </div>
     </div>
     <div class="row justify-content-center">
-      <div class="col-sm-12 col-md-6 mt-20">
+      <div class="col-sm-12 col-md-12">
         <mat-card class="bg-green text-white">
           <mat-card-header>
             <mat-card-title>Productos por Entregar</mat-card-title>
-            <mat-card-subtitle>(Próximas 3 Semanas)</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <ol>
-              <li *ngFor="let ecOverdueProduct of dataDeliveryStatuses.ecOverdueProducts">
-                {{ ecOverdueProduct.description }}
+              <li class="row" *ngFor="let ecProductsInProgress of dataDeliveryStatuses.ecProductsInProgresses; index as i">
+                <span class="col-sm-12 col-md-8">
+                  {{i+1}}. {{ ecProductsInProgress.description }}
+                </span>
+                <span class="col-sm-12 col-md-4">
+                  Fecha: {{ ecProductsInProgress.date }}
+                </span>
               </li>
             </ol>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
-    <div class="row justify-content-center mt-20">
-      <div class="col-sm-12 col-md-6">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-12">
         <mat-card class="bg-red text-white">
           <mat-card-header>
             <mat-card-title>Productos Atrasados</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <ol>
-              <li *ngFor="let ecProductsInProgress of dataDeliveryStatuses.ecProductsInProgresses">
-                {{ ecProductsInProgress.description }}
+              <li class="row" *ngFor="let ecOverdueProduct of dataDeliveryStatuses.ecOverdueProducts; index as i">
+                <span class="col-sm-12 col-md-8">
+                  {{i+1}}. {{ ecOverdueProduct.description }}
+                </span>
+                <span class="col-sm-12 col-md-4">
+                  Fecha: {{ ecOverdueProduct.date }}
+                </span>
               </li>
             </ol>
           </mat-card-content>
@@ -56,7 +70,7 @@
 
   </div>
 
-  <h2 class="mat-subtitle txt-primary" style="font-weight: 500; margin-top: 100px;">Gráfica por lineamiento estratégico</h2>
+  <h2 class="mat-subtitle txt-primary" style="font-weight: 500; margin-top: 50px;">Gráfica por lineamiento estratégico</h2>
   <mat-tab-group *ngIf="dataInitial" (selectedTabChange)="onTabChanged($event)">
     <mat-tab *ngFor="let strategicGuideline of dataInitial.strategicGuidelines">
       <ng-template mat-tab-label >

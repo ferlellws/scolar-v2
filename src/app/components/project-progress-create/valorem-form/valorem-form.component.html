@@ -1,0 +1,100 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <h2 class="mat-headline">Editar Registro Valorem</h2>
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div style="padding: 20px">
+
+    <form [formGroup]="valoremGroup">
+        <div class="row" style="padding-right: 12px !important;">
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field class="full-width">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="external_company_state_id" (openedChange)="onClickSelectStatusValorem($event)" required>
+                    <mat-option>Seleccione una opción</mat-option>
+                    <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">
+                    <div class="selects">
+                        <div class="circle" [ngStyle]="{'background-color': valoremState.color}"></div>
+                        <span>{{ valoremState.name }}</span>
+                    </div>
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.valoremGroup.get('external_company_state_id')?.invalid">
+                    {{ getMessageError('external_company_state_id', " estado") }}
+                </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field class="full-width">
+                <mat-label>Cronograma</mat-label>
+                <mat-select formControlName="external_company_schedule_id" (click)="onClickSelectScheduleValorem()" required>
+                    <mat-option>Seleccione una opción</mat-option>
+                    <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">
+                    <div class="selects">
+                        <div class="circle" [ngStyle]="{'background-color': companyType.color}"></div>
+                        <span>{{ companyType.name}}</span>
+                    </div>
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.valoremGroup.get('external_company_schedule_id')?.invalid">
+                    {{ getMessageError('external_company_schedule_id', " cronograma") }}
+                </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field class="full-width">
+                <mat-label>Fecha de Inicio y Finalización</mat-label>
+                <mat-date-range-input [formGroup]="valoremGroup" [rangePicker]="picker" required>
+                    <input matStartDate formControlName="start_date" placeholder="Inicio">
+                    <input matEndDate formControlName="due_date" placeholder="Fin">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid || this.valoremGroup.get('due_date')?.invalid">
+                    {{ getMessageError('start_date', " fecha de inicio y finalización") }}
+                </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row" style="padding-right: 12px !important;">
+            <div class="col-sm-12 col-md-8">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <mat-label>{{labels.statusDetail}}</mat-label>
+                    <textarea matInput placeholder="Observacióin que se refleja en la parte derecha del gráfico" formControlName="status_detail" required></textarea>
+                    <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
+                    {{ getMessageError('status_detail', " detalle de estado") }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-12 col-md-4">
+                <mat-form-field
+                    class="full-width"
+                    style="width: 100%;">
+                    <mat-label>{{labels.labelBox}}</mat-label>
+                    <textarea matInput placeholder="Observación que se refleja dentro de línea de tiempo" formControlName="label_box"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button *ngIf="data.mode == 'edit'" class="button" mat-button color="primary" (click)="onCancel()">Cancelar Edición</button>
+            <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+            <button class="button"
+                (click)="updateRegister()"
+                mat-button color="primary"
+                [disabled]="valoremGroup.invalid || fButtonDisabled">
+                {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+            </button>
+        </div>
+    </form>
+</div>

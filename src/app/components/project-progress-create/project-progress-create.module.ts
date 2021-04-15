@@ -35,6 +35,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
 import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
 import { DeliveredEditComponent } from './delivered-edit/delivered-edit.component';
+import { InProgressFormComponent } from './in-progress-form/in-progress-form.component';
+import { OverdueFormComponent } from './overdue-form/overdue-form.component';
+import { ValoremFormComponent } from './valorem-form/valorem-form.component';
 
 
 const materialModels = [
@@ -78,7 +81,10 @@ const materialModels = [
     ProjectProgressCreateComponent,
     AlertConfirmPassOverdueComponent,
     AlertConfirmPassDeliveredComponent,
-    DeliveredEditComponent
+    DeliveredEditComponent,
+    InProgressFormComponent,
+    OverdueFormComponent,
+    ValoremFormComponent
   ],
   imports: [
     CommonModule,

@@ -43,7 +43,6 @@ export class PersonsComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.personsService.emitDataTable
       .subscribe((res: any) => {
-        environment.consoleMessage(res, "<<<<<<<<<<<<<<<<<<<<l>>>>>>>>>>>>>>>>>>>>>");
         this.dataTable = res.data;
         this.dialog.closeAll();
       })

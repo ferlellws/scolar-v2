@@ -86,11 +86,9 @@ export class GeneralUsersFormComponent implements OnInit {
     });
 
     if (this.data.mode == 'edit') {
-      environment.consoleMessage(">>>>>>>>>>>>>>>>> Edicion");
 
       await this.userService.getUsersId(this.data.id)
         .subscribe((res: any) => {
-          environment.consoleMessage(res, "usuario");
           this.user = res;
 
           this.usersGroup.patchValue({
@@ -106,11 +104,8 @@ export class GeneralUsersFormComponent implements OnInit {
                 map(name => name ? this._filter(name) : this.persons.slice())
               );
 
-              environment.consoleMessage(this.user.id, "IDuser");
               this.personsUser = res;
-              environment.consoleMessage(this.personsUser, "FILTEEEEEEEEEEEER");
               this.personControl.setValue(this.personsUser.full_name);
-              environment.consoleMessage(this.personControl.value, "FormControl");
             });
           
           
@@ -150,12 +145,8 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   createRegister() {
-    
-    environment.consoleMessage(this.personControl.value, "FORMCONTROLLLLLL");
-    environment.consoleMessage(this.personControl.value.id, "ID PERSON");
 
     if (typeof this.personControl.value == 'object') {
-      environment.consoleMessage("Es Objeto");
       let newUser:any = {
         email: this.usersGroup.get('email')!.value,
         password: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
@@ -207,7 +198,6 @@ export class GeneralUsersFormComponent implements OnInit {
         });
       
     } else {
-      environment.consoleMessage("No es Objeto");
       this.fButtonDisabled = false;
       this.openSnackBar(false, "Esta persona no está registrada", "");
     }
@@ -215,10 +205,6 @@ export class GeneralUsersFormComponent implements OnInit {
   }
 
   updateRegister() {
-    
-    environment.consoleMessage(this.personControl.value, "FORMCONTROLLLLLL");
-    environment.consoleMessage(this.personControl.value.id, "ID PERSON");
-
     if (typeof this.personControl.value == 'object') {
       let newUser:any = {
         email: this.usersGroup.get('email')!.value,

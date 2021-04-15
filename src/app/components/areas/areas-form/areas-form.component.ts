@@ -56,7 +56,6 @@ export class AreasFormComponent implements OnInit {
         .subscribe((res: Area) => {
           this.area = res;
           let parentID;
-          environment.consoleMessage(this.area, "AREA EDIT >>>>>>>>>>>");
           if(this.area.parent == null) {
             parentID = null
           } else {
@@ -100,7 +99,6 @@ export class AreasFormComponent implements OnInit {
   createRegister() {
     this.areasService.addAreas(this.areasGroup.value)
       .subscribe((res) => {
-        environment.consoleMessage(res, "<<<<<<<<>>>>>>");
         this.fButtonDisabled = false;
         if (res.status == 'created') {
           this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -115,7 +113,6 @@ export class AreasFormComponent implements OnInit {
         let sErrors: string = "";
         aErrors.forEach((err) => {
           sErrors += "- " + err + "\n";
-          environment.consoleMessage(err, "Error: ");
         })
 
         this.openSnackBar(false, sErrors, "");
@@ -175,7 +172,6 @@ export class AreasFormComponent implements OnInit {
       this.areasService.getAreasByVicePresidency(vice)
         .subscribe((area: Area[]) => {
           this.selectAreas = area;
-          environment.consoleMessage(this.selectAreas, "SELECT AREAS");
         });
     }
   }
