@@ -28,6 +28,7 @@ import { DeliveredEditComponent } from './delivered-edit/delivered-edit.componen
 import { InProgressFormComponent } from './in-progress-form/in-progress-form.component';
 import { OverdueFormComponent } from './overdue-form/overdue-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem-form.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'tecno-project-progress-create',
@@ -442,11 +443,26 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   deleteReg(id:any) {
-    this.valoremService.deleteValorem(id)
-      .subscribe(res => {
-        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-        this.getReports();
-      });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+        value: this.items.filter(i => i.id == id)
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.valoremService.deleteValorem(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            this.getReports();
+            dialogRef.close();
+          });
+      } else {
+        dialogRef.close();
+      }
+    });
   }
 
   onCreateDelivered() {
@@ -540,13 +556,28 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   deleteProductDelivery(id:any){
-    this.productsDeliveredService.deleteProductDelivered(id)
-      .subscribe(res => {
-        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-        this.onResetProdDelivery();
-        this.getReports();
-        this.flagModeProdDelivery = 'create'
-      })
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+        value: this.items.filter(i => i.id == id)
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.productsDeliveredService.deleteProductDelivered(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            this.onResetProdDelivery();
+            this.getReports();
+            this.flagModeProdDelivery = 'create'
+            dialogRef.close();
+          });
+      } else {
+        dialogRef.close();
+      }
+    });
   }
 
   onCancelProdDelivery() {
@@ -624,13 +655,28 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   deleteProdOverdue(id:any){
-    this.productsOverdueService.deleteProductOverdue(id)
-      .subscribe(res => {
-        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-        this.onResetProdOverdue();
-        this.getReports();
-        this.flagModeProdOverdue = 'create'
-      })
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+        value: this.items.filter(i => i.id == id)
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.productsOverdueService.deleteProductOverdue(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            this.onResetProdOverdue();
+            this.getReports();
+            this.flagModeProdOverdue = 'create'
+            dialogRef.close();
+          });
+      } else {
+        dialogRef.close();
+      }
+    });    
   }
 
   onCancelProdOverdue() {
@@ -704,13 +750,28 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   deleteProdInProgress(id:any){
-    this.productsToBeDeliveredService.deleteProductToBeDelivered(id)
-      .subscribe(res => {
-        this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-        this.onResetProdInProgress();
-        this.getReports();
-        this.flagModeProdInProgress = 'create'
-      })
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+        value: this.items.filter(i => i.id == id)
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.productsToBeDeliveredService.deleteProductToBeDelivered(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            this.onResetProdInProgress();
+            this.getReports();
+            this.flagModeProdInProgress = 'create'
+            dialogRef.close();
+          });
+      } else {
+        dialogRef.close();
+      }
+    });
   }
 
   onCancelProdInProgress() {

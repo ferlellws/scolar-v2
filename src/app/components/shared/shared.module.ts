@@ -35,6 +35,7 @@ import { TextListDateComponent } from './text-list-date/text-list-date.component
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 const COMPONENTS = [
   MenuComponent,
@@ -77,6 +78,7 @@ const MODULES = [
     MessageComponent,
     TextListComponent,
     TextListDateComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
