@@ -13,11 +13,8 @@
           <mat-card-content>
             <ol>
               <li class="row" *ngFor="let ecDeliveredProduct of dataDeliveryStatuses.ecDeliveredProducts index as i">
-                <span class="col-sm-12 col-md-8">
+                <span class="productText">
                   {{i+1}}. {{ ecDeliveredProduct.description }}
-                </span>
-                <span class="col-sm-12 col-md-4">
-                  Fecha: {{ ecDeliveredProduct.date }}
                 </span>
               </li>
             </ol>
@@ -34,11 +31,8 @@
           <mat-card-content>
             <ol>
               <li class="row" *ngFor="let ecProductsInProgress of dataDeliveryStatuses.ecProductsInProgresses; index as i">
-                <span class="col-sm-12 col-md-8">
+                <span class="productText">
                   {{i+1}}. {{ ecProductsInProgress.description }}
-                </span>
-                <span class="col-sm-12 col-md-4">
-                  Fecha: {{ ecProductsInProgress.date }}
                 </span>
               </li>
             </ol>
@@ -55,11 +49,8 @@
           <mat-card-content>
             <ol>
               <li class="row" *ngFor="let ecOverdueProduct of dataDeliveryStatuses.ecOverdueProducts; index as i">
-                <span class="col-sm-12 col-md-8">
+                <span class="productText">
                   {{i+1}}. {{ ecOverdueProduct.description }}
-                </span>
-                <span class="col-sm-12 col-md-4">
-                  Fecha: {{ ecOverdueProduct.date }}
                 </span>
               </li>
             </ol>

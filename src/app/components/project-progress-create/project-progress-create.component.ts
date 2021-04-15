@@ -75,7 +75,9 @@ export class ProjectProgressCreateComponent implements OnInit {
   items: Valorem[] = [];
   selectStatusValorem: ValoremState [] = [];
   selectScheduleValorem: ValoremSchedule [] = [];
-  
+  userID: any;
+  profileID: any;
+
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
 
 
@@ -110,6 +112,9 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.flagModeProdDelivery = "create"
     this.flagModeProdOverdue = "create"
     this.flagModeProdInProgress = "create"
+
+    this.userID = JSON.parse(localStorage.user).id;
+    this.profileID = JSON.parse(localStorage.user).profile_id;
 
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
@@ -273,16 +278,6 @@ export class ProjectProgressCreateComponent implements OnInit {
   }
 
   async createRegister() {
-    this.valoremGroup.setValue({
-      external_company_state_id: this.valoremGroup.value.external_company_state_id,
-      external_company_schedule_id: this.valoremGroup.value.external_company_schedule_id,
-      status_detail: this.valoremGroup.value.status_detail,
-      label_box: this.valoremGroup.value.label_box,
-      start_date: this.getToStringDate(this.valoremGroup.value.start_date),
-      due_date: this.getToStringDate(this.valoremGroup.value.due_date),
-      is_active: this.valoremGroup.value.is_active,
-    });
-    
     this.valorem = this.valoremGroup.value;
     this.valorem.project_id = this.project.id;
     this.valorem.external_company_id = 1;

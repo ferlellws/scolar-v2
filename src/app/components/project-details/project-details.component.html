@@ -2,23 +2,23 @@
     <div class="row" style="margin-bottom: 20px;">
         <div class="header-row col-sm-12 col-md-12" style="flex-wrap: wrap;">
             <h1 class="col-sm-12 col-md-6 txt-accent" style="font-weight: 500; font-size: xx-large;">{{project.title}}</h1>
-            <div *ngIf="actions.create && (project.pmo.id == userID || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead.id == userID || profileID == 2)" class="header-row col-sm-12 col-md-6" style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
-                <button class="buttons-options" mat-menu-item (click)="onProjectEdit()">
+            <div *ngIf="((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" class="header-row col-sm-12 col-md-6" style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+                <button *ngIf="actions.update" class="buttons-options" mat-menu-item (click)="onProjectEdit()">
                     <mat-icon>editchart</mat-icon>
                     <span>Editar Proyecto</span>
                 </button>
 
-                <button class="buttons-options" mat-menu-item (click)="onDesviation()">
+                <button *ngIf="actions.create" class="buttons-options" mat-menu-item (click)="onDesviation()">
                     <mat-icon>alt_route</mat-icon>
                     <span>Causales de desviación</span>
                 </button>
                 
-                <button class="buttons-options" mat-menu-item (click)="onWeek()">
+                <button *ngIf="actions.create" class="buttons-options" mat-menu-item (click)="onWeek()">
                     <mat-icon>insert_invitation</mat-icon>
                     <span>Seguimiento Semanal</span>
                 </button>
                 
-                <button class="buttons-options" mat-menu-item (click)="onValorem(project.id)">
+                <button *ngIf="actions.create || actions.update" class="buttons-options" mat-menu-item (click)="onValorem(project.id)">
                     <mat-icon>addchart</mat-icon>
                     <span>Reporte Valorem</span>
                 </button>
@@ -275,7 +275,8 @@
                 <div mat-line class="line-text"> {{project.description}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Líder Funcional</h3>
-                <div mat-line class="line-text"> {{project.functional_lead.first_name}} {{project.functional_lead.last_name}} </div>
+                <div mat-line class="line-text" *ngIf="project.functional_lead != null"> {{project.functional_lead.first_name}} {{project.functional_lead.last_name}} </div>
+                <div mat-line class="line-text-font" *ngIf="project.functional_lead == null"> {{labelAssignment}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Prioridad</h3>
                 <div mat-line class="line-text"> {{project.priority.title}} </div>
@@ -291,7 +292,8 @@
                 <div mat-line class="line-text-font" *ngIf="project.strategic_guideline == null"> {{labelAssignment}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">PMO asignado</h3>
-                <div mat-line class="line-text"> {{project.pmo.first_name}} {{project.pmo.last_name}} </div>
+                <div mat-line class="line-text" *ngIf="project.pmo != null"> {{project.pmo.first_name}} {{project.pmo.last_name}} </div>
+                <div mat-line class="line-text-font" *ngIf="project.pmo == null"> {{labelAssignment}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Ocupación semanal PMO asignado</h3>
                 <div mat-line class="line-text"> {{project.percentage}} %</div>

@@ -1,50 +1,297 @@
-<h1 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Reporte Valorem: {{project.title}}</h1>
-<mat-tab-group>
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Línea de Tiempo
-        </ng-template>
-        
-        <div class="example-container">
-            <div class="row">
+<div *ngIf="actions.read && (project.pmo!.id == userID || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead!.id == userID || profileID == 2)">
+    <h1 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Reporte Valorem: {{project.title}}</h1>
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                Línea de Tiempo
+            </ng-template>
+            
+            <div class="example-container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                    <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Reportes Creados</h3>
+                    </div>
+                </div>
+            
+                <div class="container-cards">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="row" *ngFor="let item of items; index as i">
+                            
+                                <mat-card class="col-sm-12 col-md-12 card-content">
+                                    <div class="row">
+                                        <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
+                                        </div>
+                                        <div class="row">
+                                        <span class="col-sm-12 col-md-2" style="font-weight: 500;">Estado:
+                                            <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
+                                        </span>
+                                        <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
+                                            <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
+                                        </span>
+                                        <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
+                                            <span style="font-weight: 400; ">{{item.start_date}}</span>
+                                        </span>
+                                        <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
+                                            <span style="font-weight: 400; ">{{item.due_date}}</span>
+                                        </span>
+                                        <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                            <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editReg(item.id)">create</mat-icon>
+                                            <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteReg(item.id)">delete</mat-icon>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Estado:
+                                            <span style="font-weight: 400; word-break: break-all;">{{item.status_detail}}</span>
+                                        </span>
+                                        <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Cronograma:
+                                            <span style="font-weight: 400; word-break: break-all;">{{item.label_box}}</span>
+                                        </span>
+                                    </div>
+                                </mat-card>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+            
+                <form *ngIf="actions.create" [formGroup]="valoremGroup">
+                    <div class="row" style="padding-right: 12px !important;">
+                        <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo Reporte</h3>
+                        <div class="col-sm-12 col-md-4">
+                            <mat-form-field class="full-width">
+                            <mat-label>Estado</mat-label>
+                            <mat-select formControlName="external_company_state_id" (openedChange)="onClickSelectStatusValorem($event)" required>
+                                <mat-option>Seleccione una opción</mat-option>
+                                <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">
+                                <div class="selects">
+                                    <div class="circle" [ngStyle]="{'background-color': valoremState.color}"></div>
+                                    <span>{{ valoremState.name }}</span>
+                                </div>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="this.valoremGroup.get('external_company_state_id')?.invalid">
+                                {{ getMessageError('external_company_state_id', " estado") }}
+                            </mat-error>
+                            </mat-form-field>
+                        </div>
+            
+                        <div class="col-sm-12 col-md-4">
+                            <mat-form-field class="full-width">
+                            <mat-label>Cronograma</mat-label>
+                            <mat-select formControlName="external_company_schedule_id" (click)="onClickSelectScheduleValorem()" required>
+                                <mat-option>Seleccione una opción</mat-option>
+                                <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">
+                                <div class="selects">
+                                    <div class="circle" [ngStyle]="{'background-color': companyType.color}"></div>
+                                    <span>{{ companyType.name}}</span>
+                                </div>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="this.valoremGroup.get('external_company_schedule_id')?.invalid">
+                                {{ getMessageError('external_company_schedule_id', " cronograma") }}
+                            </mat-error>
+                            </mat-form-field>
+                        </div>
+            
+                        <div class="col-sm-12 col-md-4">
+                            <mat-form-field class="full-width">
+                            <mat-label>Fecha de Inicio y Finalización</mat-label>
+                            <mat-date-range-input [formGroup]="valoremGroup" [rangePicker]="picker" required>
+                                <input matStartDate formControlName="start_date" placeholder="Inicio">
+                                <input matEndDate formControlName="due_date" placeholder="Fin">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid || this.valoremGroup.get('due_date')?.invalid">
+                                {{ getMessageError('start_date', " fecha de inicio y finalización") }}
+                            </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+            
+                    <div class="row" style="padding-right: 12px !important;">
+                        <div class="col-sm-12 col-md-8">
+                            <mat-form-field
+                                class="full-width"
+                                style="width: 100%;">
+                                <mat-label>{{labels.statusDetail}}</mat-label>
+                                <textarea matInput placeholder="Observacióin que se refleja en la parte derecha del gráfico" formControlName="status_detail" required></textarea>
+                                <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
+                                {{ getMessageError('status_detail', " detalle de estado") }}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+            
+                        <div class="col-sm-12 col-md-4">
+                            <mat-form-field
+                                class="full-width"
+                                style="width: 100%;">
+                                <mat-label>{{labels.labelBox}}</mat-label>
+                                <textarea matInput placeholder="Observación que se refleja dentro de línea de tiempo" formControlName="label_box"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+            
+                    <div class="buttons">
+                        <button *ngIf="data.mode == 'edit'" class="button" mat-button color="primary" (click)="onCancel()">Cancelar Edición</button>
+                        <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
+                        <button class="button"
+                            (click)="data.mode == 'create' ? createRegister() : updateRegister()"
+                            mat-button color="primary"
+                            [disabled]="valoremGroup.invalid || fButtonDisabled">
+                            {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+                        </button>
+                    </div>
+                </form>
+                
+                <mat-divider></mat-divider>
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Gráfica Línea de Tiempo</h3>
+                <tecno-timeline-charts *ngIf="dataProjectProgressReport"
+                    [id]="'project-timeline'"
+                    [title]="'Porcentajes Estados Requerimientos'"
+                    [dataInitial]="dataInitial"
+                    [dataTable]="dataProjectProgressReport"
+                    [chartClass]="'content-center mt-30'">
+                </tecno-timeline-charts>    
+            
+                <ng-template #loadingBlock>
+                    <div class="row">
+                    <div class="col-12">
+                        <mat-spinner color="accent" class="content-center"></mat-spinner>
+                    </div>
+                    </div>
+                </ng-template>
+            </div>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                Productos Entregados
+            </ng-template>
+            
+            <mat-divider></mat-divider>
+            <div class="row" style="padding-top: 12px; padding-left: 2px;">
                 <div class="col-sm-12 col-md-12">
-                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Reportes Creados</h3>
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
                 </div>
             </div>
-        
             <div class="container-cards">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <div class="row" *ngFor="let item of items; index as i">
-                        
+                        <div class="row" *ngFor="let item of productsDelivered; index as i">
                             <mat-card class="col-sm-12 col-md-12 card-content">
                                 <div class="row">
-                                    <span class="txt-primary" style="font-weight: 500;">Registro {{i+1}}</span>
-                                    </div>
-                                    <div class="row">
-                                    <span class="col-sm-12 col-md-2" style="font-weight: 500;">Estado:
-                                        <span style="font-weight: 400;">{{item.external_company_state!.name}}</span>
+                                    <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                                </div>
+                                <div class="row">
+                                    <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                        <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
                                     </span>
-                                    <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Cronograma:
-                                        <span style="font-weight: 400; ">{{item.external_company_schedule!.name}}</span>
-                                    </span>
-                                    <span class="col-sm-12 col-md-3" style="font-weight: 500; ">Fecha Inicio:
-                                        <span style="font-weight: 400; ">{{item.start_date}}</span>
-                                    </span>
-                                    <span class="col-sm-12 col-md-3" style="font-weight: 500;  ">Fecha Finalización:
-                                        <span style="font-weight: 400; ">{{item.due_date}}</span>
+                                    <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                        <span style="font-weight: 400; ">{{item.date}}</span>
                                     </span>
                                     <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                        <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editReg(item.id)">create</mat-icon>
-                                        <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteReg(item.id)">delete</mat-icon>
+                                        <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create
+                                        </mat-icon>
+                                        <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateDelivered()" class="btn-new mat-elevation-z2">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-tab>
+
+        <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                Productos Por Entregar
+            </ng-template>
+            
+            <div class="row" style="padding-top: 12px; padding-left: 2px;">
+                <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+                </div>
+            </div>
+            <div class="container-cards">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="row" *ngFor="let item of productsToBeDelivered; index as i">
+                            <mat-card class="col-sm-12 col-md-12 card-content">
+                                <div class="row">
+                                    <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                                </div>
+                                <div class="row">
+                                    <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                        <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
+                                    </span>
+                                    <span  class="col-sm-12 col-md-2"style="font-weight: 500; ">Fecha:
+                                        <span style="font-weight: 400; ">{{item.date}}</span>
+                                    </span>
+                                    <div class="col-sm-12 col-md-2" style="display: flex; justify-content: space-between;">
+                                        <mat-icon *ngIf="actions.update" matTooltip="Pasar a Productos Entregados" style="cursor:pointer; color: #43a047;" (click)="passToDelivered(item.id)">done_all</mat-icon>
+                                        <mat-icon *ngIf="actions.update" matTooltip="Pasar a Productos Atrasados" style="cursor:pointer; color: #ef6c00;" (click)="passToOverdue(item.id)">running_with_errors</mat-icon>
+                                        <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProdInProgress(item.id)">create</mat-icon>
+                                        <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProdInProgress(item.id)">delete</mat-icon>
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateInProgress()" class="btn-new mat-elevation-z2">
+                <mat-icon>add</mat-icon>
+            </button>
+
+        </mat-tab>
+
+
+        <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                Productos Atrasados
+            </ng-template>
+            <div class="row" style="padding-top: 12px; padding-left: 2px;">
+                <div class="col-sm-12 col-md-12">
+                <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
+                </div>
+            </div>
+            <div class="container-cards">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="row" *ngFor="let item of productsOverdue; index as i">
+                            <mat-card class="col-sm-12 col-md-12 card-content">
+                                <div class="row">
+                                    <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
+                                </div>
+                                <div class="row">
+                                    <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
+                                        <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
+                                    </span>
+                                    <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
+                                        <span style="font-weight: 400; ">{{item.date}}</span>
+                                    </span>
+                                    <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
+                                        <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProdOverdue(item.id)">create</mat-icon>
+                                        <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProdOverdue(item.id)">delete</mat-icon>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Estado:
-                                        <span style="font-weight: 400; word-break: break-all;">{{item.status_detail}}</span>
-                                    </span>
-                                    <span class="col-sm-12 col-md-5" style="font-weight: 500; ">Detalle de Cronograma:
-                                        <span style="font-weight: 400; word-break: break-all;">{{item.label_box}}</span>
+                                    <span  class="col-sm-12 col-md-11"style="font-weight: 500; ">Causa del atraso:
+                                        <span style="font-weight: 400; ">{{item.cause_of_delay}}</span>
                                     </span>
                                 </div>
                             </mat-card>
@@ -53,256 +300,14 @@
                     
                 </div>
             </div>
-            <mat-divider></mat-divider>
-        
-            <form *ngIf="actions.create" [formGroup]="valoremGroup">
-                <div class="row" style="padding-right: 12px !important;">
-                    <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500;">Nuevo Reporte</h3>
-                    <div class="col-sm-12 col-md-4">
-                        <mat-form-field class="full-width">
-                        <mat-label>Estado</mat-label>
-                        <mat-select formControlName="external_company_state_id" (openedChange)="onClickSelectStatusValorem($event)" required>
-                            <mat-option>Seleccione una opción</mat-option>
-                            <mat-option *ngFor="let valoremState of selectStatusValorem" [value]="valoremState.id">
-                            <div class="selects">
-                                <div class="circle" [ngStyle]="{'background-color': valoremState.color}"></div>
-                                <span>{{ valoremState.name }}</span>
-                            </div>
-                            </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="this.valoremGroup.get('external_company_state_id')?.invalid">
-                            {{ getMessageError('external_company_state_id', " estado") }}
-                        </mat-error>
-                        </mat-form-field>
-                    </div>
-        
-                    <div class="col-sm-12 col-md-4">
-                        <mat-form-field class="full-width">
-                        <mat-label>Cronograma</mat-label>
-                        <mat-select formControlName="external_company_schedule_id" (click)="onClickSelectScheduleValorem()" required>
-                            <mat-option>Seleccione una opción</mat-option>
-                            <mat-option *ngFor="let companyType of selectScheduleValorem" [value]="companyType.id">
-                            <div class="selects">
-                                <div class="circle" [ngStyle]="{'background-color': companyType.color}"></div>
-                                <span>{{ companyType.name}}</span>
-                            </div>
-                            </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="this.valoremGroup.get('external_company_schedule_id')?.invalid">
-                            {{ getMessageError('external_company_schedule_id', " cronograma") }}
-                        </mat-error>
-                        </mat-form-field>
-                    </div>
-        
-                    <div class="col-sm-12 col-md-4">
-                        <mat-form-field class="full-width">
-                        <mat-label>Fecha de Inicio y Finalización</mat-label>
-                        <mat-date-range-input [formGroup]="valoremGroup" [rangePicker]="picker" required>
-                            <input matStartDate formControlName="start_date" placeholder="Inicio">
-                            <input matEndDate formControlName="due_date" placeholder="Fin">
-                        </mat-date-range-input>
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker></mat-date-range-picker>
-                        <mat-error *ngIf="this.valoremGroup.get('start_date')?.invalid || this.valoremGroup.get('due_date')?.invalid">
-                            {{ getMessageError('start_date', " fecha de inicio y finalización") }}
-                        </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
-        
-                <div class="row" style="padding-right: 12px !important;">
-                    <div class="col-sm-12 col-md-8">
-                        <mat-form-field
-                            class="full-width"
-                            style="width: 100%;">
-                            <mat-label>{{labels.statusDetail}}</mat-label>
-                            <textarea matInput placeholder="Observacióin que se refleja en la parte derecha del gráfico" formControlName="status_detail" required></textarea>
-                            <mat-error *ngIf="this.valoremGroup.get('status_detail')?.invalid">
-                            {{ getMessageError('status_detail', " detalle de estado") }}
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-        
-                    <div class="col-sm-12 col-md-4">
-                        <mat-form-field
-                            class="full-width"
-                            style="width: 100%;">
-                            <mat-label>{{labels.labelBox}}</mat-label>
-                            <textarea matInput placeholder="Observación que se refleja dentro de línea de tiempo" formControlName="label_box"></textarea>
-                        </mat-form-field>
-                    </div>
-                </div>
-        
-                <div class="buttons">
-                    <button *ngIf="data.mode == 'edit'" class="button" mat-button color="primary" (click)="onCancel()">Cancelar Edición</button>
-                    <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
-                    <button class="button"
-                        (click)="data.mode == 'create' ? createRegister() : updateRegister()"
-                        mat-button color="primary"
-                        [disabled]="valoremGroup.invalid || fButtonDisabled">
-                        {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
-                    </button>
-                </div>
-            </form>
-            
-            <mat-divider></mat-divider>
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Gráfica Línea de Tiempo</h3>
-            <tecno-timeline-charts *ngIf="dataProjectProgressReport"
-                [id]="'project-timeline'"
-                [title]="'Porcentajes Estados Requerimientos'"
-                [dataInitial]="dataInitial"
-                [dataTable]="dataProjectProgressReport"
-                [chartClass]="'content-center mt-30'">
-            </tecno-timeline-charts>    
-        
-            <ng-template #loadingBlock>
-                <div class="row">
-                <div class="col-12">
-                    <mat-spinner color="accent" class="content-center"></mat-spinner>
-                </div>
-                </div>
-            </ng-template>
-        </div>
-    </mat-tab>
 
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Productos Entregados
-        </ng-template>
-        
-        <mat-divider></mat-divider>
-        <div class="row" style="padding-top: 12px; padding-left: 2px;">
-            <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
-            </div>
-        </div>
-        <div class="container-cards">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of productsDelivered; index as i">
-                        <mat-card class="col-sm-12 col-md-12 card-content">
-                            <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
-                            </div>
-                            <div class="row">
-                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
-                                    <span style="font-weight: 400; ">{{item.date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProductDelivery(item.id)">create
-                                    </mat-icon>
-                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProductDelivery(item.id)">delete</mat-icon>
-                                </div>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
+            <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateOverdue()" class="btn-new mat-elevation-z2">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-tab>
 
-        <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateDelivered()" class="btn-new mat-elevation-z2">
-            <mat-icon>add</mat-icon>
-        </button>
-    </mat-tab>
-
-    <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Productos Por Entregar
-        </ng-template>
-        
-        <div class="row" style="padding-top: 12px; padding-left: 2px;">
-            <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
-            </div>
-        </div>
-        <div class="container-cards">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of productsToBeDelivered; index as i">
-                        <mat-card class="col-sm-12 col-md-12 card-content">
-                            <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
-                            </div>
-                            <div class="row">
-                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-2"style="font-weight: 500; ">Fecha:
-                                    <span style="font-weight: 400; ">{{item.date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-2" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" matTooltip="Pasar a Productos Entregados" style="cursor:pointer; color: #43a047;" (click)="passToDelivered(item.id)">done_all</mat-icon>
-                                    <mat-icon *ngIf="actions.update" matTooltip="Pasar a Productos Atrasados" style="cursor:pointer; color: #ef6c00;" (click)="passToOverdue(item.id)">running_with_errors</mat-icon>
-                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProdInProgress(item.id)">create</mat-icon>
-                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProdInProgress(item.id)">delete</mat-icon>
-                                </div>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-
-        <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateInProgress()" class="btn-new mat-elevation-z2">
-            <mat-icon>add</mat-icon>
-        </button>
-
-    </mat-tab>
-
-
-    <!-- <<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-
-    <mat-tab>
-        <ng-template mat-tab-label>
-            Productos Atrasados
-        </ng-template>
-        <div class="row" style="padding-top: 12px; padding-left: 2px;">
-            <div class="col-sm-12 col-md-12">
-            <h3 class="mat-title col-sm-12 col-md-12 txt-accent" style="font-weight: 500; padding-left: 12px;">Historial</h3>
-            </div>
-        </div>
-        <div class="container-cards">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="row" *ngFor="let item of productsOverdue; index as i">
-                        <mat-card class="col-sm-12 col-md-12 card-content">
-                            <div class="row">
-                                <span class="txt-primary" style="font-weight: 500;">Producto {{i+1}}</span>
-                            </div>
-                            <div class="row">
-                                <span class="col-sm-12 col-md-8" style="font-weight: 500;">Descripción:
-                                    <span style="font-weight: 400; word-break: break-all;">{{item.description}}</span>
-                                </span>
-                                <span  class="col-sm-12 col-md-3"style="font-weight: 500; ">Fecha:
-                                    <span style="font-weight: 400; ">{{item.date}}</span>
-                                </span>
-                                <div class="col-sm-12 col-md-1" style="display: flex; justify-content: space-between;">
-                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer" (click)="editProdOverdue(item.id)">create</mat-icon>
-                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer" (click)="deleteProdOverdue(item.id)">delete</mat-icon>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <span  class="col-sm-12 col-md-11"style="font-weight: 500; ">Causa del atraso:
-                                    <span style="font-weight: 400; ">{{item.cause_of_delay}}</span>
-                                </span>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-
-        <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateOverdue()" class="btn-new mat-elevation-z2">
-            <mat-icon>add</mat-icon>
-        </button>
-    </mat-tab>
-
-</mat-tab-group>
+    </mat-tab-group>
+</div>
+<div *ngIf="!actions.read || (project.pmo!.id == userID || !(project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead!.id == userID || profileID == 2)">
+    <tecno-unauthorized></tecno-unauthorized>
+</div>
