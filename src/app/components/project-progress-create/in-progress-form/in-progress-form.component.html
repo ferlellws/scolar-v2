@@ -42,7 +42,7 @@
         </div>
 
         <div class="buttons">
-            <button *ngIf="flagModeProdInProgress == 'edit'" class="button" mat-button color="accent" (click)="onCancelProdInProgress()">Cancelar Edición</button>
+            <button *ngIf="flagModeProdInProgress == 'edit'" class="button" mat-button color="primary" (click)="onCancelProdInProgress()">Cancelar Edición</button>
             <button class="button" mat-button color="primary" (click)="onResetProdInProgress()">Limpiar</button> 
             <button class="button"
                 (click)="flagModeProdInProgress == 'create' ? createProdInProgress() : updateProdInProgress()"

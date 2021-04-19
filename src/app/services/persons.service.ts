@@ -94,7 +94,7 @@ export class PersonsService {
       );
   }
 
-  deleteUser(id: number) {
+  deletePerson(id: number) {
     return this.http.delete<Person>(`${this.API}/${id}`, this.httpOptions)
       .pipe(
         tap((data: any) => {

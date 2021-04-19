@@ -1,10 +1,10 @@
 <div class="m-24">
-    <h2 class="txt-accent title">{{title}}</h2>
-    <span class="txt-primary description">{{description}}</span>
+    <h2 class="txt-primary title">{{title}}</h2>
+    <span class="description">{{description}}</span>
 
-    <div mat-dialog-actions style="justify-content: center">
-        <button mat-stroked-button class="txt-accent bttn"(click)="onNoClick()">No</button>
-        <button mat-stroked-button class="txt-primary bttn" (click)="onSiClick()">Si</button>
+    <div mat-dialog-actions style="justify-content: flex-end">
+        <button mat-button class="txt-primary bttn"(click)="onNoClick()">No</button>
+        <button mat-button class="txt-primary bttn" (click)="onSiClick()">Si</button>
     </div>
 </div>
   

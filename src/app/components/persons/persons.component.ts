@@ -73,14 +73,16 @@ export class PersonsComponent implements OnInit {
   }
   
   onDelete(data: number) {
-    this.userService.getUsersId(data)
+    let person: any;
+    this.personsService.getPersonsId(data)
       .subscribe((res) => {
+        person = res;
         const dialogRef = this.dialog.open(AlertDialogComponent, {
           width: '250px',
           data: {
             title: 'Confirmación',
             question: `Esta seguro de eliminar definitivamente el siguiente registro?`,
-            info: res.title,
+            info: res.full_name,
             value: true
           }
         });
@@ -88,9 +90,12 @@ export class PersonsComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result: any) => {
           true;//environment.consoleMessage(result, 'The dialog was closed');
           if (result) {
-            this.userService.deleteUser(data)
+            this.personsService.deletePerson(data)
               .subscribe(res => {
-                true;//environment.consoleMessage(res, 'res: ');
+                this.userService.deleteUser(person.user.id)
+                .subscribe(res => {
+                  true;
+                })
               })
           }
         });
