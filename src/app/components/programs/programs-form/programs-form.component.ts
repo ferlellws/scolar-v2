@@ -105,8 +105,6 @@ export class ProgramsFormComponent implements OnInit {
   }
 
   updateRegister() {
-    true;//environment.consoleMessage(this.programsGroup, `updateRegister para registro con id ${this.data.id}: `);
-
     this.programsService.updateProgramsId(
       this.programsGroup.value,
       this.data.id
