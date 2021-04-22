@@ -330,7 +330,7 @@
                     <mat-card-title class="row">
                         <span class="txt-accent">Interrelaciones</span>
                         <br>
-                        <span style="font-size: 16px;">Total Relaciones Identificadas: {{interrelations.total}}</span>
+                        <span style="font-size: 16px;">Total Proyectos Relacionados: {{interrelations.total}}</span>
                     </mat-card-title>  
                 </mat-card-header>
                 
@@ -341,12 +341,12 @@
                                 <mat-panel-title class="row">
                                     <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
                                     <br>
-                                    <span style="font-size: 13px; font-weight: 500;">Relaciones identificadas: {{interrelation.data.length}}</span>
+                                    <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{interrelation.total}}</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div *ngIf="interrelation.data.length != 0">
                                 <div *ngFor="let data of interrelation.data; index as j">
-                                    <div mat-line class="line-text" style="padding-left: 0px; font-weight: 500;"> {{j+1}}. {{data.projectName}} </div>
+                                    <div mat-line class="line-text" style="padding-left: 0px; font-weight: 500; padding-bottom: 0px;"> {{j+1}}. {{data.name}} </div>
                                     <div *ngFor="let info of data.data; index as k">
                                         <div mat-line class="line-text">- {{info}} </div>
                                     </div>
@@ -364,7 +364,7 @@
                                 <mat-panel-title class="row">
                                     <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
                                     <br>
-                                    <span style="font-size: 13px; font-weight: 500;">Relaciones identificadas: {{interrelation.total}}</span>
+                                    <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{interrelation.total}}</span>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div *ngIf="interrelation.data.length != 0">
@@ -374,7 +374,7 @@
                                             <mat-panel-title class="row">
                                                 <h3 class="txt-accent title-expansion">{{type.type}}</h3>
                                                 <br>
-                                                <span style="font-size: 13px; font-weight: 500;">Relaciones identificadas: {{type.data.length}}</span>
+                                                <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{type.data.length}}</span>
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <div *ngIf="type.data.length != 0">
@@ -389,7 +389,7 @@
                                                     </div>
                                                 </div>
                                                 <div mat-line class="cont-inter"> Fecha de identificación:</div>
-                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.date}} </div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.date.substring(0,10)}} </div>
                                                 <div mat-line class="cont-inter"> Impacto:</div>
                                                 <div mat-line class="line-text" style="padding-left: 15px; ">{{data.impact}} </div>
                                                 <div mat-line class="cont-inter"> Elementos a tener en cuenta::</div>
