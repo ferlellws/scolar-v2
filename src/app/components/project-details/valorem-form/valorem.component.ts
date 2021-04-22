@@ -207,14 +207,11 @@ export class ValoremFormComponent implements OnInit {
   }
 
   updateRegister() {
-    environment.consoleMessage("EDIIIIIIIIIIIIIIIIIIIT");
     this.valoremService.updateValoremId(this.valoremGroup.value, this.idRegEdit)
       .subscribe((res) => {
         this.fButtonDisabled = false;
-        environment.consoleMessage(res, "RESSSSSSSSSSSSSSSS");
         if (res.length != 0) {
           this.openSnackBar(true, "Registro actualizado satisfactoriamente", "");
-
           this.getReports();
           this.onReset();
           this.data.mode = 'create'

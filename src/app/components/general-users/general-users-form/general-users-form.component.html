@@ -18,7 +18,7 @@
         <mat-label *ngIf="data.mode == 'edit'">{{personsUser?.full_name}}</mat-label>
         <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required>
         <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto">
-        <mat-autocomplete formControlName="person" #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           <mat-option style="font-weight: 400; color: darkgrey;">Seleccione una opción</mat-option>
           <mat-option *ngFor="let person of filterPersons | async" [value]="person">
             {{person.full_name}}

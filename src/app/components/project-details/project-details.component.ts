@@ -20,6 +20,7 @@ import { BenefitsService } from 'src/app/services/benefits.service';
 import { DesviationCausesService } from 'src/app/services/desviation-causes.service';
 import { GoalsService } from 'src/app/services/goals.service';
 import { HighlightsService } from 'src/app/services/highlights.service';
+import { InterrelationsService } from 'src/app/services/interrelations.service';
 import { KpisService } from 'src/app/services/kpis.service';
 import { MainService } from 'src/app/services/main.service';
 import { NextActivitiesService } from 'src/app/services/next-activities.service';
@@ -29,10 +30,12 @@ import { RisksService } from 'src/app/services/risks.service';
 import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { DesviationCausesFormComponent } from './desviation-causes-form/desviation-causes-form.component';
+import { InterrelationsFormComponent } from './interrelations-form/interrelations-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface Indicator {
   name: string;
   color: string;
@@ -87,9 +90,125 @@ export class ProjectDetailsComponent implements OnInit {
 
   semanal_hours = 40;
   labelAssignment = "Sin asignar";
+  labelTotalInterrelation = "No hay relaciones";
   panelOpenState = false;
   userID: any;
   profileID: any;
+
+  interrelations: any;
+  // interrelations = {
+  //   total: 3,
+  //   interrelationsGeneral: {
+  //     data: [
+  //       {
+  //         title: "Disponibilidad de Recursos",
+  //         data: [
+  //           {
+  //             projectName: "EDI",
+  //             data: [
+  //               "Denis Rodriguez",
+  //               "Gerardo Hormiga",
+  //               "Santiago Fajardo",
+  //               "Jonathan Galvis"
+  //             ]
+  //           },
+  //           {
+  //             projectName: "Proyecto 5000",
+  //             data: [
+  //               "Juan Perez",
+  //               "Gerardo Hormiga",
+  //               "Santiago Fajardo",
+  //               "David Guerrero"
+  //             ]
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         title: "Disponibilidad de Proveedor",
+  //         data: [
+  //           {
+  //             projectName: "Proyecto 1000",
+  //             data: [
+  //               "Tecno",
+  //               "EmpresaX",
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //       {
+  //         title: "Áreas",
+  //         data: []
+  //       },
+  //       {
+  //         title: "Aplicaciones",
+  //         data: []
+  //       },
+  //     ]
+  //   },
+  //   interrelationsSpecific: {
+  //     data: [
+  //       {
+  //         title: "Variación Alcance de Proceso",
+  //         total: 3,
+  //         data: [
+  //           {
+  //             type: "Mi proyecto afecta a ...",
+  //             data: [
+  //               {
+  //                 id: 0,
+  //                 projectName: "Proyecto 3000",
+  //                 date: "10/04/2021",
+  //                 impact: "Bloqueante",
+  //                 description: "El proyecto esta en Gerencias, y se encuentra implementado, con requerimientos de mejoras. Se realiza la apertura de proyecto ( Reportes Power BI y automatización de consultas Geobis) para mejorar el acceso a la información requerida por Rogrigo Castañon."
+  //               },
+  //               {
+  //                 id: 1,
+  //                 projectName: "Proyecto 7000",
+  //                 date: "10/04/2021",
+  //                 impact: "Bloqueante",
+  //                 description: "Descripcion corta"
+  //               },
+  //             ]
+  //           },
+  //           {
+  //             type: "Mi proyecto es impactado por ...",
+  //             data: [
+  //               {
+  //                 id: 2,
+  //                 projectName: "Proyecto 1500",
+  //                 date: "10/04/2021",
+  //                 impact: "No Bloqueante",
+  //                 description: "Ejemplo de Descripción"
+  //               },
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //       {
+  //         title: "Definición de Proceso",
+  //         total: 2,
+  //         data: [
+  //           {
+  //             type: "Mi proyecto afecta a ...",
+  //             data: []
+  //           },
+  //           {
+  //             type: "Mi proyecto es impactado por ...",
+  //             data: [
+  //               {
+  //                 id: 3,
+  //                 projectName: "Proyecto 5500",
+  //                 date: "12/04/2021",
+  //                 impact: "No Bloqueante",
+  //                 description: "Ejemplo de Descripción 2"
+  //               },
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //     ]
+  //   }
+  // }
 
   constructor(
     public dialog: MatDialog, 
@@ -107,6 +226,8 @@ export class ProjectDetailsComponent implements OnInit {
     private nextActivitiesService:NextActivitiesService,
     private observationsService:ObservationsService,
     private desviationCausesService: DesviationCausesService,
+    private interrelationsService:InterrelationsService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -126,7 +247,10 @@ export class ProjectDetailsComponent implements OnInit {
     this.profileID = JSON.parse(localStorage.user).profile_id;
 
     this.mainService.showLoading();
+
     this.route.data.subscribe((data: any) => {
+      this.interrelations = data.interrelations.interrelations;
+
       this.modificationData(data.project);
       var desviationGeneral: any = data.desviationsByProject;
       this.desviationCausesGeneral = desviationGeneral.general_data;
@@ -431,19 +555,19 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
 
-      this.desviationCausesService.emitNew.subscribe( data => {
-        this.desviationCausesGeneral.cost_variation += data.cost_variation;
-        this.desviationCausesGeneral.impacts_time += data.impacts_time;
-        this.desviationCausesGeneral.total++;
-        this.desviationCauses.push(data);
-        this.desviationId = this.desviationCauses.length - 1;
-      })
-}
+    this.desviationCausesService.emitNew.subscribe( data => {
+      this.desviationCausesGeneral.cost_variation += data.cost_variation;
+      this.desviationCausesGeneral.impacts_time += data.impacts_time;
+      this.desviationCausesGeneral.total++;
+      this.desviationCauses.push(data);
+      this.desviationId = this.desviationCauses.length - 1;
+    });
+    
+  }
 
   onValorem(project_id: number){
 
     this.router.navigate([`/project-progress-create/${project_id}`]);
-
 
     // const dialogRef = this.dialog.open(ValoremFormComponent, {
     //   width: environment.widthFormsModal,
@@ -585,6 +709,26 @@ export class ProjectDetailsComponent implements OnInit {
     this.desviationId++;
   }
 
+  onInterrelations(id: number) {
+    const dialogRef = this.dialog.open(InterrelationsFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          window.location.reload();
+        }
+      }
+    );
+  }
+
   getToStringDate(date: any): string {
     if (date == '' || date == undefined || date == null){
       return '';
@@ -637,4 +781,60 @@ export class ProjectDetailsComponent implements OnInit {
     return res;
   }
   
+
+  editInterrelation(id: number) {
+    const dialogRef = this.dialog.open(InterrelationsFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        idInterrelation: id,
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  deleteInterrelation(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+        //value: 
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.interrelationsService.deleteInterrelation(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            dialogRef.close();
+            window.location.reload();
+          });
+      } else {
+        dialogRef.close();
+        window.location.reload();
+      }
+    });
+  }
+
+  openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
+    var panelClass = "succes-snack-bar";
+    if(!succes){
+      panelClass  = "error-snack-bar";
+    }
+    this.snackBar.open(message, action, {
+      duration: duration,
+      panelClass: panelClass
+    });
+  }
 }
