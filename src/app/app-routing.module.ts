@@ -53,6 +53,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ProjectsOwnResolver } from './components/projects/guards-projects/projects-own.resolver';
 import { PersonsResolver } from './components/persons/guards-persons/persons.resolver';
 import { ProjectProgressCreateResolver } from './components/project-progress-create/guards-project-progress-create/project-progress-create.resolver';
+import { InterrelationsResolver } from './components/project-details/guards/interrelations.resolver';
 
 const routes: Routes = [
   {
@@ -186,7 +187,8 @@ const routes: Routes = [
       goalsByWeeks: GoalsByWeeksResolver,
       nextActivitiesByWeek: NextActivitiesByWeeksResolver,
       obseravtionsByWeek: ObseravtionsByWeeksResolver,
-      desviationsByProject: DesviationByProjectResolver
+      desviationsByProject: DesviationByProjectResolver,
+      interrelations: InterrelationsResolver
     }
   },
   {

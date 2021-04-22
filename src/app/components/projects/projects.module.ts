@@ -37,6 +37,7 @@ import { ApplicationsByProjectComponent } from './projects-form/applications-by-
 import { AreasByProjectComponent } from './projects-form/areas-by-project/areas-by-project.component';
 import { CompaniesByProjectComponent } from './projects-form/companies-by-project/companies-by-project.component';
 import { TestUsersComponent } from './projects-form/test-users/test-users.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const materialModels = [
   MatSortModule,
@@ -67,6 +68,7 @@ const materialModels = [
   MatInputModule,
   MatButtonToggleModule,
   MatRippleModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

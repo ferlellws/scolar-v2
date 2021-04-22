@@ -6,7 +6,7 @@
     </button>
 </mat-toolbar>
 
-<mat-horizontal-stepper linear #stepper>
+<mat-horizontal-stepper *ngIf="cargaProject == true || data.mode == 'create'" linear #stepper>
     <mat-step [stepControl]="general" [editable]="true">
         <form [formGroup]="general" style="width: 100%;">
             <ng-template matStepLabel>General</ng-template>
@@ -188,7 +188,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-8">
+                <!-- <div class="col-sm-12 col-md-8">
                     <mat-form-field
                     class="full-width">
                         <mat-select (openedChange)="_openLeads($event)" formControlName="leads">
@@ -200,7 +200,24 @@
                             {{ getMessageError(descripcion ,'leads') }}
                         </mat-error>
                     </mat-form-field>
-                </div>
+                </div> -->
+
+                <mat-form-field class="col-sm-12 col-md-8">
+                    <mat-label *ngIf="data.mode == 'create'">{{labels.leads}}</mat-label>
+                    <mat-label *ngIf="(data.mode == 'edit') && (project!.functional_lead != null)">
+                        <span style="font-size: small;">Líder Funcional Actual: </span>
+                        <span style="color: black;">{{project.functional_lead!.full_name}}</span>
+                    </mat-label>
+                    <mat-label *ngIf="(data.mode == 'edit') && (project!.functional_lead == null)">{{labels.leads}}</mat-label>
+                    <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="leadsControl" [matAutocomplete]="autoLeads">
+                    <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="leadsControl" [matAutocomplete]="autoLeads">
+                    <mat-autocomplete #autoLeads="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option style="font-weight: 400; color: darkgrey;">Seleccione una opción</mat-option>
+                      <mat-option *ngFor="let lead of filterLeads | async" [value]="lead">
+                        {{lead.full_name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
 
                 <div class="col-sm-12 col-md-4">
                     <mat-form-field
@@ -224,7 +241,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <!-- <div class="col-sm-12 col-md-12">
                     <mat-form-field
                     class="full-width">
                         <mat-select (openedChange)="_openPMOS($event)" formControlName="pmos">
@@ -236,7 +253,23 @@
                             {{ getMessageError(descripcion ,'pmos') }}
                         </mat-error>
                     </mat-form-field>
-                </div>
+                </div> -->
+                <mat-form-field class="col-sm-12 col-md-12">
+                    <mat-label *ngIf="data.mode == 'create'">{{labels.pmos}}</mat-label>
+                    <mat-label *ngIf="(data.mode == 'edit') && (project!.pmo != null)">
+                        <span style="font-size: small;">PMO Actual: </span>
+                        <span style="color: black;">{{project.pmo!.full_name}}</span>
+                    </mat-label>
+                    <mat-label *ngIf="(data.mode == 'edit') && (project!.pmo == null)">{{labels.pmos}}</mat-label>
+                    <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="pmosControl" [matAutocomplete]="autoPMO">
+                    <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="pmosControl" [matAutocomplete]="autoPMO">
+                    <mat-autocomplete #autoPMO="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option style="font-weight: 400; color: darkgrey;">Seleccione una opción</mat-option>
+                      <mat-option *ngFor="let pmo of filterPmos | async" [value]="pmo">
+                        {{pmo.full_name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
             </div>
 
             <div class="row">
@@ -261,12 +294,10 @@
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-8">
-                    <mat-form-field
-                    class="full-width">
+                    <!-- <mat-form-field class="full-width">
                         <mat-select  
                         (openedChange)="_openPMOAssists($event)" 
                         formControlName="pmoAssists">
-                        <!-- cambio  -->
                             <mat-option>-- None --</mat-option>
                             <mat-option *ngFor="let pmoAssist of pmoAssists" [value]="pmoAssist.id">{{pmoAssist.first_name}} {{pmoAssist.last_name}}</mat-option>
                         </mat-select>
@@ -274,16 +305,31 @@
                         <mat-error *ngIf="this.descripcion.get('pmoAssists')?.invalid">
                             {{ getMessageError(descripcion ,'pmoAssists') }}
                         </mat-error>
+                    </mat-form-field> -->
+                    <mat-form-field class="col-sm-12 col-md-12">
+                        <mat-label *ngIf="data.mode == 'create'">{{labels.pmoAssists}}</mat-label>
+                        <mat-label *ngIf="(data.mode == 'edit') && (project!.pmo_assitant != null)">
+                            <span style="font-size: small;">PMO de Apoyo Actual: </span>
+                            <span style="color: black;">{{project.pmo_assitant!.full_name}}</span>
+                        </mat-label>
+                        <mat-label *ngIf="(data.mode == 'edit') && (project!.pmo_assitant == null)">{{labels.pmoAssists}}</mat-label>
+                        <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="pmosAssistantControl" [matAutocomplete]="autoPMOAssistant">
+                        <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="pmosAssistantControl" [matAutocomplete]="autoPMOAssistant">
+                        <mat-autocomplete #autoPMOAssistant="matAutocomplete" [displayWith]="displayFn">
+                          <mat-option style="font-weight: 400; color: darkgrey;">Seleccione una opción</mat-option>
+                          <mat-option *ngFor="let pmo of filterPmosAssistant | async" [value]="pmo">
+                            {{pmo.full_name}}
+                          </mat-option>
+                        </mat-autocomplete>
                     </mat-form-field>
                 </div>
 
                 <div class="col-sm-12 col-md-4">
-                    <mat-form-field
-                    class="full-width">
+                    <mat-form-field class="full-width">
                         <mat-select  
                         (openedChange)="_openStages($event)" 
                         formControlName="stages" 
-                        required >
+                        >
                             <mat-option>-- None --</mat-option>
                             <mat-option *ngFor="let stage of stages" [value]="stage.id">{{stage.title}}</mat-option>
                         </mat-select>
@@ -304,7 +350,7 @@
                         [min]="0" [max]="40" type="number" 
                         placeholder="{{labels.pmoAssistHours}}" 
                         formControlName="pmoAssistHours" 
-                        required >
+                        >
                         <mat-label>{{labels.pmoAssistHours}}</mat-label>
                         <mat-error *ngIf="this.descripcion.get('pmoAssistHours')?.invalid">
                             {{ getMessageError(descripcion ,'pmoAssistHours') }}
@@ -552,6 +598,8 @@
     </mat-step>
 
 </mat-horizontal-stepper>
+
+<mat-spinner *ngIf="cargaProject == false" color="accent" class="content-center"></mat-spinner>
 
 
 

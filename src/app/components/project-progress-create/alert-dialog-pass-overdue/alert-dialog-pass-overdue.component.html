@@ -1,11 +1,11 @@
 <div class="m-24">
-  <h2 class="txt-accent">Confirmación para pasar a productos atrasados</h2>
+  <h2 class="txt-primary">Confirmación para pasar a productos atrasados</h2>
   <form [formGroup]="productInProgressGroup">
     <div class="row" style="max-width: 100%;">
-      <span class="txt-primary title">Descripción: </span>
+      <span class="title">Descripción: </span>
       <span class="description">{{infoProduct.description}}</span>
 
-      <span class="txt-primary title">Fecha: </span>
+      <span class="title">Fecha: </span>
       <span class="description">{{infoProduct.date}}</span>
       
       <mat-form-field
@@ -21,7 +21,7 @@
   </form>
 
   <div mat-dialog-actions style="justify-content: flex-end;">
-      <button mat-button class="txt-accent" (click)="onNoClick()">Cancelar</button>
+      <button mat-button class="txt-primary" (click)="onNoClick()">Cancelar</button>
       <button mat-button color="primary" [disabled]="productInProgressGroup.invalid" (click)="onSiClick()">Pasar a Productos Atrasados</button>
   </div>
 </div>
