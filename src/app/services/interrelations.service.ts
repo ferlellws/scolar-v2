@@ -37,7 +37,7 @@ export class InterrelationsService {
   }
 
   getInterrelationsCard(id: number) {
-    return this.http.get<Interrelation>(`${this.API}/${id}`, this.httpOptions)
+    return this.http.get<Interrelation>(`${this.API}/info_card/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -66,7 +66,7 @@ export class InterrelationsService {
   }
 
   updateInterrelation(interrelation: Interrelation, id: number) {
-    return this.http.post<Interrelation>(`${this.API}/${id}`, interrelation, this.httpOptions)
+    return this.http.put<Interrelation>(`${this.API}/${id}`, interrelation, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitNew.emit(data);

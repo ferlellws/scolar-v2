@@ -35,7 +35,7 @@ import { DesviationCausesFormComponent } from './desviation-causes-form/desviati
 import { InterrelationsFormComponent } from './interrelations-form/interrelations-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface Indicator {
   name: string;
   color: string;
@@ -95,120 +95,120 @@ export class ProjectDetailsComponent implements OnInit {
   userID: any;
   profileID: any;
 
-  interrelations = {
-    total: 3,
-    interrelationsGeneral: {
-      data: [
-        {
-          title: "Disponibilidad de Recursos",
-          data: [
-            {
-              projectName: "EDI",
-              data: [
-                "Denis Rodriguez",
-                "Gerardo Hormiga",
-                "Santiago Fajardo",
-                "Jonathan Galvis"
-              ]
-            },
-            {
-              projectName: "Proyecto 5000",
-              data: [
-                "Juan Perez",
-                "Gerardo Hormiga",
-                "Santiago Fajardo",
-                "David Guerrero"
-              ]
-            }
-          ]
-        },
-        {
-          title: "Disponibilidad de Proveedor",
-          data: [
-            {
-              projectName: "Proyecto 1000",
-              data: [
-                "Tecno",
-                "EmpresaX",
-              ]
-            },
-          ]
-        },
-        {
-          title: "Áreas",
-          data: []
-        },
-        {
-          title: "Aplicaciones",
-          data: []
-        },
-      ]
-    },
-    interrelationsSpecific: {
-      data: [
-        {
-          title: "Variación Alcance de Proceso",
-          total: 3,
-          data: [
-            {
-              type: "Mi proyecto afecta a ...",
-              data: [
-                {
-                  id: 0,
-                  projectName: "Proyecto 3000",
-                  date: "10/04/2021",
-                  impact: "Bloqueante",
-                  description: "El proyecto esta en Gerencias, y se encuentra implementado, con requerimientos de mejoras. Se realiza la apertura de proyecto ( Reportes Power BI y automatización de consultas Geobis) para mejorar el acceso a la información requerida por Rogrigo Castañon."
-                },
-                {
-                  id: 1,
-                  projectName: "Proyecto 7000",
-                  date: "10/04/2021",
-                  impact: "Bloqueante",
-                  description: "Descripcion corta"
-                },
-              ]
-            },
-            {
-              type: "Mi proyecto es impactado por ...",
-              data: [
-                {
-                  id: 2,
-                  projectName: "Proyecto 1500",
-                  date: "10/04/2021",
-                  impact: "No Bloqueante",
-                  description: "Ejemplo de Descripción"
-                },
-              ]
-            },
-          ]
-        },
-        {
-          title: "Definición de Proceso",
-          total: 2,
-          data: [
-            {
-              type: "Mi proyecto afecta a ...",
-              data: []
-            },
-            {
-              type: "Mi proyecto es impactado por ...",
-              data: [
-                {
-                  id: 3,
-                  projectName: "Proyecto 5500",
-                  date: "12/04/2021",
-                  impact: "No Bloqueante",
-                  description: "Ejemplo de Descripción 2"
-                },
-              ]
-            },
-          ]
-        },
-      ]
-    }
-  }
-  snackBar: any;
+  interrelations: any;
+  // interrelations = {
+  //   total: 3,
+  //   interrelationsGeneral: {
+  //     data: [
+  //       {
+  //         title: "Disponibilidad de Recursos",
+  //         data: [
+  //           {
+  //             projectName: "EDI",
+  //             data: [
+  //               "Denis Rodriguez",
+  //               "Gerardo Hormiga",
+  //               "Santiago Fajardo",
+  //               "Jonathan Galvis"
+  //             ]
+  //           },
+  //           {
+  //             projectName: "Proyecto 5000",
+  //             data: [
+  //               "Juan Perez",
+  //               "Gerardo Hormiga",
+  //               "Santiago Fajardo",
+  //               "David Guerrero"
+  //             ]
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         title: "Disponibilidad de Proveedor",
+  //         data: [
+  //           {
+  //             projectName: "Proyecto 1000",
+  //             data: [
+  //               "Tecno",
+  //               "EmpresaX",
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //       {
+  //         title: "Áreas",
+  //         data: []
+  //       },
+  //       {
+  //         title: "Aplicaciones",
+  //         data: []
+  //       },
+  //     ]
+  //   },
+  //   interrelationsSpecific: {
+  //     data: [
+  //       {
+  //         title: "Variación Alcance de Proceso",
+  //         total: 3,
+  //         data: [
+  //           {
+  //             type: "Mi proyecto afecta a ...",
+  //             data: [
+  //               {
+  //                 id: 0,
+  //                 projectName: "Proyecto 3000",
+  //                 date: "10/04/2021",
+  //                 impact: "Bloqueante",
+  //                 description: "El proyecto esta en Gerencias, y se encuentra implementado, con requerimientos de mejoras. Se realiza la apertura de proyecto ( Reportes Power BI y automatización de consultas Geobis) para mejorar el acceso a la información requerida por Rogrigo Castañon."
+  //               },
+  //               {
+  //                 id: 1,
+  //                 projectName: "Proyecto 7000",
+  //                 date: "10/04/2021",
+  //                 impact: "Bloqueante",
+  //                 description: "Descripcion corta"
+  //               },
+  //             ]
+  //           },
+  //           {
+  //             type: "Mi proyecto es impactado por ...",
+  //             data: [
+  //               {
+  //                 id: 2,
+  //                 projectName: "Proyecto 1500",
+  //                 date: "10/04/2021",
+  //                 impact: "No Bloqueante",
+  //                 description: "Ejemplo de Descripción"
+  //               },
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //       {
+  //         title: "Definición de Proceso",
+  //         total: 2,
+  //         data: [
+  //           {
+  //             type: "Mi proyecto afecta a ...",
+  //             data: []
+  //           },
+  //           {
+  //             type: "Mi proyecto es impactado por ...",
+  //             data: [
+  //               {
+  //                 id: 3,
+  //                 projectName: "Proyecto 5500",
+  //                 date: "12/04/2021",
+  //                 impact: "No Bloqueante",
+  //                 description: "Ejemplo de Descripción 2"
+  //               },
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //     ]
+  //   }
+  // }
 
   constructor(
     public dialog: MatDialog, 
@@ -226,7 +226,8 @@ export class ProjectDetailsComponent implements OnInit {
     private nextActivitiesService:NextActivitiesService,
     private observationsService:ObservationsService,
     private desviationCausesService: DesviationCausesService,
-    private interrelationsService:InterrelationsService
+    private interrelationsService:InterrelationsService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -248,7 +249,8 @@ export class ProjectDetailsComponent implements OnInit {
     this.mainService.showLoading();
 
     this.route.data.subscribe((data: any) => {
-      //this.interrelations = data.interrelations;
+      this.interrelations = data.interrelations.interrelations;
+
       this.modificationData(data.project);
       var desviationGeneral: any = data.desviationsByProject;
       this.desviationCausesGeneral = desviationGeneral.general_data;
@@ -553,13 +555,14 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
 
-      this.desviationCausesService.emitNew.subscribe( data => {
-        this.desviationCausesGeneral.cost_variation += data.cost_variation;
-        this.desviationCausesGeneral.impacts_time += data.impacts_time;
-        this.desviationCausesGeneral.total++;
-        this.desviationCauses.push(data);
-        this.desviationId = this.desviationCauses.length - 1;
-      })
+    this.desviationCausesService.emitNew.subscribe( data => {
+      this.desviationCausesGeneral.cost_variation += data.cost_variation;
+      this.desviationCausesGeneral.impacts_time += data.impacts_time;
+      this.desviationCausesGeneral.total++;
+      this.desviationCauses.push(data);
+      this.desviationId = this.desviationCauses.length - 1;
+    });
+    
   }
 
   onValorem(project_id: number){
@@ -720,6 +723,7 @@ export class ProjectDetailsComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          window.location.reload();
         }
       }
     );
@@ -810,11 +814,12 @@ export class ProjectDetailsComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'si') {
-        // this.interrelationsService.deleteInterrelation(id)
-        //   .subscribe(res => {
-        //     this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-        //     dialogRef.close();
-        //   });
+        this.interrelationsService.deleteInterrelation(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            dialogRef.close();
+            window.location.reload();
+          });
       } else {
         dialogRef.close();
         window.location.reload();

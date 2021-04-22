@@ -8,8 +8,8 @@
                     <span>Editar Proyecto</span>
                 </button>
 
-                <button *ngIf="actions.update" class="buttons-options" mat-menu-item [matMenuTriggerFor]="menuOption">
-                    <mat-icon>menu_open</mat-icon>
+                <button *ngIf="actions.create" class="buttons-options" mat-menu-item [matMenuTriggerFor]="menuOption">
+                    <mat-icon style="font-size: 28px;">menu_open</mat-icon>
                     <span>Menú de Opciones</span>
                 </button>
 
@@ -330,11 +330,11 @@
                     <mat-card-title class="row">
                         <span class="txt-accent">Interrelaciones</span>
                         <br>
-                        <span style="font-size: 15px;">Total Relaciones Identificadas: {{interrelations.total}}</span>
+                        <span style="font-size: 16px;">Total Relaciones Identificadas: {{interrelations.total}}</span>
                     </mat-card-title>  
                 </mat-card-header>
                 
-                <div *ngFor="let interrelation of interrelations.interrelationsGeneral.data; index as i" class="">
+                <div *ngFor="let interrelation of interrelations.interrelationsGeneral.data; index as i" >
                     <mat-accordion>
                         <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
                             <mat-expansion-panel-header>
@@ -383,7 +383,7 @@
                                                 <div class="row">
                                                     <div mat-line class="col-sm-12 col-md-9 line-text txt-primary" style="padding-left: 0px; font-weight: 500;"> {{j+1}}. {{data.projectName}} </div>
 
-                                                    <div class="col-sm-12 col-md-3" style="display: flex; justify-content: space-between;">
+                                                    <div *ngIf="((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" class="col-sm-12 col-md-3" style="display: flex; justify-content: space-between;">
                                                         <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer; font-size: 19px;" (click)="editInterrelation(data.id)">create</mat-icon>
                                                         <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer; font-size: 19px;" (click)="deleteInterrelation(data.id)">delete</mat-icon>
                                                     </div>

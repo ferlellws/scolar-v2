@@ -7,12 +7,12 @@ export class Interrelation {
     id?: number;
     project_impacted_id?: number;
     project_impacted?: Project;
-    project_affects_id?: number;
-    project_affects?: Project;
-    type_dependency_id?: number;
-    type_dependency?: TypeDependency;
-    impact_interrelation_id?: number;
-    impact_interrelation?: ImpactInterrelation;
+    project_affect_id?: number;
+    project_affect?: Project;
+    types_dependency_id?: number;
+    types_dependency?: TypeDependency;
+    impacts_interrelation_id?: number;
+    impacts_interrelation?: ImpactInterrelation;
 
     date?: string;
     description?: string;

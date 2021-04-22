@@ -11,11 +11,13 @@ import { ImpactInterrelation } from 'src/app/models/impact-interrelation';
 import { Interrelation } from 'src/app/models/interrelation';
 import { Project } from 'src/app/models/project';
 import { TypeDependency } from 'src/app/models/type-dependency';
+import { ImpactsInterrelationsService } from 'src/app/services/impacts-interrelations.service';
 import { InterrelationsService } from 'src/app/services/interrelations.service';
 import { ProductsDeliveredService } from 'src/app/services/products-delivered.service';
 import { ProductsOverdueService } from 'src/app/services/products-overdue.service';
 import { ProductsToBeDeliveredService } from 'src/app/services/products-to-be-delivered.service';
 import { ProjectsService } from 'src/app/services/projects.service';
+import { TypesDependenciesService } from 'src/app/services/types-dependencies.service';
 import { ValoremSchedulesService } from 'src/app/services/valorem-schedules.service';
 import { ValoremStatesService } from 'src/app/services/valorem-states.service';
 import { ValoremService } from 'src/app/services/valorem.service';
@@ -51,6 +53,7 @@ export class InterrelationsFormComponent implements OnInit {
   impacts_interrelations: any [] = [];
   projects: any [] = [];
   projectInterEdit!: Project;
+  titleProjectEdit : string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +62,9 @@ export class InterrelationsFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     public datepipe: DatePipe,
     private projectsService: ProjectsService,
-    private interrelationsService:InterrelationsService
+    private interrelationsService:InterrelationsService,
+    private typesDependenciesService:TypesDependenciesService,
+    private impactsInterrelationsService:ImpactsInterrelationsService
   ) { }
 
   ngOnInit(): void {
@@ -77,31 +82,34 @@ export class InterrelationsFormComponent implements OnInit {
       description: [null, Validators.required],
     });
 
+    this.onClickImpactDirection();
+    this.onClickDescriptionDependency();
+    this.onClickImpacts();
     this.onClickProjects();
     
     if (this.data.mode == "edit") {
-      environment.consoleMessage("EDITANDO");
       this.onClickDescriptionDependency();
       this.onClickImpacts();
       this.interrelationsService.getInterrelationtId(this.data.idInterrelation)
         .subscribe(res => {
+          environment.consoleMessage(res.project_affect, "EDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
+          environment.consoleMessage(this.data.idProject, "EDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
           this.interrelation = res;
           this.interrelationsGroup.patchValue({
-            type_description: this.interrelation.type_dependency?.id,
-            impacts_interrelations: this.interrelation.impact_interrelation?.id,
+            type_dependency: this.interrelation.types_dependency?.id,
+            impacts_interrelations: this.interrelation.impacts_interrelation?.id,
             date: this.interrelation.date,
             description: this.interrelation.description
           });
-          if(this.interrelation.project_affects_id == this.data.idProject) {
+          if(this.interrelation.project_affect?.id == this.data.idProject) {
             this.interrelationsGroup.get('impact_direction')?.setValue(0);
             this.projectInterEdit = this.interrelation.project_impacted!;
           } else {
             this.interrelationsGroup.get('impact_direction')?.setValue(1);
-            this.projectInterEdit = this.interrelation.project_affects!;
-            this.projectControl.disable();
+            this.projectInterEdit = this.interrelation.project_affect!;
           }
+          this.titleProjectEdit = this.projectInterEdit.title;
         });
-      
         this.interrelationsGroup.get('impact_direction')?.disable();
     }
   }
@@ -154,35 +162,32 @@ export class InterrelationsFormComponent implements OnInit {
 
     let newInterrelation: Interrelation = {
       project_impacted_id: projectImpacted,
-      project_affects_id: projectAffetcs,
-      type_dependency_id: this.interrelationsGroup.get('type_dependency')?.value,
-      impact_interrelation_id: this.interrelationsGroup.get('impacts_interrelations')?.value,
+      project_affect_id: projectAffetcs,
+      types_dependency_id: this.interrelationsGroup.get('type_dependency')?.value,
+      impacts_interrelation_id: this.interrelationsGroup.get('impacts_interrelations')?.value,
       date: this.interrelationsGroup.get('date')?.value,
       description: this.interrelationsGroup.get('description')?.value,
     }
-
-    environment.consoleMessage(newInterrelation,"NUEVA INTERRELACIÓN");
-    this.emitClose.emit('close');
-    // this.interrelationsService.addInterrelation(newInterrelation)
-    //   .subscribe(res => {
-    //     if(res != null){ 
-    //       this.openSnackBar(true, "Registro creado satisfactoriamente", "");
-    //       this.onReset();
-    //       this.emitClose.emit('close');
-    //     }
-    //   }, (err) => {
-    //     this.fButtonDisabled = false;
-    //     let aErrors: any[] = [];
-    //     for(let i in err.error) {
-    //       aErrors = aErrors.concat(err.error[i])
-    //     }
-    //     let sErrors: string = "";
-    //     aErrors.forEach((err) => {
-    //       sErrors += "- " + err + "\n";
-    //     })
-  
-    //     this.openSnackBar(false, sErrors, "");
-    //   });
+    
+    this.interrelationsService.addInterrelation(newInterrelation)
+      .subscribe(res => {
+        if(res != null){ 
+          this.openSnackBar(true, "Registro creado satisfactoriamente", "");
+          this.onReset();
+          this.emitClose.emit('close');
+        }
+      }, (err) => {
+        this.fButtonDisabled = false;
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+        })
+        this.openSnackBar(false, sErrors, "");
+      });
     
   }
 
@@ -208,15 +213,32 @@ export class InterrelationsFormComponent implements OnInit {
 
     let newInterrelation: Interrelation = {
       project_impacted_id: projectImpacted,
-      project_affects_id: projectAffetcs,
-      type_dependency_id: this.interrelationsGroup.get('type_dependency')?.value,
-      impact_interrelation_id: this.interrelationsGroup.get('impacts_interrelations')?.value,
+      project_affect_id: projectAffetcs,
+      types_dependency_id: this.interrelationsGroup.get('type_dependency')?.value,
+      impacts_interrelation_id: this.interrelationsGroup.get('impacts_interrelations')?.value,
       date: this.interrelationsGroup.get('date')?.value,
       description: this.interrelationsGroup.get('description')?.value,
     }
 
-    environment.consoleMessage(newInterrelation,"NUEVA INTERRELACIÓN");
-    this.emitClose.emit('close');
+    this.interrelationsService.updateInterrelation(newInterrelation, this.data.idInterrelation)
+      .subscribe(res => {
+        if(res != null){ 
+          this.openSnackBar(true, "Registro modificado satisfactoriamente", "");
+          this.onReset();
+          this.emitClose.emit('close');
+        }
+      }, (err) => {
+        this.fButtonDisabled = false;
+        let aErrors: any[] = [];
+        for(let i in err.error) {
+          aErrors = aErrors.concat(err.error[i])
+        }
+        let sErrors: string = "";
+        aErrors.forEach((err) => {
+          sErrors += "- " + err + "\n";
+        })
+        this.openSnackBar(false, sErrors, "");
+      });
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
@@ -256,29 +278,17 @@ export class InterrelationsFormComponent implements OnInit {
   }
 
   onClickDescriptionDependency () {
-    this.type_dependency = [
-      {
-        id: 0,
-        name: "Variación alcance de proceso"
-      },
-      {
-        id: 1,
-        name: "Definición de proceso"
-      }
-    ];
+    this.typesDependenciesService.getTypeDependencyAll()
+      .subscribe(types => {
+        this.type_dependency = types;
+      });
   }
 
   onClickImpacts () {
-    this.impacts_interrelations = [
-      {
-        id: 0,
-        name: "Bloqueante"
-      },
-      {
-        id: 1,
-        name: "No Bloqueante"
-      }
-    ];
+    this.impactsInterrelationsService.getImpactsAll()
+      .subscribe(impact => {
+        this.impacts_interrelations = impact;
+      });
   }
 
   onClickProjects () {

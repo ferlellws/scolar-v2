@@ -9,7 +9,7 @@ import { TypeDependency } from '../models/type-dependency';
 })
 export class TypesDependenciesService {
 
-  private readonly API = `${environment.API}/type_dependency`;
+  private readonly API = `${environment.API}/types_dependencies`;
   
   emitNew = new EventEmitter<any>();
   
@@ -29,7 +29,7 @@ export class TypesDependenciesService {
     };
   };
   
-  getImpactsAll() {
+  getTypeDependencyAll() {
     return this.http.get<TypeDependency[]>(`${this.API}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -37,7 +37,7 @@ export class TypesDependenciesService {
     );
   }
 
-  getImpactId(id: number) {
+  getTypeDependencyId(id: number) {
     return this.http.get<TypeDependency>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -47,7 +47,7 @@ export class TypesDependenciesService {
     );
   }
   
-  addImpact(type_dependency: TypeDependency) {
+  addTypeDependency(type_dependency: TypeDependency) {
     return this.http.post<TypeDependency>(this.API, { type_dependency: type_dependency }, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -56,7 +56,7 @@ export class TypesDependenciesService {
       );
   }
 
-  updateImpact(type_dependency: TypeDependency, id: number) {
+  updateTypeDependency(type_dependency: TypeDependency, id: number) {
     return this.http.post<TypeDependency>(`${this.API}/${id}`, type_dependency, this.httpOptions)
       .pipe(
         tap((data: any) => {

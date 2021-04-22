@@ -32,8 +32,8 @@
 
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
-                    <mat-label>Proyecto</mat-label>
-                    <mat-label *ngIf="data.mode == 'edit'">{{projectInterEdit.title}}</mat-label>
+                    <mat-label *ngIf="data.mode == 'create'">Proyecto</mat-label>
+                    <mat-label *ngIf="data.mode == 'edit'">{{titleProjectEdit}}</mat-label>
                     <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="projectControl" [matAutocomplete]="auto" required>
                     <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="projectControl" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
