@@ -46,6 +46,36 @@ export class InterrelationsService {
     );
   }
 
+  getInterrelationsGraph(){ 
+    return this.http.get<Interrelation>(`${this.API}/graph`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getInterrelationsGraphByProject(id: number){ 
+    return this.http.get<Interrelation>(`${this.API}/graph_by_project/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGeneralTop(){
+    return this.http.get<Interrelation>(`${this.API}/general_top`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   getInterrelationtId(id: number) {
     return this.http.get<Interrelation>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

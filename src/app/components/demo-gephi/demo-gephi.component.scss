@@ -50,6 +50,7 @@
 .title-expansion {
     margin: 0px;
     font-weight: 500;
+    font-size: 15px;
 }
 
 .circle{
@@ -99,4 +100,17 @@
 .cont-inter{
     padding-left: 15px;
     font-weight: 500;
+}
+
+.circle{
+    border-radius: 30px;
+    height: 25px;
+    width: 25px;
+}
+
+.contenedor {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   flex-wrap: wrap; 
 }

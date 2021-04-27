@@ -1,11 +1,25 @@
-<div class="row" style="display: flex; justify-content: space-between;">
-    <tecno-gephi *ngIf="flag == '0'" class="col-sm-12 col-md-12"
-        (emitClick)="click($event)">
-    </tecno-gephi>
+<h2 class="txt-accent">Vicepresidencias</h2>
+<div class="header-row col-sm-12 col-md-8">
+    <div *ngFor="let vice of vicepresidencies; index as i" class="row contenedor">
+        <div class="circle" [ngStyle]="{'background-color': 'blue'}"></div>
+        <span>{{vice.title}} </span>
+    </div>
+</div>
 
-    <tecno-gephi *ngIf="flag == '1'" class="col-sm-12 col-md-8"
-        (emitClick)="click($event)">
-    </tecno-gephi>
+
+<div class="row" style="display: flex; justify-content: space-between;">
+
+    <div class="col-sm-12 col-md-8">
+        <tecno-gephi 
+            [dataGraph]="dataGraph"
+            [minRadius]="minRadius"
+            [maxRadius]="maxRadius"
+            [distance]="distance"
+            (emitClick)="click($event)">
+        </tecno-gephi>
+        
+        
+    </div>
 
     <mat-card *ngIf="flag == '1'" class="card-content mat-elevation-z4 col-sm-12 col-md-4">
         <mat-icon class="icons-cards txt-primary">stream</mat-icon>
@@ -89,4 +103,54 @@
                     </mat-accordion>
                 </div>
     </mat-card>
-</div>    
+</div>
+
+<br><br>
+<mat-divider></mat-divider>
+<br><br>
+<h1 class="txt-primary" style="font-weight: 500;">Top 5 Interrelaciones</h1>
+
+<div *ngIf="general_top.length != 0" class="row">
+    <div *ngFor="let top of general_top.basics.data index as i" class="col-sm-12 col-md-3">
+        <h2 class="txt-accent">{{top.name}}</h2>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let data of top.data; index as i" class="mat-elevation-z0" style="padding-left: -15px;">
+                <mat-expansion-panel-header>
+                <mat-panel-title class="row">
+                    <h3 class="txt-primary title-expansion">{{i+1}}. {{data.name}}</h3>
+                    <!-- <span  style="font-size: 12px;">Proyectos Relacionados: {{data.data.length}}</span> -->
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngIf="data.data.length != 0" >
+                    <div *ngFor="let projects of data.data; index as i" mat-line class="line-text" style="padding-left: 0px;">- {{projects}}</div>
+                </div>
+                <div *ngIf="data.data.length == 0" mat-line class="line-text-font"> No asignado </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <br>
+    </div>
+</div>
+
+<br>
+<div *ngIf="general_top.length != 0" class="row">
+    <div *ngFor="let top of general_top.specifics.data index as i" class="row col-sm-12 col-md-6">
+        <h2 class="txt-accent">{{top.name}}</h2>
+        <div *ngFor="let info of top.data as i" class="col-sm-12 col-md-6 ">
+            <h2 style="font-size: 16px;">{{info.name}}</h2>
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let data of info.data; index as i" class="mat-elevation-z0" style="padding-left: -15px;">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h3 class="txt-primary title-expansion">{{i+1}}. {{data.name}}</h3>
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="data.data.length != 0" >
+                        <div *ngFor="let projects of data.data; index as i" mat-line class="line-text" style="padding-left: 0px;">- {{projects}}</div>
+                    </div>
+                    <div *ngIf="data.data.length == 0" mat-line class="line-text-font"> No asignado </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <br>
+        </div>
+    </div>
+</div>

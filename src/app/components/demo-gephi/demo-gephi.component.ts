@@ -1,10 +1,14 @@
+import { JSONParser } from '@amcharts/amcharts4/core';
 import { Component, NgZone, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Actions } from 'src/app/models/actions';
 import { Interrelation } from 'src/app/models/interrelation';
 import { Project } from 'src/app/models/project';
+import { VicePresidency } from 'src/app/models/vice-presidency';
 import { InterrelationsService } from 'src/app/services/interrelations.service';
+import { MainService } from 'src/app/services/main.service';
 import { ProjectsService } from 'src/app/services/projects.service';
+import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
 import { environment } from 'src/environments/environment';
 // import * as go from 'gojs'
 
@@ -25,21 +29,50 @@ export class DemoGephiComponent implements OnInit {
   actions!: Actions;
   flag: string = "0";
 
+  dataGraph: any = [];
+  minRadius: number = 20;
+  maxRadius: number = 50;
+  distance: number = 3;
+
+  vicepresidencies: VicePresidency[] = [];
+  general_top: any;
+
   constructor(
+    private mainService: MainService,
     private interrelationsService:InterrelationsService,
     private projectsService:ProjectsService,
+    private vicePresidenciesService:VicePresidenciesService,
     private route: ActivatedRoute,
     private ngZone: NgZone
     ) {}
 
   ngOnInit(): void {
+    this.flag = "0";
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
       this.actions = new Actions();
     }
     this.userID = JSON.parse(localStorage.user).id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
-    this.flag = "0";
+    
+    this.mainService.showLoading();
+
+    this.route.data.subscribe((data: any) => {
+      this.dataGraph = data.interrelationsInitial.h_general_info;
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);
+    });
+
+    this.vicePresidenciesService.getVicePresidenciesSelect()
+      .subscribe(res => {
+        environment.consoleMessage(res, "Viceeee");
+        this.vicepresidencies = res;
+      });
+
+    this.interrelationsService.getGeneralTop()
+      .subscribe(res => {
+        this.general_top = res.general_top
+      });
+    
   }
 
   click(data: string) {
@@ -56,12 +89,25 @@ export class DemoGephiComponent implements OnInit {
           .subscribe(data => {
             this.interrelations = data.interrelations;
             environment.consoleMessage(this.interrelations,"Interrelaciones");
-            this.ngZone.run( () => {
-              this.flag = "1";
-           });
+            
+            this.interrelationsService.getInterrelationsGraph()      
+              .subscribe(res => {
+                environment.consoleMessage(res.h_general_info,"RES Graph")
+                
+                this.interrelationsService.getInterrelationsGraphByProject(this.clickProjectId)
+                  .subscribe(res => {
+                    environment.consoleMessage(res, "Nueva info");
+                    this.ngZone.run( () => {
+                      environment.consoleMessage(res, "Nueva Infoooooooooooooo");
+                      this.dataGraph = JSON.parse(JSON.stringify(res.h_general_info));
+                      this.minRadius = 60;
+                      this.maxRadius = 90;
+                      this.distance = 1.5;
+                      this.flag = "1";
+                    });
+                  });
+              });
           });
       });
-    
-    environment.consoleMessage(this.flag,"Flag");
-  }
+    }
 }

@@ -54,6 +54,7 @@ import { ProjectsOwnResolver } from './components/projects/guards-projects/proje
 import { PersonsResolver } from './components/persons/guards-persons/persons.resolver';
 import { ProjectProgressCreateResolver } from './components/project-progress-create/guards-project-progress-create/project-progress-create.resolver';
 import { InterrelationsResolver } from './components/project-details/guards/interrelations.resolver';
+import { InitialGraphResolver } from './components/demo-gephi/guards-demo-gephi/initial-graph.resolver';
 
 const routes: Routes = [
   {
@@ -94,7 +95,12 @@ const routes: Routes = [
   },
   {
     path: 'demo-gephi',
-    loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule)
+    loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      interrelationsInitial: InitialGraphResolver
+    }
   },
   {
     path: 'desviation-causes',
