@@ -35,7 +35,7 @@ export class DemoGephiComponent implements OnInit {
   maxRadius: number = 50;
   distance: number = 3;
 
-  vicepresidencies: VicePresidency[] = [];
+  vicepresidencies: any[] = [];
   general_top: any;
   graphByResources: any[] = [];
   graphByCompanies: any[] = [];
@@ -45,12 +45,29 @@ export class DemoGephiComponent implements OnInit {
   graphByProcessDefinition: any[] = [];
   graphByVariatonDefinition: any[] = [];
 
+  colorVerTodo: string = "primary";
+  colorRecursos: string = "";
+  colorProveedores: string = "";
+  colorAreasParticipantes: string = "";
+  colorAreasPertenecientes: string = "";
+  colorApps: string = "";
+  colorDefProcesos: string = "";
+  colorVarProcesos: string = "";
+  bttnVp1: string = ""
+  textVp1: string = ""
+  bttnVp2: string = ""
+  textVp2: string = ""
+  bttnVp3: string = ""
+  textVp3: string = ""
+  bttnVp4: string = ""
+  textVp4: string = ""
+  project_total: number = 0;
+  viceID: any = null;
 
   constructor(
     private mainService: MainService,
     private interrelationsService:InterrelationsService,
     private projectsService:ProjectsService,
-    private vicePresidenciesService:VicePresidenciesService,
     private route: ActivatedRoute,
     private ngZone: NgZone,
     private fg: FormBuilder 
@@ -69,14 +86,33 @@ export class DemoGephiComponent implements OnInit {
 
     this.route.data.subscribe((data: any) => {
       this.dataGraph = data.interrelationsInitial.h_general_info;
+      this.project_total = this.dataGraph.length;
       this.general_top = data.generalTop.general_top;
-      this.vicepresidencies = data.vicePresidency;
+      this.vicepresidencies = data.vicePresidency.vice_info;
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
       });
     }
 
   click(data: string) {
+    this.colorVerTodo = "";
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+    this.bttnVp4 = ""
+    this.textVp4 = ""
+    this.bttnVp2 = ""
+    this.textVp2 = ""
+    this.bttnVp3 = ""
+    this.textVp3 = ""
+    this.bttnVp1 = ""
+    this.textVp1 = ""
+    this.viceID = null;
+
     this.clickProjectId = Number(data.split(' ')[0]);
     this.projectsService.getProjectsId(this.clickProjectId)
       .subscribe(data => {
@@ -88,8 +124,8 @@ export class DemoGephiComponent implements OnInit {
               .subscribe(res => {
                 this.ngZone.run( () => {
                   this.dataGraph = res.h_general_info;
-                  this.minRadius = 60;
-                  this.maxRadius = 90;
+                  this.minRadius = 50;
+                  this.maxRadius = 70;
                   this.distance = 1.5;
                   this.flag = "1";
                 });
@@ -99,7 +135,24 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickViewAll() {
-    environment.consoleMessage("Ver Todo");
+    this.colorVerTodo = "primary"
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+    this.bttnVp1 = ""
+    this.textVp1 = ""
+    this.bttnVp2 = ""
+    this.textVp2 = ""
+    this.bttnVp3 = ""
+    this.textVp3 = ""
+    this.bttnVp4 = ""
+    this.textVp4 = ""
+    this.viceID = null;
+
     this.interrelationsService.getInterrelationsGraph()
       .subscribe(data => {
         this.dataGraph = data.h_general_info;
@@ -111,112 +164,299 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickResources() {
-    if(this.graphByResources.length == 0) {
-      this.interrelationsService.getGraphByResources()
+    this.colorRecursos = "accent"
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphByResources(idProject)
         .subscribe(data => {
           this.graphByResources = data.h_general_info;
           this.dataGraph = this.graphByResources;
         });
+      
+      this.dataGraph = this.graphByResources;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByResources(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
     }
-    this.dataGraph = this.graphByResources;
+
     this.minRadius = 35;
     this.maxRadius = 60;
     this.distance = 3;
-    this.flag = "0";    
   }
 
   onClickCompanies() {
-    if(this.graphByCompanies.length == 0) {
-      this.interrelationsService.getGraphByCompanies()
+    this.colorProveedores = "accent"
+    this.colorRecursos = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphByCompanies(idProject)
         .subscribe(data => {
           this.graphByCompanies = data.h_general_info;
           this.dataGraph = this.graphByCompanies;
         });
+
+        this.dataGraph = this.graphByCompanies;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByCompanies(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
     }
-    this.dataGraph = this.graphByCompanies;
+
     this.minRadius = 35;
     this.maxRadius = 60;
     this.distance = 3;
-    this.flag = "0";
   }
 
   onClickAreasParticipating() {
-    if(this.graphByParticipatingAreas.length == 0) {
-      this.interrelationsService.getGraphByParticpatingAreas()
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "accent";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+    
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphByParticpatingAreas(idProject)
         .subscribe(data => {
           this.graphByParticipatingAreas = data.h_general_info;
           this.dataGraph = this.graphByParticipatingAreas;
         });
+
+      this.dataGraph = this.graphByParticipatingAreas;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByAreasParticipating(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
     }
-    this.dataGraph = this.graphByParticipatingAreas;
+
     this.minRadius = 35;
     this.maxRadius = 60;
     this.distance = 3;
-    this.flag = "0";
   }
 
   onClickAreasBelongs() {
-    environment.consoleMessage("Áreas Pertenecientes");
-    if(this.graphByBelongsAreas.length == 0) {
-      this.interrelationsService.getGraphByBelongsAreas()
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "accent";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphByBelongsAreas(idProject)
         .subscribe(data => {
           this.graphByBelongsAreas = data.h_general_info;
           this.dataGraph = this.graphByBelongsAreas;
         });
+      this.dataGraph = this.graphByBelongsAreas;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByAreasBelongs(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
     }
-    this.dataGraph = this.graphByBelongsAreas;
+
     this.minRadius = 25;
     this.maxRadius = 50;
     this.distance = 3;
-    this.flag = "0";
   }
 
   onClickApps() {
-    environment.consoleMessage("Aplicaciones Impactadas");
-    if(this.graphByApps.length == 0) {
-      this.interrelationsService.getGraphByParticpatingAreas()
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "accent";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+   
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphByApps(idProject)
         .subscribe(data => {
           this.graphByApps = data.h_general_info;
           this.dataGraph = this.graphByApps;
         });
+      this.dataGraph = this.graphByApps;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByApps(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
     }
-    this.dataGraph = this.graphByApps;
+
     this.minRadius = 35;
     this.maxRadius = 60;
     this.distance = 3;
-    this.flag = "0";
   }
 
   onClickDefinitionProcess() {
-    environment.consoleMessage("Definición de Recursos");
-    if(this.graphByProcessDefinition.length == 0) {
-      this.interrelationsService.getGraphByProcessDefinition()
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "accent";
+    this.colorVarProcesos = "";
+   
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphByProcessDefinition(idProject)
         .subscribe(data => {
           this.graphByProcessDefinition = data.h_general_info;
           this.dataGraph = this.graphByProcessDefinition;
         });
+      this.dataGraph = this.graphByProcessDefinition;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByDefinitionProcess(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.h_general_info;
+        });
     }
-    this.dataGraph = this.graphByProcessDefinition;
+
     this.minRadius = 35;
     this.maxRadius = 60;
     this.distance = 3;
-    this.flag = "0";
   }
 
   onClickVariationProcess() {
-    environment.consoleMessage("Variación Alcance de Proceso");
-    if(this.graphByVariatonDefinition.length == 0) {
-      this.interrelationsService.getGraphByVariationDefinition()
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "accent";
+
+    let idProject = "null";
+    if(this.flag == '1') {
+      idProject = this.clickProjectId.toString();
+    }
+
+    if(this.viceID == null) {
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+      this.interrelationsService.getGraphByVariationDefinition(idProject)
         .subscribe(data => {
           this.graphByVariatonDefinition = data.h_general_info;
           this.dataGraph = this.graphByVariatonDefinition;
         });
+      this.dataGraph = this.graphByVariatonDefinition;
+    } else {
+      this.interrelationsService.getGraphVicepresidencyByVariationProcess(this.viceID)
+        .subscribe(data => {
+          this.dataGraph = data.h_general_info;
+        });
     }
-    this.dataGraph = this.graphByVariatonDefinition;
+
     this.minRadius = 35;
     this.maxRadius = 60;
     this.distance = 3;
-    this.flag = "0";
   }
 
   onClickZoomMas() {
@@ -227,6 +467,86 @@ export class DemoGephiComponent implements OnInit {
   onClickZoomMenos() {
     this.minRadius = this.minRadius - 5;
     this.maxRadius = this.maxRadius - 5;
+  }
+
+
+  clickVicepresidency(id: number) {
+    this.viceID = id;
+    this.ngZone.run( () => {
+      this.flag = "0";
+    });
+    this.colorRecursos = "";
+    this.colorProveedores = "";
+    this.colorAreasParticipantes = "";
+    this.colorAreasPertenecientes = "";
+    this.colorApps = "";
+    this.colorDefProcesos = "";
+    this.colorVarProcesos = "";
+    this.colorVerTodo = "";
+
+    environment.consoleMessage(id, "ID VICE")
+    if(id == this.vicepresidencies[0].id) {
+      this.bttnVp1 = "#ff4081"
+      this.textVp1 = "white"
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphVicepresidency(id)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
+
+    } else if(id == this.vicepresidencies[1].id) {
+      this.bttnVp2 = "#ff4081"
+      this.textVp2 = "white"
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphVicepresidency(id)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
+
+    } else if(id == this.vicepresidencies[2].id) {
+      this.bttnVp3 = "#ff4081"
+      this.textVp3 = "white"
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+      this.bttnVp4 = ""
+      this.textVp4 = ""
+
+      this.interrelationsService.getGraphVicepresidency(id)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
+
+    } else if(id == this.vicepresidencies[3].id) {
+      this.bttnVp4 = "#ff4081"
+      this.textVp4 = "white"
+      this.bttnVp2 = ""
+      this.textVp2 = ""
+      this.bttnVp3 = ""
+      this.textVp3 = ""
+      this.bttnVp1 = ""
+      this.textVp1 = ""
+
+      this.interrelationsService.getGraphVicepresidency(id)
+        .subscribe(data => {
+          this.dataGraph = data.general_info;
+        });
+
+    }
+    
   }
 }
 

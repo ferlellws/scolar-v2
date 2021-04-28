@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { VicePresidenciesService } from 'src/app/services/vice-presidencies.service';
+import { InterrelationsService } from 'src/app/services/interrelations.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,12 @@ import { VicePresidenciesService } from 'src/app/services/vice-presidencies.serv
 export class VicePresidencyResolver implements Resolve<boolean> {
 
   constructor(
-    private vicePresidenciesService: VicePresidenciesService
+    private interrelationsService: InterrelationsService
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
-      return this.vicePresidenciesService.getVicePresidenciesSelect();
+      return this.interrelationsService.getVicepresidency();
   }
 }

@@ -108,11 +108,12 @@
     border-radius: 30px;
     height: 25px;
     width: 25px;
+    margin-top: 5px;
 }
 
 .contenedor {
    display: flex;
-   justify-content: space-between;
+   justify-content: space-between !important;
    align-items: center;
    flex-wrap: wrap; 
 }

@@ -1,39 +1,41 @@
+<h2 class="txt-primary">Cantidad Total de proyectos: {{project_total}}</h2>
+
+<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
+    <button class="buttons-options" style="width: 210px !important; margin-bottom: 20px;" mat-raised-button (click)="onClickViewAll()" color={{colorVerTodo}}>
+        <span>Ver Todo</span>
+    </button>
+</div>
+
 <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 <span class="txt-accent" style="font-size: 16px; font-weight: 500;">Filtrar por</span>
 
 <div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
-    <button class="buttons-options" mat-raised-button (click)="onClickResources()">
+    <button class="buttons-options" mat-raised-button (click)="onClickResources()" color={{colorRecursos}}>
         <span>Recursos</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickCompanies()">
+    <button class="buttons-options" mat-raised-button (click)="onClickCompanies()" color={{colorProveedores}}>
         <span>Proveedores</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()">
+    <button class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()" color={{colorAreasParticipantes}}>
         <span>Áreas Participantes</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()">
+    <button class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()" color={{colorAreasPertenecientes}}>
         <span>Áreas Pertenecientes</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickApps()">
+    <button class="buttons-options" mat-raised-button (click)="onClickApps()" color={{colorApps}}>
         <span>Aplicativos Impactados</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()">
+    <button class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()" color={{colorDefProcesos}}>
         <span>Definición de Proceso</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickVariationProcess()">
+    <button class="buttons-options" mat-raised-button (click)="onClickVariationProcess()" color={{colorVarProcesos}}>
         <span>Variación Alcance de Proceso</span>
-    </button>
-</div>
-
-<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
-    <button class="buttons-options" color="primary" mat-raised-button (click)="onClickViewAll()">
-        <span>Ver Todo</span>
     </button>
 </div>
 
@@ -44,22 +46,75 @@
 <div class="row contenedor">
     <div class="col-sm-12 col-md-8">
         <span class="txt-accent" style="font-size: 16px; font-weight: 500;">Vicepresidencias</span>
-        <div class="header-row col-sm-12 col-md-7">
-            <div *ngFor="let vice of vicepresidencies; index as i" class="header-row">
-                <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vice.color}"></div>
-                <span class="col-sm-12 col-md-8" style="flex-wrap: wrap;">{{vice.title}} </span>
+
+        <div class="header-row" style="flex-wrap: wrap; padding-left: 10px;">
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp1}"
+                (click)="clickVicepresidency(vicepresidencies[0].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vicepresidencies[0].color}"></div>
+                    <span class="col-sm-12 col-md-10" style="font-weight: 500;" [ngStyle]="{'color': textVp1}">{{vicepresidencies[0].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp1}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp1}">{{vicepresidencies[0].total}}</span>
+                </div>
+            </div>
+        
+
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp2}"
+                (click)="clickVicepresidency(vicepresidencies[1].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-1" [ngStyle]="{'background-color': vicepresidencies[1].color}"></div>
+                    <span class="col-sm-12 col-md-11" style="font-weight: 500;" [ngStyle]="{'color': textVp2}">{{vicepresidencies[1].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp2}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp2}">{{vicepresidencies[1].total}}</span>
+                </div>
+            </div>
+
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp3}"
+                (click)="clickVicepresidency(vicepresidencies[2].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vicepresidencies[2].color}"></div>
+                    <span class="col-sm-12 col-md-10" style="font-weight: 500;" [ngStyle]="{'color': textVp3}">{{vicepresidencies[2].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp3}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp3}">{{vicepresidencies[2].total}}</span>
+                </div>
+            </div>
+
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp4}"
+                (click)="clickVicepresidency(vicepresidencies[3].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vicepresidencies[3].color}"></div>
+                    <span class="col-sm-12 col-md-10" style="font-weight: 500;" [ngStyle]="{'color': textVp4}">{{vicepresidencies[3].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp4}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp4}">{{vicepresidencies[3].total}}</span>
+                </div>
             </div>
         </div>
     </div> 
 
     <div class="col-sm-12 col-md-4">
-        <span class="txt-accent" style="font-size: 16px; font-weight: 500;">Zoom</span>
-        <div class="row col-sm-12 col-md-7">
-            <button class="buttons-options" color="primary" style="font-size: 18px;" mat-button (click)="onClickZoomMas()">
-                <span>+</span>
+        <span class="row txt-accent col-sm-12 col-md-12" style="font-size: 16px; font-weight: 500;justify-content: flex-end; padding-right: 50px;">Zoom</span>
+        <div class="row col-sm-12 col-md-12" style="justify-content: flex-end;">
+            <button class="buttons-options" mat-raised-button (click)="onClickZoomMas()">
+                <span class="txt-primary">+</span>
             </button>
-            <button class="buttons-options" color="primary" style="font-size: 18px;" mat-button (click)="onClickZoomMenos()">
-                <span>-</span>
+            <button class="buttons-options" mat-raised-button (click)="onClickZoomMenos()">
+                <span class="txt-primary">-</span>
             </button>
         </div>
     </div>
@@ -79,7 +134,7 @@
         (emitClick)="click($event)">
     </tecno-gephi>
 
-    <tecno-gephi  *ngIf="flag == '1'" class="col-sm-12 col-md-8"
+    <tecno-gephi  *ngIf="flag == '1'" class="col-sm-12 col-md-8" style="min-height: 70vh;"
         id="chartdiv2"
         width="100%"
         height="90vh"   

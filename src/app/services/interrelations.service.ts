@@ -66,6 +66,96 @@ export class InterrelationsService {
     );
   }
 
+  getVicepresidency() {
+    return this.http.get<Interrelation>(`${this.API}/projects_by_vicepresidency`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphVicepresidency(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_by_vicepresidency/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphVicepresidencyByResources(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_resources/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphVicepresidencyByCompanies(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_companies/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphVicepresidencyByAreasParticipating(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_areas_participating/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphVicepresidencyByAreasBelongs(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_areas_belongs/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+  
+  getGraphVicepresidencyByApps(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_apps/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+  
+  getGraphVicepresidencyByDefinitionProcess(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_definition_process/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphVicepresidencyByVariationProcess(id: number) {
+    return this.http.get<Interrelation>(`${this.API}/graph_vice_by_variation_process/${id}`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   getGeneralTop(){
     return this.http.get<Interrelation>(`${this.API}/general_top`, this.httpOptions)
     .pipe(
@@ -76,8 +166,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByResources(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_resources`, this.httpOptions)
+  getGraphByResources(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_resources/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -86,8 +176,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByCompanies(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_companies`, this.httpOptions)
+  getGraphByCompanies(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_companies/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -96,8 +186,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByParticpatingAreas(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_participating`, this.httpOptions)
+  getGraphByParticpatingAreas(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_participating/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -106,8 +196,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByBelongsAreas(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_belongs`, this.httpOptions)
+  getGraphByBelongsAreas(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_belongs/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -116,8 +206,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByApps(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_apps`, this.httpOptions)
+  getGraphByApps(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_apps/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -126,8 +216,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByProcessDefinition(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_definition_process`, this.httpOptions)
+  getGraphByProcessDefinition(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_definition_process/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
@@ -136,8 +226,8 @@ export class InterrelationsService {
     );
   }
 
-  getGraphByVariationDefinition(){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_variation_process`, this.httpOptions)
+  getGraphByVariationDefinition(id: any){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_variation_process/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {
