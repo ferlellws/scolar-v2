@@ -27,15 +27,25 @@ export class GephiComponent {
     private zone: NgZone
   ) {}
 
+  @Input() id!: string;
+  @Input() width!: string;
+  @Input() height!: string;
   @Input() dataGraph!:any[];
   @Input() minRadius:number = 20;
   @Input() maxRadius:number = 50;
   @Input() distance:number = 3;
 
   ngOnChanges(changes: SimpleChanges): void {
-    environment.consoleMessage(changes, "Cambio        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-    this.dataGraph = changes.dataGraph.currentValue;
-    this.funcRender();
+    //environment.consoleMessage(changes, "changes");
+    if(changes.dataGraph != null) {
+      this.dataGraph = changes.dataGraph.currentValue;
+      this.funcRender();
+    } else {
+      this.minRadius = changes.minRadius.currentValue;
+      this.maxRadius = changes.maxRadius.currentValue;
+      this.funcRender();
+    }
+    
   }
 
   // Run the function only in the browser
@@ -60,7 +70,7 @@ export class GephiComponent {
       am4core.useTheme(am4themes_animated);
       // Themes end
 
-      let chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
+      let chart = am4core.create(this.id, am4plugins_forceDirected.ForceDirectedTree);
 
       let networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
       
@@ -117,7 +127,6 @@ export class GephiComponent {
           selectedNode = ev.target;
           selectedNode.setState("selected");
           infoNode = selectedNode.group.node.textContent;
-          environment.consoleMessage(selectedNode, "Objeto nodo");
           d.emitClick.emit(infoNode);
         }
       });

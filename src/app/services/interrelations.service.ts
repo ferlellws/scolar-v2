@@ -76,6 +76,76 @@ export class InterrelationsService {
     );
   }
 
+  getGraphByResources(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_resources`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphByCompanies(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_companies`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphByParticpatingAreas(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_participating`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphByBelongsAreas(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_belongs`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphByApps(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_apps`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphByProcessDefinition(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_definition_process`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
+  getGraphByVariationDefinition(){
+    return this.http.get<Interrelation>(`${this.API}/graph_by_variation_process`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   getInterrelationtId(id: number) {
     return this.http.get<Interrelation>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

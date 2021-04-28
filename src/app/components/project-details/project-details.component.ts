@@ -122,7 +122,6 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    environment.consoleMessage(changes, "Cambio        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
   }
 
   initialInfo() {

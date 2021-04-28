@@ -55,6 +55,8 @@ import { PersonsResolver } from './components/persons/guards-persons/persons.res
 import { ProjectProgressCreateResolver } from './components/project-progress-create/guards-project-progress-create/project-progress-create.resolver';
 import { InterrelationsResolver } from './components/project-details/guards/interrelations.resolver';
 import { InitialGraphResolver } from './components/demo-gephi/guards-demo-gephi/initial-graph.resolver';
+import { GeneralTopResolver } from './components/demo-gephi/guards-demo-gephi/general-top.resolver';
+import { VicePresidencyResolver } from './components/demo-gephi/guards-demo-gephi/vice-presidency.resolver';
 
 const routes: Routes = [
   {
@@ -99,7 +101,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: {
-      interrelationsInitial: InitialGraphResolver
+      interrelationsInitial: InitialGraphResolver,
+      generalTop: GeneralTopResolver,
+      vicePresidency: VicePresidencyResolver
     }
   },
   {
