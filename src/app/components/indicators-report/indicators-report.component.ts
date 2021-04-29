@@ -219,8 +219,14 @@ export class IndicatorsReportComponent implements OnInit {
       });
   }
 
-  openDesviatoinCauses() {
+  openDesviationCauses() {
+    environment.consoleMessage("","Entrando");
     this.router.navigate([`/desviation-causes/`]);
+  }
+  
+  openInterrealtions() {
+    environment.consoleMessage("Entrando");
+    this.router.navigate([`/demo-gephi`]);
   }
 
   openStates(step: number) {

@@ -240,7 +240,7 @@ export class ProjectsFormComponent implements OnInit {
 
         startDate: `Fecha de Inicio`,
         dueDate: `Fecha Final Estimada`,
-        controlDate: `Fecha control de cambios`,
+        controlDate: `Fecha Fin según control de cambios`,
         states: `Estado`,
         phases: `Fase`,
         sprint: `Sprint`,
