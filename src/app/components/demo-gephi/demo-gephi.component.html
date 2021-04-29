@@ -1,4 +1,4 @@
-<h2 class="txt-primary">Cantidad Total de proyectos: {{project_total}}</h2>
+<h2 class="txt-primary">Cantidad Total de Proyectos Activos Relacionados {{project_total}}</h2>
 
 <div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
     <button class="buttons-options" style="width: 210px !important; margin-bottom: 20px;" mat-raised-button (click)="onClickViewAll()" color={{colorVerTodo}}>
@@ -123,7 +123,7 @@
 
 <div class="row" style="display: flex; justify-content: space-between;">
 
-    <tecno-gephi  *ngIf="flag == '0'" class="col-sm-12 col-md-12" style="min-height: 80vh;"
+    <tecno-gephi  *ngIf="flag == '0'" class="col-sm-12 col-md-12" style="min-height: 100vh;"
         id="chartdiv1"
         width="100%"
         height="90vh"
@@ -131,10 +131,11 @@
         [minRadius]="minRadius"
         [maxRadius]="maxRadius"
         [distance]="distance"
+        [labels]="labels"
         (emitClick)="click($event)">
     </tecno-gephi>
 
-    <tecno-gephi  *ngIf="flag == '1'" class="col-sm-12 col-md-8" style="min-height: 70vh;"
+    <tecno-gephi  *ngIf="flag == '1'" class="col-sm-12 col-md-8" style="min-height: 90vh;"
         id="chartdiv2"
         width="100%"
         height="90vh"   
@@ -142,14 +143,16 @@
         [minRadius]="minRadius"
         [maxRadius]="maxRadius"
         [distance]="distance"
+        [labels]="labels"
         (emitClick)="click($event)">
     </tecno-gephi>
 
     <mat-card *ngIf="flag == '1'" class="card-content mat-elevation-z4 col-sm-12 col-md-4">
         <mat-icon class="icons-cards txt-primary">stream</mat-icon>
                 <mat-card-header>
-                    <mat-card-title class="row">
-                        <span class="txt-accent">Interrelaciones de {{project.title}}</span>
+                    <mat-card-title class="row contenedor">
+                        <span class="txt-accent">Interrelaciones Activas de</span>
+                        <span class="txt-primary">{{project.title}}</span>
                         <br>
                         <span style="font-size: 16px;">Total Proyectos Relacionados: {{interrelations.total}}</span>
                     </mat-card-title>  
@@ -222,6 +225,13 @@
                     </mat-accordion>
                 </div>
     </mat-card>
+</div>
+
+<div class="row col-sm-12 col-md-12" style="justify-content: flex-end;">
+    <button class="buttons-options" mat-button (click)="onClickLeyenda()">
+        <span *ngIf="labels" class="txt-primary">Ocultar Leyendas</span>
+        <span *ngIf="!labels" class="txt-primary">Mostar Leyendas</span>
+    </button>
 </div>
 
 <br><br>

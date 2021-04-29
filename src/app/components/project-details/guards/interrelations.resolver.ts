@@ -21,6 +21,6 @@ export class InterrelationsResolver implements Resolve<boolean> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<any> |Promise<any>|any{
       //environment.consoleMessage(route.params.id, "ID PROYETO INTERRELACIONES");
-      return this.interrelationsService.getInterrelationsCard(route.params.id);
+      return this.interrelationsService.getInterrelationsCard(route.params.id, null);
   }
 }

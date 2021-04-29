@@ -33,7 +33,7 @@ export class DemoGephiComponent implements OnInit {
   dataGraph: any[] = [];
   minRadius: number = 20;
   maxRadius: number = 50;
-  distance: number = 3;
+  distance: number = 4;
 
   vicepresidencies: any[] = [];
   general_top: any;
@@ -63,6 +63,7 @@ export class DemoGephiComponent implements OnInit {
   textVp4: string = ""
   project_total: number = 0;
   viceID: any = null;
+  labels: boolean = false;
 
   constructor(
     private mainService: MainService,
@@ -117,14 +118,14 @@ export class DemoGephiComponent implements OnInit {
     this.projectsService.getProjectsId(this.clickProjectId)
       .subscribe(data => {
         this.project = data;
-        this.interrelationsService.getInterrelationsCard(this.clickProjectId)
+        this.interrelationsService.getInterrelationsCard(this.clickProjectId, 1)
           .subscribe(data => {
             this.interrelations = data.interrelations;
             this.interrelationsService.getInterrelationsGraphByProject(this.clickProjectId)
               .subscribe(res => {
                 this.ngZone.run( () => {
                   this.dataGraph = res.h_general_info;
-                  this.minRadius = 50;
+                  this.minRadius = 30;
                   this.maxRadius = 70;
                   this.distance = 1.5;
                   this.flag = "1";
@@ -158,7 +159,7 @@ export class DemoGephiComponent implements OnInit {
         this.dataGraph = data.h_general_info;
         this.minRadius = 20;
         this.maxRadius = 50;
-        this.distance = 3;
+        this.distance = 4;
         this.flag = "0";
       });
   }
@@ -203,7 +204,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 35;
     this.maxRadius = 60;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickCompanies() {
@@ -246,7 +247,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 35;
     this.maxRadius = 60;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickAreasParticipating() {
@@ -289,7 +290,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 35;
     this.maxRadius = 60;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickAreasBelongs() {
@@ -331,7 +332,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 25;
     this.maxRadius = 50;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickApps() {
@@ -373,7 +374,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 35;
     this.maxRadius = 60;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickDefinitionProcess() {
@@ -415,7 +416,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 35;
     this.maxRadius = 60;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickVariationProcess() {
@@ -456,7 +457,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.minRadius = 35;
     this.maxRadius = 60;
-    this.distance = 3;
+    this.distance = 4;
   }
 
   onClickZoomMas() {
@@ -547,6 +548,10 @@ export class DemoGephiComponent implements OnInit {
 
     }
     
+  }
+
+  onClickLeyenda(){
+    this.labels = !this.labels;
   }
 }
 

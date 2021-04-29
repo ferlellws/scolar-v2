@@ -36,8 +36,8 @@ export class InterrelationsService {
     );
   }
 
-  getInterrelationsCard(id: number) {
-    return this.http.get<Interrelation>(`${this.API}/info_card/${id}`, this.httpOptions)
+  getInterrelationsCard(id: number, status: any) {
+    return this.http.get<Interrelation>(`${this.API}/info_card/${id}/${status}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {

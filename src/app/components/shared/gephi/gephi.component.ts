@@ -34,15 +34,19 @@ export class GephiComponent {
   @Input() minRadius:number = 20;
   @Input() maxRadius:number = 50;
   @Input() distance:number = 3;
+  @Input() labels:boolean = true;
 
   ngOnChanges(changes: SimpleChanges): void {
     //environment.consoleMessage(changes, "changes");
     if(changes.dataGraph != null) {
       this.dataGraph = changes.dataGraph.currentValue;
       this.funcRender();
-    } else {
+    } else if(changes.minRadius != null) {
       this.minRadius = changes.minRadius.currentValue;
       this.maxRadius = changes.maxRadius.currentValue;
+      this.funcRender();
+    } else {
+      this.labels = changes.labels.currentValue;
       this.funcRender();
     }
     
@@ -74,7 +78,10 @@ export class GephiComponent {
 
       let networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
       
-      chart.legend = new am4charts.Legend();
+      if(this.labels) {
+        chart.legend = new am4charts.Legend();
+      }
+      
       chart.zoomable = true;
       chart.mouseWheelBehavior = "none";
       chart.data = this.dataGraph;
@@ -92,7 +99,7 @@ export class GephiComponent {
       //networkSeries.nodes.template.outerCircle.filters.push(new am4core.DropShadowFilter());
       networkSeries.links.template.propertyFields.strokeWidth = "linkWidth";
       networkSeries.links.template.distance = this.distance;
-      //networkSeries.manyBodyStrength = -16;
+      //networkSeries.manyBodyStrength = 1;
       //networkSeries.links.template.interactionsEnabled = true;
       
       // Add labels
