@@ -300,9 +300,9 @@
                                         </mat-expansion-panel-header>
                                         <mat-accordion>
                                             <mat-expansion-panel *ngFor="let area of vp.areas[0]" class="row mat-elevation-z0 card-expansion">
-                                                <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 0% !important;">
+                                                <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 5px !important;">
                                                     <mat-panel-title class="col-sm-12 col-md-2">
-                                                        <h3 class="title-expansion ">{{area.name}}</h3>
+                                                        <h3 class="txt-primary title-expansion ">{{area.name}}</h3>
                                                     </mat-panel-title>
                                                     <mat-panel-description class="col-sm-12 col-md-8 description" style="display: flex; justify-content: space-between;">
                                                         <span>Avance Esperado: {{area.advance_spected}}</span>
@@ -316,7 +316,7 @@
                                                 <mat-accordion>
                                                     <!-- sin subarea -->
                                                     <mat-expansion-panel class="row mat-elevation-z0 card-expansion">
-                                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 0% !important;">
+                                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 5px !important;">
                                                             <mat-panel-title class="col-sm-12 col-md-2">
                                                                 <h3 class="title-expansion ">{{area.withoutSub.name}}</h3>
                                                             </mat-panel-title>
@@ -336,7 +336,7 @@
                                                     </mat-expansion-panel>
                                                     <!-- con subarea -->
                                                     <mat-expansion-panel *ngFor="let subarea of area.subareas" class="row mat-elevation-z0 card-expansion">
-                                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 0% !important;">
+                                                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 5px !important;">
                                                             <mat-panel-title class="col-sm-12 col-md-2">
                                                                 <h3 class="title-expansion ">{{subarea.name}}</h3>
                                                             </mat-panel-title>
@@ -555,7 +555,7 @@
                             bars="horizontal">
                         </tecno-column-charts>
                     </div>
-                    <div class="col-sm-12 col-md-5 cont-table" style="padding-bottom: 20px;">
+                    <div class="col-sm-12 col-md-5 cont-table" style="padding-bottom: 20px; max-width: 100%;">
                         <br>
                         <tecno-dynamic-table
                             style="width: 100%;"

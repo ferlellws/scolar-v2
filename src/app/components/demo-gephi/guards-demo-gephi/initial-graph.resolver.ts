@@ -19,6 +19,6 @@ export class InitialGraphResolver implements Resolve<boolean> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
-      return this.interrelationsService.getInterrelationsGraph();
+      return this.interrelationsService.getInterrelationsGraph(true, true, true, true, true, true, true,null, null);
   }
 }

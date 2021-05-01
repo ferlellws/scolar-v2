@@ -1,45 +1,69 @@
 <h2 class="txt-primary">Cantidad Total de Proyectos Activos Relacionados {{project_total}}</h2>
 
-<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
-    <button class="buttons-options" style="width: 210px !important; margin-bottom: 20px;" mat-raised-button (click)="onClickViewAll()" color={{colorVerTodo}}>
-        <span>Ver Todo</span>
-    </button>
-</div>
-
 <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
 <span class="txt-accent" style="font-size: 16px; font-weight: 500;">Filtrar por</span>
 
-<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start;">
-    <button class="buttons-options" mat-raised-button (click)="onClickResources()" color={{colorRecursos}}>
+<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start; margin-top: 5px;">
+    <button *ngIf="flagResource" class="buttons-options" mat-raised-button (click)="onClickResources()" color={{colorRecursos}}>
+        <span>Recursos</span>
+    </button>
+    <button *ngIf="!flagResource" class="buttons-options" mat-raised-button (click)="onClickResources()">
         <span>Recursos</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickCompanies()" color={{colorProveedores}}>
+    <button *ngIf="flagCompanies" class="buttons-options" mat-raised-button (click)="onClickCompanies()" color={{colorProveedores}}>
+        <span>Proveedores</span>
+    </button>
+    <button *ngIf="!flagCompanies" class="buttons-options" mat-raised-button (click)="onClickCompanies()">
         <span>Proveedores</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()" color={{colorAreasParticipantes}}>
+    <button *ngIf="flagAreasParticipating" class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()" color={{colorAreasParticipantes}}>
+        <span>Áreas Participantes</span>
+    </button>
+    <button *ngIf="!flagAreasParticipating" class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()">
         <span>Áreas Participantes</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()" color={{colorAreasPertenecientes}}>
+    <button *ngIf="flagAreasBelongs" class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()" color={{colorAreasPertenecientes}}>
+        <span>Áreas Responsables de Proyectos</span>
+    </button>
+    <button *ngIf="!flagAreasBelongs" class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()">
         <span>Áreas Responsables de Proyectos</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickApps()" color={{colorApps}}>
+    <button *ngIf="flagApps" class="buttons-options" mat-raised-button (click)="onClickApps()" color={{colorApps}}>
+        <span>Aplicativos Impactados</span>
+    </button>
+    <button *ngIf="!flagApps" class="buttons-options" mat-raised-button (click)="onClickApps()">
         <span>Aplicativos Impactados</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()" color={{colorDefProcesos}}>
+    <button *ngIf="flagDefProcess" class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()" color={{colorDefProcesos}}>
+        <span>Definición de Proceso</span>
+    </button>
+    <button *ngIf="!flagDefProcess" class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()">
         <span>Definición de Proceso</span>
     </button>
 
-    <button class="buttons-options" mat-raised-button (click)="onClickVariationProcess()" color={{colorVarProcesos}}>
+    <button *ngIf="flagVarProcess" class="buttons-options" mat-raised-button (click)="onClickVariationProcess()" color={{colorVarProcesos}}>
+        <span>Variación Alcance de Proceso</span>
+    </button>
+    <button *ngIf="!flagVarProcess" class="buttons-options" mat-raised-button (click)="onClickVariationProcess()">
         <span>Variación Alcance de Proceso</span>
     </button>
 </div>
 
-<br>
+<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start; margin-top: 10px; margin-bottom: 10px;">
+    <button class="buttons-options" mat-raised-button (click)="onClickViewAll()">
+        <span>Ver Todo</span>
+    </button>
+    <button class="buttons-options" mat-raised-button (click)="onClickClearAll()">
+        <span>Limpiar</span>
+    </button>
+</div>
+
+
 <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->        
 
 
@@ -154,7 +178,7 @@
                         <span class="txt-accent">Interrelaciones Activas de</span>
                         <span class="txt-primary">{{project.title}}</span>
                         <br>
-                        <span style="font-size: 16px;">Total Proyectos Relacionados: {{interrelations.total}}</span>
+                        <!-- <span style="font-size: 16px;">Total Proyectos Relacionados: {{interrelations.total}}</span> -->
                     </mat-card-title>  
                 </mat-card-header>
                 

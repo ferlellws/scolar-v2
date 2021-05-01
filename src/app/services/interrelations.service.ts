@@ -16,7 +16,7 @@ export class InterrelationsService {
   
   inputParams: any = {
     user_email: JSON.parse(localStorage.user).email,
-    user_token: JSON.parse(localStorage.user).authentication_token
+    user_token: JSON.parse(localStorage.user).authentication_token,
   };
 
   constructor(private http: HttpClient) {
@@ -46,7 +46,27 @@ export class InterrelationsService {
     );
   }
 
-  getInterrelationsGraph(){ 
+  getInterrelationsGraph(
+    resources: boolean,
+    companies: boolean,
+    areas_participating: boolean,
+    areas_belongs: boolean,
+    apps: boolean,
+    def_process: boolean,
+    var_process: boolean,
+    project_id: any,
+    vicepresidency_id: any
+    ){
+    this.inputParams.resources = resources;
+    this.inputParams.companies = companies;
+    this.inputParams.areas_participating = areas_participating;
+    this.inputParams.areas_belongs = areas_belongs;
+    this.inputParams.apps = apps;
+    this.inputParams.def_process = def_process;
+    this.inputParams.var_process = var_process;
+    this.inputParams.project_id = project_id;
+    this.inputParams.vicepresidency_id = vicepresidency_id;
+
     return this.http.get<Interrelation>(`${this.API}/graph`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -158,76 +178,6 @@ export class InterrelationsService {
 
   getGeneralTop(){
     return this.http.get<Interrelation>(`${this.API}/general_top`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByResources(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_resources/${id}`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByCompanies(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_companies/${id}`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByParticpatingAreas(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_participating/${id}`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByBelongsAreas(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_areas_belongs/${id}`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByApps(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_apps/${id}`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByProcessDefinition(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_definition_process/${id}`, this.httpOptions)
-    .pipe(
-      // catchError(this.handleError)
-      tap((data: any) => {
-        // this.emitDataTable.emit(data);
-      })
-    );
-  }
-
-  getGraphByVariationDefinition(id: any){
-    return this.http.get<Interrelation>(`${this.API}/graph_by_variation_process/${id}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap((data: any) => {

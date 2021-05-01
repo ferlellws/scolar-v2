@@ -45,14 +45,14 @@ export class DemoGephiComponent implements OnInit {
   graphByProcessDefinition: any[] = [];
   graphByVariatonDefinition: any[] = [];
 
-  colorVerTodo: string = "primary";
-  colorRecursos: string = "";
-  colorProveedores: string = "";
-  colorAreasParticipantes: string = "";
-  colorAreasPertenecientes: string = "";
-  colorApps: string = "";
-  colorDefProcesos: string = "";
-  colorVarProcesos: string = "";
+  colorVerTodo: string = "";
+  colorRecursos: string = "primary";
+  colorProveedores: string = "primary";
+  colorAreasParticipantes: string = "primary";
+  colorAreasPertenecientes: string = "primary";
+  colorApps: string = "primary";
+  colorDefProcesos: string = "primary";
+  colorVarProcesos: string = "primary";
   bttnVp1: string = ""
   textVp1: string = ""
   bttnVp2: string = ""
@@ -64,6 +64,16 @@ export class DemoGephiComponent implements OnInit {
   project_total: number = 0;
   viceID: any = null;
   labels: boolean = false;
+
+  flagResource: boolean = true;
+  flagCompanies: boolean = true;
+  flagAreasParticipating: boolean = true;
+  flagAreasBelongs: boolean = true;
+  flagApps: boolean = true;
+  flagDefProcess: boolean = true;
+  flagVarProcess: boolean = true;
+
+  initialClick: boolean = true;
 
   constructor(
     private mainService: MainService,
@@ -96,14 +106,10 @@ export class DemoGephiComponent implements OnInit {
     }
 
   click(data: string) {
-    this.colorVerTodo = "";
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
+
+    this.selectAllFiltersButtons();
+    this.initialClick = true;
+
     this.bttnVp4 = ""
     this.textVp4 = ""
     this.bttnVp2 = ""
@@ -121,7 +127,17 @@ export class DemoGephiComponent implements OnInit {
         this.interrelationsService.getInterrelationsCard(this.clickProjectId, 1)
           .subscribe(data => {
             this.interrelations = data.interrelations;
-            this.interrelationsService.getInterrelationsGraphByProject(this.clickProjectId)
+            this.interrelationsService.getInterrelationsGraph(
+              this.flagResource,
+              this.flagCompanies,
+              this.flagAreasParticipating,
+              this.flagAreasBelongs,
+              this.flagApps,
+              this.flagDefProcess,
+              this.flagVarProcess,
+              this.clickProjectId,
+              null
+              )
               .subscribe(res => {
                 this.ngZone.run( () => {
                   this.dataGraph = res.h_general_info;
@@ -135,26 +151,77 @@ export class DemoGephiComponent implements OnInit {
       });
   }
 
+  clearFiltersButtons() {
+    this.flagResource = false;
+    this.flagCompanies = false;
+    this.flagAreasParticipating = false;
+    this.flagAreasBelongs = false;
+    this.flagApps = false;
+    this.flagDefProcess = false;
+    this.flagVarProcess = false;
+  }
+
+  selectAllFiltersButtons() {
+    this.flagResource = true;
+    this.flagCompanies = true;
+    this.flagAreasParticipating = true;
+    this.flagAreasBelongs = true;
+    this.flagApps = true;
+    this.flagDefProcess = true;
+    this.flagVarProcess = true;
+  }
+
+  clearVicesBttns() {
+    this.bttnVp1 = "";
+    this.textVp1 = "";
+    this.bttnVp2 = "";
+    this.textVp2 = "";
+    this.bttnVp3 = "";
+    this.textVp3 = "";
+    this.bttnVp4 = "";
+    this.textVp4 = "";
+  }
+
+  onClickClearAll() {
+    this.clearFiltersButtons();
+    this.initialClick = true;
+    this.clearVicesBttns();
+    
+    this.interrelationsService.getInterrelationsGraph(
+      this.flagResource,
+      this.flagCompanies,
+      this.flagAreasParticipating,
+      this.flagAreasBelongs,
+      this.flagApps,
+      this.flagDefProcess,
+      this.flagVarProcess,
+      null,
+      null
+      )
+      .subscribe(data => {
+        this.graphByResources = data.h_general_info;
+        this.dataGraph = this.graphByResources;
+      });
+  }
+
   onClickViewAll() {
-    this.colorVerTodo = "primary"
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-    this.bttnVp1 = ""
-    this.textVp1 = ""
-    this.bttnVp2 = ""
-    this.textVp2 = ""
-    this.bttnVp3 = ""
-    this.textVp3 = ""
-    this.bttnVp4 = ""
-    this.textVp4 = ""
+    this.selectAllFiltersButtons();
+    this.initialClick = true;
+
+    this.clearVicesBttns();
     this.viceID = null;
 
-    this.interrelationsService.getInterrelationsGraph()
+    this.interrelationsService.getInterrelationsGraph(
+      this.flagResource,
+      this.flagCompanies,
+      this.flagAreasParticipating,
+      this.flagAreasBelongs,
+      this.flagApps,
+      this.flagDefProcess,
+      this.flagVarProcess,
+      null,
+      null
+      )
       .subscribe(data => {
         this.dataGraph = data.h_general_info;
         this.minRadius = 20;
@@ -165,18 +232,12 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickResources() {
-    this.colorRecursos = "accent"
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
+
+    this.flagResource = !this.flagResource;
 
     if(this.viceID == null) {
       this.bttnVp1 = ""
@@ -187,19 +248,67 @@ export class DemoGephiComponent implements OnInit {
       this.textVp3 = ""
       this.bttnVp4 = ""
       this.textVp4 = ""
-
-      this.interrelationsService.getGraphByResources(idProject)
-        .subscribe(data => {
-          this.graphByResources = data.h_general_info;
-          this.dataGraph = this.graphByResources;
-        });
       
-      this.dataGraph = this.graphByResources;
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+        
+        this.interrelationsService.getInterrelationsGraph(
+          this.flagResource,
+          this.flagCompanies,
+          this.flagAreasParticipating,
+          this.flagAreasBelongs,
+          this.flagApps,
+          this.flagDefProcess,
+          this.flagVarProcess,
+          idProject,
+          null
+          )
+            .subscribe(data => {
+              this.graphByResources = data.h_general_info;
+              this.dataGraph = this.graphByResources;
+            });
+          
+          this.dataGraph = this.graphByResources;
+      } else {
+        //this.interrelationsService.getGraphByResources(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+          this.flagResource,
+          this.flagCompanies,
+          this.flagAreasParticipating,
+          this.flagAreasBelongs,
+          this.flagApps,
+          this.flagDefProcess,
+          this.flagVarProcess,
+          null,
+          null
+          )
+            .subscribe(data => {
+              this.graphByResources = data.h_general_info;
+              this.dataGraph = this.graphByResources;
+            });
+          
+          this.dataGraph = this.graphByResources;
+      }
+      
     } else {
-      this.interrelationsService.getGraphVicepresidencyByResources(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 35;
@@ -208,41 +317,72 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickCompanies() {
-    this.colorProveedores = "accent"
-    this.colorRecursos = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
 
+    this.flagCompanies = !this.flagCompanies;
+
     if(this.viceID == null) {
-      this.bttnVp1 = ""
-      this.textVp1 = ""
-      this.bttnVp2 = ""
-      this.textVp2 = ""
-      this.bttnVp3 = ""
-      this.textVp3 = ""
-      this.bttnVp4 = ""
-      this.textVp4 = ""
+      this.clearVicesBttns();
 
-      this.interrelationsService.getGraphByCompanies(idProject)
-        .subscribe(data => {
-          this.graphByCompanies = data.h_general_info;
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+        //this.interrelationsService.getGraphByCompanies(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        idProject,
+        null
+        )
+          .subscribe(data => {
+            this.graphByCompanies = data.h_general_info;
+            this.dataGraph = this.graphByCompanies;
+          });
           this.dataGraph = this.graphByCompanies;
-        });
-
-        this.dataGraph = this.graphByCompanies;
+        } else {
+          this.interrelationsService.getInterrelationsGraph(
+            this.flagResource,
+            this.flagCompanies,
+            this.flagAreasParticipating,
+            this.flagAreasBelongs,
+            this.flagApps,
+            this.flagDefProcess,
+            this.flagVarProcess,
+            null,
+            null
+            )
+              .subscribe(data => {
+                this.graphByCompanies = data.h_general_info;
+                this.dataGraph = this.graphByCompanies;
+              });
+              this.dataGraph = this.graphByCompanies;
+        }
     } else {
-      this.interrelationsService.getGraphVicepresidencyByCompanies(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 35;
@@ -251,41 +391,73 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickAreasParticipating() {
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "accent";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
     
+    this.flagAreasParticipating = !this.flagAreasParticipating;
+   
     if(this.viceID == null) {
-      this.bttnVp1 = ""
-      this.textVp1 = ""
-      this.bttnVp2 = ""
-      this.textVp2 = ""
-      this.bttnVp3 = ""
-      this.textVp3 = ""
-      this.bttnVp4 = ""
-      this.textVp4 = ""
+      this.clearVicesBttns();
 
-      this.interrelationsService.getGraphByParticpatingAreas(idProject)
-        .subscribe(data => {
-          this.graphByParticipatingAreas = data.h_general_info;
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+      
+        //this.interrelationsService.getGraphByParticpatingAreas(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        idProject,
+        null
+        )
+          .subscribe(data => {
+            this.graphByParticipatingAreas = data.h_general_info;
+            this.dataGraph = this.graphByParticipatingAreas;
+          });
+        this.dataGraph = this.graphByParticipatingAreas;
+      } else {
+        this.interrelationsService.getInterrelationsGraph(
+          this.flagResource,
+          this.flagCompanies,
+          this.flagAreasParticipating,
+          this.flagAreasBelongs,
+          this.flagApps,
+          this.flagDefProcess,
+          this.flagVarProcess,
+          null,
+          null
+          )
+            .subscribe(data => {
+              this.graphByParticipatingAreas = data.h_general_info;
+              this.dataGraph = this.graphByParticipatingAreas;
+            });
           this.dataGraph = this.graphByParticipatingAreas;
-        });
-
-      this.dataGraph = this.graphByParticipatingAreas;
+      }
     } else {
-      this.interrelationsService.getGraphVicepresidencyByAreasParticipating(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 35;
@@ -294,40 +466,74 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickAreasBelongs() {
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "accent";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
-
+    
+    this.flagAreasBelongs = !this.flagAreasBelongs;
+    
     if(this.viceID == null) {
-      this.bttnVp1 = ""
-      this.textVp1 = ""
-      this.bttnVp2 = ""
-      this.textVp2 = ""
-      this.bttnVp3 = ""
-      this.textVp3 = ""
-      this.bttnVp4 = ""
-      this.textVp4 = ""
+      this.clearVicesBttns();
 
-      this.interrelationsService.getGraphByBelongsAreas(idProject)
-        .subscribe(data => {
-          this.graphByBelongsAreas = data.h_general_info;
-          this.dataGraph = this.graphByBelongsAreas;
-        });
-      this.dataGraph = this.graphByBelongsAreas;
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+      
+        //this.interrelationsService.getGraphByBelongsAreas(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        idProject,
+        null
+        )
+          .subscribe(data => {
+            this.graphByBelongsAreas = data.h_general_info;
+            this.dataGraph = this.graphByBelongsAreas;
+          });
+        this.dataGraph = this.graphByBelongsAreas;
+        } else {
+          this.interrelationsService.getInterrelationsGraph(
+            this.flagResource,
+            this.flagCompanies,
+            this.flagAreasParticipating,
+            this.flagAreasBelongs,
+            this.flagApps,
+            this.flagDefProcess,
+            this.flagVarProcess,
+            null,
+            null
+            )
+              .subscribe(data => {
+                this.graphByBelongsAreas = data.h_general_info;
+                this.dataGraph = this.graphByBelongsAreas;
+              });
+            this.dataGraph = this.graphByBelongsAreas;
+      }
+
     } else {
-      this.interrelationsService.getGraphVicepresidencyByAreasBelongs(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 25;
@@ -336,40 +542,73 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickApps() {
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "accent";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-   
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
+    
+    this.flagApps = !this.flagApps;
 
     if(this.viceID == null) {
-      this.bttnVp1 = ""
-      this.textVp1 = ""
-      this.bttnVp2 = ""
-      this.textVp2 = ""
-      this.bttnVp3 = ""
-      this.textVp3 = ""
-      this.bttnVp4 = ""
-      this.textVp4 = ""
+      this.clearVicesBttns();
 
-      this.interrelationsService.getGraphByApps(idProject)
-        .subscribe(data => {
-          this.graphByApps = data.h_general_info;
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+      
+        //this.interrelationsService.getGraphByApps(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        idProject,
+        null
+        )
+          .subscribe(data => {
+            this.graphByApps = data.h_general_info;
+            this.dataGraph = this.graphByApps;
+          });
+        this.dataGraph = this.graphByApps;
+      } else {
+        this.interrelationsService.getInterrelationsGraph(
+          this.flagResource,
+          this.flagCompanies,
+          this.flagAreasParticipating,
+          this.flagAreasBelongs,
+          this.flagApps,
+          this.flagDefProcess,
+          this.flagVarProcess,
+          null,
+          null
+          )
+            .subscribe(data => {
+              this.graphByApps = data.h_general_info;
+              this.dataGraph = this.graphByApps;
+            });
           this.dataGraph = this.graphByApps;
-        });
-      this.dataGraph = this.graphByApps;
+      }
     } else {
-      this.interrelationsService.getGraphVicepresidencyByApps(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 35;
@@ -378,40 +617,73 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickDefinitionProcess() {
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "accent";
-    this.colorVarProcesos = "";
-   
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
+    
+    this.flagDefProcess = !this.flagDefProcess;
 
     if(this.viceID == null) {
-      this.bttnVp1 = ""
-      this.textVp1 = ""
-      this.bttnVp2 = ""
-      this.textVp2 = ""
-      this.bttnVp3 = ""
-      this.textVp3 = ""
-      this.bttnVp4 = ""
-      this.textVp4 = ""
+      this.clearVicesBttns();
 
-      this.interrelationsService.getGraphByProcessDefinition(idProject)
-        .subscribe(data => {
-          this.graphByProcessDefinition = data.h_general_info;
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+      
+        //this.interrelationsService.getGraphByProcessDefinition(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        idProject,
+        null
+        )
+          .subscribe(data => {
+            this.graphByProcessDefinition = data.h_general_info;
+            this.dataGraph = this.graphByProcessDefinition;
+          });
+        this.dataGraph = this.graphByProcessDefinition;
+      } else {
+        this.interrelationsService.getInterrelationsGraph(
+          this.flagResource,
+          this.flagCompanies,
+          this.flagAreasParticipating,
+          this.flagAreasBelongs,
+          this.flagApps,
+          this.flagDefProcess,
+          this.flagVarProcess,
+          null,
+          null
+          )
+            .subscribe(data => {
+              this.graphByProcessDefinition = data.h_general_info;
+              this.dataGraph = this.graphByProcessDefinition;
+            });
           this.dataGraph = this.graphByProcessDefinition;
-        });
-      this.dataGraph = this.graphByProcessDefinition;
+      }
     } else {
-      this.interrelationsService.getGraphVicepresidencyByDefinitionProcess(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.h_general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 35;
@@ -420,39 +692,73 @@ export class DemoGephiComponent implements OnInit {
   }
 
   onClickVariationProcess() {
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "accent";
-
-    let idProject = "null";
-    if(this.flag == '1') {
-      idProject = this.clickProjectId.toString();
+    if(this.initialClick) {
+      this.clearFiltersButtons();
+      this.initialClick = false;
     }
 
+    this.flagVarProcess = !this.flagVarProcess;
+
     if(this.viceID == null) {
-      this.bttnVp1 = ""
-      this.textVp1 = ""
-      this.bttnVp2 = ""
-      this.textVp2 = ""
-      this.bttnVp3 = ""
-      this.textVp3 = ""
-      this.bttnVp4 = ""
-      this.textVp4 = ""
-      this.interrelationsService.getGraphByVariationDefinition(idProject)
-        .subscribe(data => {
-          this.graphByVariatonDefinition = data.h_general_info;
+      this.clearVicesBttns();
+      
+      let idProject = "null";
+      if(this.flag == '1') {
+        idProject = this.clickProjectId.toString();
+      
+        //this.interrelationsService.getGraphByVariationDefinition(idProject)
+        this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        idProject,
+        null
+        )
+          .subscribe(data => {
+            this.graphByVariatonDefinition = data.h_general_info;
+            this.dataGraph = this.graphByVariatonDefinition;
+          });
+        this.dataGraph = this.graphByVariatonDefinition;
+      } else {
+        this.interrelationsService.getInterrelationsGraph(
+          this.flagResource,
+          this.flagCompanies,
+          this.flagAreasParticipating,
+          this.flagAreasBelongs,
+          this.flagApps,
+          this.flagDefProcess,
+          this.flagVarProcess,
+          null,
+          null
+          )
+            .subscribe(data => {
+              this.graphByVariatonDefinition = data.h_general_info;
+              this.dataGraph = this.graphByVariatonDefinition;
+            });
           this.dataGraph = this.graphByVariatonDefinition;
-        });
-      this.dataGraph = this.graphByVariatonDefinition;
+      }
     } else {
-      this.interrelationsService.getGraphVicepresidencyByVariationProcess(this.viceID)
-        .subscribe(data => {
-          this.dataGraph = data.h_general_info;
-        });
+      this.interrelationsService.getInterrelationsGraph(
+        this.flagResource,
+        this.flagCompanies,
+        this.flagAreasParticipating,
+        this.flagAreasBelongs,
+        this.flagApps,
+        this.flagDefProcess,
+        this.flagVarProcess,
+        null,
+        this.viceID
+        )
+          .subscribe(data => {
+            this.graphByResources = data.h_general_info;
+            this.dataGraph = this.graphByResources;
+          });
+        
+        this.dataGraph = this.graphByResources;
     }
 
     this.minRadius = 35;
@@ -472,20 +778,13 @@ export class DemoGephiComponent implements OnInit {
 
 
   clickVicepresidency(id: number) {
+    this.initialClick = true;
     this.viceID = id;
     this.ngZone.run( () => {
       this.flag = "0";
     });
-    this.colorRecursos = "";
-    this.colorProveedores = "";
-    this.colorAreasParticipantes = "";
-    this.colorAreasPertenecientes = "";
-    this.colorApps = "";
-    this.colorDefProcesos = "";
-    this.colorVarProcesos = "";
-    this.colorVerTodo = "";
+    this.selectAllFiltersButtons();
 
-    environment.consoleMessage(id, "ID VICE")
     if(id == this.vicepresidencies[0].id) {
       this.bttnVp1 = "#ff4081"
       this.textVp1 = "white"
@@ -495,11 +794,6 @@ export class DemoGephiComponent implements OnInit {
       this.textVp3 = ""
       this.bttnVp4 = ""
       this.textVp4 = ""
-
-      this.interrelationsService.getGraphVicepresidency(id)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
 
     } else if(id == this.vicepresidencies[1].id) {
       this.bttnVp2 = "#ff4081"
@@ -511,11 +805,6 @@ export class DemoGephiComponent implements OnInit {
       this.bttnVp4 = ""
       this.textVp4 = ""
 
-      this.interrelationsService.getGraphVicepresidency(id)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
-
     } else if(id == this.vicepresidencies[2].id) {
       this.bttnVp3 = "#ff4081"
       this.textVp3 = "white"
@@ -525,12 +814,7 @@ export class DemoGephiComponent implements OnInit {
       this.textVp1 = ""
       this.bttnVp4 = ""
       this.textVp4 = ""
-
-      this.interrelationsService.getGraphVicepresidency(id)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
-
+      
     } else if(id == this.vicepresidencies[3].id) {
       this.bttnVp4 = "#ff4081"
       this.textVp4 = "white"
@@ -540,14 +824,24 @@ export class DemoGephiComponent implements OnInit {
       this.textVp3 = ""
       this.bttnVp1 = ""
       this.textVp1 = ""
-
-      this.interrelationsService.getGraphVicepresidency(id)
-        .subscribe(data => {
-          this.dataGraph = data.general_info;
-        });
-
     }
-    
+
+    this.interrelationsService.getInterrelationsGraph(
+      this.flagResource,
+      this.flagCompanies,
+      this.flagAreasParticipating,
+      this.flagAreasBelongs,
+      this.flagApps,
+      this.flagDefProcess,
+      this.flagVarProcess,
+      null,
+      id
+      )
+      .subscribe(data => {
+        this.graphByResources = data.h_general_info;
+        this.dataGraph = this.graphByResources;
+      });
+      this.dataGraph = this.graphByResources;
   }
 
   onClickLeyenda(){
