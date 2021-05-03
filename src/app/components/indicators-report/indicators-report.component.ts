@@ -10,6 +10,7 @@ import { TableData } from 'src/app/models/table-data';
 import { IndicatorsReportsService } from 'src/app/services/indicators-reports.service';
 import { MainService } from 'src/app/services/main.service';
 import { PersonsService } from 'src/app/services/persons.service';
+import { ProjectsService } from 'src/app/services/projects.service';
 import { StatesService } from 'src/app/services/states.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
@@ -100,7 +101,8 @@ export class IndicatorsReportComponent implements OnInit {
     private statesService: StatesService,
     private usersService: UserService,
     private personsService: PersonsService,
-    private fg: FormBuilder 
+    private fg: FormBuilder ,
+    private projectsService:ProjectsService
   ) {
     this.statesGroup = this.fg.group({
       yearsForm: [null],
@@ -145,6 +147,11 @@ export class IndicatorsReportComponent implements OnInit {
     this.personsService.getManagers()
       .subscribe((pmos: any) => {
         this.optionsPMOs = pmos;
+      });
+    
+    this.projectsService.getYearsStartDate()
+      .subscribe(res => {
+        this.optionsYears = res.projects_start_date;
       });
   }
 
@@ -215,7 +222,7 @@ export class IndicatorsReportComponent implements OnInit {
   openAreas(step: number) {
     this.setStep(step);
 
-    if(this.advanceVicepresidencies == null) {
+    if(this.areas == null) {
       this.indicatorsReportsService.getAreas("","")
       .subscribe((data: any) => {
         this.areas = data;
@@ -278,7 +285,7 @@ export class IndicatorsReportComponent implements OnInit {
         });
 
     } else if (nameGroup == "typificationsGroup") {
-      var status = group.get('statusForm')!.value;
+      var status = this.arrayToString(group.get('statusForm')!.value);
       this.indicatorsReportsService.getTableTypificationsByVicepresidencies(years, status)
         .subscribe((data: any) => {
           this.typificationsByVicepresidencies = data.typificationsByVicepresidenciesTable;
@@ -286,7 +293,7 @@ export class IndicatorsReportComponent implements OnInit {
         });
 
     } else if (nameGroup == "prioritiesGroup") {
-      var status:any = this.arrayToString(group.get("statusForm")!.value);
+      var status = this.arrayToString(group.get("statusForm")!.value);
       this.indicatorsReportsService.getTablePriorities(years, status)
         .subscribe((data: any) => {
           this.priorities = data.priorities;
@@ -311,7 +318,8 @@ export class IndicatorsReportComponent implements OnInit {
       var states = this.arrayToString(group.get("statesForm")!.value);
       this.indicatorsReportsService.getAreas(years,states)
         .subscribe((data: any) => {
-          this.flagAreas = true;    
+          this.areas = data;
+          this.flagAreas = true;
         });
 
     } else if (nameGroup == "programsGroup") {
@@ -327,7 +335,10 @@ export class IndicatorsReportComponent implements OnInit {
       var states = this.arrayToString(group.get("statesForm")!.value);
       this.indicatorsReportsService.getTableCompanies(years, states)
       .subscribe((data: any) => {
+        let compAux = data.typificationsByVicepresidenciesTable.dataTable.filter((c:any) => c.totalProjects != 0);
         this.companies = data.typificationsByVicepresidenciesTable;
+        this.companies.dataTable = compAux;
+        //this.companies = data.typificationsByVicepresidenciesTable;
         if(this.companies.dataTable.length == 0) {
           this.emptyGraphCompanies = true;
         } else {
@@ -399,7 +410,10 @@ export class IndicatorsReportComponent implements OnInit {
     } else if (nameGroup == "companiesGroup") {
       this.indicatorsReportsService.getTableCompanies("", "")
       .subscribe((data: any) => {
+        let compAux = data.typificationsByVicepresidenciesTable.dataTable.filter((c:any) => c.totalProjects != 0);
         this.companies = data.typificationsByVicepresidenciesTable;
+        this.companies.dataTable = compAux;
+        //this.companies = data.typificationsByVicepresidenciesTable;
         if(this.companies.dataTable.length == 0) {
           this.emptyGraphCompanies = true;
         } else {

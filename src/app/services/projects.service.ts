@@ -57,9 +57,16 @@ export class ProjectsService {
     );
   }
 
-  addProjects(project: Project) {
-    
-    return this.http.post<Project>(this.API, { project: project }, this.httpOptions)
+  getYearsStartDate(){
+    return this.http.get<Project[]>(`${this.API}/years_start_date`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
+  updateProjectsId(project: Project, id: number) {
+    return this.http.put<Project>(`${this.API}/${id}`, project, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
@@ -67,8 +74,9 @@ export class ProjectsService {
       );
   }
 
-  updateProjectsId(project: Project, id: number) {
-    return this.http.put<Project>(`${this.API}/${id}`, project, this.httpOptions)
+  addProjects(project: Project) {
+    
+    return this.http.post<Project>(this.API, { project: project }, this.httpOptions)
       .pipe(
         tap((data: any) => {
           this.emitDataTable.emit(data);
