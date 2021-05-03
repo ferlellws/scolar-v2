@@ -186,6 +186,7 @@ export class DemoGephiComponent implements OnInit {
     this.clearFiltersButtons();
     this.initialClick = true;
     this.clearVicesBttns();
+    this.flag = '0';
     
     this.interrelationsService.getInterrelationsGraph(
       this.flagResource,
