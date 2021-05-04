@@ -157,8 +157,10 @@ export class WeekFormComponent implements OnInit {
     await this._weeksService.addWeek(week).subscribe((res) => {
       true; //environment.consoleMessage(res, "respuesta");
       for (let index = 0; index < this.goals.length; index++) {
+        //this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`));
         var goal: Goal = {
           week_id: res.id,
+          //date: this.parseDate(new Date(`${(this.goals[index].date).substring(0,10)}:00:00`)),
           date: this.goals[index].date,
           description: this.goals[index].description,
           value_goal: false,

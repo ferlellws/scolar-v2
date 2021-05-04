@@ -109,6 +109,7 @@ export class DemoGephiComponent implements OnInit {
 
     this.selectAllFiltersButtons();
     this.initialClick = true;
+    this.labels = false;
 
     this.bttnVp4 = ""
     this.textVp4 = ""

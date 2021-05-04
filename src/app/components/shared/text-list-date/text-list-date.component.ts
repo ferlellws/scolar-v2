@@ -32,7 +32,9 @@ export class TextListDateComponent implements OnInit {
   add(){
     this.items.push({
       description: this.inpuText,
-      date: `${this.datePicker.getDate()}-${this.datePicker.getMonth()}-${this.datePicker.getFullYear()}`});
+      date: this.getToStringDate((`${(this.datePicker)}`))
+    });
+      //date: `${this.datePicker.getDate()}-${this.datePicker.getMonth()}-${this.datePicker.getFullYear()}`});
     this.inpuText = "";
     this.datePicker = null;
     this.emitChange.emit(this.items);    

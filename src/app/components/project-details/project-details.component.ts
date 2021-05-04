@@ -146,8 +146,11 @@ export class ProjectDetailsComponent implements OnInit {
 
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
-          var mes = new Date(data.start_date).getMonth(); 
-          data.month = this.meses[mes].mes;
+          // var mes = new Date(data.start_date).getMonth();
+          // environment.consoleMessage(mes, "MES")
+          var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]);
+          
+          data.month = this.meses[mes-1].mes;
   
           if (data.advance_spected != null && data.advance_real != null) {
             data.deviation_indicator = Math.abs(data.advance_spected - data.advance_real)
@@ -171,11 +174,11 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
       data.goalsByWeeks.map((data: any) => {
-        data.date = this.getToStringDate(data.date);
+        data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
       data.nextActivitiesByWeek.map((data: any) => {
-        data.date = this.getToStringDate(data.date);
+        data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
       this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
@@ -183,8 +186,11 @@ export class ProjectDetailsComponent implements OnInit {
       );
 
       this.weeksByProject.map((data: any) =>{
-        var mes = new Date(data.start_date).getMonth(); 
-        var año = new Date(data.start_date).getFullYear();
+        // var mes = new Date(data.start_date).getMonth();
+        var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]) - 1;
+        // environment.consoleMessage(mes, "MEEEEEEEEEEEEEEEES <<<<<<<<<<<<<");
+        var año = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[0]);
+        // var año = new Date(data.start_date).getFullYear();
         data.month = this.meses[mes].mes;
         data.year = año;
 
@@ -201,7 +207,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.weekId = this.weeksByProject.length-1;
       
       this.project = data.project;
-      console.log("Datos Proyecto",this.project);
+      // console.log("Datos Proyecto",this.project);
 
       //Aplicaciones Impactadas
       this.applicationsByProject = data.applicationsByProject.filter((apps: ApplicationByProject) => 
@@ -507,6 +513,7 @@ export class ProjectDetailsComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          window.location.reload();
         }
       }
     );
