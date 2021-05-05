@@ -113,7 +113,7 @@ export class ProjectProgressCreateComponent implements OnInit {
     this.flagModeProdOverdue = "create"
     this.flagModeProdInProgress = "create"
 
-    this.userID = JSON.parse(localStorage.user).id;
+    this.userID = JSON.parse(localStorage.user).person_id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
 
     this.actions = JSON.parse(localStorage.access_to_accions);

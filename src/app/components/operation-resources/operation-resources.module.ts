@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
-import { ProjectProgressCreateRoutingModule } from './project-progress-create-routing.module';
-import { ProjectProgressCreateComponent } from './project-progress-create.component';
+import { OperationResourcesRoutingModule } from './operation-resources-routing.module';
+import { OperationResourcesComponent } from './operation-resources.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,16 +29,12 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { AlertConfirmPassOverdueComponent } from './alert-dialog-pass-overdue/alert-dialog-pass-overdue.component';
-import { AlertConfirmPassDeliveredComponent } from './alert-dialog-pass-delivered/alert-dialog-pass-delivered.component';
-import { DeliveredEditComponent } from './delivered-edit/delivered-edit.component';
-import { InProgressFormComponent } from './in-progress-form/in-progress-form.component';
-import { OverdueFormComponent } from './overdue-form/overdue-form.component';
-import { ValoremFormComponent } from './valorem-form/valorem-form.component';
-
+import { ProjectOperationResourcesResolver } from './guards/project.resolver';
+import { SponsorsResolver } from './guards/sponsors.resolver';
+import { ResourceFormComponent } from './resource-form/resource-form.component';
 
 const materialModels = [
   MatSortModule,
@@ -78,23 +74,21 @@ const materialModels = [
 
 @NgModule({
   declarations: [
-    ProjectProgressCreateComponent,
-    AlertConfirmPassOverdueComponent,
-    AlertConfirmPassDeliveredComponent,
-    DeliveredEditComponent,
-    InProgressFormComponent,
-    OverdueFormComponent,
-    ValoremFormComponent
+    OperationResourcesComponent,
+    ResourceFormComponent,
   ],
   imports: [
     CommonModule,
-    ProjectProgressCreateRoutingModule,
+    OperationResourcesRoutingModule,
     materialModels,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    MatInputModule,
+    ReactiveFormsModule,
   ],
   providers: [
+    ProjectOperationResourcesResolver,
+    SponsorsResolver,
     DatePipe,
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }
@@ -103,4 +97,4 @@ const materialModels = [
     materialModels
   ]
 })
-export class ProjectProgressCreateModule { }
+export class OperationResourcesModule { }

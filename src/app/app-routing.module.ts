@@ -57,6 +57,8 @@ import { InterrelationsResolver } from './components/project-details/guards/inte
 import { InitialGraphResolver } from './components/demo-gephi/guards-demo-gephi/initial-graph.resolver';
 import { GeneralTopResolver } from './components/demo-gephi/guards-demo-gephi/general-top.resolver';
 import { VicePresidencyResolver } from './components/demo-gephi/guards-demo-gephi/vice-presidency.resolver';
+import { ProjectOperationResourcesResolver } from './components/operation-resources/guards/project.resolver';
+import { SponsorsResolver } from './components/operation-resources/guards/sponsors.resolver';
 
 const routes: Routes = [
   {
@@ -329,6 +331,15 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     resolve: {
       projectProgressCreateResolver: ProjectProgressCreateResolver
+    }
+  },
+  { path: 'operation-resources/:id',
+    loadChildren: () => import('./components/operation-resources/operation-resources.module').then(m => m.OperationResourcesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      project: ProjectOperationResourcesResolver,
+      sponsors: SponsorsResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

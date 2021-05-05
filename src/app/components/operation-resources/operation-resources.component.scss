@@ -1,0 +1,50 @@
+.title-page {
+    font-size: 25px;
+    font-weight: 500;;
+}
+
+.sections-page {
+    font-size: 23px;
+    font-weight: 500;;
+}
+
+.section-content {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.comite-content {
+    padding-left: 20px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.card-content{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    margin-right: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.text-comite {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.front-name {
+    font-weight: 500;
+    font-size: 15px;
+}
+  

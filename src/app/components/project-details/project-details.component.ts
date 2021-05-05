@@ -129,7 +129,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.actions == null){
       this.actions = new Actions();
     }
-    this.userID = JSON.parse(localStorage.user).id;
+    this.userID = JSON.parse(localStorage.user).person_id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
 
     this.mainService.showLoading();
@@ -620,6 +620,10 @@ export class ProjectDetailsComponent implements OnInit {
         }
       }
     );
+  }
+
+  onOperationResources(project_id: number) {
+    this.router.navigate([`/operation-resources/${project_id}`]);
   }
 
   getToStringDate(date: any): string {

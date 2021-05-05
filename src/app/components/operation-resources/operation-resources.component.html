@@ -1,0 +1,99 @@
+<div *ngIf="actions.read && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || (project.functional_lead == null ? null : project.functional_lead!.id == userID) || profileID == 2)">
+    <div style="padding-bottom: 20px;">
+        <span class="title-page mat-title col-sm-12 col-md-12 txt-accent">Recursos Críticos de Operación: </span>
+        <span class="title-page mat-title col-sm-12 col-md-12 txt-primary" >{{project.title}}</span>
+    </div>
+
+    <div class="row">
+        <div class="row section-content">
+            <span class=" sections-page mat-title col-sm-12 col-md-12 txt-accent">Dirección</span>
+            <span class="mat-title col-sm-12 col-md-12 txt-primary">Comité Directivo</span>
+
+            <div class="row comite-content">
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-sm-12 col-md-6">
+                        <span class="sub-title txt-primary">Sponsor Operación</span>
+                        <div *ngFor="let sponsor of sponsors">
+                            <mat-card *ngIf="sponsor.person != null" class="row card-content">
+                                <span class="col-sm-12 col-md-6 text-comite">{{sponsor.person.full_name}}</span>
+                                <mat-icon class="col-sm-12 col-md-6" *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer; margin-right: 10px;" (click)="deleteSponsor(sponsor.id)">delete</mat-icon>
+                            </mat-card>
+                        </div>
+
+                        <div class="row card-content" style="padding-top: 10px;">
+                            <mat-form-field class="col-sm-12 col-md-11">
+                                <mat-label>Agregar nuevo Sponsor</mat-label>
+                                <input type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required>
+                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngFor="let person of filterPersons | async" [value]="person">
+                                    {{person.full_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.create && personControl.value != null" matTooltip="Agregar" style="color: #3f51b5; cursor:pointer; font-size: 35px; margin-right: 30px;" (click)="addSponsor()">add_circle</mat-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-sm-12 col-md-4">
+                        <span class="sub-title col-sm-12 col-md-12 txt-primary">Líder Funcional</span>
+                        <mat-card class="row card-content">
+                            <span *ngIf="project.functional_lead == null">Sin asignación</span>
+                            <span class="text-comite" *ngIf="project.functional_lead != null">{{project.functional_lead!.full_name}}</span>
+                        </mat-card>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-4">
+                        <span class="sub-title col-sm-12 col-md-12 txt-primary">Pmo Asignado</span>
+                        <mat-card class="row card-content">
+                            <span *ngIf="project.pmo == null">Sin asignación</span>
+                            <span class="text-comite" *ngIf="project.pmo != null">{{project.pmo!.full_name}}</span>
+                        </mat-card>
+                    </div>
+    
+                    <div class="col-sm-12 col-md-4">
+                        <span class="sub-title col-sm-12 col-md-12 txt-primary">Pmo de Apoyo</span>
+                        <mat-card class="row card-content">
+                            <span *ngIf="project.pmo_assitant == null">Sin asignación</span>
+                            <span class="text-comite" *ngIf="project.pmo_assitant != null">{{project.pmo_assitant!.full_name}}</span>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row section-content">
+            <span class="sections-page mat-title col-sm-12 col-md-12 txt-accent">Planeación, Ejecución y Control</span>
+            <div>
+                <mat-card class="mat-elevation-z2 txt-primary">
+                    <span class="front-name" style="padding-left: 10px; padding-right: 90px; font-size: 18px;">Frentes de Operación</span>
+                    <span class="front-name" style="padding-right: 170px; font-size: 18px;">Recursos de Soporte</span>
+                    <span class="front-name" style="padding-right: 160px; font-size: 18px;">Dedicación</span>
+                    <span class="front-name" style="font-size: 18px;">Rol / Alcance</span>
+                </mat-card>
+            </div>
+
+            <div *ngFor="let front of fronts">
+                <mat-card class="row card-content">
+                    <span class="front-name col-sm-12 col-md-2">{{front.name}}</span>
+                    <div class="col-sm-12 col-md-10">
+                        <div *ngFor="let resource of front.resources" class="row card-content">
+                            <span class="front-name col-sm-12 col-md-3">{{resource.name}}</span>
+                            <span class="front-name col-sm-12 col-md-2">{{resource.dedication}}</span>
+                            <span class="front-name col-sm-12 col-md-4">{{resource.description}}</span>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="resource.totalDedication < 60" style="color: #81C784; margin-right: 10px;"></mat-icon>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="resource.totalDedication >= 60" matTooltip={{resource.totalDedication}} style="color: #FDD835; margin-right: 10px;">warning</mat-icon>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.delete" matTooltip="Eliminar" style="color: #3f51b5; cursor:pointer; margin-right: 10px;" (click)="deleteSponsor(resource.id)">edit</mat-icon>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer; margin-right: 10px;" (click)="deleteSponsor(resource.id)">delete</mat-icon>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateSupportResource()" class="btn-new mat-elevation-z2">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
