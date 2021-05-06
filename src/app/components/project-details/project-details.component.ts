@@ -502,7 +502,7 @@ export class ProjectDetailsComponent implements OnInit {
   onWeek(){
     const dialogRef = this.dialog.open(WeekFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         idProject: this.project.id,
         mode: 'create',
@@ -514,6 +514,26 @@ export class ProjectDetailsComponent implements OnInit {
         if (data == 'close'){
           dialogRef.close();
           window.location.reload();
+        }
+      }
+    );
+  }
+
+  onWeeekEdit(id: number) {
+    const dialogRef = this.dialog.open(WeekFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true,
+      data: {   
+        idProject: this.project.id,
+        idWeek: id,
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
         }
       }
     );
@@ -542,7 +562,7 @@ export class ProjectDetailsComponent implements OnInit {
   onDesviationEdit(id: number){
     const dialogRef = this.dialog.open(DesviationCausesFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         idProject: this.project.id,
         idCausal: id, 

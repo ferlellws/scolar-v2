@@ -64,6 +64,8 @@ export class OperationResourcesComponent implements OnInit {
       this.sponsors = data.sponsors;
       this.persons = data.resources;
       this.fronts = data.supportResources.fronts;
+      
+      environment.consoleMessage(this.fronts, "FRENTES");
 
       this.filterPersons = this.personControl.valueChanges.pipe(
         startWith(''),

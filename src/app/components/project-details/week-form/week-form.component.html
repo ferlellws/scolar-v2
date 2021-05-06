@@ -85,11 +85,14 @@
     <div class="row">
         <div class="col-sm-12 col-md-12"  style="margin-left: 15px;">
             <tecno-text-list-date 
-            class="external-component" 
-            titleClass="txt-primary" 
-            name="Logros del periodo" 
-            [items]="goals" 
-            (emitChange)="onGoal($event)"></tecno-text-list-date>
+                class="external-component" 
+                titleClass="txt-primary" 
+                name="Logros del periodo" 
+                [items]="goals" 
+                [disableEdit]="disableEdit"
+                [mode]="mode"
+                (emitChange)="onGoal($event)">
+            </tecno-text-list-date>
         </div>
     </div>
     <mat-divider></mat-divider>
@@ -97,11 +100,12 @@
     <div class="row">
         <div class="col-sm-12 col-md-12" style="margin-left: 15px;">
             <tecno-text-list-date 
-            class="external-component" 
-            titleClass="txt-primary" 
-            name="Proximas actividades" 
-            [items]="nextActivities" 
-            (emitChange)="onNextActivities($event)"></tecno-text-list-date>
+                class="external-component" 
+                titleClass="txt-primary" 
+                name="Proximas actividades" 
+                [items]="nextActivities" 
+                (emitChange)="onNextActivities($event)">
+            </tecno-text-list-date>
         </div>
     </div>
     <mat-divider></mat-divider>
@@ -109,20 +113,21 @@
     <div class="row">
         <div style="margin-left: 15px;" class="col-sm-12 col-md-12">         
             <tecno-text-list 
-            class="external-component" 
-            titleClass="txt-primary" 
-            name="Observaciones" 
-            [items]="observations" 
-            (emitChange)="onObservations($event)"></tecno-text-list>
+                class="external-component" 
+                titleClass="txt-primary" 
+                name="Observaciones" 
+                [items]="observations" 
+                (emitChange)="onObservations($event)">
+            </tecno-text-list>
         </div>
     </div>
     <div class="buttons">
         <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
         <button class="button"
-            (click)="crear()"
-          mat-button color="primary"
-          [disabled]="general.invalid || fButtonDisabled">
-          {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
+            (click)="data.mode == 'create' ? crear() : editar()"
+            mat-button color="primary"
+            [disabled]="general.invalid || fButtonDisabled">
+            {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
         </button>
     </div>
 </div>

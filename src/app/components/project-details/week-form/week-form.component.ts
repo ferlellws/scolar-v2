@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 
 export interface DialogData {
   idProject: number;
+  idWeek: number;
   mode: string;
   labelAction: string;
 }
@@ -48,6 +49,10 @@ export class WeekFormComponent implements OnInit {
   nextActivities: any[] = [];
   observations: string[] = []
 
+  goalsAux: any[] = [];
+  disableEdit = false;
+  mode = "create";
+
   constructor(
     private _fbG: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -75,6 +80,42 @@ export class WeekFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.data.mode == 'edit') {
+      this.disableEdit = true;
+      this.mode = "edit";
+      this._weeksService.getWeeksId(this.data.idWeek)
+       .subscribe(data => {
+          this.general.patchValue({
+            start_date: this.parseDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)),
+            end_date: this.parseDate(new Date(`${(data.end_date).substring(0,10)}:00:00`)),
+            advance_spected: data.advance_spected,
+            advance_real: data.advance_real
+          });
+
+          this.changeAdvance();
+       });
+
+      this._goalsService.getGoalsAll()
+        .subscribe(goals => {
+          this.goals = goals.filter((f:any) => f.week.id == this.data.idWeek)
+          this.goals.map((m:any) => m.date = this.parseDate(new Date(`${(m.date).substring(0,10)}:00:00`)));
+          
+          this.goalsAux = goals.filter((f:any) => f.week.id == this.data.idWeek)
+          this.goalsAux.map((m:any) => m.date = this.parseDate(new Date(`${(m.date).substring(0,10)}:00:00`)));
+        });
+    }
+  }
+
+  editar() {
+    for (let index = 0; index < this.goals.length; index++) {
+      environment.consoleMessage(this.goals[index], "goal");      
+    }
+
+    for (let index = 0; index < this.goalsAux.length; index++) {
+      environment.consoleMessage(this.goalsAux[index], "goalAux");      
+    }
+
+    
   }
 
   getMessageError(formGroup: FormGroup, field: string): string {
@@ -118,7 +159,6 @@ export class WeekFormComponent implements OnInit {
     }else{
       this.indicator = null;
     }
-    true; //environment.consoleMessage("entre", "changeAdvance")
   }
 
   onGoal(data: any){
@@ -143,7 +183,6 @@ export class WeekFormComponent implements OnInit {
   }
 
   async crear(){
-    true; //environment.consoleMessage("crear")
     var week: Week = {
       project_id: this.data.idProject,
       advance_real: this.general.get('advance_real')!.value,
@@ -155,12 +194,9 @@ export class WeekFormComponent implements OnInit {
       user_creates_id: JSON.parse(localStorage.user).id,
     }
     await this._weeksService.addWeek(week).subscribe((res) => {
-      true; //environment.consoleMessage(res, "respuesta");
       for (let index = 0; index < this.goals.length; index++) {
-        //this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`));
         var goal: Goal = {
           week_id: res.id,
-          //date: this.parseDate(new Date(`${(this.goals[index].date).substring(0,10)}:00:00`)),
           date: this.goals[index].date,
           description: this.goals[index].description,
           value_goal: false,
