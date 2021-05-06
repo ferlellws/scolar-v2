@@ -9,7 +9,7 @@
       
 <div class="example-container bg-color-white mat-elevation-z4">
     <form action="" [formGroup]="resourcesGroup" (ngSubmit)="onSubmit()"
-        *ngIf="data.mode === 'create' || (data.mode === 'edit'); else loadingBlock">
+        *ngIf="data.mode === 'create' || (data.mode === 'edit' && cargaProject == true)">
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
@@ -44,7 +44,7 @@
             </div>
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
-                    <mat-label>Dedicación</mat-label>
+                    <mat-label>Dedicación (Tiempo semanal en horas)</mat-label>
                     <input matInput [min]="0" [max]="40" type="number" placeholder="Dedicación" formControlName="dedication" required>
                     <mat-error *ngIf="this.resourcesGroup.get('dedication')?.invalid">
                         {{ getMessageError('dedication' ,'dedicación') }}
@@ -83,3 +83,5 @@
         </div>
     </ng-template>
 </div>
+
+<mat-spinner *ngIf="cargaProject == false" color="accent" class="content-center"></mat-spinner>

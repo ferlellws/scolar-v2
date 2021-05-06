@@ -18,6 +18,7 @@ export interface DialogData {
   mode: string;
   labelAction: string;
   project_id: number;
+  supportResources: SupportResource
 }
 
 @Component({
@@ -41,11 +42,12 @@ export class ResourceFormComponent implements OnInit {
   personControl = new FormControl();
   supportResource!: SupportResource;
 
+  cargaProject!: boolean;
+
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private snackBar: MatSnackBar,
-    private usersService: UserService,
     private operationFrontsService:OperationFrontsService,
     private supportResourcesService:SupportResourcesService
   ) { }
@@ -56,18 +58,16 @@ export class ResourceFormComponent implements OnInit {
       dedication: [null, Validators.required],
       description: [null, Validators.required],
     });
-
-    this.usersService.getFunctionalResources()
-    .subscribe(users => {
-      this.persons = users;
-      this.filterPersons = this.personControl.valueChanges.pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value!.full_name),
-        map(name => name ? this._filter(name) : this.persons.slice())
-      );
-    });
+    
+    this.persons = this.data.supportResources;
+    this.filterPersons = this.personControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value!.full_name),
+      map(name => name ? this._filter(name) : this.persons.slice())
+    );
 
     if(this.data.mode == "edit") {
+      this.cargaProject = false;
       this.onClickSelectFront();
       await this.supportResourcesService.getSupportResourceId(this.data.id)
         .subscribe(res => {
@@ -78,6 +78,8 @@ export class ResourceFormComponent implements OnInit {
             dedication: this.supportResource.dedication,
             description: this.supportResource.description
           });
+
+          this.cargaProject = true;
       });
     }
   }

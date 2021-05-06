@@ -84,7 +84,7 @@
                             <span class="front-name col-sm-12 col-md-4">{{resource.description}}</span>
                             <mat-icon class="col-sm-12 col-md-1" *ngIf="resource.totalDedication < 60" style="color: #81C784; margin-right: 10px;"></mat-icon>
                             <mat-icon class="col-sm-12 col-md-1" *ngIf="resource.totalDedication >= 60" matTooltip={{resource.totalDedication}} style="color: #FDD835; margin-right: 10px;">warning</mat-icon>
-                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.delete" matTooltip="Eliminar" style="color: #3f51b5; cursor:pointer; margin-right: 10px;" (click)="onEditSupportResource(resource.id)">edit</mat-icon>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.update" matTooltip="Eliminar" style="color: #3f51b5; cursor:pointer; margin-right: 10px;" (click)="onEditSupportResource(resource.id)">edit</mat-icon>
                             <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer; margin-right: 10px;" (click)="onDeleteSupportResource(resource.id)">delete</mat-icon>
                         </div>
                     </div>
@@ -96,4 +96,8 @@
     <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateSupportResource()" class="btn-new mat-elevation-z2">
         <mat-icon>add</mat-icon>
     </button>
+</div>
+
+<div *ngIf="!actions.read">
+    <tecno-unauthorized></tecno-unauthorized>
 </div>

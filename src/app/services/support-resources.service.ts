@@ -49,7 +49,7 @@ export class SupportResourcesService {
   }
 
   getSupportResourceProjectId(id_project: number) {
-    return this.http.get<SupportResource[]>(`${this.API}/project_id/${id_project}`, this.httpOptions)
+    return this.http.get<SupportResource[]>(`${this.API}/${id_project}/by_project/`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

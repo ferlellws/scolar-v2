@@ -34,10 +34,10 @@
                         <span>Interrelaciones</span>
                     </button>
 
-                    <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
+                    <!-- <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
                         <mat-icon>manage_accounts</mat-icon>
                         <span>Recursos Críticos de Operación</span>
-                    </button>
+                    </button> -->
 
                 </mat-menu>
             </div>
@@ -141,7 +141,7 @@
                 <div mat-line class="line-text"> {{project.strategic_approach.title}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Fecha de Recepción</h3>
-                <div mat-line class="line-text"> {{project.reception_date}} </div>
+                <div mat-line class="line-text"> {{project.reception_date.split("-")[2]}} - {{project.reception_date.split("-")[1]}} - {{project.reception_date.split("-")[0]}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Programa</h3>
                 <div mat-line *ngIf="project.program != null" class="line-text" > {{project.program.title}} </div>
@@ -431,7 +431,7 @@
                 
                 <h3 class="h3-subtitle txt-primary">Fecha de Control</h3>
                 <div mat-line *ngIf="project.control_date == null || project.control_date == ''" class="line-text-font"> {{labelAssignment}}</div>
-                <div mat-line *ngIf="project.control_date != null" class="line-text"> {{project.control_date}} </div>
+                <div mat-line *ngIf="project.control_date != null" class="line-text"> {{project.control_date.split("-")[2]}} - {{project.control_date.split("-")[1]}} - {{project.control_date.split("-")[0]}}</div>
                 
                 <h3 class="h3-subtitle txt-primary">Estado</h3>
                 <div mat-line class="line-text"> {{project.states_by_phase.state.title}} </div>
@@ -500,7 +500,7 @@
                     <div class="line-text causal-header">
                         <div class="cause-header-text-icon">
                             <h2  class=" txt-accent">Causal {{desviationId +1}}</h2>
-                            <mat-icon *ngIf="actions.update  && (project.pmo.id == userID || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead.id == userID || profileID == 2)" matRipple (click)="onDesviationEdit(desviationCauses[desviationId].id!)">create</mat-icon>
+                            <mat-icon *ngIf="actions.update  && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" matRipple (click)="onDesviationEdit(desviationCauses[desviationId].id!)">create</mat-icon>
                         </div>
                         <div *ngIf="desviationCauses.length != 0" class="causal-content">
                             <button mat-button [disabled]="desviationId == 0" class="buttons-options-arrows" (click)="beforeDesviation()">
@@ -511,8 +511,6 @@
                             </button> 
                         </div>   
                     </div>
-                    
-                
                 
                     <mat-accordion>
                         <mat-expansion-panel class="mat-elevation-z0"
@@ -524,7 +522,7 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <h3 class="h3-subtitle txt-primary">Fecha de incidencia</h3>
-                            <div mat-line class="line-text"> {{(desviationCauses[desviationId].date).substr(0,10)}} </div>
+                            <div mat-line class="line-text"> {{(desviationCauses[desviationId].date).substr(0,10).split("-")[2]}} - {{(desviationCauses[desviationId].date).substr(0,10).split("-")[1]}} - {{(desviationCauses[desviationId].date).substr(0,10).split("-")[0]}} </div>
                             <h3 class="h3-subtitle txt-primary">Entregable</h3>
                             <div mat-line class="line-text"> {{desviationCauses[desviationId].deliverable}} </div>
                         </mat-expansion-panel>

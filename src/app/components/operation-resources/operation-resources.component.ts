@@ -32,53 +32,8 @@ export class OperationResourcesComponent implements OnInit {
   project!: Project;
   sponsors: OperationSponsor[] = [];
   persons!: any;
+  fronts!: any;
 
-  fronts = [
-    {
-      name: "Frente Tecnológico",
-      resources: [
-        {
-          id: 1,
-          name: "Carlos Sanchez",
-          dedication: "15%",
-          description: "Ejemplo de rol/alcance alñsjmdlaksdklansd as dnaklsnd kad kjasdhaksd nkadb kasbnd kasdbjkasb dasdb kasdb kasdb akbsdajksdbjkasdb kajsd bkjashd jkassd jkasdb k",
-          totalDedication: 40
-        },
-        {
-          id: 2,
-          name: "Daniel Cortés",
-          dedication: "7%",
-          description: "Más descripciones",
-          totalDedication: 70
-        },
-      ]
-    },
-    {
-      name: "Frente Financiero",
-      resources: [
-        {
-          id: 3,
-          name: "Adriana Lucia Ocampoz",
-          dedication: "35%",
-          description: "Ejemplo de rol/alcance 2 y otros alñsjmdlaksdklansd as dnaklsnd kad kjasdhaksd nkadb kasbnd kasdbjkasb dasdb kasdb kasdb akbsdajksdbjkasdb kajsd bkjashd jkassd jkasdb k",
-          totalDedication: 40
-        },
-      ]
-    },
-    {
-      name: "Frente Contable",
-      resources: [
-        {
-          id: 5,
-          name: "Adriana Lucia Ocampoz",
-          dedication: "35%",
-          description: "Ejemplo de rol/alcance 2 y otros alñsjmdlaksdklansd as dnaklsnd kad kjasdhaksd nkadb kasbnd kasdbjkasb dasdb kasdb kasdb akbsdajksdbjkasdb kajsd bkjashd jkassd jkasdb k",
-          totalDedication: 60
-        },
-      ]
-    },
-  ];
-  
   filterPersons!: Observable<Person[]>;
   personControl = new FormControl();
   flagAddSponsor: boolean = false;
@@ -106,23 +61,17 @@ export class OperationResourcesComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe(data =>{
       this.project = data.project;
-      //this.sponsors = data.sponsors.filter((data:any) => data.project.id == this.project.id);
-      setTimeout(() => {this.mainService.hideLoading()}, 1000);
-    });
+      this.sponsors = data.sponsors;
+      this.persons = data.resources;
+      this.fronts = data.supportResources.fronts;
 
-    this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
-      .subscribe(res => {
-        this.sponsors = res;
-      });
-
-    this._usersService.getFunctionalResources()
-    .subscribe(users => {
-      this.persons = users;
       this.filterPersons = this.personControl.valueChanges.pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value!.full_name),
         map(name => name ? this._filter(name) : this.persons.slice())
       );
+
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
   }
   
@@ -158,6 +107,12 @@ export class OperationResourcesComponent implements OnInit {
       this.openSnackBar(false, "No existe un usuario creado con este nombre", "");
     }
     this.personControl.reset();
+    
+    this.filterPersons = this.personControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value!.full_name),
+      map(name => name ? this._filter(name) : this.persons.slice())
+    );
   }
 
   deleteSponsor(id: any) {
@@ -192,12 +147,17 @@ export class OperationResourcesComponent implements OnInit {
       data: {
         mode: 'create',
         labelAction: 'Crear',
-        project_id: this.project.id
+        project_id: this.project.id,
+        supportResources: this.persons
       }
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'close') {
         dialogRef.close();
+        this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+          .subscribe(data => {
+            this.fronts = data.fronts;
+          });
       }
     });
   }
@@ -210,12 +170,17 @@ export class OperationResourcesComponent implements OnInit {
         mode: 'edit',
         labelAction: 'Editar',
         project_id: this.project.id,
-        id: id
+        id: id,
+        supportResources: this.persons
       }
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'close') {
         dialogRef.close();
+        this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+          .subscribe(data => {
+            this.fronts = data.fronts;
+          });
       }
     });
   }
@@ -234,7 +199,10 @@ export class OperationResourcesComponent implements OnInit {
         .subscribe(res => {
           this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
           dialogRef.close();
-          // Espacio para llamar el endpoint que haga Ferley
+          this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+            .subscribe(data => {
+              this.fronts = data.fronts;
+            });
         });
       } else {
         dialogRef.close();
