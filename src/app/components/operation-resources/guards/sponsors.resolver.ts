@@ -19,7 +19,7 @@ export class SponsorsResolver implements Resolve<boolean> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
-      // return this.operationSponsor.getOperationSponsorProjectId(route.params.id);
-      return this.operationSponsor.getOperationSponsorsAll();
+      return this.operationSponsor.getOperationSponsorProjectId(route.params.id);
+      //return this.operationSponsor.getOperationSponsorsAll();
   }
 }

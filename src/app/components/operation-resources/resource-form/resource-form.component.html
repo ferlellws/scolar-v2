@@ -8,49 +8,68 @@
 </mat-toolbar>
       
 <div class="example-container bg-color-white mat-elevation-z4">
-    <form action="" [formGroup]="resorucesGroup" (ngSubmit)="onSubmit()"
+    <form action="" [formGroup]="resourcesGroup" (ngSubmit)="onSubmit()"
         *ngIf="data.mode === 'create' || (data.mode === 'edit'); else loadingBlock">
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
-                <mat-label>{{ singularOption }}</mat-label>
-                <input matInput formControlName="title" required>
-                <mat-error *ngIf="this.resorucesGroup.get('title')?.invalid">
-                    {{ getMessageError('title', "vicepresidencia") }}
+                <mat-label>Frente de Operación</mat-label>
+                <mat-select formControlName="front" (click)="onClickSelectFront()" required>
+                    <mat-option>Seleccione una opción</mat-option>
+                    <mat-option *ngFor="let front of selectOperationFronst" [value]="front.id">{{ front.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.resourcesGroup.get('front')?.invalid">
+                    {{ getMessageError('front', "frente de operación") }}
                 </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <mat-form-field class="full-width">
+                    <mat-label *ngIf="data.mode == 'create'">Agregar nuevo Recurso de Soporte</mat-label>
+                    <mat-label *ngIf="(data.mode == 'edit')">
+                        <span style="font-size: small;">Recurso de Soporte Actual: </span>
+                        <span style="color: black;">{{supportResource.person!.full_name}}</span>
+                    </mat-label>
+                    <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required>
+                    <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let person of filterPersons | async" [value]="person">
+                        {{person.full_name}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
             </div>
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
-                <mat-label>Jefe</mat-label>
-                <mat-select formControlName="manager_id" (click)="onClickSelectFront()" required>
-                    <mat-option>Seleccione una opción</mat-option>
-                    <mat-option *ngFor="let front of selectOperationFronst" [value]="front.id">{{ front.name }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="this.resorucesGroup.get('manager_id')?.invalid">
-                    {{ getMessageError('manager_id', "jefe") }}
-                </mat-error>
+                    <mat-label>Dedicación</mat-label>
+                    <input matInput [min]="0" [max]="40" type="number" placeholder="Dedicación" formControlName="dedication" required>
+                    <mat-error *ngIf="this.resourcesGroup.get('dedication')?.invalid">
+                        {{ getMessageError('dedication' ,'dedicación') }}
+                    </mat-error>
                 </mat-form-field>
             </div>
         </div>
+
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <mat-form-field class="full-width">
-                <mat-label>Descripción</mat-label>
-                <textarea matInput formControlName="description"></textarea>
+                    <mat-label>Rol / Alcance</mat-label>
+                    <textarea matInput formControlName="description" required></textarea>
+                    <mat-error *ngIf="this.resourcesGroup.get('description')?.invalid">
+                        {{ getMessageError('description' ,'rol / alcance') }}
+                    </mat-error>
                 </mat-form-field>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <mat-slide-toggle formControlName="is_active">Estado</mat-slide-toggle>
-            </div>
-        </div>
+        
         <div class="buttons">
             <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button>
             <button class="button"
                 mat-button color="primary"
-                [disabled]="resorucesGroup.invalid || fButtonDisabled">
+                [disabled]="resourcesGroup.invalid || fButtonDisabled && personControl.value != null">
                 {{ data.mode == 'create' ? 'Crear' : 'Editar'}}
             </button>
         </div>
@@ -62,5 +81,5 @@
             <mat-spinner color="accent" class="content-center"></mat-spinner>
           </div>
         </div>
-      </ng-template>
+    </ng-template>
 </div>

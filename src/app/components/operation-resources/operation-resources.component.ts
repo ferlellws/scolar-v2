@@ -13,9 +13,11 @@ import { Person } from 'src/app/models/person';
 import { Project } from 'src/app/models/project';
 import { MainService } from 'src/app/services/main.service';
 import { OperationSponsorsService } from 'src/app/services/operation-sponsors.service';
+import { SupportResourcesService } from 'src/app/services/support-resources.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { ResourceFormComponent } from './resource-form/resource-form.component';
 
 @Component({
   selector: 'tecno-operation-resources',
@@ -43,7 +45,7 @@ export class OperationResourcesComponent implements OnInit {
           totalDedication: 40
         },
         {
-          id: 3,
+          id: 2,
           name: "Daniel Cortés",
           dedication: "7%",
           description: "Más descripciones",
@@ -55,7 +57,7 @@ export class OperationResourcesComponent implements OnInit {
       name: "Frente Financiero",
       resources: [
         {
-          id: 2,
+          id: 3,
           name: "Adriana Lucia Ocampoz",
           dedication: "35%",
           description: "Ejemplo de rol/alcance 2 y otros alñsjmdlaksdklansd as dnaklsnd kad kjasdhaksd nkadb kasbnd kasdbjkasb dasdb kasdb kasdb akbsdajksdbjkasdb kajsd bkjashd jkassd jkasdb k",
@@ -67,7 +69,7 @@ export class OperationResourcesComponent implements OnInit {
       name: "Frente Contable",
       resources: [
         {
-          id: 2,
+          id: 5,
           name: "Adriana Lucia Ocampoz",
           dedication: "35%",
           description: "Ejemplo de rol/alcance 2 y otros alñsjmdlaksdklansd as dnaklsnd kad kjasdhaksd nkadb kasbnd kasdbjkasb dasdb kasdb kasdb akbsdajksdbjkasdb kajsd bkjashd jkassd jkasdb k",
@@ -87,7 +89,8 @@ export class OperationResourcesComponent implements OnInit {
     private fb: FormBuilder,
     private _usersService: UserService,
     private snackBar: MatSnackBar,
-    private operationSponsorsService:OperationSponsorsService,
+    private operationSponsorsService: OperationSponsorsService,
+    private supportResourcesService :SupportResourcesService,
     private ngZone: NgZone,
     public dialog: MatDialog,    
   ) { }
@@ -121,10 +124,6 @@ export class OperationResourcesComponent implements OnInit {
         map(name => name ? this._filter(name) : this.persons.slice())
       );
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    environment.consoleMessage(changes, "Cambiosssssssssss");
   }
   
   displayFn(person: Person): string {
@@ -162,8 +161,6 @@ export class OperationResourcesComponent implements OnInit {
   }
 
   deleteSponsor(id: any) {
-    environment.consoleMessage("Delete Sponsor");
-    
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "400px",
       data: {
@@ -189,7 +186,60 @@ export class OperationResourcesComponent implements OnInit {
   }
 
   onCreateSupportResource() {
+    const dialogRef = this.dialog.open(ResourceFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true,
+      data: {
+        mode: 'create',
+        labelAction: 'Crear',
+        project_id: this.project.id
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close') {
+        dialogRef.close();
+      }
+    });
+  }
 
+  onEditSupportResource(id: number) {
+    const dialogRef = this.dialog.open(ResourceFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true,
+      data: {
+        mode: 'edit',
+        labelAction: 'Editar',
+        project_id: this.project.id,
+        id: id
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close') {
+        dialogRef.close();
+      }
+    });
+  }
+
+  onDeleteSupportResource(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.supportResourcesService.deleteSupportResource(id)
+        .subscribe(res => {
+          this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+          dialogRef.close();
+          // Espacio para llamar el endpoint que haga Ferley
+        });
+      } else {
+        dialogRef.close();
+      }
+    });
   }
 
 
