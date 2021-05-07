@@ -45,6 +45,14 @@
 
 .front-name {
     font-weight: 500;
-    font-size: 15px;
+    font-size: 14px;
 }
-  
+.dedication-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.warning-icon {
+    color: #FDD835;
+    padding-left: 40px;
+}

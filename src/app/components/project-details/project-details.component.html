@@ -35,10 +35,14 @@
                     </button>
 
                     <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
-                        <mat-icon>manage_accounts</mat-icon>
-                        <span>Recursos Críticos de Operación</span>
+                        <mat-icon>groups</mat-icon>
+                        <span>Equipo de Proyecto</span>
                     </button>
 
+                    <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
+                        <mat-icon>pending_actions</mat-icon>
+                        <span>Gestión de Fases</span>
+                    </button>
                 </mat-menu>
             </div>
         </div>
@@ -180,7 +184,7 @@
                 </mat-card-header>
                 <div class="seg-line-sem-edit">
                     <mat-card-title *ngIf="weeksByProject[weekId] != null" style="font-size: 16px;">Semana {{weeksByProject[weekId].nReg}} - {{weeksByProject[weekId].month}} {{weeksByProject[weekId].year}} </mat-card-title> 
-                    <!-- <mat-icon class="txt-primary" style="cursor: pointer;" *ngIf="actions.update  && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" matRipple (click)="onWeeekEdit(weeksByProject[weekId].id)">create</mat-icon> -->
+                    <mat-icon class="txt-primary" style="cursor: pointer;" *ngIf="actions.update  && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" matRipple (click)="onWeeekEdit(weeksByProject[weekId].id)">create</mat-icon>
                 </div>
                 <h3 class="h3-subtitle txt-primary">Fecha Inicio</h3>
                 <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].start_date.split("-")[2]}} - {{weeksByProject[weekId].start_date.split("-")[1]}} - {{weeksByProject[weekId].start_date.split("-")[0]}}</div>
