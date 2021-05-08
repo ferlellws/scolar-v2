@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Goal } from 'src/app/models/goal';
 import { NextActivity } from 'src/app/models/next-activity';
@@ -12,6 +12,7 @@ import { NextActivitiesService } from 'src/app/services/next-activities.service'
 import { ObservationsService } from 'src/app/services/observations.service';
 import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
+import { PhaseManagementComponent } from '../phase-management/phase-management.component';
 
 export interface DialogData {
   idProject: number;
@@ -52,6 +53,7 @@ export class WeekFormComponent implements OnInit {
   goalsAux: any[] = [];
   disableEdit = false;
   mode = "create";
+  project: any;
 
   constructor(
     private _fbG: FormBuilder,
@@ -62,6 +64,7 @@ export class WeekFormComponent implements OnInit {
     private _nextActivitiesService: NextActivitiesService,
     private _observationsService: ObservationsService,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog, 
   ) { 
     this.general = this._fbG.group({
       'start_date': [null, [Validators.required]],
@@ -104,6 +107,26 @@ export class WeekFormComponent implements OnInit {
           this.goalsAux.map((m:any) => m.date = this.parseDate(new Date(`${(m.date).substring(0,10)}:00:00`)));
         });
     }
+  }
+
+  managementPhases() {
+    // this.emitClose.emit('close');
+    const dialogRef = this.dialog.open(PhaseManagementComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true,
+      data: {   
+        idProject: this.data.idProject,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose
+      .subscribe( (data :any) => {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
   editar() {

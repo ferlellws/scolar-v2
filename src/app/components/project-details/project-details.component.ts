@@ -36,6 +36,7 @@ import { InterrelationsFormComponent } from './interrelations-form/interrelation
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PhaseManagementComponent } from './phase-management/phase-management.component';
 export interface Indicator {
   name: string;
   color: string;
@@ -644,6 +645,25 @@ export class ProjectDetailsComponent implements OnInit {
 
   onOperationResources(project_id: number) {
     this.router.navigate([`/operation-resources/${project_id}`]);
+  }
+  
+  onPhaseManagements(id: number) {
+    const dialogRef = this.dialog.open(PhaseManagementComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true,
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
   }
 
   getToStringDate(date: any): string {

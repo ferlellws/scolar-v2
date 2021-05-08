@@ -37,6 +37,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WeekFormComponent } from './week-form/week-form.component';
 import { DesviationCausesFormComponent } from './desviation-causes-form/desviation-causes-form.component';
 import { InterrelationsFormComponent } from './interrelations-form/interrelations-form.component';
+import { PhaseManagementComponent } from './phase-management/phase-management.component';
+import { DateRangeComponent } from './phase-management/date-range/date-range.component';
 
 const materialModels = [
   MatSortModule,
@@ -77,7 +79,9 @@ const materialModels = [
     ValoremFormComponent,
     WeekFormComponent,
     DesviationCausesFormComponent,
-    InterrelationsFormComponent
+    InterrelationsFormComponent,
+    PhaseManagementComponent,
+    DateRangeComponent  
   ],
   imports: [
     CommonModule,

@@ -10,7 +10,13 @@
 <div class="example-container bg-color-white mat-elevation-z4">
   
     <form [formGroup]="general" style="width: 100%;">
-        <div class="row">
+        <div class="row buttons">
+            <div class="buttons col-sm-12 col-md-2">
+                <button class="buttons-options" mat-menu-item (click)="managementPhases()">
+                    <mat-icon >pending_actions</mat-icon>
+                    <span >Ir a Gestión de Fases</span>
+                </button>
+            </div>
             <div class="col-sm-12 col-md-12">
                 <h3 class="mat-title txt-accent">Nuevo Seguimiento Semanal</h3>
             </div>

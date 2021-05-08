@@ -68,7 +68,6 @@ export class InterrelationsFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    environment.consoleMessage(this.data, "dataaaaa");
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
       this.actions = new Actions();

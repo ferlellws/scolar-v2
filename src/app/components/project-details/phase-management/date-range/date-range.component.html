@@ -1,0 +1,35 @@
+<form [formGroup]="group">   
+    <div class="row phases-content">
+        <span class="col-sm-12 col-md-2 txt-primary title-phase">{{title}}</span>
+        <div class="col-sm-12 col-md-4">
+            <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                <mat-label>Fecha de Inicio</mat-label>
+                <input required matInput [matDatepicker]="picker1" formControlName="start_date">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+                <mat-error *ngIf="this.group.get('start_date')?.invalid">
+                    {{ getMessageError('start_date' ,'fecha de inicio') }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
+                <mat-label>Fecha de Finalización</mat-label>
+                <input required matInput [matDatepicker]="picker2" formControlName="end_date">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-error *ngIf="this.group.get('end_date')?.invalid">
+                    {{ getMessageError('end_date' ,'fecha de finalización') }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="buttons col-sm-12 col-md-2">
+            <button
+                (click)="add()"
+                mat-button color="primary"
+                [disabled]="group.invalid">
+                {{ flagDate == 'asignar' ? 'Asignar' : 'Editar'}}
+            </button>
+        </div>
+    </div>
+</form>
