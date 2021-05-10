@@ -86,6 +86,7 @@ export class WeekFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.disableEdit = true;
     if(this.data.mode == 'edit') {
       this.disableEdit = true;
       this.mode = "edit";
