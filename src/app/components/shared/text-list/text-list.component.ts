@@ -10,30 +10,77 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./text-list.component.scss']
 })
 export class TextListComponent implements OnInit {
-
-  @Input() items: string[] = [];
+  @Input() name: string = "";
+  @Input() titleClass: string = "txt-primary";
+  @Input() items: any[] = [];
+  @Input() disableEdit: boolean = false;
+  @Input() mode: string = "create";
+  @Output() emitChange: EventEmitter<string[]> = new EventEmitter();
+  
   inpuText = '';
+
+  id_reg: any;
+  i_pos: any;
+  clickEdit: boolean = false;
+  deleteColor: string = "#f44336"
 
   constructor(
     private snackBar: MatSnackBar,
   ) { }
 
-  @Input() name: string = "";
-  @Input() titleClass: string = "txt-primary";
-  @Output() emitChange: EventEmitter<string[]> = new EventEmitter();
-
   ngOnInit(): void {
   }
 
   add(){
-    if(this.items.includes(this.inpuText)){
-      this.openSnackBar(false, `${this.name} ya contiene el elemento`, "");
+    let pos = this.i_pos;
 
-    }else{
-      this.items.push(this.inpuText);
-      this.inpuText = "";
+    if(typeof this.id_reg == 'number') {
+      this.items.push({
+        id: this.items[pos].id,
+        description: this.inpuText,
+        edit: true
+      });
+      this.items.splice(pos, 1);
+      this.id_reg = null;
+      this.i_pos = null;
+      this.clickEdit = false;
+      this.deleteColor = "#f44336"
       this.emitChange.emit(this.items);
+      this.inpuText = "";
+    }else if(pos != null && typeof this.id_reg != 'number') {
+      this.items.push({
+        id: null,
+        description: this.inpuText,
+        edit: true
+      });
+      this.items.splice(pos, 1);
+      this.id_reg = null;
+      this.i_pos = null;
+      this.clickEdit = false;
+      this.deleteColor = "#f44336"
+      this.emitChange.emit(this.items);
+      this.inpuText = "";
+    } else {
+      if(this.items.includes(this.inpuText)){
+        this.openSnackBar(false, `${this.name} ya contiene el elemento`, "");
+      }else{
+        this.items.push({
+          id: null,
+          description: this.inpuText,
+        });
+        this.inpuText = "";
+        this.emitChange.emit(this.items);
+      }
     }
+  }
+
+  edit(id: number, i: number) {
+    this.clickEdit = true;
+    this.deleteColor = "#bdbdbd";
+
+    this.id_reg = id;
+    this.i_pos = i;
+    this.inpuText = this.items[i].description;
   }
 
   delete(index: number){

@@ -41,8 +41,9 @@ export class ResourceFormComponent implements OnInit {
   filterPersons!: Observable<Person[]>;
   personControl = new FormControl();
   supportResource!: SupportResource;
-
   cargaProject!: boolean;
+  
+  selectPhases: any[] = [];                 //FALTA MODELO Y SERVICE
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +56,7 @@ export class ResourceFormComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.resourcesGroup = this.fb.group({
       front: [null, Validators.required],
+      phase: [null, Validators.required],
       dedication: [null, Validators.required],
       description: [null, Validators.required],
     });
@@ -169,6 +171,10 @@ export class ResourceFormComponent implements OnInit {
       });
   }
   
+  onClickSelectPhase() {
+    environment.consoleMessage("Hola Fases");
+  }
+
   getMessageError(field: string, labelField: string): string {
     let message!: string;
     

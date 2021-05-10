@@ -48,9 +48,12 @@ export class WeekFormComponent implements OnInit {
 
   goals: any[] = [];
   nextActivities: any[] = [];
-  observations: string[] = []
+  observations: any[] = []
 
   goalsAux: any[] = [];
+  nextActivitiesAux: any[] = [];
+  observationsAux: any[] = []
+
   disableEdit = false;
   mode = "create";
   project: any;
@@ -89,8 +92,8 @@ export class WeekFormComponent implements OnInit {
       this._weeksService.getWeeksId(this.data.idWeek)
        .subscribe(data => {
           this.general.patchValue({
-            start_date: this.parseDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)),
-            end_date: this.parseDate(new Date(`${(data.end_date).substring(0,10)}:00:00`)),
+            start_date: new Date(`${(data.start_date).substring(0,10)}:00:00`),
+            end_date: new Date(`${(data.end_date).substring(0,10)}:00:00`),
             advance_spected: data.advance_spected,
             advance_real: data.advance_real
           });
@@ -105,6 +108,21 @@ export class WeekFormComponent implements OnInit {
           
           this.goalsAux = goals.filter((f:any) => f.week.id == this.data.idWeek)
           this.goalsAux.map((m:any) => m.date = this.parseDate(new Date(`${(m.date).substring(0,10)}:00:00`)));
+        });
+
+      this._nextActivitiesService.getNextActivitiesAll()
+        .subscribe(nextActivities => {
+          this.nextActivities = nextActivities.filter((f:any) => f.week.id == this.data.idWeek)
+          this.nextActivities.map((m:any) => m.date = this.parseDate(new Date(`${(m.date).substring(0,10)}:00:00`)));
+          
+          this.nextActivitiesAux = nextActivities.filter((f:any) => f.week.id == this.data.idWeek)
+          this.nextActivitiesAux.map((m:any) => m.date = this.parseDate(new Date(`${(m.date).substring(0,10)}:00:00`)));
+        });
+
+      this._observationsService.getObservationsAll()
+        .subscribe(observations => {
+          this.observations = observations.filter((f:any) => f.week.id == this.data.idWeek)
+          this.observationsAux = observations.filter((f:any) => f.week.id == this.data.idWeek)
         });
     }
   }
@@ -130,15 +148,140 @@ export class WeekFormComponent implements OnInit {
   }
 
   editar() {
+    //Week ..................................................................................
+    var week: Week = {
+      project_id: this.data.idProject,
+      advance_real: this.general.get('advance_real')!.value,
+      advance_spected: this.general.get('advance_spected')!.value,
+      start_date: this.parseDate(this.general.get('start_date')!.value),
+      end_date: this.parseDate(this.general.get('end_date')!.value),
+      is_active: true,
+      is_delete: false,
+      user_creates_id: JSON.parse(localStorage.user).id,
+    }
+    this._weeksService.updateWeek(week, this.data.idWeek).subscribe((res) => {
+      true;
+    });
+
+    //Goals .................................................................................
     for (let index = 0; index < this.goals.length; index++) {
-      environment.consoleMessage(this.goals[index], "goal");      
+      var goal: Goal = {
+        week_id: this.data.idWeek,
+        date: this.goals[index].date,
+        description: this.goals[index].description,
+        value_goal: false,
+        is_active: true,
+        is_delete: false,
+      }
+      if(this.goals[index].id == null) {
+        this._goalsService.addGoal(goal).subscribe(data =>{
+          true;
+        });
+      } else if(this.goals[index].id != null) {
+        if(this.goals[index].edit != null) {
+          this._goalsService.updateGoal(goal, this.goals[index].id).subscribe(data =>{
+            true;
+          });
+        }
+        
+      }
     }
-
     for (let index = 0; index < this.goalsAux.length; index++) {
-      environment.consoleMessage(this.goalsAux[index], "goalAux");      
+      let del = false;
+      for (let index2 = 0; index2 < this.goals.length; index2++) {
+        if(this.goalsAux[index].id == this.goals[index2].id) {
+          del = true;
+          break;
+        }
+      }
+      if(del == false) {
+        this._goalsService.deleteGoal(this.goalsAux[index].id)
+          .subscribe(res => {
+            true;
+          });
+      }
     }
+    //Goals .................................................................................
 
-    
+    //Next Activities .................................................................................
+    for (let index = 0; index < this.nextActivities.length; index++) {
+      var nextActivity: NextActivity = {
+        week_id: this.data.idWeek,
+        date: this.nextActivities[index].date,
+        description: this.nextActivities[index].description,
+        is_active: true,
+        is_delete: false,
+      }
+      if(this.nextActivities[index].id == null) {
+        this._nextActivitiesService.addNextActivity(nextActivity).subscribe(data =>{
+          true;
+        });
+      } else if(this.nextActivities[index].id != null) {
+        if(this.nextActivities[index].edit != null) {
+          this._nextActivitiesService.updateNextActivity(nextActivity, this.nextActivities[index].id).subscribe(data =>{
+            true;
+          });
+        }
+        
+      }
+    }
+    for (let index = 0; index < this.nextActivitiesAux.length; index++) {
+      let del = false;
+      for (let index2 = 0; index2 < this.nextActivities.length; index2++) {
+        if(this.nextActivitiesAux[index].id == this.nextActivities[index2].id) {
+          del = true;
+          break;
+        }
+      }
+      if(del == false) {
+        this._nextActivitiesService.deleteNextActivity(this.nextActivitiesAux[index].id)
+          .subscribe(res => {
+            true;
+          });
+      }
+    }
+    //Next Activities .................................................................................
+
+
+    //Observations .................................................................................
+    for (let index = 0; index < this.observations.length; index++) {
+      var observation: Observation = {
+        week_id: this.data.idWeek,
+        description: this.observations[index].description,
+        is_active: true,
+        is_delete: false,
+      }
+      if(this.observations[index].id == null) {
+        this._observationsService.addObservation(observation).subscribe(data =>{
+          true;
+        });
+      } else if(this.observations[index].id != null) {
+        if(this.observations[index].edit != null) {
+          this._observationsService.updateObservation(observation, this.observations[index].id).subscribe(data =>{
+            true;
+          });
+        }
+        
+      }
+    }
+    for (let index = 0; index < this.observationsAux.length; index++) {
+      let del = false;
+      for (let index2 = 0; index2 < this.observations.length; index2++) {
+        if(this.observationsAux[index].id == this.observations[index2].id) {
+          del = true;
+          break;
+        }
+      }
+      if(del == false) {
+        this._observationsService.deleteObservation(this.observationsAux[index].id)
+          .subscribe(res => {
+            true;
+          });
+      }
+    }
+    //Observations .................................................................................
+
+    this.emitClose.emit('close');
   }
 
   getMessageError(formGroup: FormGroup, field: string): string {
@@ -273,7 +416,7 @@ export class WeekFormComponent implements OnInit {
       for (let index = 0; index < this.observations.length; index++) {
         var observation: Observation = {
           week_id: res.id,
-          description: this.observations[index],
+          description: this.observations[index].description,
           is_active: true,
           is_delete: false,
         } 

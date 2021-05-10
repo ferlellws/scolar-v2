@@ -144,7 +144,7 @@ export class OperationResourcesComponent implements OnInit {
 
   onCreateSupportResource() {
     const dialogRef = this.dialog.open(ResourceFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true,
       data: {
         mode: 'create',
@@ -166,7 +166,7 @@ export class OperationResourcesComponent implements OnInit {
 
   onEditSupportResource(id: number) {
     const dialogRef = this.dialog.open(ResourceFormComponent, {
-      width: environment.widthFormsModal,
+      width: environment.widthFormsLittleModal,
       disableClose: true,
       data: {
         mode: 'edit',

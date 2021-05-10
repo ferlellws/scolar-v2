@@ -23,9 +23,6 @@
                 </mat-error>
                 </mat-form-field>
             </div>
-        </div>
-
-        <div class="row">
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
                     <mat-label *ngIf="data.mode == 'create'">Agregar nuevo Recurso de Soporte</mat-label>
@@ -40,6 +37,21 @@
                         {{person.full_name}}
                         </mat-option>
                     </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <mat-form-field class="full-width">
+                <mat-label>Fase del Proyecto</mat-label>
+                <mat-select formControlName="front" (click)="onClickSelectPhase()" required>
+                    <mat-option>Seleccione una opción</mat-option>
+                    <mat-option *ngFor="let phase of selectPhases" [value]="phase.id">{{ phase.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="this.resourcesGroup.get('phase')?.invalid">
+                    {{ getMessageError('phase', "fase de proyecto") }}
+                </mat-error>
                 </mat-form-field>
             </div>
             <div class="col-sm-12 col-md-6">
