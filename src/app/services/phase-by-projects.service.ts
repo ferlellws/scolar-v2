@@ -41,7 +41,7 @@ export class PhaseByProjectsService {
   }
 
   getPhasByProjectId(id_project: number) {
-    return this.http.get<PhaseByProject[]>(`${this.API}/${id_project}`, this.httpOptions)
+    return this.http.get<PhaseByProject[]>(`${this.API}/${id_project}/by_project`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

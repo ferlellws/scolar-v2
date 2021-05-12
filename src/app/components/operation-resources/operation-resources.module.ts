@@ -35,6 +35,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProjectOperationResourcesResolver } from './guards/project.resolver';
 import { SponsorsResolver } from './guards/sponsors.resolver';
 import { ResourceFormComponent } from './resource-form/resource-form.component';
+import { PhasesDedicationComponent } from './phases-dedication/phases-dedication.component';
 
 const materialModels = [
   MatSortModule,
@@ -76,6 +77,7 @@ const materialModels = [
   declarations: [
     OperationResourcesComponent,
     ResourceFormComponent,
+    PhasesDedicationComponent,
   ],
   imports: [
     CommonModule,

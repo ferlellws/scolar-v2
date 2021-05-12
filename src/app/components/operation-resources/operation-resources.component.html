@@ -1,4 +1,11 @@
 <div *ngIf="actions.read && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || (project.functional_lead == null ? null : project.functional_lead!.id == userID) || profileID == 2)">
+    <div class="header-buttons">
+        <button *ngIf="actions.create" class="buttons-options" mat-menu-item (click)="onPhaseManagements(project.id)">
+            <mat-icon>pending_actions</mat-icon>
+            <span>Gestión de Fases</span>
+        </button>
+    </div>
+    
     <div style="padding-bottom: 20px;">
         <span class="title-page mat-title col-sm-12 col-md-12 txt-accent">Equipo de Proyecto: </span>
         <span class="title-page mat-title col-sm-12 col-md-12 txt-primary" >{{project.title}}</span>
@@ -16,12 +23,15 @@
                         <div *ngFor="let sponsor of sponsors">
                             <mat-card *ngIf="sponsor.person != null" class="row card-content">
                                 <span class="col-sm-12 col-md-6 text-comite">{{sponsor.person.full_name}}</span>
-                                <mat-icon class="col-sm-12 col-md-6" *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer; margin-right: 10px;" (click)="deleteSponsor(sponsor.id)">delete</mat-icon>
+                                <div class="col-sm-12 col-md-6 header-buttons">
+                                    <mat-icon *ngIf="actions.update" matTooltip="Editar" style="color: #3f51b5; cursor:pointer; margin-right: 30px;" (click)="editSponsor(sponsor.id)">edit</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer;" (click)="deleteSponsor(sponsor.id)">delete</mat-icon>
+                                </div>
                             </mat-card>
                         </div>
 
                         <div class="row card-content" style="padding-top: 10px;">
-                            <mat-form-field class="col-sm-12 col-md-11">
+                            <mat-form-field class="col-sm-12 col-md-6">
                                 <mat-label>Agregar nuevo Sponsor</mat-label>
                                 <input type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required>
                                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
@@ -30,7 +40,13 @@
                                     </mat-option>
                                 </mat-autocomplete>
                             </mat-form-field>
-                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.create && personControl.value != null" matTooltip="Agregar" style="color: #3f51b5; cursor:pointer; font-size: 35px; margin-right: 30px;" (click)="addSponsor()">add_circle</mat-icon>
+                            <form [formGroup]="sponsorGroup" class="col-sm-12 col-md-5">
+                                <mat-form-field class="full-width dedication">
+                                    <mat-label>Dedicación (Tiempo semanal en horas)</mat-label>
+                                    <input matInput [min]="0" [max]="40" type="number" placeholder="Dedicación" formControlName="dedication" required>
+                                </mat-form-field>
+                            </form>
+                            <mat-icon class="col-sm-12 col-md-1" *ngIf="actions.create && personControl.value != null && sponsorGroup.get('dedication')!.value != null" matTooltip="Agregar" style="color: #3f51b5; cursor:pointer; font-size: 35px; margin-right: 30px;" (click)="addSponsor()">add_circle</mat-icon>
                         </div>
                     </div>
                 </div>

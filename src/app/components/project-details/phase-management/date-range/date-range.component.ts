@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PhaseByProjectsService } from 'src/app/services/phase-by-projects.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,6 +18,7 @@ export class DateRangeComponent implements OnInit {
   @Input() title: string = "";
   @Input() start_date: string = "";
   @Input() end_date: string = "";
+  @Input() idEdit!: any;
 
   group!: FormGroup;
   flagDate: string = "asignar";
@@ -26,6 +28,7 @@ export class DateRangeComponent implements OnInit {
     private fb: FormBuilder,
     public dialog: MatDialog,    
     public datepipe: DatePipe,
+    private phaseByProjectsService: PhaseByProjectsService
   ) { }
 
   ngOnInit(): void {
@@ -45,9 +48,33 @@ export class DateRangeComponent implements OnInit {
 
   add() {
     if(this.flagDate == "asignar") {
-
+      let phase_date= {
+        project_id: this.id_project,
+        phase_id: this.id_phase,
+        start_date: this.group.get('start_date')?.value,
+        end_date: this.group.get('end_date')?.value,
+      };
+      this.phaseByProjectsService.addPhasByProjects(phase_date)
+        .subscribe(data => {
+          this.openSnackBar(true, "Asignación correcta", "");
+          this.flagDate = "editar";
+          this.idEdit = data.id;
+        }, (err) => {
+          this.openSnackBar(true, "No se ha podido asignar una fecha para la fase", "");
+        });
     }else if(this.flagDate == "editar") {
-
+      let phase_date= {
+        project_id: this.id_project,
+        phase_id: this.id_phase,
+        start_date: this.group.get('start_date')?.value,
+        end_date: this.group.get('end_date')?.value,
+      };
+      this.phaseByProjectsService.updatePhaseByProject(phase_date, this.idEdit)
+        .subscribe(data => {
+          this.openSnackBar(true, "Asignación correcta", "");
+        } ,(err) => {
+        this.openSnackBar(true, "No se ha podido realizar la edición", "");
+      });
     }
   }
 

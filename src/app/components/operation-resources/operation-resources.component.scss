@@ -56,3 +56,16 @@
     color: #FDD835;
     padding-left: 40px;
 }
+
+.header-buttons {
+    display: flex; 
+    align-items: center; 
+    flex-wrap: wrap;
+    justify-content: flex-end
+}
+
+.buttons-options {
+    width: auto;
+    text-align: center;
+    border-radius: 5px;
+}

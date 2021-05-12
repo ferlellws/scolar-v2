@@ -12,8 +12,9 @@
     </div>
     <div class="row phases-content" *ngFor="let dataPhase of datePhases">
         <tecno-date-range
+            idEdit = {{dataPhase.reg_id}}
+            id_project = {{data.idProject}}
             id_phase = {{dataPhase.phase_id}}
-            id_project = {{dataPhase.project_id}}
             title = {{dataPhase.phase_name}}
             start_date = {{dataPhase.start_date}}
             end_date = {{dataPhase.end_date}}

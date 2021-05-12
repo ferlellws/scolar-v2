@@ -14,6 +14,11 @@
                 </button>
 
                 <mat-menu #menuOption="matMenu" xPosition="before">
+                    <button *ngIf="actions.create" mat-menu-item (click)="onPhaseManagements(project.id)">
+                        <mat-icon>pending_actions</mat-icon>
+                        <span>Gestión de Fases</span>
+                    </button>
+
                     <button *ngIf="actions.create" mat-menu-item (click)="onDesviation()">
                         <mat-icon>alt_route</mat-icon>
                         <span>Causales de desviación</span>
@@ -34,15 +39,11 @@
                         <span>Interrelaciones</span>
                     </button>
 
-                    <!-- <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
+                    <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
                         <mat-icon>groups</mat-icon>
                         <span>Equipo de Proyecto</span>
                     </button>
 
-                    <button *ngIf="actions.create" mat-menu-item (click)="onPhaseManagements(project.id)">
-                        <mat-icon>pending_actions</mat-icon>
-                        <span>Gestión de Fases</span>
-                    </button> -->
                 </mat-menu>
             </div>
         </div>

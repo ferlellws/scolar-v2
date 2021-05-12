@@ -1,6 +1,6 @@
 import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
 import { Component, NgZone, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -16,6 +16,7 @@ import { OperationSponsorsService } from 'src/app/services/operation-sponsors.se
 import { SupportResourcesService } from 'src/app/services/support-resources.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
+import { PhaseManagementComponent } from '../project-details/phase-management/phase-management.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { ResourceFormComponent } from './resource-form/resource-form.component';
 
@@ -37,6 +38,7 @@ export class OperationResourcesComponent implements OnInit {
   filterPersons!: Observable<Person[]>;
   personControl = new FormControl();
   flagAddSponsor: boolean = false;
+  sponsorGroup!: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,7 +49,7 @@ export class OperationResourcesComponent implements OnInit {
     private operationSponsorsService: OperationSponsorsService,
     private supportResourcesService :SupportResourcesService,
     private ngZone: NgZone,
-    public dialog: MatDialog,    
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +57,11 @@ export class OperationResourcesComponent implements OnInit {
     if (this.actions == null){
       this.actions = new Actions();
     }
+
+    this.sponsorGroup = this.fb.group({
+      dedication: [null, Validators.required],
+    });
+
     this.userID = JSON.parse(localStorage.user).person_id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
 
@@ -115,6 +122,29 @@ export class OperationResourcesComponent implements OnInit {
       map(value => typeof value === 'string' ? value : value!.full_name),
       map(name => name ? this._filter(name) : this.persons.slice())
     );
+  }
+
+  editSponsor(id: any) {
+    const dialogRef = this.dialog.open(ResourceFormComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true,
+      data: {
+        mode: 'edit',
+        labelAction: 'Editar',
+        project_id: this.project.id,
+        id: id,
+        supportResources: this.persons,
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'close') {
+        dialogRef.close();
+        this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+          .subscribe(data => {
+            this.fronts = data.fronts;
+          });
+      }
+    });
   }
 
   deleteSponsor(id: any) {
@@ -212,6 +242,24 @@ export class OperationResourcesComponent implements OnInit {
     });
   }
 
+  onPhaseManagements(id: any) {
+    const dialogRef = this.dialog.open(PhaseManagementComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true,
+      data: {   
+        idProject: id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
+  }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
     var panelClass = "succes-snack-bar";

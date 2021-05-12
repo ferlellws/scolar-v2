@@ -12,8 +12,8 @@ export class SupportResource {
     person?: Person;
     operation_front_id!: number;
     operation_front?: OperationFront;
-    dedication!: number;
-    description!: string;
+    // dedication!: number;
+    // description!: string;
     is_active?: boolean;
     is_delete?: boolean;
     user_creates?: User;

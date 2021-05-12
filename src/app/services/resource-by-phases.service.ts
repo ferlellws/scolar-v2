@@ -9,7 +9,7 @@ import { ResourceByPhase } from '../models/resource-by-phase';
 })
 export class ResourceByPhasesService {
 
-  private readonly API = `${environment.API}/phase_by_projects`;
+  private readonly API = `${environment.API}/resource_by_phases`;
   
   emitResourceByPhaseAdd = new EventEmitter<any>();
   emitResourceByPhaseUpdate = new EventEmitter<any>();
@@ -41,7 +41,7 @@ export class ResourceByPhasesService {
     );
   }
 
-  getPhasByProjectId(id_project: number) {
+  getResourceByPhaseId(id_project: number) {
     return this.http.get<ResourceByPhase[]>(`${this.API}/${id_project}`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -49,7 +49,7 @@ export class ResourceByPhasesService {
     );
   }
 
-  addPhasByProjects(resource_by_phase: ResourceByPhase) {
+  addResourceByPhase(resource_by_phase: ResourceByPhase) {
     return this.http.post<ResourceByPhase>(this.API, { resource_by_phase: resource_by_phase }, this.httpOptions)
       .pipe(
         tap((data: any) => {
