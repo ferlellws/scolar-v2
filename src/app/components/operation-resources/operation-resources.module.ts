@@ -36,6 +36,8 @@ import { ProjectOperationResourcesResolver } from './guards/project.resolver';
 import { SponsorsResolver } from './guards/sponsors.resolver';
 import { ResourceFormComponent } from './resource-form/resource-form.component';
 import { PhasesDedicationComponent } from './phases-dedication/phases-dedication.component';
+import { ComiteResourceFormComponent } from './comite-resource-form/comite-resource-form.component';
+import { PhasesDedicationComiteComponent } from './phases-dedication-comite/phases-dedication-comite.component';
 
 const materialModels = [
   MatSortModule,
@@ -78,6 +80,8 @@ const materialModels = [
     OperationResourcesComponent,
     ResourceFormComponent,
     PhasesDedicationComponent,
+    ComiteResourceFormComponent,
+    PhasesDedicationComiteComponent,
   ],
   imports: [
     CommonModule,

@@ -10,9 +10,12 @@ import { OperationFront } from 'src/app/models/operation-front';
 import { Person } from 'src/app/models/person';
 import { PhaseByProject } from 'src/app/models/phase-by-project';
 import { SupportResource } from 'src/app/models/support-resource';
+import { TestUser } from 'src/app/models/test-user';
 import { OperationFrontsService } from 'src/app/services/operation-fronts.service';
 import { PhaseByProjectsService } from 'src/app/services/phase-by-projects.service';
+import { ResourceByPhasesService } from 'src/app/services/resource-by-phases.service';
 import { SupportResourcesService } from 'src/app/services/support-resources.service';
+import { TestUsersService } from 'src/app/services/test-users.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -34,8 +37,8 @@ export class ResourceFormComponent implements OnInit {
   @Output() emitClose: EventEmitter<any> = new EventEmitter();
 
   showBtnClose: boolean = true;
-  pluralOption: string = "Recursos de Soporte";
-  singularOption: string = "Recurso de Soporte";
+  pluralOption: string = "Recursos Funcionales";
+  singularOption: string = "Recurso Funcional";
   isButtonReset: boolean = false;
   fButtonDisabled: boolean = false;
   resourcesGroup!: FormGroup;
@@ -48,12 +51,11 @@ export class ResourceFormComponent implements OnInit {
   selectPhases: any[] = [];
   disablePhases: boolean = false;
   flagModeGeneral: string = "create";
-  
   generalPhase: any;
   idSupportResource!: number;
-
   phases: PhaseByProject[] = [];
-
+  testUsersByProject: TestUser[] = [];
+  testUsersByProjectIdsPerson: number[] = [];
   resoruce_by_phases = [
     {
       id_reg: 5,
@@ -124,6 +126,8 @@ export class ResourceFormComponent implements OnInit {
     private operationFrontsService: OperationFrontsService,
     private supportResourcesService: SupportResourcesService,
     private phaseByProjectsService: PhaseByProjectsService,
+    private resourceByPhasesService: ResourceByPhasesService,
+    private testUsersService: TestUsersService,
     private ngZone: NgZone,
   ) { }
 
@@ -137,6 +141,15 @@ export class ResourceFormComponent implements OnInit {
         this.phases = data;
         if(this.data.mode != "edit") {
           this.generalPhase = this.phases;
+        }
+      });
+    
+    // this.testUsersService.getTestUserByProjectId
+    this.testUsersService.getTestUsers()
+      .subscribe(data => {
+        this.testUsersByProject = data.filter((f :any) => f.project.id == this.data.project_id);
+        for (let index = 0; index < this.testUsersByProject.length; index++) {
+          this.testUsersByProjectIdsPerson.push(Number(this.testUsersByProject[index].person?.id));
         }
       });
 
@@ -169,6 +182,10 @@ export class ResourceFormComponent implements OnInit {
     }
   }
 
+  closeForm() {
+    this.emitClose.emit('close');
+  }
+
   displayFn(person: Person): string {
     return person && person.full_name ? person.full_name : '';
   }
@@ -193,20 +210,53 @@ export class ResourceFormComponent implements OnInit {
 
   createRegister() {
     if (this.personControl.value != null && typeof this.personControl.value == 'object') {
-      let newsupportResource = {
-        operation_front_id: Number(this.resourcesGroup.get('front')?.value),
-        person_id: Number(this.personControl.value.id),
-        project_id: Number(this.data.project_id),
-      }
+      // let newsupportResource = {
+      //   operation_front_id: Number(this.resourcesGroup.get('front')?.value),
+      //   person_id: Number(this.personControl.value.id),
+      //   project_id: Number(this.data.project_id),
+      // }
 
-      this.supportResourcesService.addSupportResource(newsupportResource)
-        .subscribe(res => {
-          if(res != null) {
-            this.openSnackBar(true, "Recurso creado satisfactoriamente", "");
+      // this.supportResourcesService.addSupportResource(newsupportResource)
+      //   .subscribe(res => {
+      //     if(res != null) {
+      //       this.openSnackBar(true, "Recurso creado satisfactoriamente", "");
+      //       this.disablePhases = true;
+      //       this.idSupportResource = res.id;
+      //     }
+      //   });
+
+      // Nueva implementacion con TestUsers en vez de SupportResources
+      if(this.testUsersByProjectIdsPerson.includes(Number(this.personControl.value.id))) {
+        let testUserUpdate = this.testUsersByProject.filter((f: any) => f.person.id == Number(this.personControl.value.id));
+        let updateTestUser = {
+          operation_front_id: Number(this.resourcesGroup.get('front')?.value),
+        }
+        this.testUsersService.updateTestUsersId(updateTestUser, Number(testUserUpdate[0].id))
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro actualizado correctamente", "");
             this.disablePhases = true;
             this.idSupportResource = res.id;
-          }
-        });
+            this.fButtonDisabled = !this.fButtonDisabled;
+          }, (err) => {
+            this.openSnackBar(false, "No se ha podido asignar un frente de operación", "");
+          });        
+      } else {
+        let createTestUser = {
+          operation_front_id: Number(this.resourcesGroup.get('front')?.value),
+          person_id: Number(this.personControl.value.id),
+          project_id: Number(this.data.project_id),
+        }
+        this.testUsersService.addTestUser(createTestUser)
+          .subscribe(res => {
+            this.openSnackBar(true, "Recurso asignado correctamente", "");
+            this.disablePhases = true;
+            this.idSupportResource = res.id;
+            this.fButtonDisabled = !this.fButtonDisabled;
+          }, (err) => {
+            this.openSnackBar(false, "No se ha podido asignar este recurso al proyecto", "");
+          }); 
+        }
+
     } else{
       this.openSnackBar(false, "No existe un usuario creado con este nombre", "");
       this.fButtonDisabled = false;
@@ -250,10 +300,6 @@ export class ResourceFormComponent implements OnInit {
     }
   }
   
-  onClickSelectPhase() {
-    environment.consoleMessage("Hola Fases");
-  }
-
   getMessageError(field: string, labelField: string): string {
     let message!: string;
     

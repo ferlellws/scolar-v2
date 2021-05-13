@@ -1,0 +1,24 @@
+<form [formGroup]="group">   
+    <div class="row phases-content">
+        <div class="col-sm-12 col-md-3 group-content">
+            <span class="txt-primary title-phase">{{phaseTitle}}</span>
+        </div>
+        <div class="col-sm-12 col-md-7">
+            <mat-form-field class="full-width">
+                <mat-label>Dedicación (Tiempo semanal en horas)</mat-label>
+                <input matInput [min]="0" [max]="40" type="number" placeholder="Dedicación" formControlName="dedication" required>
+                <mat-error *ngIf="this.group.get('dedication')?.invalid">
+                    {{ getMessageError('dedication' ,'dedicación') }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="header-buttons col-sm-12 col-md-2">
+            <button class="buttons-options"
+                (click)="flagMode == 'asignar' ? add() : edit()"
+                mat-button color="primary"
+                [disabled]="disabled">
+                {{( dedication == "") && flagMode == "create" ? 'Asignar' : 'Editar'}}
+            </button>
+        </div>
+    </div>
+</form>

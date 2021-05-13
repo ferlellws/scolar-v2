@@ -13,11 +13,13 @@ import { Person } from 'src/app/models/person';
 import { Project } from 'src/app/models/project';
 import { MainService } from 'src/app/services/main.service';
 import { OperationSponsorsService } from 'src/app/services/operation-sponsors.service';
+import { ResourceByPhasesService } from 'src/app/services/resource-by-phases.service';
 import { SupportResourcesService } from 'src/app/services/support-resources.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { PhaseManagementComponent } from '../project-details/phase-management/phase-management.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { ComiteResourceFormComponent } from './comite-resource-form/comite-resource-form.component';
 import { ResourceFormComponent } from './resource-form/resource-form.component';
 
 @Component({
@@ -48,6 +50,7 @@ export class OperationResourcesComponent implements OnInit {
     private snackBar: MatSnackBar,
     private operationSponsorsService: OperationSponsorsService,
     private supportResourcesService :SupportResourcesService,
+    private resourceByPhasesService: ResourceByPhasesService,
     private ngZone: NgZone,
     public dialog: MatDialog,
   ) { }
@@ -125,23 +128,25 @@ export class OperationResourcesComponent implements OnInit {
   }
 
   editSponsor(id: any) {
-    const dialogRef = this.dialog.open(ResourceFormComponent, {
-      width: environment.widthFormsLittleModal,
+    const dialogRef = this.dialog.open(ComiteResourceFormComponent, {
+      // width: environment.widthFormsLittleModal,
+      width: "600px",
       disableClose: true,
       data: {
         mode: 'edit',
         labelAction: 'Editar',
         project_id: this.project.id,
-        id: id,
-        supportResources: this.persons,
+        resource_id: id,
+        people: this.persons,
+        type_resource: 'Sponsor'
       }
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'close') {
         dialogRef.close();
-        this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+        this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
           .subscribe(data => {
-            this.fronts = data.fronts;
+            this.sponsors = data;
           });
       }
     });
@@ -186,7 +191,11 @@ export class OperationResourcesComponent implements OnInit {
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'close') {
         dialogRef.close();
-        this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+        // this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+        //   .subscribe(data => {
+        //     this.fronts = data.fronts;
+        //   });
+        this.resourceByPhasesService.getResourcesByProjectId(Number(this.project.id))
           .subscribe(data => {
             this.fronts = data.fronts;
           });
