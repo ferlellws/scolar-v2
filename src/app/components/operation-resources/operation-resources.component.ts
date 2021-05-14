@@ -13,11 +13,15 @@ import { Person } from 'src/app/models/person';
 import { Project } from 'src/app/models/project';
 import { MainService } from 'src/app/services/main.service';
 import { OperationSponsorsService } from 'src/app/services/operation-sponsors.service';
+import { PhaseByProjectsService } from 'src/app/services/phase-by-projects.service';
+import { ProjectsService } from 'src/app/services/projects.service';
 import { ResourceByPhasesService } from 'src/app/services/resource-by-phases.service';
+import { SponsorByPhasesService } from 'src/app/services/sponsor-by-phases.service';
 import { SupportResourcesService } from 'src/app/services/support-resources.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { PhaseManagementComponent } from '../project-details/phase-management/phase-management.component';
+import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { ComiteResourceFormComponent } from './comite-resource-form/comite-resource-form.component';
 import { ResourceFormComponent } from './resource-form/resource-form.component';
@@ -31,16 +35,15 @@ export class OperationResourcesComponent implements OnInit {
   actions!: Actions;
   userID: any;
   profileID: any;
-  
   project!: Project;
   sponsors: OperationSponsor[] = [];
   persons!: any;
   fronts!: any;
-
   filterPersons!: Observable<Person[]>;
   personControl = new FormControl();
   flagAddSponsor: boolean = false;
   sponsorGroup!: FormGroup;
+  datePhases :any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -51,6 +54,9 @@ export class OperationResourcesComponent implements OnInit {
     private operationSponsorsService: OperationSponsorsService,
     private supportResourcesService :SupportResourcesService,
     private resourceByPhasesService: ResourceByPhasesService,
+    private projectsService:ProjectsService,
+    private sponsorByPhasesService: SponsorByPhasesService,
+    private phaseByProjectsService: PhaseByProjectsService,
     private ngZone: NgZone,
     public dialog: MatDialog,
   ) { }
@@ -77,6 +83,11 @@ export class OperationResourcesComponent implements OnInit {
       
       environment.consoleMessage(this.fronts, "FRENTES");
 
+      this.phaseByProjectsService.getPhaseByProjectId(Number(this.project.id))
+        .subscribe(res => {
+          this.datePhases = res.datePhases;
+        });
+
       this.filterPersons = this.personControl.valueChanges.pipe(
         startWith(''),
         map(value => typeof value === 'string' ? value : value!.full_name),
@@ -101,13 +112,29 @@ export class OperationResourcesComponent implements OnInit {
     if (typeof this.personControl.value == 'object') {
       let newSponsor = {
         project_id: Number(this.project.id),
-        person_id: Number(this.personControl.value.id)
+        person_id: Number(this.personControl.value.id),
       }
+      let dedication = this.sponsorGroup.get('dedication')?.value;
+
       this.operationSponsorsService.addOperationSponsor(newSponsor)
         .subscribe(res => {
           if(res != null) {
             this.openSnackBar(true, "Sponsor creado correctamente", "");
             
+            for (let index = 0; index < this.datePhases.length; index++) {
+              if(this.datePhases[index].reg_id != null) {
+                let newSponsorByPhase = {
+                  phase_by_project_id: this.datePhases[index].reg_id,
+                  operation_sponsor_id: res.id,
+                  dedication: dedication,
+                }
+                // this.sponsorByPhasesService.addSponsorByPhase(newSponsorByPhase)
+                //   .subscribe(res => {
+                //     true;
+                //   });        
+              }
+            }
+
             this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
             .subscribe(res => {
               this.sponsors = res;
@@ -119,7 +146,8 @@ export class OperationResourcesComponent implements OnInit {
       this.openSnackBar(false, "No existe un usuario creado con este nombre", "");
     }
     this.personControl.reset();
-    
+    this.sponsorGroup.reset();
+
     this.filterPersons = this.personControl.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : value!.full_name),
@@ -127,7 +155,7 @@ export class OperationResourcesComponent implements OnInit {
     );
   }
 
-  editSponsor(id: any) {
+  editResourceComite(id: any, type: string) {
     const dialogRef = this.dialog.open(ComiteResourceFormComponent, {
       // width: environment.widthFormsLittleModal,
       width: "600px",
@@ -135,10 +163,10 @@ export class OperationResourcesComponent implements OnInit {
       data: {
         mode: 'edit',
         labelAction: 'Editar',
-        project_id: this.project.id,
+        project: this.project,
         resource_id: id,
         people: this.persons,
-        type_resource: 'Sponsor'
+        type_resource: type
       }
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
@@ -191,10 +219,6 @@ export class OperationResourcesComponent implements OnInit {
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'close') {
         dialogRef.close();
-        // this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
-        //   .subscribe(data => {
-        //     this.fronts = data.fronts;
-        //   });
         this.resourceByPhasesService.getResourcesByProjectId(Number(this.project.id))
           .subscribe(data => {
             this.fronts = data.fronts;
@@ -218,7 +242,7 @@ export class OperationResourcesComponent implements OnInit {
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'close') {
         dialogRef.close();
-        this.supportResourcesService.getSupportResourceProjectId(Number(this.project.id))
+        this.resourceByPhasesService.getResourcesByProjectId(Number(this.project.id))
           .subscribe(data => {
             this.fronts = data.fronts;
           });
@@ -251,6 +275,28 @@ export class OperationResourcesComponent implements OnInit {
     });
   }
 
+  onProjectEdit() {
+    const dialogRef = this.dialog.open(ProjectsFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        id: this.project.id,
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          this.projectsService.getProjectsId(Number(this.project.id))
+            .subscribe(res => {
+              this.project = res;
+            });
+        }
+      });
+  }
+
   onPhaseManagements(id: any) {
     const dialogRef = this.dialog.open(PhaseManagementComponent, {
       width: environment.widthFormsLittleModal,
@@ -265,6 +311,14 @@ export class OperationResourcesComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          this.projectsService.getProjectsId(Number(this.project.id))
+            .subscribe(res => {
+              this.project = res;
+              this.resourceByPhasesService.getResourcesByProjectId(Number(this.project.id))
+                .subscribe(data => {
+                  this.fronts = data.fronts;
+                });
+            });
         }
       }
     );

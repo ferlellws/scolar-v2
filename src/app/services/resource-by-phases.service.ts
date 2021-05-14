@@ -42,6 +42,14 @@ export class ResourceByPhasesService {
     );
   }
 
+  getResourcesByProjectDataProjectByResource(id_project: number, id_person: number) {
+    return this.http.get<TestUser[]>(`${this.API}/${id_project}/${id_person}/data_project_by_resource/`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getResourceByPhasesAll() {
     return this.http.get<ResourceByPhase[]>(`${this.API}`, this.httpOptions)
     .pipe(

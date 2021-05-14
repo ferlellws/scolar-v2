@@ -14,10 +14,10 @@
         </div>
         <div class="header-buttons col-sm-12 col-md-2">
             <button class="buttons-options"
-                (click)="flagMode == 'asignar' ? add() : edit()"
+                (click)="dedication == '' ? add() : edit()"
                 mat-button color="primary"
-                [disabled]="disabled">
-                {{( dedication == "") && flagMode == "create" ? 'Asignar' : 'Editar'}}
+                [disabled]="this.group.get('dedication')?.value == '' || this.group.get('dedication')?.invalid">
+                {{( dedication == "") ? 'Asignar' : 'Editar'}}
             </button>
         </div>
     </div>

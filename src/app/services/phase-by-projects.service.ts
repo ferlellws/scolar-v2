@@ -39,17 +39,17 @@ export class PhaseByProjectsService {
       // catchError(this.handleError)
       tap(console.log)
     );
-  }
+  } 
 
-  getPhasByProjectId(id_project: number) {
-    return this.http.get<PhaseByProject[]>(`${this.API}/${id_project}/by_project`, this.httpOptions)
+  getPhaseByProjectId(id_project: number) {
+    return this.http.get<PhaseByProject[]>(`${this.API}/${id_project}/phases_date_range`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
     );
   }
 
-  addPhasByProjects(phase_by_project: PhaseByProject) {
+  addPhaseByProjects(phase_by_project: PhaseByProject) {
     return this.http.post<PhaseByProject>(this.API, { phase_by_project: phase_by_project }, this.httpOptions)
       .pipe(
         tap((data: any) => {

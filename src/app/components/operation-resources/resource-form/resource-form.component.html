@@ -14,7 +14,7 @@
             <div class="col-sm-12 col-md-6">
                 <mat-form-field class="full-width">
                     <mat-label>Frente de Operación</mat-label>
-                    <mat-select formControlName="front" (click)="onClickSelectFront()" required [disabled] = "fButtonDisabled">
+                    <mat-select formControlName="front" (click)="onClickSelectFront()" required [disabled]="fButtonDisabled">
                         <mat-option>Seleccione una opción</mat-option>
                         <mat-option *ngFor="let front of selectOperationFronst" [value]="front.id">{{ front.name }}</mat-option>
                     </mat-select>
@@ -30,10 +30,10 @@
                         <span style="font-size: small;">Recurso Funcional Actual: </span>
                         <span style="color: black;">{{supportResource.person!.full_name}}</span>
                     </mat-label>
-                    <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required [disabled] = "fButtonDisabled">
+                    <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required [disabled]="disablePerson">
                     <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                        <mat-option *ngFor="let person of filterPersons | async" [value]="person" [disabled] = "fButtonDisabled">
+                        <mat-option *ngFor="let person of filterPersons | async" [value]="person" [disabled]="disablePerson">
                         {{person.full_name}}
                         </mat-option>
                     </mat-autocomplete>

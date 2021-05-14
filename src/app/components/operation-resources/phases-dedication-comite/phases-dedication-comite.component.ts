@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResourceByPhasesService } from 'src/app/services/resource-by-phases.service';
+import { SponsorByPhasesService } from 'src/app/services/sponsor-by-phases.service';
 import { environment } from 'src/environments/environment';
 import { DialogData } from '../resource-form/resource-form.component';
 
@@ -21,7 +22,7 @@ export class PhasesDedicationComiteComponent implements OnInit {
   @Input() phaseTitle!: any;
   @Input() flagMode: any = "create";
   @Input() dedication!: any;
-  @Input() description!: any;
+  @Input() type_resource!: string;
 
   disabled: boolean = false;
 
@@ -29,71 +30,79 @@ export class PhasesDedicationComiteComponent implements OnInit {
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private snackBar: MatSnackBar,
-    private resourceByPhasesService: ResourceByPhasesService
+    private resourceByPhasesService: ResourceByPhasesService,
+    private sponsorByPhasesService:SponsorByPhasesService
   ) { }
 
   ngOnInit(): void {
     this.group = this.fb.group({
       dedication: [null, Validators.required],
-      description: [null, Validators.required],
     });
-    environment.consoleMessage(this.dedication, "DEDICACION <<<<<<<<<<<<<<");
-    environment.consoleMessage(typeof this.dedication, "tipo dato DEDICACION <<<<<<<<<<<<<<");
     this.group.get('dedication')?.setValue(this.dedication);
-    this.group.get('description')?.setValue(this.description);
   }
 
   add() {
-    let newReg = {
-      phase_by_project_id: this.idPhase,
-      support_resource_id: this.idResource,
-      dedication: this.group.get('dedication')?.value,
-      description: this.group.get('description')?.value
-    }
-    if((this.dedication == "" || this.description == "") && (this.flagMode == "create")) {
-      this.resourceByPhasesService.addResourceByPhase(newReg)
-        .subscribe(data => {
-          this.openSnackBar(true, "Asignado correctamente", "");
-          this.flagMode = "adit";
-          this.idResourceByPhase = data.id;
-        }, (err) => {
-          this.openSnackBar(false, "No se han podido asignar los datos", "");
-        });
-    } else {
-      this.resourceByPhasesService.updateResourceByPhase(newReg, this.idResourceByPhase)
-        .subscribe(data => {
-          this.openSnackBar(true, "Registro actualizado correctamente", "");
-        }, (err) => {
-          this.openSnackBar(false, "No se ha podido actualziar el registro", "");
+    if(this.type_resource == 'Sponsor') {
+      let newSponsorByPhase = {
+        phase_by_project_id: this.idPhase,
+        operation_sponsor_id: this.idResource,
+        dedication: this.group.get('dedication')?.value,
+      }
+
+      this.sponsorByPhasesService.addSponsorByPhase(newSponsorByPhase)
+        .subscribe(res => {
+          this.openSnackBar(true, "Tiempo de dedicación asignado correctamente", "");
         });
     }
+
+    // let newReg = {
+    //   phase_by_project_id: this.idPhase,
+    //   support_resource_id: this.idResource,
+    //   dedication: this.group.get('dedication')?.value,
+    // }
+    // if((this.dedication == "") && (this.flagMode == "create")) {
+    //   this.resourceByPhasesService.addResourceByPhase(newReg)
+    //     .subscribe(data => {
+    //       this.openSnackBar(true, "Asignado correctamente", "");
+    //       this.flagMode = "adit";
+    //       this.idResourceByPhase = data.id;
+    //     }, (err) => {
+    //       this.openSnackBar(false, "No se han podido asignar los datos", "");
+    //     });
+    // } else {
+    //   this.resourceByPhasesService.updateResourceByPhase(newReg, this.idResourceByPhase)
+    //     .subscribe(data => {
+    //       this.openSnackBar(true, "Registro actualizado correctamente", "");
+    //     }, (err) => {
+    //       this.openSnackBar(false, "No se ha podido actualziar el registro", "");
+    //     });
+    // }
   }
 
   edit() {
-    environment.consoleMessage(this.idResourceByPhase, "ID de Registro");
-    let newReg = {
-      phase_by_project_id: this.idPhase,
-      support_resource_id: this.idResource,
-      dedication: this.group.get('dedication')?.value,
-      description: this.group.get('description')?.value
-    }
-    if((this.flagMode == "edit") && this.idResourceByPhase != ""){
-      this.resourceByPhasesService.updateResourceByPhase(newReg, this.idResourceByPhase)
-      .subscribe(data => {
-        this.openSnackBar(true, "Registro actualizado correctamente", "");
-      }, (err) => {
-        this.openSnackBar(false, "No se ha podido actualziar el registro", "");
-      });
-    } else {
-      this.resourceByPhasesService.addResourceByPhase(newReg)
-        .subscribe(data => {
-          this.openSnackBar(true, "Asignado correctamente", "");
-          this.flagMode = "edit";
-          this.idResourceByPhase = data.id;
-        }, (err) => {
-          this.openSnackBar(false, "No se han podido asignar los datos", "");
-        });
-    }
+    environment.consoleMessage("EDITANDO");
+    // let newReg = {
+    //   phase_by_project_id: this.idPhase,
+    //   support_resource_id: this.idResource,
+    //   dedication: this.group.get('dedication')?.value,
+    // }
+    // if((this.flagMode == "edit") && this.idResourceByPhase != ""){
+    //   this.resourceByPhasesService.updateResourceByPhase(newReg, this.idResourceByPhase)
+    //   .subscribe(data => {
+    //     this.openSnackBar(true, "Registro actualizado correctamente", "");
+    //   }, (err) => {
+    //     this.openSnackBar(false, "No se ha podido actualziar el registro", "");
+    //   });
+    // } else {
+    //   this.resourceByPhasesService.addResourceByPhase(newReg)
+    //     .subscribe(data => {
+    //       this.openSnackBar(true, "Asignado correctamente", "");
+    //       this.flagMode = "edit";
+    //       this.idResourceByPhase = data.id;
+    //     }, (err) => {
+    //       this.openSnackBar(false, "No se han podido asignar los datos", "");
+    //     });
+    // }
   }
 
   getMessageError(field: string, labelField: string): string {

@@ -36,8 +36,9 @@ export class DateRangeComponent implements OnInit {
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
     });
+    environment.consoleMessage(this.start_date, "Fecha Nula???");
 
-    if(this.start_date == "null" || this.end_date == "null") {
+    if(this.start_date == "" || this.end_date == "") {
       this.flagDate = "asignar";
     } else {
       this.flagDate = "editar";
@@ -54,13 +55,13 @@ export class DateRangeComponent implements OnInit {
         start_date: this.group.get('start_date')?.value,
         end_date: this.group.get('end_date')?.value,
       };
-      this.phaseByProjectsService.addPhasByProjects(phase_date)
+      this.phaseByProjectsService.addPhaseByProjects(phase_date)
         .subscribe(data => {
           this.openSnackBar(true, "Asignación correcta", "");
           this.flagDate = "editar";
           this.idEdit = data.id;
         }, (err) => {
-          this.openSnackBar(true, "No se ha podido asignar una fecha para la fase", "");
+          this.openSnackBar(false, "No se ha podido asignar una fecha para la fase", "");
         });
     }else if(this.flagDate == "editar") {
       let phase_date= {
@@ -73,7 +74,7 @@ export class DateRangeComponent implements OnInit {
         .subscribe(data => {
           this.openSnackBar(true, "Asignación correcta", "");
         } ,(err) => {
-        this.openSnackBar(true, "No se ha podido realizar la edición", "");
+        this.openSnackBar(false, "No se ha podido realizar la edición", "");
       });
     }
   }

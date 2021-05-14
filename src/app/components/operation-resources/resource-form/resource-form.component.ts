@@ -56,68 +56,8 @@ export class ResourceFormComponent implements OnInit {
   phases: PhaseByProject[] = [];
   testUsersByProject: TestUser[] = [];
   testUsersByProjectIdsPerson: number[] = [];
-  resoruce_by_phases = [
-    {
-      id_reg: 5,
-      id: 6,
-      phase: {
-        id: 1,
-        title: "Factibilidad" 
-      },
-      dedication: 37.67,
-      description: "prueba 1",
-    },
-    {
-      id_reg: 6,
-      id: 7,
-      phase: {
-        id: 2,
-        title: "Inicio" 
-      },
-      dedication: 40,
-      description: "prueba 2",
-    },
-    {
-      id_reg: 8,
-      id: 9,
-      phase: {
-        id: 3,
-        title: "Planeación" 
-      },
-      dedication: 10,
-      description: "prueba 3",
-    },
-    {
-      id_reg: 10,
-      id: 10,
-      phase: {
-        id: 4,
-        title: "Ejecución" 
-      },
-      dedication: 23,
-      description: "prueba 4",
-    },
-    {
-      id_reg: null,
-      id: 11,
-      phase: {
-        id: 5,
-        title: "Cierre" 
-      },
-      dedication: 40,
-      description: "prueba 5",
-    },
-    // {
-    //   id_reg: null,
-    //   id: null,
-    //   phase: {
-    //     id: 6,
-    //     title: "BAU" 
-    //   },
-    //   dedication: 40,
-    //   description: "nuevo registro desde la edición EDITADO sin cerrar ventana",
-    // },
-  ]
+  disablePerson: boolean = false;
+  resource_by_phases: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -136,7 +76,7 @@ export class ResourceFormComponent implements OnInit {
       front: [null, Validators.required],
     });
 
-    this.phaseByProjectsService.getPhasByProjectId(this.data.project_id)
+    this.phaseByProjectsService.getPhaseByProjectId(this.data.project_id)
       .subscribe(data => {
         this.phases = data;
         if(this.data.mode != "edit") {
@@ -144,10 +84,9 @@ export class ResourceFormComponent implements OnInit {
         }
       });
     
-    // this.testUsersService.getTestUserByProjectId
-    this.testUsersService.getTestUsers()
+    this.testUsersService.getTestUserByProjectId(this.data.project_id)
       .subscribe(data => {
-        this.testUsersByProject = data.filter((f :any) => f.project.id == this.data.project_id);
+        this.testUsersByProject = data;
         for (let index = 0; index < this.testUsersByProject.length; index++) {
           this.testUsersByProjectIdsPerson.push(Number(this.testUsersByProject[index].person?.id));
         }
@@ -167,16 +106,20 @@ export class ResourceFormComponent implements OnInit {
       this.disablePhases = true;
       this.cargaProject = false;
       this.flagModeGeneral = "edit";
-
+      this.disablePerson = !this.disablePerson;
       this.onClickSelectFront();
-      await this.supportResourcesService.getSupportResourceId(this.data.id)
+      await this.testUsersService.getTestUserById(this.data.id)
         .subscribe(res => {
           this.supportResource = res;
           this.idSupportResource = res.id;
           this.resourcesGroup.patchValue({
             front: this.supportResource.operation_front?.id,
           });
-          this.generalPhase = this.resoruce_by_phases;
+
+          this.resourceByPhasesService.getResourcesByProjectDataProjectByResource(this.data.project_id, this.idSupportResource)
+            .subscribe(data => {
+              this.generalPhase = data.data_by_resource;
+            });
           this.cargaProject = true;
       });
     }
@@ -210,22 +153,6 @@ export class ResourceFormComponent implements OnInit {
 
   createRegister() {
     if (this.personControl.value != null && typeof this.personControl.value == 'object') {
-      // let newsupportResource = {
-      //   operation_front_id: Number(this.resourcesGroup.get('front')?.value),
-      //   person_id: Number(this.personControl.value.id),
-      //   project_id: Number(this.data.project_id),
-      // }
-
-      // this.supportResourcesService.addSupportResource(newsupportResource)
-      //   .subscribe(res => {
-      //     if(res != null) {
-      //       this.openSnackBar(true, "Recurso creado satisfactoriamente", "");
-      //       this.disablePhases = true;
-      //       this.idSupportResource = res.id;
-      //     }
-      //   });
-
-      // Nueva implementacion con TestUsers en vez de SupportResources
       if(this.testUsersByProjectIdsPerson.includes(Number(this.personControl.value.id))) {
         let testUserUpdate = this.testUsersByProject.filter((f: any) => f.person.id == Number(this.personControl.value.id));
         let updateTestUser = {
@@ -237,6 +164,16 @@ export class ResourceFormComponent implements OnInit {
             this.disablePhases = true;
             this.idSupportResource = res.id;
             this.fButtonDisabled = !this.fButtonDisabled;
+            this.disablePerson = !this.disablePerson;
+            
+            this.testUsersService.getTestUserById(res.id)
+              .subscribe(res => {
+                this.supportResource = res;
+                this.idSupportResource = res.id;
+                this.generalPhase = this.resource_by_phases;
+                this.cargaProject = true;
+              });
+
           }, (err) => {
             this.openSnackBar(false, "No se ha podido asignar un frente de operación", "");
           });        
@@ -252,11 +189,16 @@ export class ResourceFormComponent implements OnInit {
             this.disablePhases = true;
             this.idSupportResource = res.id;
             this.fButtonDisabled = !this.fButtonDisabled;
+            this.disablePerson = !this.disablePerson;
           }, (err) => {
             this.openSnackBar(false, "No se ha podido asignar este recurso al proyecto", "");
           }); 
-        }
-
+      }
+      this.resourceByPhasesService.getResourcesByProjectDataProjectByResource(this.data.project_id, this.idSupportResource)
+        .subscribe(data => {
+          this.generalPhase = data.data_by_resource;
+          this.cargaProject = true;
+        });
     } else{
       this.openSnackBar(false, "No existe un usuario creado con este nombre", "");
       this.fButtonDisabled = false;
@@ -275,17 +217,16 @@ export class ResourceFormComponent implements OnInit {
     }
 
     if(typeof this.personControl.value == 'object' || this.personControl.value == null) {
-      let editsupportResource = {
+      let editResource = {
         operation_front_id: Number(this.resourcesGroup.get('front')?.value),
         person_id: Number(person_id),
         project_id: Number(this.data.project_id),
       }
 
-      this.supportResourcesService.updateSupportResource(editsupportResource, this.data.id)
+      this.testUsersService.updateTestUsersId(editResource, this.data.id)
       .subscribe(res => {
         if(res != null){
           this.openSnackBar(true, "Registro actualizado correctamente", "");
-          this.emitClose.emit('close');
         }
       });
     }

@@ -34,8 +34,6 @@ export class PhasesDedicationComponent implements OnInit {
       dedication: [null, Validators.required],
       description: [null, Validators.required],
     });
-    environment.consoleMessage(this.dedication, "DEDICACION <<<<<<<<<<<<<<");
-    environment.consoleMessage(typeof this.dedication, "tipo dato DEDICACION <<<<<<<<<<<<<<");
     this.group.get('dedication')?.setValue(this.dedication);
     this.group.get('description')?.setValue(this.description);
   }
@@ -43,7 +41,7 @@ export class PhasesDedicationComponent implements OnInit {
   add() {
     let newReg = {
       phase_by_project_id: this.idPhase,
-      support_resource_id: this.idResource,
+      test_user_id: this.idResource,
       dedication: this.group.get('dedication')?.value,
       description: this.group.get('description')?.value
     }
@@ -67,10 +65,9 @@ export class PhasesDedicationComponent implements OnInit {
   }
 
   edit() {
-    environment.consoleMessage(this.idResourceByPhase, "ID de Registro");
     let newReg = {
       phase_by_project_id: this.idPhase,
-      support_resource_id: this.idResource,
+      test_user_id: this.idResource,
       dedication: this.group.get('dedication')?.value,
       description: this.group.get('description')?.value
     }

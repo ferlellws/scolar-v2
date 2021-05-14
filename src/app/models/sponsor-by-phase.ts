@@ -1,15 +1,14 @@
+import { OperationSponsor } from "./operation-sponsor";
 import { PhaseByProject } from "./phase-by-project";
-import { SupportResource } from "./support-resource";
 import { User } from "./user";
 
-export class ResourceByPhase {
+export class SponsorByPhase {
     id?: number;
     phase_by_project_id?: number;
     phase_by_project?: PhaseByProject;
-    support_resource_id?: number;
-    support_resource?: SupportResource;
+    operation_sponsor_id?: number;
+    operation_sponsor?: OperationSponsor;
     dedication?: number;
-    description?: string;
     is_active?: boolean;
     is_delete?: boolean;
     user_creates?: User;
