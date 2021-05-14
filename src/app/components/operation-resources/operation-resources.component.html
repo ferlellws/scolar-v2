@@ -16,6 +16,10 @@
         <span class="title-page mat-title col-sm-12 col-md-12 txt-primary" >{{project.title}}</span>
     </div>
 
+    <div class="row" *ngIf="emptyPhases">
+        <span class="empty-phases col-sm-12 col-md-12">No se han asignado fechas a las fases de este proyecto. Por favor diríjase al formulario de Gestión de Fases</span>
+    </div>
+
     <div class="row">
         <div class="row section-content">
             <span class=" sections-page mat-title col-sm-12 col-md-12 txt-accent">Dirección de Proyecto</span>

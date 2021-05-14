@@ -44,6 +44,7 @@ export class OperationResourcesComponent implements OnInit {
   flagAddSponsor: boolean = false;
   sponsorGroup!: FormGroup;
   datePhases :any[] = [];
+  emptyPhases :boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,7 +78,7 @@ export class OperationResourcesComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe(data =>{
       this.project = data.project;
-      this.sponsors = data.sponsors;
+      this.sponsors = data.sponsors.filter((f :any) => f.is_active == true);;
       this.persons = data.resources;
       this.fronts = data.supportResources.fronts;
       
@@ -86,6 +87,11 @@ export class OperationResourcesComponent implements OnInit {
       this.phaseByProjectsService.getPhaseByProjectId(Number(this.project.id))
         .subscribe(res => {
           this.datePhases = res.datePhases;
+          for (let index = 0; index < this.datePhases.length; index++) {
+            if(this.datePhases[index].reg_id != null) {
+              this.emptyPhases = false;
+            }
+          }
         });
 
       this.filterPersons = this.personControl.valueChanges.pipe(
@@ -128,16 +134,16 @@ export class OperationResourcesComponent implements OnInit {
                   operation_sponsor_id: res.id,
                   dedication: dedication,
                 }
-                // this.sponsorByPhasesService.addSponsorByPhase(newSponsorByPhase)
-                //   .subscribe(res => {
-                //     true;
-                //   });        
+                this.sponsorByPhasesService.addSponsorByPhase(newSponsorByPhase)
+                  .subscribe(res => {
+                    environment.consoleMessage(res, "RES SponsorByPhases");;
+                  });        
               }
             }
 
             this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
             .subscribe(res => {
-              this.sponsors = res;
+              this.sponsors = res.filter((f :any) => f.is_active == true);;
             });
           }      
       });
@@ -174,7 +180,7 @@ export class OperationResourcesComponent implements OnInit {
         dialogRef.close();
         this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
           .subscribe(data => {
-            this.sponsors = data;
+            this.sponsors = data.filter((f :any) => f.is_active == true);;
           });
       }
     });
@@ -190,15 +196,26 @@ export class OperationResourcesComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'si') {
-        this.operationSponsorsService.deleteOperationSponsor(id)
-        .subscribe(res => {
-          this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-          dialogRef.close();
-          this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
-            .subscribe(res => {
-              this.sponsors = res;
-            });
-        });
+        // this.operationSponsorsService.deleteOperationSponsor(id)
+        // .subscribe(res => {
+        //   this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+        //   dialogRef.close();
+        //   this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
+        //     .subscribe(res => {
+        //       this.sponsors = res;
+        //     });
+        // });
+        let updateState = {
+          is_active: false
+        }
+        this.operationSponsorsService.updateOperationSponsor(updateState, id)
+          .subscribe(res => {
+            this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
+              .subscribe(res => {
+                this.sponsors = res.filter((f :any) => f.is_active == true);
+                dialogRef.close();
+              });
+          });
       } else {
         dialogRef.close();
       }

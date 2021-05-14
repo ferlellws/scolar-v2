@@ -49,6 +49,14 @@ export class PmoAssignedByPhaseByPhasesService {
     );
   }
 
+  getPmoAssignedByPhasesByProjectByPmo(id_project: number, id_pmo: number) {
+    return this.http.get<PmoAssignedByPhase[]>(`${this.API}/${id_project}/${id_pmo}/data_project_by_pmo_assigned`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   addPmoAssignedByPhaseByPhase(pmo_assigned_by_phase: PmoAssignedByPhase) {
     return this.http.post<PmoAssignedByPhase>(this.API, { pmo_assigned_by_phase: pmo_assigned_by_phase }, this.httpOptions)
       .pipe(

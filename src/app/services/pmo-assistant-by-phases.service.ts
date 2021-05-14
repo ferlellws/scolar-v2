@@ -49,6 +49,14 @@ export class PmoAssistantByPhasesService {
     );
   }
 
+  getPmoAssistantByPhasesByProjectByPmo(id_project: number, id_pmo: number) {
+    return this.http.get<PmoAssistantByPhase[]>(`${this.API}/${id_project}/${id_pmo}/data_project_by_pmo_assistant`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   addPmoAssistantByPhaseByPhase(pmo_assistant_by_phase: PmoAssistantByPhase) {
     return this.http.post<PmoAssistantByPhase>(this.API, { pmo_assistant_by_phase: pmo_assistant_by_phase }, this.httpOptions)
       .pipe(

@@ -4,9 +4,9 @@ import { User } from "./user";
 
 export class OperationSponsor {
     id?: number;
-    project_id!: number;
+    project_id?: number;
     project?: Project;
-    person_id!: number;
+    person_id?: number;
     person?: Person;
     is_active?: boolean;
     is_delete?: boolean;

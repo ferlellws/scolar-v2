@@ -44,3 +44,13 @@
   font-size: 18px;
   font-weight: 500;
 }
+
+.empty-phases {
+  font-size: 15px;
+  padding-left: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-self: center;
+}

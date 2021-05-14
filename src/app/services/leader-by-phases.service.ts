@@ -50,6 +50,14 @@ export class LeaderByPhasesService {
     );
   }
 
+  getLeaderByPhasesByProjectByLeader(id_project: number, id_functional_leader: number) {
+    return this.http.get<SponsorByPhase[]>(`${this.API}/${id_project}/${id_functional_leader}/data_project_by_leader`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   addLeaderByPhase(leader_by_phase: LeaderByPhase) {
     return this.http.post<LeaderByPhase>(this.API, { leader_by_phase: leader_by_phase }, this.httpOptions)
       .pipe(

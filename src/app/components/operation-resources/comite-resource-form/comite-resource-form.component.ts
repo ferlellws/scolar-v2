@@ -5,12 +5,18 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { LeaderByPhase } from 'src/app/models/leader-by-phase';
 import { Person } from 'src/app/models/person';
 import { PhaseByProject } from 'src/app/models/phase-by-project';
+import { PmoAssignedByPhase } from 'src/app/models/pmo-assigned-by-phase';
+import { PmoAssistantByPhase } from 'src/app/models/pmo-assistant-by-phase';
 import { Project } from 'src/app/models/project';
 import { SupportResource } from 'src/app/models/support-resource';
+import { LeaderByPhasesService } from 'src/app/services/leader-by-phases.service';
 import { OperationSponsorsService } from 'src/app/services/operation-sponsors.service';
 import { PhaseByProjectsService } from 'src/app/services/phase-by-projects.service';
+import { PmoAssignedByPhaseByPhasesService } from 'src/app/services/pmo-assigned-by-phases.service';
+import { PmoAssistantByPhasesService } from 'src/app/services/pmo-assistant-by-phases.service';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { SponsorByPhasesService } from 'src/app/services/sponsor-by-phases.service';
 import { SupportResourcesService } from 'src/app/services/support-resources.service';
@@ -53,63 +59,8 @@ export class ComiteResourceFormComponent implements OnInit {
   person!: any;
   currentResource: any;
   disablePerson: boolean = false;
-
-  resoruce_by_phases = [
-    {
-      id_reg: 5,
-      id: 6,
-      phase: {
-        id: 1,
-        title: "Factibilidad" 
-      },
-      dedication: null,
-    },
-    {
-      id_reg: 6,
-      id: 7,
-      phase: {
-        id: 2,
-        title: "Inicio" 
-      },
-      dedication: 4,
-    },
-    {
-      id_reg: 8,
-      id: 9,
-      phase: {
-        id: 3,
-        title: "Planeación" 
-      },
-      dedication: 4,
-    },
-    {
-      id_reg: 10,
-      id: 10,
-      phase: {
-        id: 4,
-        title: "Ejecución" 
-      },
-      dedication: 4,
-    },
-    {
-      id_reg: null,
-      id: 11,
-      phase: {
-        id: 5,
-        title: "Cierre" 
-      },
-      dedication: 4,
-    },
-    // {
-    //   id_reg: null,
-    //   id: null,
-    //   phase: {
-    //     id: 6,
-    //     title: "BAU" 
-    //   },
-    //   dedication: 40,
-    // },
-  ]
+  resoruce_by_phases: any[] = [];
+  emptyPhases: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -120,6 +71,9 @@ export class ComiteResourceFormComponent implements OnInit {
     private operationSponsorsService: OperationSponsorsService,
     private projectsService: ProjectsService,
     private sponsorByPhasesService:SponsorByPhasesService,
+    private leaderByPhasesService:LeaderByPhasesService,
+    private pmoAssignedByPhasesService:PmoAssignedByPhaseByPhasesService,
+    private pmoAssistantByPhasesService:PmoAssistantByPhasesService,
     private ngZone: NgZone,
   ) { }
 
@@ -130,6 +84,11 @@ export class ComiteResourceFormComponent implements OnInit {
     this.phaseByProjectsService.getPhaseByProjectId(Number(this.data.project.id))
       .subscribe(data => {
         this.phases = data;
+        for (let index = 0; index < this.phases.length; index++) {
+          if(data[index].reg_id != null) {
+            this.emptyPhases = false;
+          }
+        }
         if(this.data.mode != "edit") {
           this.generalPhase = this.phases;
         }
@@ -147,34 +106,47 @@ export class ComiteResourceFormComponent implements OnInit {
       this.disablePhases = true;
       this.cargaProject = false;
       this.flagModeGeneral = "edit";
-
+      this.idSupportResource = this.data.resource_id;
+      
       if(this.data.type_resource == 'Sponsor') {
         this.operationSponsorsService.getOperationSponsorProjectId(Number(this.data.project.id))
-          .subscribe(data => {
-            this.person = data.filter((f: any) => f.id == this.data.resource_id);
+          .subscribe(res => {
+            this.person = res.filter((f: any) => f.id == this.data.resource_id);
             this.currentResource = this.person[0].person.full_name;
             this.cargaProject = true;
             
-            this.generalPhase = this.resoruce_by_phases;
-            // Aquí va el endpoint que Ferley me entregue
-            // this.sponsorByPhasesService.getSponsorByPhasesByProjectBySponsor(Number(this.data.project.id), this.person.id)
-            //   .subscribe(res => {
-            //     true;
-            //   });
+            this.sponsorByPhasesService.getSponsorByPhasesByProjectBySponsor(Number(this.data.project.id), this.person[0].id)
+              .subscribe(res => {
+                this.generalPhase = res.data_by_resource;
+              });
 
           });
       } else if (this.data.type_resource == 'Líder Funcional') {
         this.currentResource = this.data.project.functional_lead!.full_name;
         this.cargaProject = true;
-        this.generalPhase = this.resoruce_by_phases;
+
+        this.leaderByPhasesService.getLeaderByPhasesByProjectByLeader(Number(this.data.project.id), Number(this.data.project.functional_lead?.id))
+          .subscribe(res => {
+            this.generalPhase = res.data_by_resource;
+          });
+
       } else if (this.data.type_resource == 'Pmo Asignado') {
         this.currentResource = this.data.project.pmo!.full_name;
         this.cargaProject = true;
-        this.generalPhase = this.resoruce_by_phases;
+        
+        this.pmoAssignedByPhasesService.getPmoAssignedByPhasesByProjectByPmo(Number(this.data.project.id), Number(this.data.project.pmo?.id))
+          .subscribe(res => {
+            this.generalPhase = res.data_by_resource;
+          });
+
       } else if (this.data.type_resource == 'Pmo de Apoyo') {
         this.currentResource = this.data.project.pmo_assitant!.full_name;
         this.cargaProject = true;
-        this.generalPhase = this.resoruce_by_phases;
+        
+        this.pmoAssistantByPhasesService.getPmoAssistantByPhasesByProjectByPmo(Number(this.data.project.id), Number(this.data.project.pmo_assitant?.id))
+          .subscribe(res => {
+            this.generalPhase = res.data_by_resource;
+          });
       }
     }
   }
@@ -200,9 +172,13 @@ export class ComiteResourceFormComponent implements OnInit {
     this.fButtonDisabled = false;
   }
 
-  createRegister() { }
+  createRegister() {
+    environment.consoleMessage("Creando");
+   }
 
-  updateRegister() { }
+  updateRegister() { 
+    environment.consoleMessage("Editando");
+  }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
     var panelClass = "succes-snack-bar";

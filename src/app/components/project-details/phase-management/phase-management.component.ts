@@ -31,51 +31,6 @@ export class PhaseManagementComponent implements OnInit {
   showBtnClose: boolean = true;
   datePhases: any[] = [];
 
-  // datePhases = [
-  //   {
-  //     reg_id: 6,
-  //     phase_id: 1,
-  //     phase_name: "Factibilidad",
-  //     start_date: "2021-05-10:00:00",
-  //     end_date: "2021-06-10:00:00",
-  //   },
-  //   {
-  //     reg_id: 6,
-  //     phase_id: 2,
-  //     phase_name: "Inicio",
-  //     start_date: "null",
-  //     end_date: "null",
-  //   },
-  //   {
-  //     reg_id: 6,
-  //     phase_id: 3,
-  //     phase_name: "Planeación",
-  //     start_date: "null",
-  //     end_date: "null",
-  //   },
-  //   {
-  //     reg_id: 6,
-  //     phase_id: 4,
-  //     phase_name: "Ejecución",
-  //     start_date: "null",
-  //     end_date: "null",
-  //   },
-  //   {
-  //     reg_id: 6,
-  //     phase_id: 5,
-  //     phase_name: "Cierre",
-  //     start_date: "null",
-  //     end_date: "null",
-  //   },
-  //   {
-  //     reg_id: 6,
-  //     phase_id: 6,
-  //     phase_name: "BAU",
-  //     start_date: "null",
-  //     end_date: "null",
-  //   },
-  // ];
-
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,    

@@ -42,7 +42,7 @@ export class SponsorByPhasesService {
   } 
 
   getSponsorByPhasesByProjectBySponsor(id_project: number, id_sponsor: number) {
-    return this.http.get<SponsorByPhase[]>(`${this.API}/${id_project}/by_project/${id_sponsor}/bySponsor`, this.httpOptions)
+    return this.http.get<SponsorByPhase[]>(`${this.API}/${id_project}/${id_sponsor}/data_project_by_sponsor`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)
