@@ -53,12 +53,11 @@ export class ResourceFormComponent implements OnInit {
   flagModeGeneral: string = "create";
   generalPhase: any;
   idSupportResource!: number;
-  phases: PhaseByProject[] = [];
+  phases: any[] = [];
   testUsersByProject: TestUser[] = [];
   testUsersByProjectIdsPerson: number[] = [];
   disablePerson: boolean = false;
   resource_by_phases: any[] = [];
-  emptyPhases: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -77,14 +76,9 @@ export class ResourceFormComponent implements OnInit {
       front: [null, Validators.required],
     });
 
-    this.phaseByProjectsService.getPhaseByProjectId(this.data.project_id)
+    await this.phaseByProjectsService.getPhaseByProjectId(this.data.project_id)
       .subscribe(data => {
         this.phases = data;
-        for (let index = 0; index < this.phases.length; index++) {
-          if(data[index].reg_id != null) {
-            this.emptyPhases = false;
-          }
-        }
         if(this.data.mode != "edit") {
           this.generalPhase = this.phases;
         }

@@ -33,7 +33,11 @@
                             <mat-card *ngIf="sponsor.person != null" class="row card-content">
                                 <span class="col-sm-12 col-md-6 text-comite">{{sponsor.person.full_name}}</span>
                                 <div class="col-sm-12 col-md-6 header-buttons">
-                                    <mat-icon *ngIf="actions.update" matTooltip="Asignación de tiempos" style="color: #3f51b5; cursor:pointer; margin-right: 30px;" (click)="editResourceComite(sponsor.id, 'Sponsor')">watch_later</mat-icon>
+                                    <mat-icon *ngIf="actions.update"
+                                                class="bttn-dedication"
+                                                [matTooltip]="!emptyPhases ? 'Asignación de tiempos' : 'Asigne fechas a las fases del proyecto para poder asignar tiempos de dedicación'"
+                                                [ngStyle]="!emptyPhases ? {'color': '#3f51b5'} : {'color': 'grey'}"
+                                                (click)="!emptyPhases ? editResourceComite(sponsor.id, 'Sponsor') : true">watch_later</mat-icon>
                                     <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer;" (click)="deleteSponsor(sponsor.id)">delete</mat-icon>
                                 </div>
                             </mat-card>
@@ -55,7 +59,7 @@
                                     <input matInput [min]="0" [max]="40" type="number" placeholder="Dedicación" formControlName="dedication" required>
                                 </mat-form-field>
                             </form>
-                            <mat-icon class="col-sm-12 col-md-1 bttn-add-sponsor" *ngIf="actions.create && personControl.value != null && sponsorGroup.get('dedication')!.value != null" matTooltip="Agregar" (click)="addSponsor()">add_circle</mat-icon>
+                            <mat-icon class="col-sm-12 col-md-1 bttn-dedication" style="color: #3f51b5; font-size: 35px;" *ngIf="actions.create && personControl.value != null && sponsorGroup.get('dedication')!.value != null" matTooltip="Agregar" (click)="addSponsor()">add_circle</mat-icon>
                         </div>
                     </div>
                 </div>
@@ -66,7 +70,11 @@
                         <mat-card class="row card-content">
                             <span *ngIf="project.functional_lead == null" class="col-sm-12 col-md-12">Sin asignación</span>
                             <span class="text-comite col-sm-12 col-md-10" *ngIf="project.functional_lead != null">{{project.functional_lead!.full_name}}</span>
-                            <mat-icon *ngIf="actions.update && project.functional_lead != null" matTooltip="Asignación de tiempos" class="col-sm-12 col-md-2 bttn-edit-resource-comite" (click)="editResourceComite(project.functional_lead.id, 'Líder Funcional')">watch_later</mat-icon>
+                            <mat-icon *ngIf="actions.update && project.functional_lead != null"
+                                        [matTooltip]="!emptyPhases ? 'Asignación de tiempos' : 'Asigne fechas a las fases del proyecto para poder asignar tiempos de dedicación'"
+                                        class="col-sm-12 col-md-2 bttn-dedication"
+                                        [ngStyle]="!emptyPhases ? {'color': '#3f51b5'} : {'color': 'grey'}"
+                                        (click)="!emptyPhases ? editResourceComite(project.functional_lead.id, 'Líder Funcional'): true">watch_later</mat-icon>
                         </mat-card>
                     </div>
                     
@@ -75,7 +83,11 @@
                         <mat-card class="row card-content">
                             <span *ngIf="project.pmo == null">Sin asignación</span>
                             <span class="text-comite col-sm-12 col-md-10" *ngIf="project.pmo != null">{{project.pmo!.full_name}}</span>
-                            <mat-icon *ngIf="actions.update && project.pmo != null" matTooltip="Asignación de tiempos" class="col-sm-12 col-md-2 bttn-edit-resource-comite" (click)="editResourceComite(project.pmo.id, 'Pmo Asignado')">watch_later</mat-icon>
+                            <mat-icon *ngIf="actions.update && project.pmo != null"
+                                        [matTooltip]="!emptyPhases ? 'Asignación de tiempos' : 'Asigne fechas a las fases del proyecto para poder asignar tiempos de dedicación'"
+                                        class="col-sm-12 col-md-2 bttn-dedication"
+                                        [ngStyle]="!emptyPhases ? {'color': '#3f51b5'} : {'color': 'grey'}"
+                                        (click)="!emptyPhases ? editResourceComite(project.pmo.id, 'Pmo Asignado') : true">watch_later</mat-icon>
                         </mat-card>
                     </div>
     
@@ -84,7 +96,11 @@
                         <mat-card class="row card-content">
                             <span *ngIf="project.pmo_assitant == null">Sin asignación</span>
                             <span class="text-comite  col-sm-12 col-md-10" *ngIf="project.pmo_assitant != null">{{project.pmo_assitant!.full_name}}</span>
-                            <mat-icon *ngIf="actions.update && project.pmo_assitant != null" matTooltip="Asignación de tiempos" class="col-sm-12 col-md-2 bttn-edit-resource-comite" (click)="editResourceComite(project.pmo_assitant.id, 'Pmo de Apoyo')">watch_later</mat-icon>
+                            <mat-icon *ngIf="actions.update && project.pmo_assitant != null"
+                                        [matTooltip]="!emptyPhases ? 'Asignación de tiempos' : 'Asigne fechas a las fases del proyecto para poder asignar tiempos de dedicación'"
+                                        class="col-sm-12 col-md-2 bttn-dedication"
+                                        [ngStyle]="!emptyPhases ? {'color': '#3f51b5'} : {'color': 'grey'}"
+                                        (click)="!emptyPhases ? editResourceComite(project.pmo_assitant.id, 'Pmo de Apoyo') : true">watch_later</mat-icon>
                         </mat-card>
                     </div>
                 </div>
@@ -116,7 +132,11 @@
                                 <mat-icon class="warning-icon" *ngIf="resource.totalDedication >= 60" matTooltip={{resource.projects}}>warning</mat-icon>
                             </div>
                             <div class="col-sm-12 col-md-1" style="padding-left: 20px;">
-                                <mat-icon *ngIf="actions.update" matTooltip="Asignación de tiempos" class="icons-edit-delete" style="color: #3f51b5;" (click)="onEditSupportResource(resource.id)">watch_later</mat-icon>
+                                <mat-icon *ngIf="actions.update"
+                                            [matTooltip]="!emptyPhases ? 'Asignación de tiempos' : 'Asigne fechas a las fases del proyecto para poder asignar tiempos de dedicación'"
+                                            class="icons-edit-delete bttn-dedication"
+                                            [ngStyle]="!emptyPhases ? {'color': '#3f51b5'} : {'color': 'grey'}"
+                                            (click)="!emptyPhases ? onEditSupportResource(resource.id) : true">watch_later</mat-icon>
                                 <!-- <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" class="icons-edit-delete" style="color: red;" (click)="onDeleteSupportResource(resource.id)">delete</mat-icon> -->
                             </div>
                         </div>

@@ -78,7 +78,7 @@ export class OperationResourcesComponent implements OnInit {
     this.mainService.showLoading();
     this.route.data.subscribe(data =>{
       this.project = data.project;
-      this.sponsors = data.sponsors.filter((f :any) => f.is_active == true);;
+      this.sponsors = data.sponsors
       this.persons = data.resources;
       this.fronts = data.supportResources.fronts;
       
@@ -328,17 +328,22 @@ export class OperationResourcesComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
-          this.projectsService.getProjectsId(Number(this.project.id))
+          this.resourceByPhasesService.getResourcesByProjectId(Number(this.project.id))
+            .subscribe(data => {
+              this.fronts = data.fronts;
+            });
+          
+          this.phaseByProjectsService.getPhaseByProjectId(Number(this.project.id))
             .subscribe(res => {
-              this.project = res;
-              this.resourceByPhasesService.getResourcesByProjectId(Number(this.project.id))
-                .subscribe(data => {
-                  this.fronts = data.fronts;
-                });
+              this.datePhases = res.datePhases;
+              for (let index = 0; index < this.datePhases.length; index++) {
+                if(this.datePhases[index].reg_id != null) {
+                  this.emptyPhases = false;
+                }
+              }
             });
         }
-      }
-    );
+      });
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {

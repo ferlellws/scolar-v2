@@ -56,6 +56,14 @@ export class OperationSponsorsService {
     );
   }
 
+  getOperationSponsorProjectIdActive(id_project: any) {
+    return this.http.get<OperationSponsor[]>(`${this.API}/${id_project}/by_project_sponsor_active`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   addOperationSponsor(operation_sponsor: OperationSponsor) {
     return this.http.post<OperationSponsor>(this.API, { operation_sponsor: operation_sponsor }, this.httpOptions)
       .pipe(
