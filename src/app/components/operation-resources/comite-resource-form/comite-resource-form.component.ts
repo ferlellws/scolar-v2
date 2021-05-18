@@ -60,7 +60,6 @@ export class ComiteResourceFormComponent implements OnInit {
   currentResource: any;
   disablePerson: boolean = false;
   resoruce_by_phases: any[] = [];
-  emptyPhases: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -84,11 +83,6 @@ export class ComiteResourceFormComponent implements OnInit {
     this.phaseByProjectsService.getPhaseByProjectId(Number(this.data.project.id))
       .subscribe(data => {
         this.phases = data;
-        for (let index = 0; index < this.phases.length; index++) {
-          if(data[index].reg_id != null) {
-            this.emptyPhases = false;
-          }
-        }
         if(this.data.mode != "edit") {
           this.generalPhase = this.phases;
         }
