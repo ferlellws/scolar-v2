@@ -11,9 +11,10 @@
             </div>
             <div class="date-button">
                 <span style="font-weight: 500">Fecha:
-                    <span style="font-weight: 400">{{item.date}}</span>
+                    <span style="font-weight: 400">{{item.date | date:'dd/MM/yyyy'}}</span>
                 </span>
-                <mat-icon color="warn" (click)="delete(i)" matRipple class="delete">delete</mat-icon>
+                <mat-icon *ngIf="disableEdit" color="primary" (click)="edit(item.id, i)" matRipple class="delete">create</mat-icon>
+                <mat-icon [ngStyle]="{'color': deleteColor}" (click)="clickEdit == false ? delete(i) : true" matRipple class="delete">delete</mat-icon>
             </div>
         </div>
     </mat-card>

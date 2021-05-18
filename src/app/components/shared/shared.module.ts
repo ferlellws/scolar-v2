@@ -37,6 +37,7 @@ import { MatInputModule } from '@angular/material/input';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { GephiComponent } from './gephi/gephi.component';
+import { DateRangeComponent } from '../project-details/phase-management/date-range/date-range.component';
 
 const COMPONENTS = [
   MenuComponent,
@@ -48,7 +49,7 @@ const COMPONENTS = [
   TextListComponent,
   TextListDateComponent,
   UnauthorizedComponent,
-  GephiComponent
+  GephiComponent,
 ];
 
 const materialModules = [

@@ -49,9 +49,13 @@ export class TestUsersService {
   }
 
   getTestUserByProjectId(id: number) {
-    this.getTestUsers().subscribe( (data: TestUser[]) => {
-      return data.filter(test_user => test_user.project!.id == id);
-    })
+    return this.http.get<TestUser>(`${this.API}/${id}/by_project`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
   }
 
   addTestUser(test_user: TestUser) {

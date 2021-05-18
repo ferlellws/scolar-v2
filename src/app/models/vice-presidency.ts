@@ -4,6 +4,7 @@ export class VicePresidency {
     manager_id!: User;
     title: string;
     description: string;
+    color!: string;
     is_active: boolean;
     is_delete: boolean;
     user_creates?: User;

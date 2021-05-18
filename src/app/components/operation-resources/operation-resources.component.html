@@ -1,0 +1,141 @@
+<div *ngIf="actions.read && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || (project.functional_lead == null ? null : project.functional_lead!.id == userID) || profileID == 2)">
+    <div class="header-buttons">
+        <button *ngIf="actions.update" class="buttons-options" mat-menu-item (click)="onProjectEdit()">
+            <mat-icon>editchart</mat-icon>
+            <span>Editar Proyecto</span>
+        </button>
+
+        <button *ngIf="actions.create" class="buttons-options" mat-menu-item (click)="onPhaseManagements(project.id)">
+            <mat-icon>pending_actions</mat-icon>
+            <span>Gestión de Fases</span>
+        </button>
+    </div>
+    
+    <div style="padding-bottom: 20px;">
+        <span class="title-page mat-title col-sm-12 col-md-12 txt-accent">Equipo de Proyecto: </span>
+        <span class="title-page mat-title col-sm-12 col-md-12 txt-primary" >{{project.title}}</span>
+    </div>
+
+    <div class="row" *ngIf="emptyPhases">
+        <span class="empty-phases col-sm-12 col-md-12">No se han asignado fechas a las fases de este proyecto. Por favor diríjase al formulario de Gestión de Fases</span>
+    </div>
+
+    <div class="row">
+        <div class="row section-content">
+            <span class=" sections-page mat-title col-sm-12 col-md-12 txt-accent">Dirección de Proyecto</span>
+            <span class="mat-title col-sm-12 col-md-12 txt-primary">Comité Directivo</span>
+
+            <div class="row comite-content">
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-sm-12 col-md-6">
+                        <span class="sub-title txt-primary">Sponsor de Proyecto</span>
+                        <div *ngFor="let sponsor of sponsors">
+                            <mat-card *ngIf="sponsor.person != null" class="row card-content">
+                                <span class="col-sm-12 col-md-6 text-comite">{{sponsor.person.full_name}}</span>
+                                <div class="col-sm-12 col-md-6 header-buttons">
+                                    <mat-icon *ngIf="actions.update" matTooltip="Asignación de tiempos" style="color: #3f51b5; cursor:pointer; margin-right: 30px;" (click)="editResourceComite(sponsor.id, 'Sponsor')">watch_later</mat-icon>
+                                    <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer;" (click)="deleteSponsor(sponsor.id)">delete</mat-icon>
+                                </div>
+                            </mat-card>
+                        </div>
+
+                        <div class="row card-content" style="padding-top: 10px;">
+                            <mat-form-field class="col-sm-12 col-md-6">
+                                <mat-label>Agregar nuevo Sponsor</mat-label>
+                                <input type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required>
+                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngFor="let person of filterPersons | async" [value]="person">
+                                    {{person.full_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <form [formGroup]="sponsorGroup" class="col-sm-12 col-md-5">
+                                <mat-form-field class="full-width dedication">
+                                    <mat-label>Dedicación (Tiempo semanal en horas)</mat-label>
+                                    <input matInput [min]="0" [max]="40" type="number" placeholder="Dedicación" formControlName="dedication" required>
+                                </mat-form-field>
+                            </form>
+                            <mat-icon class="col-sm-12 col-md-1 bttn-add-sponsor" *ngIf="actions.create && personControl.value != null && sponsorGroup.get('dedication')!.value != null" matTooltip="Agregar" (click)="addSponsor()">add_circle</mat-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-sm-12 col-md-4">
+                        <span class="sub-title col-sm-12 col-md-12 txt-primary">Líder Funcional</span>
+                        <mat-card class="row card-content">
+                            <span *ngIf="project.functional_lead == null" class="col-sm-12 col-md-12">Sin asignación</span>
+                            <span class="text-comite col-sm-12 col-md-10" *ngIf="project.functional_lead != null">{{project.functional_lead!.full_name}}</span>
+                            <mat-icon *ngIf="actions.update && project.functional_lead != null" matTooltip="Asignación de tiempos" class="col-sm-12 col-md-2 bttn-edit-resource-comite" (click)="editResourceComite(project.functional_lead.id, 'Líder Funcional')">watch_later</mat-icon>
+                        </mat-card>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-4">
+                        <span class="sub-title col-sm-12 col-md-12 txt-primary">Pmo Asignado</span>
+                        <mat-card class="row card-content">
+                            <span *ngIf="project.pmo == null">Sin asignación</span>
+                            <span class="text-comite col-sm-12 col-md-10" *ngIf="project.pmo != null">{{project.pmo!.full_name}}</span>
+                            <mat-icon *ngIf="actions.update && project.pmo != null" matTooltip="Asignación de tiempos" class="col-sm-12 col-md-2 bttn-edit-resource-comite" (click)="editResourceComite(project.pmo.id, 'Pmo Asignado')">watch_later</mat-icon>
+                        </mat-card>
+                    </div>
+    
+                    <div class="col-sm-12 col-md-4">
+                        <span class="sub-title col-sm-12 col-md-12 txt-primary">Pmo de Apoyo</span>
+                        <mat-card class="row card-content">
+                            <span *ngIf="project.pmo_assitant == null">Sin asignación</span>
+                            <span class="text-comite  col-sm-12 col-md-10" *ngIf="project.pmo_assitant != null">{{project.pmo_assitant!.full_name}}</span>
+                            <mat-icon *ngIf="actions.update && project.pmo_assitant != null" matTooltip="Asignación de tiempos" class="col-sm-12 col-md-2 bttn-edit-resource-comite" (click)="editResourceComite(project.pmo_assitant.id, 'Pmo de Apoyo')">watch_later</mat-icon>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row section-content">
+            <span class="sections-page mat-title col-sm-12 col-md-12 txt-accent">Planeación, Ejecución y Control de Proyecto</span>
+            <div>
+                <mat-card class="mat-elevation-z2 txt-primary">
+                    <span class="front-name" style="padding-left: 10px; padding-right: 90px; font-size: 18px;">Frentes de Operación</span>
+                    <span class="front-name" style="padding-right: 130px; font-size: 18px;">Recursos de Soporte</span>
+                    <span class="front-name" style="padding-right: 35px; font-size: 18px;">Dedicación Proyecto</span>
+                    <span class="front-name" style="padding-right: 300px; font-size: 18px;">Rol / Alcance</span>
+                    <span class="front-name" style="font-size: 18px;">Dedicación Portafolio</span>
+                </mat-card>
+            </div>
+
+            <div *ngFor="let front of fronts">
+                <mat-card class="row card-content">
+                    <span class="front-name col-sm-12 col-md-2">{{front.name}}</span>
+                    <div class="col-sm-12 col-md-10">
+                        <div *ngFor="let resource of front.resources" class="row card-content" style="padding-bottom: 20px;">
+                            <span class="front-name col-sm-12 col-md-3">{{resource.name}}</span>
+                            <span class="front-name col-sm-12 col-md-2">{{resource.dedication}}</span>
+                            <span class="front-name col-sm-12 col-md-4">{{resource.description}}</span>
+                            <div class="content-total-dedication col-sm-12 col-md-2">
+                                <span class="front-name ">{{resource.totalDedication}} %</span>
+                                <mat-icon class="warning-icon" *ngIf="resource.totalDedication >= 60" matTooltip={{resource.projects}}>warning</mat-icon>
+                            </div>
+                            <div class="col-sm-12 col-md-1" style="padding-left: 20px;">
+                                <mat-icon *ngIf="actions.update" matTooltip="Asignación de tiempos" class="icons-edit-delete" style="color: #3f51b5;" (click)="onEditSupportResource(resource.id)">watch_later</mat-icon>
+                                <!-- <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" class="icons-edit-delete" style="color: red;" (click)="onDeleteSupportResource(resource.id)">delete</mat-icon> -->
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-label-content">
+        <mat-icon class="warning-icon">warning</mat-icon>
+        <span class="label-warning">Porcentaje de Tiempo de Dedicación excede el 60%</span>
+    </div>
+
+    <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateSupportResource()" class="btn-new mat-elevation-z2">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+
+<div *ngIf="!actions.read">
+    <tecno-unauthorized></tecno-unauthorized>
+</div>

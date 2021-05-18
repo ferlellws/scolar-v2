@@ -68,7 +68,6 @@ export class InterrelationsFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    environment.consoleMessage(this.data, "dataaaaa");
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
       this.actions = new Actions();
@@ -92,8 +91,6 @@ export class InterrelationsFormComponent implements OnInit {
       this.onClickImpacts();
       this.interrelationsService.getInterrelationtId(this.data.idInterrelation)
         .subscribe(res => {
-          environment.consoleMessage(res.project_affect, "EDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
-          environment.consoleMessage(this.data.idProject, "EDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
           this.interrelation = res;
           this.interrelationsGroup.patchValue({
             type_dependency: this.interrelation.types_dependency?.id,
@@ -110,7 +107,7 @@ export class InterrelationsFormComponent implements OnInit {
           }
           this.titleProjectEdit = this.projectInterEdit.title;
         });
-        this.interrelationsGroup.get('impact_direction')?.disable();
+        //this.interrelationsGroup.get('impact_direction')?.disable();
     }
   }
 

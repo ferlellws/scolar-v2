@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <h1 class="mat-headline">{{ singularOption }}</h1>
+    <span class="example-spacer"></span>
+    <button mat-icon-button mat-dialog-close *ngIf="showBtnClose">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="example-container bg-color-white mat-elevation-z4">
+    <div class="row" style="padding-left: 15px;">
+        <h3 class="mat-title txt-accent" style="font-weight: 500; font-size: 18px;">Fases del Proyecto</h3>
+    </div>
+    <div class="row phases-content" *ngFor="let dataPhase of datePhases">
+        <tecno-date-range
+            idEdit = {{dataPhase.reg_id}}
+            id_project = {{data.idProject}}
+            id_phase = {{dataPhase.phase_id}}
+            title = {{dataPhase.phase_name}}
+            start_date = {{dataPhase.start_date}}
+            end_date = {{dataPhase.end_date}}
+        >
+        </tecno-date-range>
+    </div>
+
+    <ng-template #loadingBlock>
+        <div class="row">
+        <div class="col-12">
+            <mat-spinner color="accent" class="content-center"></mat-spinner>
+        </div>
+        </div>
+    </ng-template>
+</div>
+

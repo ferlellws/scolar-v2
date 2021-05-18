@@ -36,6 +36,7 @@ import { InterrelationsFormComponent } from './interrelations-form/interrelation
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PhaseManagementComponent } from './phase-management/phase-management.component';
 export interface Indicator {
   name: string;
   color: string;
@@ -96,119 +97,6 @@ export class ProjectDetailsComponent implements OnInit {
   profileID: any;
 
   interrelations: any;
-  // interrelations = {
-  //   total: 3,
-  //   interrelationsGeneral: {
-  //     data: [
-  //       {
-  //         title: "Disponibilidad de Recursos",
-  //         data: [
-  //           {
-  //             projectName: "EDI",
-  //             data: [
-  //               "Denis Rodriguez",
-  //               "Gerardo Hormiga",
-  //               "Santiago Fajardo",
-  //               "Jonathan Galvis"
-  //             ]
-  //           },
-  //           {
-  //             projectName: "Proyecto 5000",
-  //             data: [
-  //               "Juan Perez",
-  //               "Gerardo Hormiga",
-  //               "Santiago Fajardo",
-  //               "David Guerrero"
-  //             ]
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         title: "Disponibilidad de Proveedor",
-  //         data: [
-  //           {
-  //             projectName: "Proyecto 1000",
-  //             data: [
-  //               "Tecno",
-  //               "EmpresaX",
-  //             ]
-  //           },
-  //         ]
-  //       },
-  //       {
-  //         title: "Áreas",
-  //         data: []
-  //       },
-  //       {
-  //         title: "Aplicaciones",
-  //         data: []
-  //       },
-  //     ]
-  //   },
-  //   interrelationsSpecific: {
-  //     data: [
-  //       {
-  //         title: "Variación Alcance de Proceso",
-  //         total: 3,
-  //         data: [
-  //           {
-  //             type: "Mi proyecto afecta a ...",
-  //             data: [
-  //               {
-  //                 id: 0,
-  //                 projectName: "Proyecto 3000",
-  //                 date: "10/04/2021",
-  //                 impact: "Bloqueante",
-  //                 description: "El proyecto esta en Gerencias, y se encuentra implementado, con requerimientos de mejoras. Se realiza la apertura de proyecto ( Reportes Power BI y automatización de consultas Geobis) para mejorar el acceso a la información requerida por Rogrigo Castañon."
-  //               },
-  //               {
-  //                 id: 1,
-  //                 projectName: "Proyecto 7000",
-  //                 date: "10/04/2021",
-  //                 impact: "Bloqueante",
-  //                 description: "Descripcion corta"
-  //               },
-  //             ]
-  //           },
-  //           {
-  //             type: "Mi proyecto es impactado por ...",
-  //             data: [
-  //               {
-  //                 id: 2,
-  //                 projectName: "Proyecto 1500",
-  //                 date: "10/04/2021",
-  //                 impact: "No Bloqueante",
-  //                 description: "Ejemplo de Descripción"
-  //               },
-  //             ]
-  //           },
-  //         ]
-  //       },
-  //       {
-  //         title: "Definición de Proceso",
-  //         total: 2,
-  //         data: [
-  //           {
-  //             type: "Mi proyecto afecta a ...",
-  //             data: []
-  //           },
-  //           {
-  //             type: "Mi proyecto es impactado por ...",
-  //             data: [
-  //               {
-  //                 id: 3,
-  //                 projectName: "Proyecto 5500",
-  //                 date: "12/04/2021",
-  //                 impact: "No Bloqueante",
-  //                 description: "Ejemplo de Descripción 2"
-  //               },
-  //             ]
-  //           },
-  //         ]
-  //       },
-  //     ]
-  //   }
-  // }
 
   constructor(
     public dialog: MatDialog, 
@@ -235,7 +123,6 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    environment.consoleMessage(changes, "Cambio        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
   }
 
   initialInfo() {
@@ -243,7 +130,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.actions == null){
       this.actions = new Actions();
     }
-    this.userID = JSON.parse(localStorage.user).id;
+    this.userID = JSON.parse(localStorage.user).person_id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
 
     this.mainService.showLoading();
@@ -260,8 +147,11 @@ export class ProjectDetailsComponent implements OnInit {
 
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
-          var mes = new Date(data.start_date).getMonth(); 
-          data.month = this.meses[mes].mes;
+          // var mes = new Date(data.start_date).getMonth();
+          // environment.consoleMessage(mes, "MES")
+          var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]);
+          
+          data.month = this.meses[mes-1].mes;
   
           if (data.advance_spected != null && data.advance_real != null) {
             data.deviation_indicator = Math.abs(data.advance_spected - data.advance_real)
@@ -285,11 +175,11 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
       data.goalsByWeeks.map((data: any) => {
-        data.date = this.getToStringDate(data.date);
+        data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
       data.nextActivitiesByWeek.map((data: any) => {
-        data.date = this.getToStringDate(data.date);
+        data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
       this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
@@ -297,8 +187,11 @@ export class ProjectDetailsComponent implements OnInit {
       );
 
       this.weeksByProject.map((data: any) =>{
-        var mes = new Date(data.start_date).getMonth(); 
-        var año = new Date(data.start_date).getFullYear();
+        // var mes = new Date(data.start_date).getMonth();
+        var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]) - 1;
+        // environment.consoleMessage(mes, "MEEEEEEEEEEEEEEEES <<<<<<<<<<<<<");
+        var año = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[0]);
+        // var año = new Date(data.start_date).getFullYear();
         data.month = this.meses[mes].mes;
         data.year = año;
 
@@ -315,7 +208,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.weekId = this.weeksByProject.length-1;
       
       this.project = data.project;
-      console.log("Datos Proyecto",this.project);
+      // console.log("Datos Proyecto",this.project);
 
       //Aplicaciones Impactadas
       this.applicationsByProject = data.applicationsByProject.filter((apps: ApplicationByProject) => 
@@ -610,7 +503,7 @@ export class ProjectDetailsComponent implements OnInit {
   onWeek(){
     const dialogRef = this.dialog.open(WeekFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         idProject: this.project.id,
         mode: 'create',
@@ -621,6 +514,28 @@ export class ProjectDetailsComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  onWeeekEdit(id: number) {
+    const dialogRef = this.dialog.open(WeekFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true,
+      data: {   
+        idProject: this.project.id,
+        idWeek: id,
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          window.location.reload();
         }
       }
     );
@@ -649,7 +564,7 @@ export class ProjectDetailsComponent implements OnInit {
   onDesviationEdit(id: number){
     const dialogRef = this.dialog.open(DesviationCausesFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         idProject: this.project.id,
         idCausal: id, 
@@ -724,6 +639,29 @@ export class ProjectDetailsComponent implements OnInit {
         if (data == 'close'){
           dialogRef.close();
           window.location.reload();
+        }
+      }
+    );
+  }
+
+  onOperationResources(project_id: number) {
+    this.router.navigate([`/operation-resources/${project_id}`]);
+  }
+  
+  onPhaseManagements(id: number) {
+    const dialogRef = this.dialog.open(PhaseManagementComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true,
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
         }
       }
     );

@@ -117,13 +117,13 @@ export class ProjectsFormComponent implements OnInit {
   isButtonReset: boolean = false;
   fButtonDisabled: boolean = false;
 
-  benefits: string[] = [];
+  benefits: any[] = [];
   benefitsObjects: Benefit[] = [];
-  highlights: string[] = [];
+  highlights: any[] = [];
   highlightsObjects: Highlight[] = [];
-  risks: string[] = [];
+  risks: any[] = [];
   risksObjects: Risk[] = [];
-  kpis: string[] = [];
+  kpis: any[] = [];
   kpisObjects: Kpi[] = [];
   applications: Application[] = [];
   applicationsObjects: ApplicationByProject[] = [];
@@ -240,7 +240,7 @@ export class ProjectsFormComponent implements OnInit {
 
         startDate: `Fecha de Inicio`,
         dueDate: `Fecha Final Estimada`,
-        controlDate: `Fecha control de cambios`,
+        controlDate: `Fecha Fin según control de cambios`,
         states: `Estado`,
         phases: `Fase`,
         sprint: `Sprint`,
@@ -403,8 +403,16 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Benefit[]) =>
       {
         this.benefitsObjects = data.filter(benefit => benefit.project!.id == id);
-        true;//environment.consoleMessage(this.benefitsObjects, "beneficios " );
-        this.benefits = this.benefitsObjects.map(benefit => benefit.description);
+        // this.benefits = this.benefitsObjects.map(benefit => benefit.description);
+        for (let index = 0; index < this.benefitsObjects.length; index++) {
+          let reg = {
+            id: this.benefitsObjects[index].id,
+            description: this.benefitsObjects[index].description,
+          }
+          this.benefits.push(reg);
+        }
+        // this.benefits = this.benefitsObjects;
+        // environment.consoleMessage(this.benefits, "BENEFICIOS <<<<<<<<<<<<<<");
       }
     );
 
@@ -412,8 +420,15 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Highlight[]) =>
       {
         this.highlightsObjects = data.filter(highlight => highlight.project!.id == id);
-        true;//environment.consoleMessage(this.highlightsObjects, "hitos " );
-        this.highlights = this.highlightsObjects.map(highlight => highlight.description);
+        for (let index = 0; index < this.highlightsObjects.length; index++) {
+          let reg = {
+            id: this.highlightsObjects[index].id,
+            description: this.highlightsObjects[index].description,
+          }
+          this.highlights.push(reg);
+        }
+        // this.highlights = this.highlightsObjects.map(highlight => highlight.description);
+        // this.highlights = this.highlightsObjects;
       }
     );
 
@@ -421,8 +436,15 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Risk[]) =>
       {
         this.risksObjects = data.filter(risk => risk.project!.id == id);
-        true;//environment.consoleMessage(this.risksObjects, "riesgos " );
-        this.risks = this.risksObjects.map(risk => risk.description);
+        for (let index = 0; index < this.risksObjects.length; index++) {
+          let reg = {
+            id: this.risksObjects[index].id,
+            description: this.risksObjects[index].description,
+          }
+          this.risks.push(reg);
+        }
+        // this.risks = this.risksObjects.map(risk => risk.description);
+        // this.risks = this.risksObjects;
       }
     );
 
@@ -430,8 +452,15 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Kpi[]) =>
       {
         this.kpisObjects = data.filter(kpi => kpi.project!.id == id);
-        true;//environment.consoleMessage(this.risksObjects, "kpis " );
-        this.kpis = this.kpisObjects.map(kpi => kpi.description);
+        for (let index = 0; index < this.kpisObjects.length; index++) {
+          let reg = {
+            id: this.kpisObjects[index].id,
+            description: this.kpisObjects[index].description,
+          }
+          this.kpis.push(reg);
+        }
+        // this.kpis = this.kpisObjects.map(kpi => kpi.description);
+        // this.kpis = this.kpisObjects;
       }
     );
 
@@ -477,50 +506,52 @@ export class ProjectsFormComponent implements OnInit {
 
   }
 
-  onBenefits(benefits: string[]): any{
-    true;//environment.consoleMessage(this.data.mode, "mode ")
+  onBenefits(benefits: any[]): any{
     if (this.data.mode == 'create'){
       this.benefits = benefits;
-      true;//environment.consoleMessage(this.benefits, "beneficios padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(benefits.length > this.benefitsObjects.length){
         this.benefits = benefits;
         var benefit: Benefit = {
           project_id: this.project.id,
-          description: this.benefits[benefits.length - 1],
+          description: this.benefits[benefits.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._benefitsService.addBenefit(benefit).
-        subscribe(data =>
-          {
-            true;//environment.consoleMessage(data, "objeto beneficio");
-            this.benefitsObjects.push(data)
-            this.openSnackBar(true, "Beneficio creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.benefitsObjects, "benefitsObjects");
-          }
+        subscribe(data =>{
+          this.benefitsObjects.push(data)
+          this.benefits[this.benefits.length-1].id = data.id;
+          this.openSnackBar(true, "Beneficio creado satisfactoriamente", "");
+        }, (err) => {
+          this.benefits.pop();
+          this.openSnackBar(false, "La descripción ya existe", "");
+        }
         );
       }
-      //agregación
+      //eliminado
       else if(benefits.length < this.benefitsObjects.length){
         for (let index = 0; index < this.benefitsObjects.length; index++) {
-          if(!this.benefits.includes(this.benefitsObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.benefits.length; index2++) {
+            if(this.benefits[index2].id == this.benefitsObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var benefit: Benefit = this.benefitsObjects[index];
             if(benefit.id == undefined){
               benefit.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._benefitsService.deleteBenefit(benefit!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "Beneficio eliminando", "");
-                  this.benefitsObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Beneficio eliminando", "");
+                this.benefitsObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -528,8 +559,6 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   onHighlights(highlights: string[]): any{
-
-    true;//environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.highlights = highlights;
       true;//environment.consoleMessage(this.highlights, "hitos padre")
@@ -539,39 +568,44 @@ export class ProjectsFormComponent implements OnInit {
         this.highlights = highlights;
         var highlight: Highlight = {
           project_id: this.project.id,
-          description: this.highlights[highlights.length - 1],
+          description: this.highlights[highlights.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._highlightsService.addHighlight(highlight).
         subscribe(data =>
           {
-            true;//environment.consoleMessage(data, "objeto hito");
             this.highlightsObjects.push(data)
+            this.highlights[this.highlights.length-1].id = data.id;
             this.openSnackBar(true, "Hito creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.highlightsObjects, "highlightsObjects");
+          }, (err) => {
+            this.highlights.pop();
+            this.openSnackBar(false, "La descripción ya existe", "");
           }
         );
       }
-      //agregación
+      //eliminado
       else if(highlights.length < this.highlightsObjects.length){
         for (let index = 0; index < this.highlightsObjects.length; index++) {
-          if(!this.highlights.includes(this.highlightsObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.highlights.length; index2++) {
+            if(this.highlights[index2].id == this.highlightsObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var highlight: Highlight = this.highlightsObjects[index];
             if(highlight.id == undefined){
               highlight.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._highlightsService.deleteHighlight(highlight!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "Hilto eliminando", "");
-                  this.highlightsObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Hito eliminando", "");
+                this.highlightsObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -579,9 +613,6 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   onRisks(risks: string[]): any{
-
-
-    true;//environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.risks = risks;
       true;//environment.consoleMessage(this.risks, "riesgos padre")
@@ -591,39 +622,44 @@ export class ProjectsFormComponent implements OnInit {
         this.risks = risks;
         var risk: Risk = {
           project_id: this.project.id,
-          description: this.risks[risks.length - 1],
+          description: this.risks[risks.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._risksService.addRisk(risk).
         subscribe(data =>
           {
-            true;//environment.consoleMessage(data, "objeto risk");
             this.risksObjects.push(data)
+            this.risks[this.risks.length-1].id = data.id;
             this.openSnackBar(true, "Riesgo creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.risksObjects, "risksObjects");
+          }, (err) => {
+            this.risks.pop();
+            this.openSnackBar(false, "La descripción ya existe", "");
           }
         );
       }
-      //agregación
+      //eliminado
       else if(risks.length < this.risksObjects.length){
         for (let index = 0; index < this.risksObjects.length; index++) {
-          if(!this.risks.includes(this.risksObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.risks.length; index2++) {
+            if(this.risks[index2].id == this.risksObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var risk: Risk = this.risksObjects[index];
             if(risk.id == undefined){
               risk.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._risksService.deleteRisk(risk!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "Riesgo eliminando", "");
-                  this.risksObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Riesgo eliminando", "");
+                this.risksObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -631,52 +667,52 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   onKpis(kpis: string[]): any{
-
-
-
-    true;//environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.kpis = kpis;
-      true;//environment.consoleMessage(this.kpis, "kpis padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(kpis.length > this.kpisObjects.length){
         this.kpis = kpis;
         var kpi: Kpi = {
           project_id: this.project.id,
-          description: this.kpis[kpis.length - 1],
+          description: this.kpis[kpis.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._kpisService.addKpi(kpi).
         subscribe(data =>
           {
-            true;//environment.consoleMessage(data, "objeto kpi");
             this.kpisObjects.push(data)
+            this.kpis[this.kpis.length-1].id = data.id;
             this.openSnackBar(true, "KPI creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.kpisObjects, "kpisObjects");
+          }, (err) => {
+            this.kpis.pop();
+            this.openSnackBar(false, "La descripción ya existe", "");
           }
         );
       }
       //eliminacion
       else if(kpis.length < this.kpisObjects.length){
         for (let index = 0; index < this.kpisObjects.length; index++) {
-          if(!this.kpis.includes(this.kpisObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.kpis.length; index2++) {
+            if(this.kpis[index2].id == this.kpisObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var kpi: Kpi = this.kpisObjects[index];
             if(kpi.id == undefined){
               kpi.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._kpisService.deleteKpi(kpi!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "KPI eliminando", "");
-                  this.kpisObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Kpi eliminando", "");
+                this.kpisObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -1306,7 +1342,6 @@ export class ProjectsFormComponent implements OnInit {
         
         this.fButtonDisabled = true;
         await this._projectsService.addProjects(project).subscribe((res) => {
-          true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
           this.fButtonDisabled = false;
           if (res.status == 'created') {
             this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -1315,8 +1350,8 @@ export class ProjectsFormComponent implements OnInit {
               benefits: [],
               highlights: [],
               risks: [],
-              applications_by_projects: [],
               kpis: [],
+              applications_by_projects: [],
               areas_by_projects: [],
               test_users: [],
               companies_by_projects: [],
@@ -1324,7 +1359,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.benefits.length; index++) {
               var benefit: Benefit = {
                 project_id: id,
-                description: this.benefits[index],
+                description: this.benefits[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.benefits?.push(benefit);
@@ -1333,7 +1368,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.highlights.length; index++) {
               var highlight: Highlight = {
                 project_id: id,
-                description: this.highlights[index],
+                description: this.highlights[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.highlights?.push(highlight);
@@ -1342,7 +1377,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.risks.length; index++) {
               var risk: Risk = {
                 project_id: id,
-                description: this.risks[index],
+                description: this.risks[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.risks?.push(risk);
@@ -1351,7 +1386,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.kpis.length; index++) {
               var kpi: Kpi = {
                 project_id: id,
-                description: this.kpis[index],
+                description: this.kpis[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.kpis?.push(kpi);

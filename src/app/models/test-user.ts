@@ -1,3 +1,4 @@
+import { OperationFront } from "./operation-front";
 import { Person } from "./person";
 import { Project } from "./project";
 import { User } from "./user";
@@ -8,6 +9,8 @@ export class TestUser {
     person?: Person;
     project_id?: number;
     project?: Project;
+    operation_front_id?: number;
+    operation_front?: OperationFront;
     is_active?: boolean;
     is_delete?: boolean;
     user_updates_id?: number;
