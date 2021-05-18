@@ -1,0 +1,38 @@
+//Grafico Completo
+::ng-deep .legend-item .ng-star-inserted {
+    display: contents;
+    justify-content: center;
+}
+
+//Calidad
+::ng-deep .total-label {
+    padding-top: 15px;
+    font-weight: 500;
+    height: 40px;
+    //text-align: center;   
+}
+
+//100
+::ng-deep .total-value .ng-star-inserted {
+    display: none !important;
+    visibility: hidden !important;
+ }
+
+::ng-deep .item-value .ng-star-inserted { }
+
+//Contenedores gráfico dona
+::ng-deep .arc-group { 
+    width: 100px !important;
+}
+
+::ng-dee .advanced-pie .chart { 
+    width: 500px !important;
+}
+
+.graph-content{
+    width: 100%;
+}
+
+::ng-dee .advanced-pie-legend{
+    padding-left: 100px !important;
+}

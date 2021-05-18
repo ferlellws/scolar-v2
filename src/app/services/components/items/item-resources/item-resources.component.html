@@ -1,0 +1,77 @@
+<mat-grid-list cols="6" rowHeight="100px">
+    <!--<mat-grid-tile  [colspan]="5" [rowspan]="1">
+        <form [formGroup]="resourceOptions">
+            <mat-form-field class="field-full ml-5 mr-5"
+            [hideRequiredMarker]="hideRequiredControl.value"
+            [floatLabel]="floatLabelControl.value">
+              <input type="text"
+                     placeholder="Pick one"
+                     aria-label="Number"
+                     matInput
+                     formControlName="resourceControl"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" value="{{option.firstname}} {{option.lastname}}">
+                  {{option.firstname}} {{option.lastname}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+    </mat-grid-tile>-->
+    <mat-grid-tile  [colspan]="5" [rowspan]="1">
+        <form style="width: 80%;" [formGroup]="resourceOptions">
+            <mat-form-field style="width: 100%;" class="field-full ml-5 mr-5"
+            [hideRequiredMarker]="hideRequiredControl.value"
+            [floatLabel]="floatLabelControl.value">
+                <mat-select  required (openedChange)="_openUsers($event)" formControlName="resourceControl"  [disabled]="deshabilitado">
+                    <mat-option  *ngFor="let option of options" [value]="option.id">{{option.firstname}} {{option.lastname}}</mat-option>
+                </mat-select>
+                <mat-label>Recurso</mat-label>
+            </mat-form-field>
+        </form>
+    </mat-grid-tile>
+
+    <mat-grid-tile  [colspan]="1" [rowspan]="1" >
+        <button style="width: 100%;" mat-button (click)="addResource()" [disabled]="deshabilitado">
+            <mat-icon>person_add</mat-icon>&nbsp;Añadir Recurso
+        </button>
+    </mat-grid-tile>
+</mat-grid-list>
+
+
+<mat-grid-list cols="11" rowHeight="50px">
+  <mat-grid-tile class="txt-left" [colspan]="6" [rowspan]="1">
+    <span style="color: #666; font-weight: bolder;">Recurso </span>
+  </mat-grid-tile>
+  <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+    <span></span>
+  </mat-grid-tile>
+  <mat-grid-tile  class="txt-left" [colspan]="2" [rowspan]="1">
+      <span style="color: #666; font-weight: bolder;">Email</span>
+  </mat-grid-tile>
+  <mat-grid-tile class="txt-left" [colspan]="1" [rowspan]="1">
+
+  </mat-grid-tile>
+
+  <mat-divider></mat-divider>
+</mat-grid-list>
+
+<mat-grid-list cols="11" rowHeight="50px" *ngFor="let resource of resources" >
+  <mat-grid-tile class="txt-left" [colspan]="6" [rowspan]="1">
+      <tecno-perfil-circle *ngIf="getUser(resource.sysuser_id)" [user]="getUser(resource.sysuser_id)"></tecno-perfil-circle>
+      <span>{{getUser(resource.sysuser_id)?.firstname}} {{getUser(resource.sysuser_id)?.lastname}}</span>
+  </mat-grid-tile>
+  <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+      <span style="color: #666">{{getUser(resource.sysuser_id)?.login_name}} </span>
+  </mat-grid-tile>
+  <mat-grid-tile  class="txt-left" [colspan]="2" [rowspan]="1">
+      <span style="color: #666">{{getUser(resource.sysuser_id)?.email}}</span>
+  </mat-grid-tile>
+  <mat-grid-tile class="txt-left" [colspan]="1" [rowspan]="1">
+      <button mat-button (click)="deleteResource(resource.id)">
+          <mat-icon>person_remove</mat-icon>
+      </button>
+  </mat-grid-tile>
+
+  <mat-divider></mat-divider>
+</mat-grid-list>

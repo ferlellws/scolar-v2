@@ -1,0 +1,41 @@
+<!-- <tecno-line-chart></tecno-line-chart> -->
+<mat-grid-list cols="1" rowHeight="550px">
+    <mat-grid-tile style="overflow-x: auto;">
+      <div #containerRef class="graph-content">
+        
+        <h2 class="mat-title" style="text-align: center;">Comportamiento Oportunidad de Gestión</h2>
+
+        <tecno-buttons-filter-graphs
+          [buttons]="buttons"
+          [flagShowDateForm]="true"
+          (onFilterButtonEvent)="onFilterButtonEvent($event, 'graph1')"
+          (onFilterDateEvent)="onFilterDateEvent($event, 'graph1')">
+        </tecno-buttons-filter-graphs>
+  
+        <ngx-charts-line-chart
+          [view]="[containerRef.offsetWidth, 250]"
+          [scheme]="colorScheme.chart1"
+          [legend]="chartOptions.chart1.legend"
+          [legendPosition]="chartOptions.chart1.legendPosition"
+          [legendTitle]="chartOptions.chart1.legendTitle"
+          [showXAxisLabel]="chartOptions.chart1.showXAxisLabel"
+          [showYAxisLabel]="chartOptions.chart1.showYAxisLabel"
+          [xAxis]="chartOptions.chart1.xAxis"
+          [yAxis]="chartOptions.chart1.yAxis"
+          [xAxisLabel]="chartOptions.chart1.xAxisLabel"
+          [yAxisLabel]="chartOptions.chart1.yAxisLabel"
+          [timeline]="chartOptions.chart1.timeline"
+          [results]="multi_chart1"
+          [autoScale]="true"
+          [timeline]="false"
+          [showRefLines]="true"
+          [roundDomains]="true"
+          (select)="onSelect($event)"
+          (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)">
+        </ngx-charts-line-chart>
+        
+      </div>
+    </mat-grid-tile>
+  
+</mat-grid-list>  

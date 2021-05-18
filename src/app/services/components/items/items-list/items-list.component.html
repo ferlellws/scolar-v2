@@ -1,0 +1,79 @@
+<mat-chip-list aria-label="Totales requerimientos" class="d-block mb-10">
+  <mat-chip color="accent" value="3" [selected]="totalItems > 0"><strong>Total requerimientos: </strong>&nbsp;{{ totalItems }}</mat-chip>
+</mat-chip-list>
+
+<mat-accordion class="example-headers-align" >
+  <mat-expansion-panel *ngFor="let item of itemsProject; let i = index" class="animate__animated animate__backInLeft">
+    <mat-expansion-panel-header>
+      <mat-panel-title >
+        <span class="mr-15 mat-body-2">{{ item.id }} </span>
+        <span>{{ item.title }}</span>
+      </mat-panel-title>
+      <mat-panel-description>
+        <!-- HORAS TOTALES TRABAJADAS -->
+        <span class="mat-caption">Horas Trabajadas: <b>{{ item.worked_time.hours }}h {{ item.worked_time.minutes }}m</b></span>
+        <!-- HORAS TOTALES ESTIMADAS -->
+        <span class="mat-caption">Horas Estimadas: <b>{{ item.estimated_time.hours }}h {{ item.estimated_time.minutes }}m</b></span>
+
+        <mat-icon class="txt-{{getColor(item.item_type_id)}}">{{getIcon(item.item_type_id)}}</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <mat-tab-group >
+        <mat-tab *ngIf="getAutorization(item.id)" label="Modificar">
+          <div class="example-button-row mb-20" style="padding-top: 20px;">
+            <button mat-raised-button color="warn" (click)="onDeleteItem(item.id)">Eliminar</button>
+          </div>
+          <div class="example-container bg-color-white">
+            <tecno-items-form [item]="item" [labelAction]="labelAction" [project]="project" [mode]="'modify'" [showBtnClose]="false"></tecno-items-form>
+          </div>
+        </mat-tab>
+        <mat-tab *ngIf="getAutorization(item.id)" label="Recursos">
+          <div class="example-container bg-color-white">
+            <tecno-item-resources [project]="project" [item]="item"></tecno-item-resources>
+          </div>
+        </mat-tab>
+        <mat-tab label="Tiempos">
+          <div class="example-container bg-color-white">
+            <tecno-item-time-list [project]="project" [item]="item"></tecno-item-time-list>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </ng-template>
+  </mat-expansion-panel>
+
+  <!-- <mat-expansion-panel disabled>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Destination
+      </mat-panel-title>
+      <mat-panel-description>
+        Type the country name
+        <mat-icon>map</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <mat-label>Country</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </mat-expansion-panel> -->
+
+  <!-- <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Day of the trip
+      </mat-panel-title>
+      <mat-panel-description>
+        Inform the date you wish to travel
+        <mat-icon>date_range</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" (focus)="picker.open()" readonly>
+    </mat-form-field>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-expansion-panel> -->
+</mat-accordion>

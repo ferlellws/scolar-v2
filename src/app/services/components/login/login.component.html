@@ -1,0 +1,41 @@
+<div class="general-container">
+    <div class="cards-container">
+        <div class="left-card-container bg-primary">
+          <img src="../../../assets/images/login-photo.jpg" height="100%" alt="Photo of a Shiba Inu">
+        </div>
+        <div class="right-card-container">
+            <div class="text-center">
+                <img src="../../../assets/images/logo_tecno_project.png" height="100" alt="tecnoproject">
+            </div>
+            <div class="body-right-card-container">
+                <form class="form" [formGroup]="logInGroup">
+
+                        <mat-form-field class="form-item">
+                            <mat-label >Correo</mat-label>
+                            <input  matInput formControlName="emailControl" type="email" email="true">
+                            <mat-hint >Direccion de Correo</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field class="form-item" >
+                            <mat-label >Contraseña</mat-label>
+                            <input matInput (keydown.enter)="logIn()" formControlName="passControl" [type]="true ? 'password' : 'text'" >
+                            <mat-hint >Contraseña</mat-hint>
+                        </mat-form-field>
+
+                </form>
+                <span *ngIf="errorFlag == true " style="color: #F44336;">Usuario y/o contraseña incorrecta</span>
+            </div>
+            <div class="footer-right-card-container">
+                <button mat-flat-button
+                class="button"
+                color="accent"
+                (click)="logIn()">
+                    Entrar
+                </button>
+                <div class="links">
+                    <span>Olvidé mi contraseña</span>
+                    <span>Registrarme</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

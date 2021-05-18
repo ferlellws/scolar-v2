@@ -1,0 +1,33 @@
+<mat-chip-list aria-label="Totales requerimientos" class="d-block mb-10">
+  <mat-chip color="accent" [selected]="totalItems > 0"><strong>Total requerimientos temporales: </strong>&nbsp;{{ totalItems }}</mat-chip>
+</mat-chip-list>
+
+<mat-accordion class="example-headers-align">
+  <mat-expansion-panel *ngFor="let temporalItem of temporalItems; let i = index" cdkDrag class="animate__animated animate__backInLeft">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ temporalItem.title }}
+      </mat-panel-title>
+
+      <mat-panel-description>
+        <span></span>
+        <mat-icon class="mr-20" class="txt-{{temporalItem.item_type.color}}">{{temporalItem.iconName}}</mat-icon>
+      </mat-panel-description>
+
+    </mat-expansion-panel-header>
+
+    <div class="example-button-row mb-20">
+      <button mat-raised-button color="warn" (click)="onDeleteItem(temporalItem.id)">Eliminar</button>
+    </div>
+
+    <div class="example-container bg-color-white">
+      <tecno-items-form  [item]="temporalItem"
+        [labelAction]="labelAction"
+        [project]="project"
+        [mode]="'tempToItem'"
+        [showBtnClose]="false"></tecno-items-form>
+    </div>
+
+  </mat-expansion-panel>
+
+</mat-accordion>

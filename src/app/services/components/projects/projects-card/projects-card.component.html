@@ -1,0 +1,33 @@
+<mat-card class="bg-{{ bgColor }} txt-white card-container card-link" color="accent">
+  <!-- <mat-card-header> -->
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
+    <!-- <mat-card-title></mat-card-title>
+    <mat-card-subtitle class="txt-white">Proyecto para pedidos CEDI</mat-card-subtitle>
+  </mat-card-header> -->
+  <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+  <mat-card-content [routerLink]="['/items', id]">
+    <h2 class="mat-title txt-white">{{ projectName }}</h2>
+    <p class="mat-body-1">
+      {{ projectDescription }}
+    </p>
+  </mat-card-content>
+  <mat-card-actions class="actions-container">
+    <span class="caption">{{firstname}} {{lastname}}</span>
+    <div class="profile-container">
+      <div class="btn-profile" [matMenuTriggerFor]="options">
+        <mat-icon>more_vert</mat-icon>
+      </div>
+      <mat-menu #options="matMenu" xPosition ="before">
+        <button mat-menu-item (click)="openDialog()">
+          <mat-icon>create</mat-icon>
+          <span>Editar / Edit</span>
+        </button>
+        <button mat-menu-item (click)="openDialogDelete()">
+          <mat-icon>delete</mat-icon>
+          <span>Eliminar / Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-card-actions>
+</mat-card>
+

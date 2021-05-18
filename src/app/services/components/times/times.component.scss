@@ -1,0 +1,41 @@
+.container-general {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+.container-list {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 440px);
+    overflow-y: auto;
+}
+.container-message {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 100%;
+    align-items: center;
+    justify-items: center;
+}
+mat-divider {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    border-width: 1px;
+}
+.text-inside-grid {
+    position: absolute;
+    left: 5px;
+}
+mat-table {
+    background-color: yellow;
+    width: 100%;
+}
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 97%;
+    margin-bottom: 10px;
+}

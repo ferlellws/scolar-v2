@@ -1,0 +1,73 @@
+<mat-grid-list cols="12" rowHeight="50px" *ngIf="!flagCrear">
+    <mat-grid-tile class="txt-right" [colspan]="12" [rowspan]="1">
+    <button mat-button (click)="flagCrear = !flagCrear" >
+        <mat-icon>add</mat-icon>&nbsp;Añadir Tiempo
+    </button>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<tecno-item-time-form-basic *ngIf="flagCrear" [flagEditar]="flagEditar" [itemTime]="itemTime" [isMultipleResource]="isMultipleResource" [lead_id]="lead_id" [reported_by_id]="item.reported_by_id" [itemId]="item.id" [flagCrear]="flagCrear" (emitFlagCrearTime)="onEmitFlagCrearTime($event)">
+</tecno-item-time-form-basic>
+
+    <mat-grid-list style="font-weight: bold;" cols="16" rowHeight="50px" >
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>Usuario</span>
+        </mat-grid-tile>
+        <mat-divider></mat-divider>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>Tipo</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="4" [rowspan]="1">
+            <span>Descripción</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>Fecha</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>Horas</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>Minutos</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="1" [rowspan]="1">
+            <span>Editar</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="1" [rowspan]="1">
+            <span>Eliminar</span>
+        </mat-grid-tile>
+        <mat-divider></mat-divider>
+    </mat-grid-list>
+    <mat-grid-list cols="16" rowHeight="50px" *ngFor="let itemTime of itemTimes">
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>{{getNameUser(itemTime.user_creates_id)}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>{{getNameType(itemTime.time_type_id)}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="4" [rowspan]="1">
+            <span>{{itemTime.description}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>{{itemTime.date_work}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>{{itemTime.hours}}</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="2" [rowspan]="1">
+            <span>{{itemTime.minutes}}</span>
+            <span *ngIf="itemTime.minutes == null || itemTime.minutes == ''">0</span>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="1" [rowspan]="1">
+            <button mat-button (click)="edit(itemTime)">
+                <mat-icon>create</mat-icon>
+            </button>
+        </mat-grid-tile>
+        <mat-grid-tile class="txt-left" [colspan]="1" [rowspan]="1">
+            <button mat-button (click)="delete(itemTime.id)">
+                <mat-icon>delete_outline</mat-icon>
+            </button>
+        </mat-grid-tile>
+        <mat-divider></mat-divider>
+    </mat-grid-list>
+
+   

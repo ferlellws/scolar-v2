@@ -1,0 +1,36 @@
+<mat-grid-list
+  cols="3"
+  rowHeight="110px">
+    <mat-grid-tile
+      class="txt-right"
+      [colspan]="1"
+      [rowspan]="1"
+      *ngFor="let indicatorProject of indicatorsProjects">
+        <mat-card
+          class="card-indicator"
+          [ngStyle]="{
+            'border-color': indicatorProject.borderColor,
+            'background': '' + indicatorProject.bgColor + ''
+          }"
+          (click)="onClick(indicatorProject.projectId, indicatorProject.mode, developerCompanyId)">
+            <mat-card-header>
+              <mat-card-title>
+                <span>{{ indicatorProject.name }}</span>
+                <span>{{ indicatorProject.value }}</span>
+              </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+              <mat-progress-bar color="accent" mode="determinate" value="{{ indicatorProject.progressPercentage }}"></mat-progress-bar>
+            </mat-card-content>
+        </mat-card>
+
+    </mat-grid-tile>
+
+    <mat-grid-tile
+      class="txt-right"
+      [colspan]="3"
+      [rowspan]="3">
+        <tecno-chart [data]="chartData" [colorScheme]="colorScheme" ></tecno-chart>
+    </mat-grid-tile>
+</mat-grid-list>

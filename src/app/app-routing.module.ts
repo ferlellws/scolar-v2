@@ -321,6 +321,7 @@ const routes: Routes = [
       projectProgressCreateResolver: ProjectProgressCreateResolver
     }
   },
+  { path: 'gantt', loadChildren: () => import('./components/gantt/gantt.module').then(m => m.GanttModule) },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];
 

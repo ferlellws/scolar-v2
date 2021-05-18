@@ -1,0 +1,27 @@
+<h2 class="mat-title">Proyectos</h2>
+<mat-divider></mat-divider>
+<div class="cards-container mt-15">
+  <tecno-projects-card *ngFor="let project of projects"  class="card"
+    [id]="project.id"
+    [bgColor]="project.color"
+    [projectName]="project.title"
+    [projectDescription]="project.description"
+    [userReporter]="project.lead_id"
+    [company_id]="project.company_id"
+    [code]="project.code"
+    [is_active]="project.is_active"
+    [is_multiple_components]="project.is_multiple_components"
+    [is_multiple_resources]="project.is_multiple_resources"
+    [project_category_id]="project.project_category_id"
+    [template_id]="project.template_id"
+
+  ></tecno-projects-card>
+</div>
+
+<!-- <button mat-fab color="accent" aria-label="Nuevo registro" [routerLink]="['/items/new']" class="btn-new">
+  <mat-icon>add</mat-icon>
+</button> -->
+
+<button mat-fab color="accent" aria-label="Nuevo registro" (click)="openDialog()" class="btn-new">
+  <mat-icon>add</mat-icon>
+</button>

@@ -1,0 +1,14 @@
+.card-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 10px;
+}
+
+.actions-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 0;
+    width: 100%;
+}

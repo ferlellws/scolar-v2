@@ -1,0 +1,28 @@
+<div #containerRef class="general-container" style="overflow-x: auto;" >
+    <h2 class="mat-title" style="text-align: center;">% req por aplicación</h2>
+    
+    <tecno-buttons-filter-graphs
+        [buttons]="buttons"
+        [flagShowDateForm]="true"
+        (onFilterButtonEvent)="onFilterButtonEvent($event, 'graph1')"
+        (onFilterDateEvent)="onFilterDateEvent($event, 'graph1')">
+    </tecno-buttons-filter-graphs>
+
+    <ngx-charts-pie-chart 
+        [view]="[containerRef.offsetWidth, 300]"
+        [results]="chartData"
+        [scheme]="colorScheme"
+        [legend]="false"
+        [legendTitle]="'Componente'" 
+        [legendPosition]="null"
+        [labels]="false"
+        [doughnut]="false"
+        [maxLabelLength] ="20"
+        [doughnut] = "true">
+    </ngx-charts-pie-chart>
+    
+    <tecno-chart-label
+        [results]="chartData"
+        [scheme]="colorScheme">
+    </tecno-chart-label>
+</div>

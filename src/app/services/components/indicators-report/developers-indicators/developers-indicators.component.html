@@ -1,0 +1,19 @@
+<mat-accordion class="example-headers-align" multi>
+    <mat-expansion-panel *ngFor="let developer of developers" >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <tecno-perfil-circle [user]="developer" size="30"></tecno-perfil-circle> {{developer.firstname}} {{developer.lastname}}
+        </mat-panel-title>
+        <mat-panel-description >
+            {{developer.email}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <tecno-developer-detail
+        [devId]="developer.id"
+        ></tecno-developer-detail>
+      </ng-template>
+
+    </mat-expansion-panel>
+</mat-accordion>

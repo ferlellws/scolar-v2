@@ -1,0 +1,92 @@
+<h2>Tiempos/</h2>
+<h1>Tiempos</h1>
+<div class="buttons">
+  <button mat-mini-fab color="accent" aria-label="Descargar archivo Excel" (click)="download()">
+    <mat-icon>get_app</mat-icon>
+  </button>
+</div>
+
+<div class="container-general">
+  <tecno-times-filter></tecno-times-filter>
+
+  <div *ngIf="lleno()" class="container-list m-10 mat-elevation-z8" style="color: white;">
+    <table mat-table [dataSource]="dataSource">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- UserId Column -->
+      <ng-container matColumnDef="user_id">
+        <th mat-header-cell *matHeaderCellDef style="width: 120px;"> Id Usuario </th>
+        <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.user_creates.id }} </td>
+      </ng-container>
+
+      <!-- UserCreates Column -->
+      <ng-container matColumnDef="user_creates_name">
+          <th mat-header-cell *matHeaderCellDef style="width: 300px;"> Usuario </th>
+          <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.user_creates.firstname }} {{ element.user_creates.lastname }} </td>
+      </ng-container>
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="time_type">
+        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+        <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.time_type.title }} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef style="width: 400px;"> Tarea </th>
+        <td mat-cell *matCellDef="let element" class="pr-20"> {{element.description}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="date_work">
+        <th mat-header-cell *matHeaderCellDef style="width: 120px;"> Fecha Trabajada </th>
+        <td mat-cell *matCellDef="let element" class="pr-20"> {{element.date_work}} </td>
+      </ng-container>
+
+      <!-- Time Column -->
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef style="width: 150px;"> Tiempo </th>
+        <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.hours }}h {{ element.minutes }}m </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="project_title">
+          <th mat-header-cell *matHeaderCellDef style="width: 150px;"> Proyecto </th>
+          <td mat-cell *matCellDef="let element" class="pr-20"> {{element.project.title}} </td>
+      </ng-container>
+
+      <!-- ItemId Column -->
+      <ng-container matColumnDef="item_id">
+        <th mat-header-cell *matHeaderCellDef style="width: 500px;"> # Req </th>
+        <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.item.id }} </td>
+      </ng-container>
+
+      <!-- ItemTitle Column -->
+      <ng-container matColumnDef="item_title">
+          <th mat-header-cell *matHeaderCellDef style="width: 500px;"> Requerimiento </th>
+          <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.item.title }} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="user_updates_name">
+          <th mat-header-cell *matHeaderCellDef style="width: 300px;"> Actualización </th>
+          <td mat-cell *matCellDef="let element" class="pr-20"> {{ element.user_updates.firstname }} {{ element.user_updates.lastname }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
+      [length]="100"
+      [pageSize]="50"
+      showFirstLastButtons>
+    </mat-paginator>
+  </div>
+  <div  *ngIf="!lleno()" class="container-message">
+    <h1>No se encontraron registros</h1>
+  </div>
+
+</div>

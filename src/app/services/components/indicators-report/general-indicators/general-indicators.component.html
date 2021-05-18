@@ -1,0 +1,74 @@
+<h2 class="mat-title">Indicadores por Desarrollador</h2>
+
+<tecno-buttons-filter-graphs
+  [buttons]="buttons"
+  [flagShowDateForm]="true"
+  (onFilterButtonEvent)="onFilterButtonEvent($event, 'generalDevelopersIndicators')"
+  (onFilterDateEvent)="onFilterDateEvent($event, 'generalDevelopersIndicators')">
+</tecno-buttons-filter-graphs>
+
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="generalDevelopersIndicators">
+</tecno-dynamic-table>
+
+<tecno-pie-charts
+  [id]="'statesGeneral'"
+  [title]="'Porcentajes Estados Requerimientos'"
+  [dataTable]="percentagesDataPie"
+  [chartClass]="'content-center mt-30'"
+  [pieHole]=".6"
+  [width]="'1000px'">
+</tecno-pie-charts>
+
+<mat-divider class="mb-20"></mat-divider>
+
+<h2 class="mat-title">Indicadores de horas por desarrollador</h2>
+
+<tecno-buttons-filter-graphs
+  [buttons]="buttons"
+  [flagShowDateForm]="true"
+  (onFilterButtonEvent)="onFilterButtonEvent($event, 'generalIndicatorsHoursDevelopers')"
+  (onFilterDateEvent)="onFilterDateEvent($event, 'generalIndicatorsHoursDevelopers')">
+</tecno-buttons-filter-graphs>
+
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="generalIndicatorsHoursDevelopers">
+</tecno-dynamic-table>
+
+<tecno-column-charts
+  [id]="'generalHoursColumn'"
+  [title]="'Horas por desarrollador'"
+  [subtitle]="'Horas estimada - trabajadas'"
+  [dataTable]="data"
+  [chartClass]="'content-center'"
+  class="mt-50 d-block">
+</tecno-column-charts>
+
+<br>
+
+<mat-divider class="mb-20"></mat-divider>
+
+<h2 class="mat-title">Indicadores de devoluciones</h2>
+
+<tecno-buttons-filter-graphs
+  [buttons]="buttons"
+  [flagShowDateForm]="true"
+  (onFilterButtonEvent)="onFilterButtonEvent($event, 'generalIndicatorsReturns')"
+  (onFilterDateEvent)="onFilterDateEvent($event, 'generalIndicatorsReturns')">
+</tecno-buttons-filter-graphs>
+
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="generalIndicatorsReturns">
+</tecno-dynamic-table>
+
+<tecno-pie-charts
+  [id]="'returnsGeneral'"
+  [title]="'Porcentajes Devoluciones'"
+  [dataTable]="returnsPieData"
+  [chartClass]="'content-center mt-30'"
+  [pieHole]=".6"
+  [width]="'1000px'">
+</tecno-pie-charts>

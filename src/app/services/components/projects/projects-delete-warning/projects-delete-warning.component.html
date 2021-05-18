@@ -1,0 +1,13 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+    <span>Eliminación</span>
+    <!-- &nbsp;<span class="mat-caption">(Koba)</span> -->
+</mat-toolbar>
+<mat-dialog-content align="center" class="mat-typography">
+  <p>
+    ¿Está seguro de que desea eliminar el proyecto {{projectName}}?
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="deleteProject()">Si</button>
+  <button mat-button mat-dialog-close >No</button>
+</mat-dialog-actions>

@@ -1,0 +1,39 @@
+<mat-progress-bar mode="indeterminate" *ngIf="flagProgressBar"></mat-progress-bar>
+
+<div class="example-action-buttons">
+  <button mat-button (click)="accordion.openAll()">Expandir Todo</button>
+  <button mat-button (click)="accordion.closeAll()">Contraer Todo</button>
+</div>
+<mat-accordion class="example-headers-align" multi>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Indicadores Generales
+      </mat-panel-title>
+      <mat-panel-description>
+        Indicadores generales importantes
+        <mat-icon>poll</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <tecno-general-indicators
+      [generalDevelopersIndicators]="generalDevelopersIndicators"
+      [generalIndicatorsHoursDevelopers]="generalIndicatorsHoursDevelopers"
+      [generalIndicatorsReturns]="generalIndicatorsReturns">
+    </tecno-general-indicators>
+  </mat-expansion-panel>
+  
+  <!-- <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Indicadores por usuario
+      </mat-panel-title>
+      <mat-panel-description>
+        Indicadores por usuario al detalle
+        <mat-icon>timeline</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <tecno-developers-indicators
+    [developers]="developers"></tecno-developers-indicators>
+  </mat-expansion-panel> -->
+</mat-accordion>
