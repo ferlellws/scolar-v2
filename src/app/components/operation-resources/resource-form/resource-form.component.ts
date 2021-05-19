@@ -72,6 +72,12 @@ export class ResourceFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    if(this.data.mode == "create") {
+      this.flagModeGeneral = "create";
+    }
+
+    this.idSupportResource = this.data.id;
+    
     this.resourcesGroup = this.fb.group({
       front: [null, Validators.required],
     });
@@ -79,8 +85,9 @@ export class ResourceFormComponent implements OnInit {
     await this.phaseByProjectsService.getPhaseByProjectId(this.data.project_id)
       .subscribe(data => {
         this.phases = data;
-        if(this.data.mode != "edit") {
+        if(this.data.mode == "edit") {
           this.generalPhase = this.phases;
+          this.flagModeGeneral = "edit"
         }
       });
     
@@ -149,6 +156,7 @@ export class ResourceFormComponent implements OnInit {
     );
     this.disablePhases = false;
     this.fButtonDisabled = false;
+    this.disablePerson = !this.disablePerson;
   }
 
   createRegister() {
@@ -165,15 +173,19 @@ export class ResourceFormComponent implements OnInit {
             this.idSupportResource = res.id;
             this.fButtonDisabled = !this.fButtonDisabled;
             this.disablePerson = !this.disablePerson;
+            this.flagModeGeneral = "edit";
             
             this.testUsersService.getTestUserById(res.id)
               .subscribe(res => {
                 this.supportResource = res;
                 this.idSupportResource = res.id;
-                this.generalPhase = this.resource_by_phases;
-                this.cargaProject = true;
+                this.resourceByPhasesService.getResourcesByProjectDataProjectByResource(this.data.project_id, this.idSupportResource)
+                  .subscribe(data => {
+                    this.generalPhase = data.data_by_resource;
+                    this.cargaProject = true;
+                    this.fButtonDisabled = false;
+                  });
               });
-
           }, (err) => {
             this.openSnackBar(false, "No se ha podido asignar un frente de operación", "");
           });        
@@ -190,6 +202,8 @@ export class ResourceFormComponent implements OnInit {
             this.idSupportResource = res.id;
             this.fButtonDisabled = !this.fButtonDisabled;
             this.disablePerson = !this.disablePerson;
+            this.flagModeGeneral = "edit";
+            this.fButtonDisabled = false;
           }, (err) => {
             this.openSnackBar(false, "No se ha podido asignar este recurso al proyecto", "");
           }); 
@@ -198,7 +212,9 @@ export class ResourceFormComponent implements OnInit {
         .subscribe(data => {
           this.generalPhase = data.data_by_resource;
           this.cargaProject = true;
+          this.flagModeGeneral = "edit";
         });
+      this.flagModeGeneral = "edit";
     } else{
       this.openSnackBar(false, "No existe un usuario creado con este nombre", "");
       this.fButtonDisabled = false;
@@ -223,7 +239,7 @@ export class ResourceFormComponent implements OnInit {
         project_id: Number(this.data.project_id),
       }
 
-      this.testUsersService.updateTestUsersId(editResource, this.data.id)
+      this.testUsersService.updateTestUsersId(editResource, this.idSupportResource)
       .subscribe(res => {
         if(res != null){
           this.openSnackBar(true, "Registro actualizado correctamente", "");

@@ -110,12 +110,16 @@
         <div class="row section-content">
             <span class="sections-page mat-title col-sm-12 col-md-12 txt-accent">Planeación, Ejecución y Control de Proyecto</span>
             <div>
-                <mat-card class="mat-elevation-z2 txt-primary">
-                    <span class="front-name" style="padding-left: 10px; padding-right: 90px; font-size: 18px;">Frentes de Operación</span>
-                    <span class="front-name" style="padding-right: 130px; font-size: 18px;">Recursos de Soporte</span>
-                    <span class="front-name" style="padding-right: 35px; font-size: 18px;">Dedicación Proyecto</span>
-                    <span class="front-name" style="padding-right: 300px; font-size: 18px;">Rol / Alcance</span>
-                    <span class="front-name" style="font-size: 18px;">Dedicación Portafolio</span>
+                <mat-card class="mat-elevation-z2 txt-primary row card-content">
+                    <span class="front-name-2 col-sm-12 col-md-2">Frentes de Operación</span>
+                    <div class="col-sm-12 col-md-10">
+                        <div class="row card-content">
+                            <span class="front-name-2 col-sm-12 col-md-3">Recursos Funcionales</span>
+                            <span class="front-name-2 col-sm-12 col-md-2">Dedicación Proyecto</span>
+                            <span class="front-name-2 col-sm-12 col-md-4">Rol / Alcance</span>
+                            <span class="front-name-2 col-sm-12 col-md-3">Dedicación Portafolio</span>
+                        </div>
+                    </div>
                 </mat-card>
             </div>
 
@@ -148,7 +152,7 @@
 
     <div class="warning-label-content">
         <mat-icon class="warning-icon">warning</mat-icon>
-        <span class="label-warning">Porcentaje de Tiempo de Dedicación excede el 60%</span>
+        <span class="label-warning">Porcentaje de tiempo de dedicación excede el 60%</span>
     </div>
 
     <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreateSupportResource()" class="btn-new mat-elevation-z2">

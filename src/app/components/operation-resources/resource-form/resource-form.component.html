@@ -30,8 +30,8 @@
                         <span style="font-size: small;">Recurso Funcional Actual: </span>
                         <span style="color: black;">{{supportResource.person!.full_name}}</span>
                     </mat-label>
-                    <input *ngIf="data.mode == 'create'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required [disabled]="disablePerson">
-                    <input *ngIf="data.mode == 'edit'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto">
+                    <input *ngIf="flagModeGeneral== 'create'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto" required [disabled]="disablePerson">
+                    <input *ngIf="flagModeGeneral == 'edit'" type="text" matInput [formControl]="personControl" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                         <mat-option *ngFor="let person of filterPersons | async" [value]="person" [disabled]="disablePerson">
                         {{person.full_name}}
@@ -45,9 +45,9 @@
             <!-- <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button> -->
             <button class="button"
                 mat-button color="primary"
-                (click)="data.mode == 'create' ? createRegister() : updateRegister()"
+                (click)="data.mode == 'create' && flagModeGeneral == 'create' ? createRegister() : updateRegister()"
                 [disabled]="resourcesGroup.invalid || fButtonDisabled && personControl.value != null">
-                {{ data.mode == 'create' ? 'Crear Recurso' : 'Editar Recurso'}}
+                {{ data.mode == 'create' && flagModeGeneral == 'create' ? 'Crear Recurso' : 'Editar Recurso'}}
             </button>
         </div>
     </form>
@@ -66,7 +66,7 @@
         </tecno-phases-dedication>
     </div>
 
-    <div class="row" *ngIf="disablePhases && flagModeGeneral == 'create'">
+    <div class="row" style="padding-bottom: 20px;" *ngIf="disablePhases && data.mode == 'create'">
         <button mat-button color="accent" (click)="onReset()">Parametrizar nuevo recurso</button>
     </div>
 

@@ -26,7 +26,7 @@ export class PhaseManagementComponent implements OnInit {
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
   actions!: Actions;
   
-  singularOption: string = "Gestionar Phases";
+  singularOption: string = "Gestionar Fases";
   isButtonReset: boolean = false;
   fButtonDisabled: boolean = false;
   showBtnClose: boolean = true;
