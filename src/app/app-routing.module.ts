@@ -61,6 +61,9 @@ import { ProjectOperationResourcesResolver } from './components/operation-resour
 import { SponsorsResolver } from './components/operation-resources/guards/sponsors.resolver';
 import { ResourcesResolver } from './components/operation-resources/guards/resources.resolver';
 import { SupportResourcesResolver } from './components/operation-resources/guards/support-resources.resolver';
+import { ProjectsTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/projects-time-capacity.resolver';
+import { ResourcesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/resources-time-capacity.resolver';
+import { AreasTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/areas-time-capacity.resolver';
 
 const routes: Routes = [
   {
@@ -345,6 +348,15 @@ const routes: Routes = [
       sponsors: SponsorsResolver,
       resources: ResourcesResolver,
       supportResources: SupportResourcesResolver
+    }
+  },
+  { path: 'time-capacity', loadChildren: () => import('./components/time-capacity/time-capacity.module').then(m => m.TimeCapacityModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      projects: ProjectsTimeCapacityResolver,
+      resources: ResourcesTimeCapacityResolver,
+      areas: AreasTimeCapacityResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

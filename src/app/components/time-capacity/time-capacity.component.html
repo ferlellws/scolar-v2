@@ -1,0 +1,86 @@
+<mat-tab-group (selectedTabChange)="tabChanged($event)" style="overflow-x: hidden !important;">
+    <mat-tab label="Recursos Portafolio" style="overflow-x: hidden !important;">
+        <div class="phases-content">
+            <span class="text-sub">Fases:</span>
+            <div *ngFor="let phase of phases" class="label-rect-content-phase">
+                <div class="phases-rect" [ngStyle]="{'background-color': phase.color}"></div>
+                <span class="phases-name">{{phase.name}}</span>    
+            </div>
+        </div>
+        
+        <div class="filter-content">
+            <span class="text-sub">Filtros:</span>
+            <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+            <form [formGroup]="filtersGroup" class="row filters">
+                <mat-form-field class="col-sm-12 col-md-2">
+                    <mat-label>Proyecto</mat-label>
+                    <input type="text" matInput [formControl]="projectsControl" [matAutocomplete]="projects">
+                    <mat-autocomplete #projects="matAutocomplete" [displayWith]="displayProject">
+                        <mat-option *ngFor="let project of filterProjects | async" [value]="project">
+                        {{project.title}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                
+                <!-- <mat-form-field class="col-sm-12 col-md-2">
+                    <mat-label>Área</mat-label>
+                    <mat-select formControlName="areas" multiple>
+                        <mat-option *ngFor="let area of areasFilter; index as i" [value]="i+1">{{area.title}}</mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+                <mat-form-field class="col-sm-12 col-md-2">
+                    <mat-label>Área</mat-label>
+                    <input type="text" matInput [formControl]="areasControl" [matAutocomplete]="areas">
+                    <mat-autocomplete #areas="matAutocomplete" [displayWith]="displayAreas">
+                        <mat-option *ngFor="let area of filterAreas | async" [value]="area">
+                        {{area.title}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+        
+                <mat-form-field class="col-sm-12 col-md-2">
+                    <mat-label>Recurso</mat-label>
+                    <input type="text" matInput [formControl]="resourcesControl" [matAutocomplete]="resources">
+                    <mat-autocomplete #resources="matAutocomplete" [displayWith]="displayResources">
+                        <mat-option *ngFor="let resource of filterResources | async" [value]="resource">
+                        {{resource.full_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+        
+                <mat-form-field appearance="legacy" class="col-sm-12 col-md-2">
+                    <mat-label>Rango de fecha</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate formControlName="start_date" placeholder="Fecha Inicio">
+                        <input matEndDate formControlName="end_date" placeholder="Fecah Fin">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <!-- <mat-error *ngIf="this.filtersGroup.get('start_date')?.invalid">
+                        {{ getMessageError(filtersGroup ,'start_date') }}
+                    </mat-error>
+                    <mat-error *ngIf="this.filtersGroup.get('end_date')?.invalid">
+                        {{ getMessageError(filtersGroup ,'end_date') }}
+                    </mat-error> -->
+                </mat-form-field>
+        
+                <div class="buttons-content col-sm-12 col-md-2">
+                    <button mat-raised-button class="button-filter" color="primary" (click)="filter()">{{labelButton.filter}}</button>
+                    <button mat-raised-button class="button-filter" color="accent" (click)="removeValueGroup()">{{labelButton.remove}}</button>
+                </div>
+            </form>    
+            <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+        </div>
+        
+        <div class="table-time-line" *ngFor="let data of generalData">
+            <tecno-table-time-line
+                [generalData]=data
+            ></tecno-table-time-line>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Analítica">
+
+    </mat-tab>
+</mat-tab-group>
