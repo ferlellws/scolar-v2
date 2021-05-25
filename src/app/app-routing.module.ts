@@ -346,7 +346,7 @@ const routes: Routes = [
     resolve: {
       project: ProjectOperationResourcesResolver,
       sponsors: SponsorsResolver,
-      resources: ResourcesResolver,
+      // resources: ResourcesResolver,
       supportResources: SupportResourcesResolver
     }
   },

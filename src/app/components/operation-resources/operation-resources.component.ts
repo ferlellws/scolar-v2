@@ -50,7 +50,7 @@ export class OperationResourcesComponent implements OnInit {
     private route: ActivatedRoute,
     private mainService: MainService,
     private fb: FormBuilder,
-    private _usersService: UserService,
+    private usersService: UserService,
     private snackBar: MatSnackBar,
     private operationSponsorsService: OperationSponsorsService,
     private supportResourcesService :SupportResourcesService,
@@ -79,10 +79,19 @@ export class OperationResourcesComponent implements OnInit {
     this.route.data.subscribe(data =>{
       this.project = data.project;
       this.sponsors = data.sponsors
-      this.persons = data.resources;
+      // this.persons = data.resources;
       this.fronts = data.supportResources.fronts;
       
-      environment.consoleMessage(this.fronts, "FRENTES");
+      this.usersService.getFunctionalResources()
+        .subscribe(res => {
+          this.persons = res;
+
+          this.filterPersons = this.personControl.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value!.full_name),
+            map(name => name ? this._filter(name) : this.persons.slice())
+          );
+        });
 
       this.phaseByProjectsService.getPhaseByProjectId(Number(this.project.id))
         .subscribe(res => {
@@ -93,12 +102,6 @@ export class OperationResourcesComponent implements OnInit {
             }
           }
         });
-
-      this.filterPersons = this.personControl.valueChanges.pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value!.full_name),
-        map(name => name ? this._filter(name) : this.persons.slice())
-      );
 
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
