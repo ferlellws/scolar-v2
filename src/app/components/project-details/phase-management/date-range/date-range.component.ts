@@ -49,33 +49,41 @@ export class DateRangeComponent implements OnInit {
 
   add() {
     if(this.flagDate == "asignar") {
-      let phase_date= {
-        project_id: this.id_project,
-        phase_id: this.id_phase,
-        start_date: this.group.get('start_date')?.value,
-        end_date: this.group.get('end_date')?.value,
-      };
-      this.phaseByProjectsService.addPhaseByProjects(phase_date)
-        .subscribe(data => {
-          this.openSnackBar(true, "Asignación correcta", "");
-          this.flagDate = "editar";
-          this.idEdit = data.id;
-        }, (err) => {
-          this.openSnackBar(false, "No se ha podido asignar una fecha para la fase", "");
+      if (this.group.get('end_date')!.value < this.group.get('start_date')!.value) {
+        this.openSnackBar(false, "La fecha de finalización debe ser mayor a la fecha de inicio", "");
+      } else {
+        let phase_date= {
+          project_id: this.id_project,
+          phase_id: this.id_phase,
+          start_date: this.group.get('start_date')?.value,
+          end_date: this.group.get('end_date')?.value,
+        };
+        this.phaseByProjectsService.addPhaseByProjects(phase_date)
+          .subscribe(data => {
+            this.openSnackBar(true, "Asignación correcta", "");
+            this.flagDate = "editar";
+            this.idEdit = data.id;
+          }, (err) => {
+            this.openSnackBar(false, "No se ha podido asignar una fecha para la fase", "");
+          });
+      }
+    } else if(this.flagDate == "editar") {
+      if (this.group.get('end_date')!.value < this.group.get('start_date')!.value) {
+        this.openSnackBar(false, "La fecha de finalización debe ser mayor a la fecha de inicio", "");
+      } else {
+        let phase_date= {
+          project_id: this.id_project,
+          phase_id: this.id_phase,
+          start_date: this.group.get('start_date')?.value,
+          end_date: this.group.get('end_date')?.value,
+        };
+        this.phaseByProjectsService.updatePhaseByProject(phase_date, this.idEdit)
+          .subscribe(data => {
+            this.openSnackBar(true, "Asignación correcta", "");
+          } ,(err) => {
+          this.openSnackBar(false, "No se ha podido realizar la edición", "");
         });
-    }else if(this.flagDate == "editar") {
-      let phase_date= {
-        project_id: this.id_project,
-        phase_id: this.id_phase,
-        start_date: this.group.get('start_date')?.value,
-        end_date: this.group.get('end_date')?.value,
-      };
-      this.phaseByProjectsService.updatePhaseByProject(phase_date, this.idEdit)
-        .subscribe(data => {
-          this.openSnackBar(true, "Asignación correcta", "");
-        } ,(err) => {
-        this.openSnackBar(false, "No se ha podido realizar la edición", "");
-      });
+      }
     }
   }
 

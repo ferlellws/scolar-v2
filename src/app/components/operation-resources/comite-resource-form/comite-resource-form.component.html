@@ -45,10 +45,6 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="emptyPhases">
-        <span class="empty-phases col-sm-12 col-md-12 ">No se han asignado fechas a las fases de este proyecto. Por favor diríjase al formulario de Gestión de Fases</span>
-    </div>
-    
     <div class="row phases-content"  *ngIf="disablePhases">
         <tecno-phases-dedication-comite class="phases-content" *ngFor="let phase of generalPhase"
             idResourceByPhase = {{phase.id_reg}}

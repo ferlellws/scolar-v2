@@ -317,12 +317,12 @@
         <mat-accordion>
             <mat-expansion-panel *ngFor="let tbs of typificationsBySources" class="row mat-elevation-z1 card-expansion" style="padding: 0px;">
                 <mat-expansion-panel-header class="col-sm-12 col-md-12">
-                    <mat-panel-title class="col-sm-12 col-md-5">
+                    <mat-panel-title class="col-sm-12 col-md-4">
                         <h3 class="title-expansion" style="color: #5C6BC0;">{{tbs.name}}</h3>
                     </mat-panel-title>
-                    <mat-panel-description class="col-sm-12 col-md-6 description2" style="display: flex; justify-content: space-between;">
-                        <span>Impacto en Tiempo: {{tbs.impacts_time}} días </span>
-                        <span>Variación de Costos: {{tbs.cost_variaton}}</span>
+                    <mat-panel-description class="col-sm-12 col-md-8 description2" style="display: flex; justify-content: left;">
+                        <span class="col-sm-12 col-md-6">Impacto en Tiempo: {{tbs.impacts_time}} días </span>
+                        <span class="col-sm-12 col-md-6">Variación de Costos: {{tbs.cost_variation}}</span>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="cont-table">

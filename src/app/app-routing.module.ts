@@ -61,6 +61,10 @@ import { ProjectOperationResourcesResolver } from './components/operation-resour
 import { SponsorsResolver } from './components/operation-resources/guards/sponsors.resolver';
 import { ResourcesResolver } from './components/operation-resources/guards/resources.resolver';
 import { SupportResourcesResolver } from './components/operation-resources/guards/support-resources.resolver';
+import { ProjectsTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/projects-time-capacity.resolver';
+import { ResourcesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/resources-time-capacity.resolver';
+import { AreasTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/areas-time-capacity.resolver';
+import { DesviationCausesTypificationsBySourcesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-typifications-by-sources.resolver';
 
 const routes: Routes = [
   {
@@ -119,7 +123,8 @@ const routes: Routes = [
       desviationCausesBySource: DesviationCausesBySourceResolver,
       desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
       desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
-      desviationCausesByAreas: DesviationCausesByAreasResolver
+      desviationCausesByAreas: DesviationCausesByAreasResolver,
+      desviationCausesTypificationsBySources: DesviationCausesTypificationsBySourcesResolver
     }
   },
   {
@@ -343,8 +348,17 @@ const routes: Routes = [
     resolve: {
       project: ProjectOperationResourcesResolver,
       sponsors: SponsorsResolver,
-      resources: ResourcesResolver,
+      // resources: ResourcesResolver,
       supportResources: SupportResourcesResolver
+    }
+  },
+  { path: 'time-capacity', loadChildren: () => import('./components/time-capacity/time-capacity.module').then(m => m.TimeCapacityModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      projects: ProjectsTimeCapacityResolver,
+      resources: ResourcesTimeCapacityResolver,
+      areas: AreasTimeCapacityResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

@@ -3,6 +3,7 @@ import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { emit } from 'node:process';
 import { Actions } from 'src/app/models/actions';
 import { Phase } from 'src/app/models/phase';
 import { PhaseByProjectsService } from 'src/app/services/phase-by-projects.service';
@@ -25,7 +26,7 @@ export class PhaseManagementComponent implements OnInit {
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
   actions!: Actions;
   
-  singularOption: string = "Gestionar Phases";
+  singularOption: string = "Gestionar Fases";
   isButtonReset: boolean = false;
   fButtonDisabled: boolean = false;
   showBtnClose: boolean = true;
@@ -51,5 +52,9 @@ export class PhaseManagementComponent implements OnInit {
       .subscribe(res => {
         this.datePhases = res.datePhases;
       });
+  }
+
+  close() {
+    this.emitClose.emit('close');
   }
 }
