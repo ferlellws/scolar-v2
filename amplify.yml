@@ -6,7 +6,7 @@ frontend:
         - npm install
     build:
       commands:
-        - ng build --prod
+        - npm run-script build
   artifacts:
     baseDirectory: dist/tecno-project-portfolio
     files:
