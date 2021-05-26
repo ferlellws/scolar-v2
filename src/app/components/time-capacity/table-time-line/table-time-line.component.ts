@@ -23,6 +23,8 @@ export class TableTimeLineComponent implements OnInit {
   }
 
   @Input() generalData:any;
+  @Input() tab:number = 1;
+  opColums:number = 2;
   displayedColumns: any;
 
   phases: any = [
@@ -53,8 +55,10 @@ export class TableTimeLineComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    environment.consoleMessage(this.generalData, "INfoooooooooooooooo");
-
+    if(this.tab == 2) {
+      this.opColums = 1;
+    }
+    
     if(this.generalData != []) {
       this.displayedColumns = Object.keys(this.generalData.dataSource[0]);
     }

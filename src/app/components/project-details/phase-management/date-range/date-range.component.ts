@@ -36,7 +36,6 @@ export class DateRangeComponent implements OnInit {
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
     });
-    environment.consoleMessage(this.start_date, "Fecha Nula???");
 
     if(this.start_date == "" || this.end_date == "") {
       this.flagDate = "asignar";

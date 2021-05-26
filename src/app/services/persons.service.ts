@@ -68,7 +68,6 @@ export class PersonsService {
     return this.http.post<Person>(`${this.API}`, { person: person }, this.httpOptions)
       .pipe(
         tap((data: any) => {
-          environment.consoleMessage(data,"INFOOOOOOOOOOO PERSON RES ADD");
           this.emitDataTable.emit(data);
         })
       );

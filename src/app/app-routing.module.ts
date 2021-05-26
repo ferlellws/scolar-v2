@@ -65,6 +65,7 @@ import { ProjectsTimeCapacityResolver } from './components/time-capacity/guards-
 import { ResourcesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/resources-time-capacity.resolver';
 import { AreasTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/areas-time-capacity.resolver';
 import { DesviationCausesTypificationsBySourcesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-typifications-by-sources.resolver';
+import { VicepresidenciesTimeCapcityResolver } from './components/time-capacity/guards-time-capacity/vicepresidencies-time-capcity.resolver';
 
 const routes: Routes = [
   {
@@ -357,8 +358,9 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     resolve: {
       projects: ProjectsTimeCapacityResolver,
-      resources: ResourcesTimeCapacityResolver,
-      areas: AreasTimeCapacityResolver
+      // resources: ResourcesTimeCapacityResolver,
+      areas: AreasTimeCapacityResolver,
+      vicepresidencies: VicepresidenciesTimeCapcityResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

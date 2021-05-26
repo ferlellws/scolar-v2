@@ -1,4 +1,4 @@
-<h2 class="title-project">{{generalData.project_name}}</h2>
+<h2 *ngIf="tab==1" class="title-project txt-accent">{{generalData.project_name}}</h2>
 
 <div>
     <span class="text-bttns-sticky">Fijar Columnas:</span>
@@ -14,7 +14,7 @@
         <mat-button-toggle value="position">
         Cargo
         </mat-button-toggle>
-        <mat-button-toggle value="profile">
+        <mat-button-toggle *ngIf="tab==1" value="profile">
         Rol Proyecto
         </mat-button-toggle>
     </mat-button-toggle-group>
@@ -49,7 +49,7 @@
         </ng-container>
 
         <!-- Rol Proyecto -->
-        <ng-container
+        <ng-container *ngIf="tab==1"
             matColumnDef="profile"
             [sticky]="isSticky(stickyColumns, 'profile')"
         >
@@ -62,7 +62,7 @@
         </ng-container>
 
         <ng-container *ngFor="let data of displayedColumns; index as i">
-            <ng-container *ngIf="i > 2" [matColumnDef]="data">
+            <ng-container *ngIf="i > opColums" [matColumnDef]="data">
                 <th mat-header-cell *matHeaderCellDef class="headers-date">
                 <div class="content-date">
                     <div class="months">{{generalData.months[data]}}</div>
@@ -76,26 +76,26 @@
                 <td mat-cell *matCellDef="let element">
                 <div class="dedication">
                     <div
-                    *ngIf="element[data].sem2.dedication != '0%'"
+                    *ngIf="(element[data].sem2.dedication != '0%' && tab == 1) || tab == 2"
                     class="rect"
                     [ngStyle]="{'background-color': element[data].sem2.color}"
                     >
                     {{element[data].sem2.dedication}}
                     </div>
                     <div
-                    *ngIf="element[data].sem2.dedication == '0%'"
+                    *ngIf="element[data].sem2.dedication == '0%' && tab == 1"
                     class="rect"
                     ></div>
 
                     <div
-                    *ngIf="element[data].sem4.dedication != '0%'"
+                    *ngIf="(element[data].sem4.dedication != '0%' && tab == 1) || tab == 2"
                     class="rect"
                     [ngStyle]="{'background-color': element[data].sem4.color}"
                     >
                     {{element[data].sem4.dedication}}
                     </div>
                     <div
-                    *ngIf="element[data].sem4.dedication == '0%'"
+                    *ngIf="element[data].sem4.dedication == '0%' && tab == 1"
                     class="rect"
                     ></div>
                 </div>

@@ -80,6 +80,39 @@
 }
 
 .title-analitycs {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
+}
+
+.filter-content-analitycs {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+}
+
+.general-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.title-out-areas {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.title-panel {
+  color: black;
+  padding-left: 15px;
+}
+
+.content-info-out-area {
+  overflow-y: auto;
+  margin-top: 5px;
+  border-radius: 5px;
+}
+
+.paginator {
+  margin-top: 10px;
+  background-color: #fafafa;
 }

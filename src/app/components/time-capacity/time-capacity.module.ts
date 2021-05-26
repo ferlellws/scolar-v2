@@ -32,6 +32,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TableTimeLineComponent } from './table-time-line/table-time-line.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
+import { SharedModule } from '../shared/shared.module';
 
 const materialModels = [
   MatSortModule,
@@ -64,7 +66,8 @@ const materialModels = [
   MatRippleModule,
   MatMenuModule,
   MatProgressSpinnerModule,
-  MatTabsModule
+  MatTabsModule,
+  MatCardModule
 ];
 
 @NgModule({
@@ -75,6 +78,7 @@ const materialModels = [
     materialModels,
     FormsModule,
     ReactiveFormsModule,
+    SharedModule
   ],
   providers: [
     DatePipe,
