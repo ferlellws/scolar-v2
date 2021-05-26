@@ -36,6 +36,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { GephiComponent } from './gephi/gephi.component';
+import { DateRangeComponent } from '../project-details/phase-management/date-range/date-range.component';
 
 const COMPONENTS = [
   MenuComponent,
@@ -46,7 +48,8 @@ const COMPONENTS = [
   AlertDialogComponent,
   TextListComponent,
   TextListDateComponent,
-  UnauthorizedComponent
+  UnauthorizedComponent,
+  GephiComponent,
 ];
 
 const materialModules = [

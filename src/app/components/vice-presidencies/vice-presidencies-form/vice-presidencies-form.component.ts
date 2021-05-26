@@ -43,13 +43,8 @@ export class VicePresidenciesFormComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    true;//environment.consoleMessage(this.data, "++++++++++");
     this.vicePresidenciesGroup = this.fb.group({
-      title: [null, [
-          Validators.required,
-          // this.validateUniqueness
-        ]
-      ],
+      title: [null, Validators.required],
       description: null,
       manager_id: [null],
       is_active: true
@@ -71,7 +66,6 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   onSubmit() {
-    true;//environment.consoleMessage(this.vicePresidenciesGroup, "OnSubmit vicepresidencias: ");
     if (!this.isButtonReset) {
       this.fButtonDisabled = true;
       if (this.data.mode == 'create') {
@@ -93,7 +87,6 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   createRegister() {
-    true;//environment.consoleMessage(this.vicePresidenciesGroup.value, "createRegister: ");
     this.vicePresidenciesService.addVicePresidency(this.vicePresidenciesGroup.value)
       .subscribe((res) => {
         true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
@@ -119,8 +112,6 @@ export class VicePresidenciesFormComponent implements OnInit {
   }
 
   updateRegister() {
-    true;//environment.consoleMessage(this.vicePresidenciesGroup, `updateRegister para registro con id ${this.data.id}: `);
-
     // this.fButtonDisabled = true;
     this.vicePresidenciesService.updateVicePresidency(
       this.vicePresidenciesGroup.value,

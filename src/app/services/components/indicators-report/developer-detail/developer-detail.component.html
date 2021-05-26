@@ -1,0 +1,61 @@
+<h2 class="mat-title">Indicadores por Mes</h2>
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="indicators">
+</tecno-dynamic-table>
+<tecno-pie-charts
+  [id]="'indicatorsPie' + devId"
+  [title]="'Porcentajes Estados Requerimientos'"
+  [dataTable]="indicatorsPie"
+  [chartClass]="'content-center mt-30'"
+  [pieHole]=".6"
+  [width]="'1000px'">
+</tecno-pie-charts>
+<tecno-column-charts
+    [id]="'items_late_chart' + devId"
+    [title]="'Porcentajes Estados Requerimientos'"
+    [subtitle]="'Porcentajes Estados Requerimientos'"
+    [dataTable]="indicatorsLateColumn"
+    [chartClass]="'content-center'"
+    class="mt-50 d-block">
+</tecno-column-charts>
+
+<mat-divider class="mb-20"></mat-divider>
+
+<h2 class="mat-title">Horas por Mes</h2>
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="hours">
+</tecno-dynamic-table>
+<tecno-column-charts
+    [id]="'hoursChart' + devId"
+    [title]="'Porcentajes Estados Requerimientos'"
+    [subtitle]="'Porcentajes Estados Requerimientos'"
+    [dataTable]="hoursColumn"
+    [chartClass]="'content-center'"
+    class="mt-50 d-block">
+</tecno-column-charts>
+
+<mat-divider class="mb-20"></mat-divider>
+
+<h2 class="mat-title">Devoluciones por Mes</h2>
+<tecno-dynamic-table
+  style="width: 100%;"
+  [objectsData]="returns">
+</tecno-dynamic-table>
+<tecno-column-charts
+    [id]="'returnsColumn' + devId"
+    [title]="'Porcentajes Estados Requerimientos'"
+    [subtitle]="'Porcentajes Estados Requerimientos'"
+    [dataTable]="returnsColumn"
+    [chartClass]="'content-center'"
+    class="mt-50 d-block">
+</tecno-column-charts>
+<tecno-pie-charts
+  [id]="'returnsPie' + devId"
+  [title]="'Porcentajes Estados Requerimientos'"
+  [dataTable]="returnsPie"
+  [chartClass]="'content-center mt-30'"
+  [pieHole]=".6"
+  >
+</tecno-pie-charts>

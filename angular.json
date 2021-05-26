@@ -29,73 +29,23 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "core-js",
+              "raf",
+              "xlsx",
+              "@babel/runtime"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.webmanifest",
-              {
-                "glob": "**/*",
-                "input":"./node_modules/sigma/build",
-                "output": "/assets/lib"
-              }
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/animate.css/animate.min.css",
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/js/loader.js",
-              "src/assets/lib/sigma/sigma.conf.js",
-              "node_modules/sigma/build/sigma.min.js",
-              "src/assets/lib/sigma/src/sigma.core.js",
-              "src/assets/lib/sigma/src/conrad.js",
-              "src/assets/lib/sigma/src/utils/sigma.utils.js",
-              "src/assets/lib/sigma/src/utils/sigma.polyfills.js",
-              "src/assets/lib/sigma/src/sigma.settings.js",
-              "src/assets/lib/sigma/src/classes/sigma.classes.dispatcher.js",
-              "src/assets/lib/sigma/src/classes/sigma.classes.configurable.js",
-              "src/assets/lib/sigma/src/classes/sigma.classes.graph.js",
-              "src/assets/lib/sigma/src/classes/sigma.classes.camera.js",
-              "src/assets/lib/sigma/src/classes/sigma.classes.quad.js",
-              "src/assets/lib/sigma/src/classes/sigma.classes.edgequad.js",
-              "src/assets/lib/sigma/src/captors/sigma.captors.mouse.js",
-              "src/assets/lib/sigma/src/captors/sigma.captors.touch.js",
-              "src/assets/lib/sigma/src/renderers/sigma.renderers.canvas.js",
-              "src/assets/lib/sigma/src/renderers/sigma.renderers.webgl.js",
-              "src/assets/lib/sigma/src/renderers/sigma.renderers.svg.js",
-              "src/assets/lib/sigma/src/renderers/sigma.renderers.def.js",
-              "src/assets/lib/sigma/src/renderers/webgl/sigma.webgl.nodes.def.js",
-              "src/assets/lib/sigma/src/renderers/webgl/sigma.webgl.nodes.fast.js",
-              "src/assets/lib/sigma/src/renderers/webgl/sigma.webgl.edges.def.js",
-              "src/assets/lib/sigma/src/renderers/webgl/sigma.webgl.edges.fast.js",
-              "src/assets/lib/sigma/src/renderers/webgl/sigma.webgl.edges.arrow.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.labels.def.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.hovers.def.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.nodes.def.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edges.def.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edges.curve.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edges.arrow.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edgehovers.def.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edgehovers.curve.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js",
-              "src/assets/lib/sigma/src/renderers/canvas/sigma.canvas.extremities.def.js",
-              "src/assets/lib/sigma/src/renderers/svg/sigma.svg.utils.js",
-              "src/assets/lib/sigma/src/renderers/svg/sigma.svg.nodes.def.js",
-              "src/assets/lib/sigma/src/renderers/svg/sigma.svg.edges.def.js",
-              "src/assets/lib/sigma/src/renderers/svg/sigma.svg.edges.curve.js",
-              "src/assets/lib/sigma/src/renderers/svg/sigma.svg.labels.def.js",
-              "src/assets/lib/sigma/src/renderers/svg/sigma.svg.hovers.def.js",
-              "src/assets/lib/sigma/src/middlewares/sigma.middlewares.rescale.js",
-              "src/assets/lib/sigma/src/middlewares/sigma.middlewares.copy.js",
-              "src/assets/lib/sigma/src/misc/sigma.misc.animation.js",
-              "src/assets/lib/sigma/src/misc/sigma.misc.bindEvents.js",
-              "src/assets/lib/sigma/src/misc/sigma.misc.bindDOMEvents.js",
-              "src/assets/lib/sigma/src/misc/sigma.misc.drawHovers.js",
-              "src/assets/lib/sigma/plugins/sigma.plugins.neighborhoods/sigma.plugins.neighborhoods.js",
-              "src/assets/lib/sigma/plugins/sigma.layout.forceAtlas2/supervisor.js",
-              "src/assets/lib/sigma/plugins/sigma.layout.forceAtlas2/worker.js"
+              "src/assets/js/loader.js"
             ]
           },
           "configurations": {
@@ -122,7 +72,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "100kb"
                 }
               ],
               "serviceWorker": false,

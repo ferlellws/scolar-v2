@@ -1,7 +1,130 @@
-#sigma-container {
-  min-width: 600px;
-  min-height: 600px;
-  width: 100%;
-  height: 100%;
-  border: 1px solid black;
+.header-row {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
 }
+
+.icons-cards {
+    margin-left: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+}
+
+.h3-subtitle {
+    padding-left: 16px;
+    margin-bottom: 0px;
+}
+
+.line-text {
+    padding-left: 16px;
+    padding-bottom: 10px;
+}
+
+.line-text-font {
+    padding-left: 16px;
+    padding-bottom: 10px;
+    font-weight: 300;
+}
+
+.card-content {
+    margin-bottom: 30px;
+}
+
+.buttons-options {
+   width: auto;
+   text-align: center;
+   border-radius: 5px;
+   margin-left: 10px;
+   margin-bottom: 10px;
+}
+
+.buttons-options-arrows {
+    width: 70px!important;
+    min-width: unset!important;
+    border-radius: 5px;
+}
+
+.mat-expansion-panel-header {
+    padding: 15px;
+}
+
+.title-expansion {
+    margin: 0px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.indicator-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.causal-header{ 
+    display: flex; 
+    flex-wrap: nowrap;
+}
+
+.causal-content{ 
+    display: flex; 
+    justify-content: space-around; 
+    flex-wrap: wrap;
+    width: 60%;
+}
+
+.cause-header-text-icon{
+    display: flex; 
+    flex-wrap: wrap; 
+    align-items: center;
+    justify-content: space-between; 
+    width: 40%;
+}
+
+.cause-header-text-icon h2{
+    padding-top: 15px;
+    
+}
+
+.cause-header-text-icon mat-icon{
+    color: rgba(0, 0, 0, 0.54);
+    cursor: pointer;
+}
+
+.cont-inter{
+    padding-left: 15px;
+    font-weight: 500;
+}
+
+.circle{
+    border-radius: 30px;
+    height: 22px;
+    width: 22px;
+    margin-top: 5px;
+}
+
+.contenedor {
+   display: flex;
+   justify-content: space-between !important;
+   align-items: center;
+   flex-wrap: wrap; 
+}
+
+.contenedor2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap; 
+ }
+
+ .buttons-zoom {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    width: 28px;
+    height: 28px;
+ }

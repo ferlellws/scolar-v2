@@ -1,0 +1,53 @@
+.example-container {
+  // height: 270px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+}
+
+.mat-table-sticky {
+  border-top: 1px solid #e0e0e0;
+}
+
+.card-percentage {
+  width: 100%;
+}
+
+.cards-content .mat-card-header-text {
+  margin: 0 !important;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.card-value {
+  width: 70%;
+  line-height: 50px;
+  padding-left: 16px;
+}
+
+.card-graph {
+  width: 25%;
+  height: 25%;
+}
+
+.mat-table-sticky, .mat-header-cell {
+  background: #a2195b;
+  color: #fff;
+}
+
+.title-card {
+  margin: 0;
+}
+.select {
+  float: left;
+  width: 50%;
+  padding-left: 200px;
+}

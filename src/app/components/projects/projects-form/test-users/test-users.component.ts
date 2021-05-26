@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { Person } from 'src/app/models/person';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
@@ -12,8 +14,10 @@ import { environment } from 'src/environments/environment';
 export class TestUsersComponent implements OnInit {
 
   usersForm = new FormControl();
-  users: Person[] = [];
+  users: any[] = [];
   @Input() usersSelected : Person[] = [];
+  personControl = new FormControl();
+  filterPersons!: Observable<Person[]>;
 
   @Output() emitChange: EventEmitter<Person[]> = new EventEmitter();
 
@@ -23,9 +27,15 @@ export class TestUsersComponent implements OnInit {
 
   async ngOnInit() {
     await this._usersService.getFunctionalResources()
-    .subscribe(users => this.users = users);
+    .subscribe(users => {
+      this.users = users;
+      this.filterPersons = this.personControl.valueChanges.pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value!.full_name),
+        map(name => name ? this._filter(name) : this.users.slice())
+      );
+    });
     var selectedIDs: number[] = this.usersSelected.map(user => user.id!);
-    true;//environment.consoleMessage(selectedIDs, "selectedIDs")
     this.usersForm.setValue(selectedIDs);
   }
 
@@ -57,4 +67,25 @@ export class TestUsersComponent implements OnInit {
     this.emitChange.emit(this.usersSelected)
   }
 
+  displayFn(person: Person): string {
+    return person && person.full_name ? person.full_name : '';
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.users.filter(users => users.full_name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  selected(){
+    this.usersSelected.push(this.personControl.value);
+    this.emitChange.emit(this.usersSelected);
+    this.personControl.reset();
+    this.filterPersons = this.personControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value!.full_name),
+      map(name => name ? this._filter(name) : this.users.slice())
+    );
+
+  }
 }

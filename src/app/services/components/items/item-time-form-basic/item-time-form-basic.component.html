@@ -1,0 +1,110 @@
+<div class="general-container">
+    <form [formGroup]="basicTimeOptions">
+    
+        <mat-grid-list cols="8" rowHeight="60px" >
+            <mat-grid-tile
+                class="txt-right"
+                [colspan]="2"
+                [rowspan]="1">
+                <mat-form-field
+                [hideRequiredMarker]="hideRequiredControl.value"
+                [floatLabel]="floatLabelControl.value"
+                class="field-full ml-5 mr-5">
+                <mat-select [disabled]="habilitado"  required (openedChange)="_openUsers($event)" formControlName="userControl">
+                    <mat-option  *ngFor="let user of usersFitered" [value]="user.id">{{user.firstname}} {{user.lastname}}</mat-option>
+                </mat-select>
+                <mat-label>Usuario</mat-label>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile
+                class="txt-right"
+                [colspan]="2"
+                [rowspan]="1">
+                <mat-form-field
+                [hideRequiredMarker]="hideRequiredControl.value"
+                [floatLabel]="floatLabelControl.value"
+                class="field-full ml-5 mr-5">
+                <mat-select required (openedChange)="_openTimeTypes($event)" formControlName="TimeTypeControl">
+                    <mat-option   >None</mat-option>
+                    <mat-option  *ngFor="let timeType of timeTypes" [value]="timeType.id">{{timeType.title}}</mat-option>
+                </mat-select>
+                <mat-label>Tipo Tiempo</mat-label>
+                </mat-form-field>
+            </mat-grid-tile>
+      
+            <mat-grid-tile
+            class="txt-right"
+            [colspan]="4"
+            [rowspan]="1">
+                <mat-form-field class="field-full">
+                <mat-label>Descripción</mat-label>
+                <input matInput (keydown.enter)="crear()" formControlName="descriptionControl">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile
+            class="txt-right"
+            [colspan]="2"
+            [rowspan]="1">
+                <mat-form-field class="field-full">
+                    <mat-label>Fecha</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dateControl">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile
+            class="txt-right"
+            [colspan]="2"
+            [rowspan]="1">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Horas</mat-label>
+                    <input matInput [min]="0" [max]="24" placeholder="Horas" type="number" formControlName="hoursControl" >
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile
+            class="txt-right"
+            [colspan]="2"
+            [rowspan]="1">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Minutos</mat-label>
+                    <input matInput [min]="0" [max]="59" placeholder="Minutos" type="number" formControlName="minutesControl">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile
+            *ngIf="!flagEditar"
+            class="txt-right"
+            [colspan]="1"
+            [rowspan]="1">
+                <button mat-button (click)="crear()" >
+                    <mat-icon>add</mat-icon>
+                </button>
+            </mat-grid-tile>
+            <mat-grid-tile
+            *ngIf="flagEditar"
+            class="txt-right"
+            [colspan]="1"
+            [rowspan]="1">
+                <button mat-button (click)="editar()" >
+                    <mat-icon>save</mat-icon>
+                </button>
+            </mat-grid-tile>
+            <mat-grid-tile
+            class="txt-right"
+            [colspan]="1"
+            [rowspan]="1">
+                <button mat-button (click)="cancel()" >
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-grid-tile>
+            <mat-grid-tile
+            *ngIf="!validation"
+            class="txt-right"
+            [colspan]="8"
+            [rowspan]="1">
+                <span style="color: red;">{{message}}</span>
+            </mat-grid-tile>
+        </mat-grid-list>
+        
+    </form>
+</div>
+

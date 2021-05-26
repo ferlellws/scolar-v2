@@ -6,6 +6,7 @@ import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Actions } from 'src/app/models/actions';
 import { environment } from 'src/environments/environment';
+import {PageEvent} from '@angular/material/paginator';
 
 export interface DataInitial {
   start_date: any;

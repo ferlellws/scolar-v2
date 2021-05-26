@@ -1,0 +1,18 @@
+.general-container{
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap;
+}
+.individual-label{
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    padding-left: 10px;
+    min-width: 33%;
+}
+.color-square{
+    margin-right: 5px; 
+    width: 15px; 
+    height: 15px; 
+}

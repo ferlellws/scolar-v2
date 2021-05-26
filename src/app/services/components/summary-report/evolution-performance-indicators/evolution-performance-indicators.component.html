@@ -1,0 +1,99 @@
+<!-- <tecno-line-chart></tecno-line-chart> -->
+<mat-grid-list cols="2" rowHeight="900px">
+  
+  <div style="display: flex; justify-content: center;">
+    <h2 class="mat-title" style="text-align: center;">Evolución Indicadores de Desempeño</h2>
+  </div>
+  <br>
+
+  <mat-grid-tile style="overflow-x: auto;">
+    <div class="table-container-report">
+        <tecno-dynamic-table
+          [objectsData]="table1">
+        </tecno-dynamic-table>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile style="overflow-x: auto;">
+    <div #containerRef class="graph-content" style="width: 95%">
+      
+      <tecno-buttons-filter-graphs
+        [buttons]="buttons"
+        [flagShowDateForm]="true"
+        (onFilterButtonEvent)="onFilterButtonEvent($event, 'graph1')"
+        (onFilterDateEvent)="onFilterDateEvent($event, 'graph1')">
+      </tecno-buttons-filter-graphs>
+
+      <ngx-charts-line-chart
+        [view]="[containerRef.offsetWidth, 200]"
+        [scheme]="colorScheme.chart1"
+        [legend]="chartOptions.chart1.legend"
+        [legendPosition]="chartOptions.chart1.legendPosition"
+        [legendTitle]="chartOptions.chart1.legendTitle"
+        [showXAxisLabel]="chartOptions.chart1.showXAxisLabel"
+        [showYAxisLabel]="chartOptions.chart1.showYAxisLabel"
+        [xAxis]="chartOptions.chart1.xAxis"
+        [yAxis]="chartOptions.chart1.yAxis"
+        [xAxisLabel]="chartOptions.chart1.xAxisLabel"
+        [yAxisLabel]="chartOptions.chart1.yAxisLabel"
+        [timeline]="chartOptions.chart1.timeline"
+        [results]="multi_chartGestion"
+        [autoScale]="false"
+        [timeline]="false"
+        [showRefLines]="true"
+        [roundDomains]="true"          
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)">
+      </ngx-charts-line-chart>
+
+      <ngx-charts-line-chart
+        [view]="[containerRef.offsetWidth, 200]"
+        [scheme]="colorScheme.chart2"
+        [legend]="chartOptions.chart2.legend"
+        [legendPosition]="chartOptions.chart1.legendPosition"
+        [legendTitle]="chartOptions.chart2.legendTitle"
+        [showXAxisLabel]="chartOptions.chart2.showXAxisLabel"
+        [showYAxisLabel]="chartOptions.chart2.showYAxisLabel"
+        [xAxis]="chartOptions.chart2.xAxis"
+        [yAxis]="chartOptions.chart2.yAxis"
+        [xAxisLabel]="chartOptions.chart2.xAxisLabel"
+        [yAxisLabel]="chartOptions.chart2.yAxisLabel"
+        [timeline]="chartOptions.chart2.timeline"
+        [results]="multi_chartCalidad"
+        [autoScale]="false"
+        [timeline]="false"
+        [showRefLines]="true"
+        [roundDomains]="true"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)">
+      </ngx-charts-line-chart>
+
+      <ngx-charts-line-chart
+        [view]="[containerRef.offsetWidth, 200]"
+        [scheme]="colorScheme.chart3"
+        [legend]="chartOptions.chart3.legend"
+        [legendPosition]="chartOptions.chart1.legendPosition"
+        [legendTitle]="chartOptions.chart3.legendTitle"
+        [showXAxisLabel]="chartOptions.chart3.showXAxisLabel"
+        [showYAxisLabel]="chartOptions.chart3.showYAxisLabel"
+        [xAxis]="chartOptions.chart3.xAxis"
+        [yAxis]="chartOptions.chart3.yAxis"
+        [xAxisLabel]="chartOptions.chart3.xAxisLabel"
+        [yAxisLabel]="chartOptions.chart3.yAxisLabel"
+        [timeline]="chartOptions.chart3.timeline"
+        [results]="multi_chartOnTime"
+        [autoScale]="false"
+        [timeline]="false"
+        [showRefLines]="true"
+        [roundDomains]="true"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)">
+      </ngx-charts-line-chart>
+      
+    </div>
+  </mat-grid-tile>
+
+</mat-grid-list>

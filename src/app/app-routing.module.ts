@@ -53,6 +53,18 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ProjectsOwnResolver } from './components/projects/guards-projects/projects-own.resolver';
 import { PersonsResolver } from './components/persons/guards-persons/persons.resolver';
 import { ProjectProgressCreateResolver } from './components/project-progress-create/guards-project-progress-create/project-progress-create.resolver';
+import { InterrelationsResolver } from './components/project-details/guards/interrelations.resolver';
+import { InitialGraphResolver } from './components/demo-gephi/guards-demo-gephi/initial-graph.resolver';
+import { GeneralTopResolver } from './components/demo-gephi/guards-demo-gephi/general-top.resolver';
+import { VicePresidencyResolver } from './components/demo-gephi/guards-demo-gephi/vice-presidency.resolver';
+import { ProjectOperationResourcesResolver } from './components/operation-resources/guards/project.resolver';
+import { SponsorsResolver } from './components/operation-resources/guards/sponsors.resolver';
+import { ResourcesResolver } from './components/operation-resources/guards/resources.resolver';
+import { SupportResourcesResolver } from './components/operation-resources/guards/support-resources.resolver';
+import { ProjectsTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/projects-time-capacity.resolver';
+import { ResourcesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/resources-time-capacity.resolver';
+import { AreasTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/areas-time-capacity.resolver';
+import { DesviationCausesTypificationsBySourcesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-typifications-by-sources.resolver';
 
 const routes: Routes = [
   {
@@ -93,7 +105,14 @@ const routes: Routes = [
   },
   {
     path: 'demo-gephi',
-    loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule)
+    loadChildren: () => import('./components/demo-gephi/demo-gephi.module').then(m => m.DemoGephiModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      interrelationsInitial: InitialGraphResolver,
+      generalTop: GeneralTopResolver,
+      vicePresidency: VicePresidencyResolver
+    }
   },
   {
     path: 'desviation-causes',
@@ -104,7 +123,8 @@ const routes: Routes = [
       desviationCausesBySource: DesviationCausesBySourceResolver,
       desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
       desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
-      desviationCausesByAreas: DesviationCausesByAreasResolver
+      desviationCausesByAreas: DesviationCausesByAreasResolver,
+      desviationCausesTypificationsBySources: DesviationCausesTypificationsBySourcesResolver
     }
   },
   {
@@ -186,7 +206,8 @@ const routes: Routes = [
       goalsByWeeks: GoalsByWeeksResolver,
       nextActivitiesByWeek: NextActivitiesByWeeksResolver,
       obseravtionsByWeek: ObseravtionsByWeeksResolver,
-      desviationsByProject: DesviationByProjectResolver
+      desviationsByProject: DesviationByProjectResolver,
+      interrelations: InterrelationsResolver
     }
   },
   {
@@ -286,8 +307,8 @@ const routes: Routes = [
     redirectTo: '/login',
     pathMatch: 'full'
   },
-  { 
-    path: 'pages-profiles', 
+  {
+    path: 'pages-profiles',
     loadChildren: () => import('./components/pages-profiles/pages-profiles.module').then(m => m.PagesProfilesModule),
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
@@ -297,8 +318,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
   },
-  { 
-    path: 'projects-create', 
+  {
+    path: 'projects-create',
     loadChildren: () => import('./components/projects-create/projects-create.module').then(m => m.ProjectsCreateModule),
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
@@ -317,6 +338,27 @@ const routes: Routes = [
     canLoad: [AuthGuard],
     resolve: {
       projectProgressCreateResolver: ProjectProgressCreateResolver
+    }
+  },
+  { path: 'gantt', loadChildren: () => import('./components/gantt/gantt.module').then(m => m.GanttModule) },
+  { path: 'operation-resources/:id',
+    loadChildren: () => import('./components/operation-resources/operation-resources.module').then(m => m.OperationResourcesModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      project: ProjectOperationResourcesResolver,
+      sponsors: SponsorsResolver,
+      // resources: ResourcesResolver,
+      supportResources: SupportResourcesResolver
+    }
+  },
+  { path: 'time-capacity', loadChildren: () => import('./components/time-capacity/time-capacity.module').then(m => m.TimeCapacityModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    resolve: {
+      projects: ProjectsTimeCapacityResolver,
+      resources: ResourcesTimeCapacityResolver,
+      areas: AreasTimeCapacityResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

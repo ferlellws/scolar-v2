@@ -43,12 +43,21 @@ export class DesviationCausesService {
     );
   }
 
+  getDesviationCausesTypificationsBySource() {
+    return this.http.get<DesviationCause>(`${this.API}/totals_typifications_by_sources`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   getDesviationCausesBySource(years: any, months: any, projects: any, typifications: any) {
     this.inputParams.years = years
     this.inputParams.months = months
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
-    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
     
     return this.http.get<DesviationCause>(`${this.API}/data_table_source_report`, this.httpOptions)
     .pipe(
@@ -64,7 +73,6 @@ export class DesviationCausesService {
     this.inputParams.months = months
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
-    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
     return this.http.get<DesviationCause>(`${this.API}/data_table_typifications_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -79,7 +87,6 @@ export class DesviationCausesService {
     this.inputParams.months = months
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
-    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
     return this.http.get<DesviationCause>(`${this.API}/data_table_vicepresidencies_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
@@ -94,7 +101,6 @@ export class DesviationCausesService {
     this.inputParams.months = months
     this.inputParams.projects = projects
     this.inputParams.typifications = typifications
-    environment.consoleMessage(this.inputParams, "INPUT PARAMS")
     return this.http.get<DesviationCause>(`${this.API}/data_table_areas_report`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)

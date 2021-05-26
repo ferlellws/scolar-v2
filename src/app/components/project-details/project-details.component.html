@@ -8,20 +8,43 @@
                     <span>Editar Proyecto</span>
                 </button>
 
-                <button *ngIf="actions.create" class="buttons-options" mat-menu-item (click)="onDesviation()">
-                    <mat-icon>alt_route</mat-icon>
-                    <span>Causales de desviación</span>
+                <button *ngIf="actions.create" class="buttons-options" mat-menu-item [matMenuTriggerFor]="menuOption">
+                    <mat-icon style="font-size: 28px;">menu_open</mat-icon>
+                    <span>Menú de Opciones</span>
                 </button>
-                
-                <button *ngIf="actions.create" class="buttons-options" mat-menu-item (click)="onWeek()">
-                    <mat-icon>insert_invitation</mat-icon>
-                    <span>Seguimiento Semanal</span>
-                </button>
-                
-                <button *ngIf="actions.create || actions.update" class="buttons-options" mat-menu-item (click)="onValorem(project.id)">
-                    <mat-icon>addchart</mat-icon>
-                    <span>Reporte Valorem</span>
-                </button>
+
+                <mat-menu #menuOption="matMenu" xPosition="before">
+                    <button *ngIf="actions.create" mat-menu-item (click)="onPhaseManagements(project.id)">
+                        <mat-icon>pending_actions</mat-icon>
+                        <span>Gestión de Fases</span>
+                    </button>
+
+                    <button *ngIf="actions.create" mat-menu-item (click)="onDesviation()">
+                        <mat-icon>alt_route</mat-icon>
+                        <span>Causales de desviación</span>
+                    </button>
+                    
+                    <button *ngIf="actions.create" mat-menu-item (click)="onWeek()">
+                        <mat-icon>insert_invitation</mat-icon>
+                        <span>Seguimiento Semanal</span>
+                    </button>
+                    
+                    <button *ngIf="actions.create || actions.update" mat-menu-item (click)="onValorem(project.id)">
+                        <mat-icon>addchart</mat-icon>
+                        <span>Reporte Valorem</span>
+                    </button>
+
+                    <button *ngIf="actions.create" mat-menu-item (click)="onInterrelations(project.id)">
+                        <mat-icon>stream</mat-icon>
+                        <span>Interrelaciones</span>
+                    </button>
+
+                    <button *ngIf="actions.create" mat-menu-item (click)="onOperationResources(project.id)">
+                        <mat-icon>groups</mat-icon>
+                        <span>Equipo de Proyecto</span>
+                    </button>
+
+                </mat-menu>
             </div>
         </div>
     </div>
@@ -123,7 +146,7 @@
                 <div mat-line class="line-text"> {{project.strategic_approach.title}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Fecha de Recepción</h3>
-                <div mat-line class="line-text"> {{project.reception_date}} </div>
+                <div mat-line class="line-text"> {{project.reception_date.split("-")[2]}} - {{project.reception_date.split("-")[1]}} - {{project.reception_date.split("-")[0]}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Programa</h3>
                 <div mat-line *ngIf="project.program != null" class="line-text" > {{project.program.title}} </div>
@@ -159,14 +182,17 @@
                 </div>    
                 <mat-card-header>
                     <mat-card-title class="txt-accent">Seguimiento Semanal </mat-card-title>
-                    <mat-card-title *ngIf="weeksByProject[weekId] != null" style="font-size: 16px;">Semana {{weeksByProject[weekId].nReg}} - {{weeksByProject[weekId].month}} {{weeksByProject[weekId].year}} </mat-card-title> 
                 </mat-card-header>
+                <div class="seg-line-sem-edit">
+                    <mat-card-title *ngIf="weeksByProject[weekId] != null" style="font-size: 16px;">Semana {{weeksByProject[weekId].nReg}} - {{weeksByProject[weekId].month}} {{weeksByProject[weekId].year}} </mat-card-title> 
+                    <mat-icon class="txt-primary" style="cursor: pointer;" *ngIf="weeksByProject.length != 0 && actions.update  && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" matRipple (click)="onWeeekEdit(weeksByProject[weekId].id)">create</mat-icon>
+                </div>
                 <h3 class="h3-subtitle txt-primary">Fecha Inicio</h3>
-                <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].start_date}} </div>
+                <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].start_date.split("-")[2]}} - {{weeksByProject[weekId].start_date.split("-")[1]}} - {{weeksByProject[weekId].start_date.split("-")[0]}}</div>
                 <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Fecha Final</h3>
-                <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].end_date}} </div>
+                <div *ngIf="weeksByProject[weekId] != null" mat-line class="line-text"> {{weeksByProject[weekId].end_date.split("-")[2]}} - {{weeksByProject[weekId].end_date.split("-")[1]}} - {{weeksByProject[weekId].end_date.split("-")[0]}} </div>
                 <div *ngIf="weeksByProject[weekId] == null" mat-line class="line-text-font"> {{labelAssignment}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Avance esperado</h3>
@@ -197,7 +223,7 @@
                             <div *ngFor="let goalsWeek of goalsByWeeks; index as i">
                                 <div mat-line class="line-text" style="padding-left: 0px;"> 
                                     <span style="font-weight: 500">{{i+1}}. Fecha: 
-                                        <span style="font-weight: 400">{{goalsByWeeks[i].date}}</span>
+                                        <span style="font-weight: 400">{{goalsByWeeks[i].date.split("-")[2]}} - {{goalsByWeeks[i].date.split("-")[1]}} - {{goalsByWeeks[i].date.split("-")[0]}}</span>
                                     </span>
                                 </div>
                                 <div mat-line class="line-text"> {{goalsByWeeks[i].description}} </div>
@@ -218,7 +244,7 @@
                             <div *ngFor="let nextActivitiesWeek of nextActivitiesByWeek; index as i">
                                 <div mat-line class="line-text" style="padding-left: 0px;"> 
                                     <span style="font-weight: 500">{{i+1}}. Fecha: 
-                                        <span style="font-weight: 400">{{nextActivitiesByWeek[i].date}}</span>
+                                        <span style="font-weight: 400">{{nextActivitiesByWeek[i].date.split("-")[2]}} - {{nextActivitiesByWeek[i].date.split("-")[1]}} - {{nextActivitiesByWeek[i].date.split("-")[0]}}</span>
                                     </span>
                                 </div>
                                 <div mat-line class="line-text"> {{nextActivitiesByWeek[i].description}} </div>
@@ -314,8 +340,85 @@
             <mat-card class="card-content mat-elevation-z4">
                 <mat-icon class="icons-cards txt-primary">stream</mat-icon>
                 <mat-card-header>
-                    <mat-card-title class="txt-accent">Interrelaciones</mat-card-title>  
+                    <mat-card-title class="row">
+                        <span class="txt-accent">Interrelaciones</span>
+                        <br>
+                        <span style="font-size: 16px;">Total Proyectos Relacionados: {{interrelations.total}}</span>
+                    </mat-card-title>  
                 </mat-card-header>
+                
+                <div *ngFor="let interrelation of interrelations.interrelationsGeneral.data; index as i" >
+                    <mat-accordion>
+                        <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="row">
+                                    <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
+                                    <br>
+                                    <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{interrelation.total}}</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div *ngIf="interrelation.data.length != 0">
+                                <div *ngFor="let data of interrelation.data; index as j">
+                                    <div mat-line class="line-text" style="padding-left: 0px; font-weight: 500; padding-bottom: 0px;"> {{j+1}}. {{data.name}} </div>
+                                    <div *ngFor="let info of data.data; index as k">
+                                        <div mat-line class="line-text">- {{info}} </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="interrelation.data.length == 0" mat-line class="line-text-font"> {{labelTotalInterrelation}} </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+                <div *ngFor="let interrelation of interrelations.interrelationsSpecific.data; index as i" class="">
+                    <mat-accordion>
+                        <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="row">
+                                    <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
+                                    <br>
+                                    <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{interrelation.total}}</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div *ngIf="interrelation.data.length != 0">
+                                <mat-accordion *ngFor="let type of interrelation.data; index as j">
+                                    <mat-expansion-panel [expanded]="true" class="mat-elevation-z0" style="padding-bottom: 15px;">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title class="row">
+                                                <h3 class="txt-accent title-expansion">{{type.type}}</h3>
+                                                <br>
+                                                <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{type.data.length}}</span>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div *ngIf="type.data.length != 0">
+                                            <div *ngFor="let data of type.data; index as j">
+                                                <br>
+                                                <div class="row">
+                                                    <div mat-line class="col-sm-12 col-md-9 line-text txt-primary" style="padding-left: 0px; font-weight: 500;"> {{j+1}}. {{data.projectName}} </div>
+
+                                                    <div *ngIf="((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" class="col-sm-12 col-md-3" style="display: flex; justify-content: space-between;">
+                                                        <mat-icon *ngIf="actions.update" matTooltip="Editar" class="txt-primary" style="cursor:pointer; font-size: 19px;" (click)="editInterrelation(data.id)">create</mat-icon>
+                                                        <mat-icon *ngIf="actions.delete" matTooltip="Eliminar" style="color: red; cursor:pointer; font-size: 19px;" (click)="deleteInterrelation(data.id)">delete</mat-icon>
+                                                    </div>
+                                                </div>
+                                                <div mat-line class="cont-inter"> Fecha de identificación:</div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.date.substring(0,10).split("-")[2]}} - {{data.date.split("-")[1]}} - {{data.date.split("-")[0]}}</div>
+                                                <div mat-line class="cont-inter"> Impacto:</div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.impact}} </div>
+                                                <div mat-line class="cont-inter"> Elementos a tener en cuenta::</div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.description}} </div>
+                                                <mat-divider style="margin-left: 25px;"></mat-divider>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="type.data.length == 0" mat-line class="line-text-font"> {{labelTotalInterrelation}} </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
+                            <div *ngIf="interrelation.data.length == 0" mat-line class="line-text-font"> {{labelTotalInterrelation}} </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
             </mat-card>
 
         </div>
@@ -328,15 +431,15 @@
                 
                 <h3 class="h3-subtitle txt-primary">Fecha de Inicio</h3>
                 <div mat-line *ngIf="project.start_date == null || project.start_date == ''" class="line-text-font"> {{labelAssignment}}</div>
-                <div mat-line *ngIf="project.start_date != null" class="line-text"> {{project.start_date}} </div>
+                <div mat-line *ngIf="project.start_date != null" class="line-text"> {{project.start_date.split("-")[2]}} - {{project.start_date.split("-")[1]}} - {{project.start_date.split("-")[0]}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Fecha estimada de Finalización</h3>
                 <div mat-line *ngIf="project.due_date == null || project.due_date == ''" class="line-text-font"> {{labelAssignment}} </div>
-                <div mat-line *ngIf="project.due_date != null" class="line-text"> {{project.due_date}} </div>
+                <div mat-line *ngIf="project.due_date != null" class="line-text"> {{project.due_date.split("-")[2]}} - {{project.due_date.split("-")[1]}} - {{project.due_date.split("-")[0]}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Fecha de Control</h3>
                 <div mat-line *ngIf="project.control_date == null || project.control_date == ''" class="line-text-font"> {{labelAssignment}}</div>
-                <div mat-line *ngIf="project.control_date != null" class="line-text"> {{project.control_date}} </div>
+                <div mat-line *ngIf="project.control_date != null" class="line-text"> {{project.control_date.split("-")[2]}} - {{project.control_date.split("-")[1]}} - {{project.control_date.split("-")[0]}}</div>
                 
                 <h3 class="h3-subtitle txt-primary">Estado</h3>
                 <div mat-line class="line-text"> {{project.states_by_phase.state.title}} </div>
@@ -405,7 +508,7 @@
                     <div class="line-text causal-header">
                         <div class="cause-header-text-icon">
                             <h2  class=" txt-accent">Causal {{desviationId +1}}</h2>
-                            <mat-icon *ngIf="actions.update  && (project.pmo.id == userID || (project.pmo_assitant == null ? null: project.pmo_assitant.id == userID) || project.functional_lead.id == userID || profileID == 2)" matRipple (click)="onDesviationEdit(desviationCauses[desviationId].id!)">create</mat-icon>
+                            <mat-icon class="txt-primary" *ngIf="actions.update  && ((project.pmo == null ? null : project.pmo!.id == userID) || (project.pmo_assitant == null ? null: project.pmo_assitant!.id == userID) || (project.functional_lead == null ? null : project.functional_lead.id == userID) || profileID == 2)" matRipple (click)="onDesviationEdit(desviationCauses[desviationId].id!)">create</mat-icon>
                         </div>
                         <div *ngIf="desviationCauses.length != 0" class="causal-content">
                             <button mat-button [disabled]="desviationId == 0" class="buttons-options-arrows" (click)="beforeDesviation()">
@@ -416,8 +519,6 @@
                             </button> 
                         </div>   
                     </div>
-                    
-                
                 
                     <mat-accordion>
                         <mat-expansion-panel class="mat-elevation-z0"
@@ -429,7 +530,7 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <h3 class="h3-subtitle txt-primary">Fecha de incidencia</h3>
-                            <div mat-line class="line-text"> {{(desviationCauses[desviationId].date).substr(0,10)}} </div>
+                            <div mat-line class="line-text"> {{(desviationCauses[desviationId].date).substr(0,10).split("-")[2]}} - {{(desviationCauses[desviationId].date).substr(0,10).split("-")[1]}} - {{(desviationCauses[desviationId].date).substr(0,10).split("-")[0]}} </div>
                             <h3 class="h3-subtitle txt-primary">Entregable</h3>
                             <div mat-line class="line-text"> {{desviationCauses[desviationId].deliverable}} </div>
                         </mat-expansion-panel>

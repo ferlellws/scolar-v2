@@ -1,0 +1,580 @@
+<mat-progress-bar mode="indeterminate" *ngIf="showProgressBar" ></mat-progress-bar>
+<mat-card class="mb-20">
+  <mat-card-header>
+    <mat-card-subtitle>Agrupar por</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-chip-list
+      class="mb-20 d-block"
+      cdkDropList
+      cdkDropListOrientation="horizontal">
+      <mat-chip
+        class="cursor-pointer"
+        color="accent"
+        [selected]="groupBy.selected"
+        (click)="onClickGroupBy(groupBy.id)"
+        *ngFor="let groupBy of groupsBy">
+        {{ groupBy.name }}
+      </mat-chip>
+    </mat-chip-list>
+  </mat-card-content>
+</mat-card>
+
+
+<div class="description-container">
+  <div class="circle bg-deep-purple"></div><span class="desc-badge">Todos</span>
+  <div class="circle bg-amber ml-30"></div><span class="desc-badge">A vencer</span>
+  <div class="circle bg-red ml-30"></div><span class="desc-badge">Vencidos</span>
+  <div class="circle bg-green ml-30"></div><span class="desc-badge">On Time</span>
+  <div class="circle bg-blue ml-30"></div><span class="desc-badge">Anticipados</span>
+  <div class="circle bg-blue-grey ml-30"></div><span class="desc-badge">Sin Tiempo</span>
+  <div class="circle bg-cyan ml-30"></div><span class="desc-badge">En Desarrollo</span>
+  <div class="circle bg-pink ml-30"></div><span class="desc-badge">Tardíos</span>
+</div>
+
+<div class="clear-both mb-20"></div>
+
+<!--AL ELEJIR AGRUPAR POR PROYECTOS -->
+<div *ngIf="groupById == 1; else elseBlock">
+  <!-- +++++++++++++++{{projectsIndicators | json}} -->
+  <mat-accordion class="project-expansion">
+    <!-- {{projectsIndicators.length}} -->
+    <mat-expansion-panel
+        *ngFor="let projectIndicator of projectsIndicators"
+        (opened)="changePanelStatus(projectIndicator.project.id, projectIndicator.indicators, projectIndicator.total_items)"
+        [ngStyle]="{'border-color': getColor(projectIndicator.project.color)}"
+        (closed)="changePanelStatus(projectIndicator.project.id, projectIndicator.indicators, projectIndicator.total_items)"
+        [expanded]="projectId == projectIndicator.project.id">
+        <mat-expansion-panel-header >
+            <mat-panel-title>
+              {{projectIndicator.project.title}}
+            </mat-panel-title>
+            <mat-panel-description *ngIf="(projectIndicator.total_items) != 0" >
+
+              <!-- HORAS TOTALES TRABAJADAS -->
+              <span class="mat-caption">Horas Trabajadas: <b>{{ projectIndicator.worked_hours.hours }}h {{ projectIndicator.worked_hours.minutes }}m</b></span>
+              <!-- HORAS TOTALES ESTIMADAS -->
+              <span class="mat-caption">Horas Estimadas: <b>{{ projectIndicator.estimated_hours.hours }}h {{ projectIndicator.estimated_hours.minutes }}m</b></span>
+
+              <!-- ZONA DE INDICADORES -->
+              <mat-chip-list aria-label="Fish selection" style="width: 300px;">
+                <mat-chip [ngStyle]="{
+                    'background-color': getColor('deep-purple'),
+                    'color': '#fff'}"
+                  matTooltip="Todos"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  (click)="clickTodas(projectIndicator.project.id)">
+                    {{projectIndicator.total_items}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                    'background-color': colorScheme.domain[0],
+                    'color': '#fff'}"
+                  matTooltip="Próximos a vencer"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[0].items_to_expire_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 0)">
+                    {{projectIndicator.indicators[0].items_to_expire_count}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                    'background-color': colorScheme.domain[1],
+                    'color': '#fff'}"
+                  matTooltip="Vencidos"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[1].items_expired_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 1)">
+                    {{projectIndicator.indicators[1].items_expired_count}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                    'background-color': colorScheme.domain[3],
+                    'color': '#fff'}"
+                  matTooltip="On Time"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[3].items_ontime_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 3)">
+                    {{projectIndicator.indicators[3].items_ontime_count}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                    'background-color': colorScheme.domain[2],
+                    'color': '#fff'}"
+                  matTooltip="Anticipados"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[2].items_anticipated_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 2)">
+                    {{projectIndicator.indicators[2].items_anticipated_count}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                    'background-color': colorScheme.domain[4],
+                    'color': '#fff'}"
+                  matTooltip="Sin Tiempo"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[4].items_no_time_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 4)">
+                    {{projectIndicator.indicators[4].items_no_time_count}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[5],
+                  'color': '#fff'}"
+                  matTooltip="En Desarrollo"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[5].items_develop_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 5)">
+                    {{projectIndicator.indicators[5].items_develop_count}}
+                </mat-chip>
+                <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[6],
+                  'color': '#fff'}"
+                  matTooltip="Tardío"
+                  matTooltipPosition="above"
+                  class="cursor-pointer"
+                  *ngIf="projectIndicator.indicators[6].items_late_count != 0"
+                  (click)="onClick(projectIndicator.project.id, 6)">
+                    {{projectIndicator.indicators[6].items_late_count}}
+                </mat-chip>
+              </mat-chip-list>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <!-- <div *ngIf="!cargaFinalizada" class="spinner-container">
+            <mat-spinner ></mat-spinner>
+        </div> -->
+        <ng-template matExpansionPanelContent>
+          <!-- <mat-grid-list
+            cols="3"
+            rowHeight="110px">
+              <mat-grid-tile
+                class="txt-right"
+                [colspan]="1"
+                [rowspan]="1">
+                  <mat-card
+                    class="card-indicator"
+                    [ngStyle]="{
+                      'border-color': getColor('deep-purple'),
+                      'background': '' + hexToRGB(getColor('deep-purple')) + ''
+                    }"
+                  (click)="clickTodas(projectIndicator.project.id)">
+                      <mat-card-header>
+                          <mat-card-title>
+                              <span>Todos</span>
+                              <span>{{total}}</span>
+                          </mat-card-title>
+                      </mat-card-header>
+
+                      <mat-card-content>
+                          <mat-progress-bar color="accent" mode="determinate" value="{{progressAll}}"></mat-progress-bar>
+                      </mat-card-content>
+                  </mat-card>
+
+              </mat-grid-tile>
+              <mat-grid-tile
+                class="txt-right"
+                [colspan]="1"
+                [rowspan]="1">
+                  <mat-card
+                    class="card-indicator"
+                    [ngStyle]="{
+                        'border-color': colorScheme.domain[0],
+                        'background': '' + hexToRGB(colorScheme.domain[0]) + ''
+                      }"
+                    (click)="onClick(projectIndicator.project.id, 0)">
+                      <mat-card-header>
+                          <mat-card-title>
+                              <span>Proximos a Vencer</span>
+                              <span>{{projectIndicator.indicators[0].items_to_expire_count}}</span>
+                          </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                          <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[0].items_to_expire_percentage}}"></mat-progress-bar>
+                      </mat-card-content>
+                  </mat-card>
+              </mat-grid-tile>
+              <mat-grid-tile
+                class="txt-right"
+                [colspan]="1"
+                [rowspan]="1">
+                  <mat-card
+                    class="card-indicator"
+                    [ngStyle]="{
+                        'border-color': colorScheme.domain[1],
+                        'background': '' + hexToRGB(colorScheme.domain[1]) + ''
+                      }"
+                    (click)="onClick(projectIndicator.project.id, 1)">
+                      <mat-card-header>
+                          <mat-card-title>
+                              <span>Vencidos</span>
+                              <span>{{projectIndicator.indicators[1].items_expired_count}}</span>
+                          </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                          <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[1].items_expired_percentage}}"></mat-progress-bar>
+                      </mat-card-content>
+                  </mat-card>
+              </mat-grid-tile>
+              <mat-grid-tile
+                class="txt-right"
+                [colspan]="1"
+                [rowspan]="1">
+                  <mat-card
+                    class="card-indicator"
+                    [ngStyle]="{
+                      'border-color': colorScheme.domain[3],
+                      'background': '' + hexToRGB(colorScheme.domain[3]) + ''
+                    }"
+                  (click)="onClick(projectIndicator.project.id, 3)">
+                      <mat-card-header>
+                          <mat-card-title>
+                              <span>On Time</span>
+                              <span>{{projectIndicator.indicators[3].items_ontime_count}}</span>
+                          </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                          <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[3].items_ontime_percentage}}"></mat-progress-bar>
+                      </mat-card-content>
+                  </mat-card>
+              </mat-grid-tile>
+              <mat-grid-tile
+              class="txt-right"
+              [colspan]="1"
+              [rowspan]="1">
+                <mat-card
+                [ngStyle]="{
+                    'border-color': colorScheme.domain[2],
+                    'background': '' + hexToRGB(colorScheme.domain[2]) + ''
+                  }"
+                (click)="onClick(projectIndicator.project.id, 2)">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span>Anticipados</span>
+                            <span>{{projectIndicator.indicators[2].items_anticipated_count}}</span>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[2].items_anticipated_percentage}}"></mat-progress-bar>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile
+            class="txt-right"
+            [colspan]="1"
+            [rowspan]="1">
+                <mat-card
+                  class="card-indicator"
+                  [ngStyle]="{
+                      'border-color': colorScheme.domain[4],
+                      'background': '' + hexToRGB(colorScheme.domain[4]) + ''
+                    }"
+                  (click)="onClick(projectIndicator.project.id, 4)">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span>Sin Tiempo</span>
+                            <span>{{projectIndicator.indicators[4].items_no_time_count}}</span>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[4].items_no_time_percentage}}"></mat-progress-bar>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile
+              class="txt-right"
+              [colspan]="1"
+              [rowspan]="1">
+                <mat-card
+                  class="card-indicator"
+                  [ngStyle]="{
+                      'border-color': colorScheme.domain[5],
+                      'background': '' + hexToRGB(colorScheme.domain[5]) + ''
+                    }"
+                  (click)="onClick(projectIndicator.project.id, 5)">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span>En Desarrollo</span>
+                            <span>{{projectIndicator.indicators[5].items_develop_count}}</span>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[5].items_develop_percentage}}"></mat-progress-bar>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+
+            <mat-grid-tile
+              class="txt-right"
+              [colspan]="1"
+              [rowspan]="1">
+                <mat-card
+                  class="card-indicator"
+                  [ngStyle]="{
+                      'border-color': colorScheme.domain[6],
+                      'background': '' + hexToRGB(colorScheme.domain[6]) + ''
+                    }"
+                  (click)="onClick(projectIndicator.project.id, 6)">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <span>Tardío</span>
+                            <span>{{projectIndicator.indicators[6].items_late_count}}</span>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-progress-bar color="accent" mode="determinate" value="{{projectIndicator.indicators[6].items_late_percentage}}"></mat-progress-bar>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+
+            <mat-grid-tile
+              class="txt-right"
+              [colspan]="3"
+              [rowspan]="3">
+                <tecno-chart [data]="chartData" [colorScheme]="colorScheme" ></tecno-chart>
+            </mat-grid-tile>
+          </mat-grid-list> -->
+
+          <tecno-home-indicators-chart
+            [indicatorsProjects]="indicatorsProjects"
+            [projectIndicator]="projectIndicator"
+            [chartData]="chartData"
+            [colorScheme]="colorScheme"
+            [developerCompanyId]="0"></tecno-home-indicators-chart>
+        </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<!-- AL ELEJIR AGRUPAR POR COPAÑIA DESARROLLADORA -->
+<ng-template #elseBlock>
+  <mat-accordion *ngFor="let companyProjectIndicator of companiesProjectsIndicators">
+    <mat-expansion-panel [expanded]="true"
+      class="project-expansion">
+      <mat-expansion-panel-header >
+          <mat-panel-title>
+            {{companyProjectIndicator.company.title}}
+          </mat-panel-title>
+          <mat-panel-description *ngIf="(companyProjectIndicator.total_items) != 0" >
+
+            <!-- HORAS TOTALES TRABAJADAS -->
+            <span class="mat-caption">Horas Trabajadas: <b>{{ companyProjectIndicator.worked_hours.hours }}h {{ companyProjectIndicator.worked_hours.minutes }}m</b></span>
+            <!-- HORAS TOTALES ESTIMADAS -->
+            <span class="mat-caption">Horas Estimadas: <b>{{ companyProjectIndicator.estimated_hours.hours }}h {{ companyProjectIndicator.estimated_hours.minutes }}m</b></span>
+
+            <!-- ZONA DE INDICADORES -->
+            <mat-chip-list aria-label="Fish selection" style="width: 350px;">
+              <mat-chip [ngStyle]="{
+                  'background-color': getColor('deep-purple'),
+                  'color': '#fff'}"
+                matTooltip="Todos"
+                matTooltipPosition="above"
+                class="cursor-pointer">
+                  {{companyProjectIndicator.total_items}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[0],
+                  'color': '#fff'}"
+                matTooltip="Próximos a vencer"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[0].items_to_expire_count != 0">
+                  {{companyProjectIndicator.indicators[0].items_to_expire_count}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[1],
+                  'color': '#fff'}"
+                matTooltip="Vencidos"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[1].items_expired_count != 0">
+                  {{companyProjectIndicator.indicators[1].items_expired_count}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[3],
+                  'color': '#fff'}"
+                matTooltip="On Time"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[3].items_ontime_count != 0">
+                  {{companyProjectIndicator.indicators[3].items_ontime_count}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[2],
+                  'color': '#fff'}"
+                matTooltip="Anticipados"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[2].items_anticipated_count != 0">
+                  {{companyProjectIndicator.indicators[2].items_anticipated_count}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                  'background-color': colorScheme.domain[4],
+                  'color': '#fff'}"
+                matTooltip="Sin Tiempo"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[4].items_no_time_count != 0">
+                  {{companyProjectIndicator.indicators[4].items_no_time_count}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                'background-color': colorScheme.domain[5],
+                'color': '#fff'}"
+                matTooltip="En Desarrollo"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[5].items_develop_count != 0">
+                  {{companyProjectIndicator.indicators[5].items_develop_count}}
+              </mat-chip>
+              <mat-chip [ngStyle]="{
+                'background-color': colorScheme.domain[6],
+                'color': '#fff'}"
+                matTooltip="Tardío"
+                matTooltipPosition="above"
+                class="cursor-pointer"
+                *ngIf="companyProjectIndicator.indicators[6].items_late_count != 0">
+                  {{companyProjectIndicator.indicators[6].items_late_count}}
+              </mat-chip>
+            </mat-chip-list>
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+      <!-- <div *ngIf="!cargaFinalizada" class="spinner-container">
+          <mat-spinner ></mat-spinner>
+      </div> -->
+      <ng-template matExpansionPanelContent>
+        <!-- INDICADORES Y GRAFICA POR PROYECTO -->
+        <tecno-home-indicators-chart
+          [indicatorsProjects]="indicatorsProjectsP"
+          [chartData]="chartData"
+          [colorScheme]="colorScheme"></tecno-home-indicators-chart>
+
+        <!-- LISTA DE PROYECTOS -->
+        <mat-accordion>
+          <mat-expansion-panel
+            *ngFor="let projectIndicator of companyProjectIndicator.projects"
+            class="project-expansion"
+            (opened)="changePanelStatus(projectIndicator.project.id, projectIndicator.indicators, projectIndicator.total_items)"
+            [ngStyle]="{'border-color': getColor(projectIndicator.project.color)}"
+            (closed)="changePanelStatus(projectIndicator.project.id, projectIndicator.indicators, projectIndicator.total_items)"
+            [expanded]="projectId == projectIndicator.project.id">
+              <mat-expansion-panel-header >
+                  <mat-panel-title>
+                    {{projectIndicator.project.title}}
+                  </mat-panel-title>
+                  <mat-panel-description *ngIf="(projectIndicator.total_items) != 0" >
+
+                    <!-- HORAS TOTALES TRABAJADAS -->
+                    <span class="mat-caption">Horas Trabajadas: <b>{{ projectIndicator.worked_hours.hours }}h {{ projectIndicator.worked_hours.minutes }}m</b></span>
+                    <!-- HORAS TOTALES ESTIMADAS -->
+                    <span class="mat-caption">Horas Estimadas: <b>{{ projectIndicator.estimated_hours.hours }}h {{ projectIndicator.estimated_hours.minutes }}m</b></span>
+
+                    <!-- ZONA DE INDICADORES -->
+                    <mat-chip-list aria-label="Fish selection" style="width: 300px;">
+                      <mat-chip [ngStyle]="{
+                          'background-color': getColor('deep-purple'),
+                          'color': '#fff'}"
+                        matTooltip="Todos"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        (click)="clickTodas(projectIndicator.project.id)">
+                          {{projectIndicator.total_items}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                          'background-color': colorScheme.domain[0],
+                          'color': '#fff'}"
+                        matTooltip="Próximos a vencer"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[0].items_to_expire_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 0)">
+                          {{projectIndicator.indicators[0].items_to_expire_count}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                          'background-color': colorScheme.domain[1],
+                          'color': '#fff'}"
+                        matTooltip="Vencidos"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[1].items_expired_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 1)">
+                          {{projectIndicator.indicators[1].items_expired_count}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                          'background-color': colorScheme.domain[3],
+                          'color': '#fff'}"
+                        matTooltip="On Time"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[3].items_ontime_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 3)">
+                          {{projectIndicator.indicators[3].items_ontime_count}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                          'background-color': colorScheme.domain[2],
+                          'color': '#fff'}"
+                        matTooltip="Anticipados"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[2].items_anticipated_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 2)">
+                          {{projectIndicator.indicators[2].items_anticipated_count}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                          'background-color': colorScheme.domain[4],
+                          'color': '#fff'}"
+                        matTooltip="Sin Tiempo"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[4].items_no_time_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 4)">
+                          {{projectIndicator.indicators[4].items_no_time_count}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                        'background-color': colorScheme.domain[5],
+                        'color': '#fff'}"
+                        matTooltip="En Desarrollo"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[5].items_develop_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 5)">
+                          {{projectIndicator.indicators[5].items_develop_count}}
+                      </mat-chip>
+                      <mat-chip [ngStyle]="{
+                        'background-color': colorScheme.domain[6],
+                        'color': '#fff'}"
+                        matTooltip="Tardío"
+                        matTooltipPosition="above"
+                        class="cursor-pointer"
+                        *ngIf="projectIndicator.indicators[6].items_late_count != 0"
+                        (click)="onClick(projectIndicator.project.id, 6)">
+                          {{projectIndicator.indicators[6].items_late_count}}
+                      </mat-chip>
+                    </mat-chip-list>
+                  </mat-panel-description>
+              </mat-expansion-panel-header>
+              <!-- <div *ngIf="!cargaFinalizada" class="spinner-container">
+                  <mat-spinner ></mat-spinner>
+              </div> -->
+              <ng-template matExpansionPanelContent>
+                <tecno-home-indicators-chart
+                  [indicatorsProjects]="indicatorsProjects"
+                  [projectIndicator]="projectIndicator"
+                  [chartData]="chartData"
+                  [colorScheme]="colorScheme"
+                  [developerCompanyId]="companyProjectIndicator.company.id"></tecno-home-indicators-chart>
+              </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-template>
+    </mat-expansion-panel>
+
+<!-- ====================== -->
+
+    <!-- <mat-card-header>
+      <mat-card-title>{{ companyProjectIndicator.company.title }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+    </mat-card-content> -->
+  </mat-accordion>
+</ng-template>

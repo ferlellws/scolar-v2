@@ -1,0 +1,15 @@
+<div class="menu-container">
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let modulo of menu" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>{{getIcon(modulo.module.icon_id)}}</mat-icon>
+          <span>{{modulo.module.title}}</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list>
+        <mat-list-item *ngFor="let page of modulo.pages" (click)="go(page.route)" class="cursor-pointer"> {{page.title}} </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

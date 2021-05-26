@@ -1,0 +1,7 @@
+<div class="general-container">
+    <div *ngFor="let result of results; index as i" class="individual-label">
+        <div style="background-color: {{scheme.domain[i]}};" class="color-square"></div>
+        <span>{{result.name}}</span>
+    </div>
+    
+</div>

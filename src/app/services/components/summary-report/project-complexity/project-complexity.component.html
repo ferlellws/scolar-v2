@@ -1,0 +1,19 @@
+
+<mat-grid-list cols="1" rowHeight="1050px">
+    <mat-grid-tile style="overflow-x: auto;">
+        <div class="container-general" style="width: 95%;">
+            <h2 class="mat-title" style="text-align: center;">Complejidad por Proyecto</h2>
+
+            <tecno-buttons-filter-graphs
+                [buttons]="buttons"
+                [flagShowDateForm]="true"
+                (onFilterButtonEvent)="onFilterButtonEvent($event, 'graph1')"
+                (onFilterDateEvent)="onFilterDateEvent($event, 'graph1')">
+            </tecno-buttons-filter-graphs>
+
+            <tecno-dynamic-table
+                [objectsData]=data[template_id].objectsData[0]>
+            </tecno-dynamic-table>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>

@@ -6,9 +6,12 @@
         <mat-card >
             <div class="card-content">
                 <span class="texto" style="font-weight: 500">{{i+1}}. 
-                    <span style="font-weight: 400;">{{item}}</span>
+                    <span style="font-weight: 400;">{{item.description}}</span>
                 </span>
-                <mat-icon color="warn" (click)="delete(i)" matRipple class="delete">delete</mat-icon>
+                <div>
+                    <mat-icon *ngIf="disableEdit" color="primary" (click)="edit(item.id, i)" matRipple class="edit">create</mat-icon>
+                    <mat-icon [ngStyle]="{'color': deleteColor}" (click)="clickEdit == false ? delete(i) : true" matRipple class="delete">delete</mat-icon>
+                </div>
             </div>
         </mat-card>
     </div>

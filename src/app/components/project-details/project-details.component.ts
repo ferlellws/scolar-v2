@@ -20,6 +20,7 @@ import { BenefitsService } from 'src/app/services/benefits.service';
 import { DesviationCausesService } from 'src/app/services/desviation-causes.service';
 import { GoalsService } from 'src/app/services/goals.service';
 import { HighlightsService } from 'src/app/services/highlights.service';
+import { InterrelationsService } from 'src/app/services/interrelations.service';
 import { KpisService } from 'src/app/services/kpis.service';
 import { MainService } from 'src/app/services/main.service';
 import { NextActivitiesService } from 'src/app/services/next-activities.service';
@@ -29,10 +30,13 @@ import { RisksService } from 'src/app/services/risks.service';
 import { WeeksService } from 'src/app/services/weeks.service';
 import { environment } from 'src/environments/environment';
 import { ProjectsFormComponent } from '../projects/projects-form/projects-form.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { DesviationCausesFormComponent } from './desviation-causes-form/desviation-causes-form.component';
+import { InterrelationsFormComponent } from './interrelations-form/interrelations-form.component';
 import { ValoremFormComponent } from './valorem-form/valorem.component';
 import { WeekFormComponent } from './week-form/week-form.component';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PhaseManagementComponent } from './phase-management/phase-management.component';
 export interface Indicator {
   name: string;
   color: string;
@@ -87,9 +91,12 @@ export class ProjectDetailsComponent implements OnInit {
 
   semanal_hours = 40;
   labelAssignment = "Sin asignar";
+  labelTotalInterrelation = "No hay relaciones";
   panelOpenState = false;
   userID: any;
   profileID: any;
+
+  interrelations: any;
 
   constructor(
     public dialog: MatDialog, 
@@ -107,6 +114,8 @@ export class ProjectDetailsComponent implements OnInit {
     private nextActivitiesService:NextActivitiesService,
     private observationsService:ObservationsService,
     private desviationCausesService: DesviationCausesService,
+    private interrelationsService:InterrelationsService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -114,7 +123,6 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    environment.consoleMessage(changes, "Cambio        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
   }
 
   initialInfo() {
@@ -122,11 +130,14 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.actions == null){
       this.actions = new Actions();
     }
-    this.userID = JSON.parse(localStorage.user).id;
+    this.userID = JSON.parse(localStorage.user).person_id;
     this.profileID = JSON.parse(localStorage.user).profile_id;
 
     this.mainService.showLoading();
+
     this.route.data.subscribe((data: any) => {
+      this.interrelations = data.interrelations.interrelations;
+
       this.modificationData(data.project);
       var desviationGeneral: any = data.desviationsByProject;
       this.desviationCausesGeneral = desviationGeneral.general_data;
@@ -136,8 +147,11 @@ export class ProjectDetailsComponent implements OnInit {
 
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
-          var mes = new Date(data.start_date).getMonth(); 
-          data.month = this.meses[mes].mes;
+          // var mes = new Date(data.start_date).getMonth();
+          // environment.consoleMessage(mes, "MES")
+          var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]);
+          
+          data.month = this.meses[mes-1].mes;
   
           if (data.advance_spected != null && data.advance_real != null) {
             data.deviation_indicator = Math.abs(data.advance_spected - data.advance_real)
@@ -161,11 +175,11 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
       data.goalsByWeeks.map((data: any) => {
-        data.date = this.getToStringDate(data.date);
+        data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
       data.nextActivitiesByWeek.map((data: any) => {
-        data.date = this.getToStringDate(data.date);
+        data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
       this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
@@ -173,8 +187,11 @@ export class ProjectDetailsComponent implements OnInit {
       );
 
       this.weeksByProject.map((data: any) =>{
-        var mes = new Date(data.start_date).getMonth(); 
-        var año = new Date(data.start_date).getFullYear();
+        // var mes = new Date(data.start_date).getMonth();
+        var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]) - 1;
+        // environment.consoleMessage(mes, "MEEEEEEEEEEEEEEEES <<<<<<<<<<<<<");
+        var año = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[0]);
+        // var año = new Date(data.start_date).getFullYear();
         data.month = this.meses[mes].mes;
         data.year = año;
 
@@ -191,7 +208,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.weekId = this.weeksByProject.length-1;
       
       this.project = data.project;
-      console.log("Datos Proyecto",this.project);
+      // console.log("Datos Proyecto",this.project);
 
       //Aplicaciones Impactadas
       this.applicationsByProject = data.applicationsByProject.filter((apps: ApplicationByProject) => 
@@ -431,19 +448,19 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
 
-      this.desviationCausesService.emitNew.subscribe( data => {
-        this.desviationCausesGeneral.cost_variation += data.cost_variation;
-        this.desviationCausesGeneral.impacts_time += data.impacts_time;
-        this.desviationCausesGeneral.total++;
-        this.desviationCauses.push(data);
-        this.desviationId = this.desviationCauses.length - 1;
-      })
-}
+    this.desviationCausesService.emitNew.subscribe( data => {
+      this.desviationCausesGeneral.cost_variation += data.cost_variation;
+      this.desviationCausesGeneral.impacts_time += data.impacts_time;
+      this.desviationCausesGeneral.total++;
+      this.desviationCauses.push(data);
+      this.desviationId = this.desviationCauses.length - 1;
+    });
+    
+  }
 
   onValorem(project_id: number){
 
     this.router.navigate([`/project-progress-create/${project_id}`]);
-
 
     // const dialogRef = this.dialog.open(ValoremFormComponent, {
     //   width: environment.widthFormsModal,
@@ -486,7 +503,7 @@ export class ProjectDetailsComponent implements OnInit {
   onWeek(){
     const dialogRef = this.dialog.open(WeekFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         idProject: this.project.id,
         mode: 'create',
@@ -497,6 +514,28 @@ export class ProjectDetailsComponent implements OnInit {
       {
         if (data == 'close'){
           dialogRef.close();
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  onWeeekEdit(id: number) {
+    const dialogRef = this.dialog.open(WeekFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true,
+      data: {   
+        idProject: this.project.id,
+        idWeek: id,
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          window.location.reload();
         }
       }
     );
@@ -525,7 +564,7 @@ export class ProjectDetailsComponent implements OnInit {
   onDesviationEdit(id: number){
     const dialogRef = this.dialog.open(DesviationCausesFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         idProject: this.project.id,
         idCausal: id, 
@@ -585,6 +624,49 @@ export class ProjectDetailsComponent implements OnInit {
     this.desviationId++;
   }
 
+  onInterrelations(id: number) {
+    const dialogRef = this.dialog.open(InterrelationsFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  onOperationResources(project_id: number) {
+    this.router.navigate([`/operation-resources/${project_id}`]);
+  }
+  
+  onPhaseManagements(id: number) {
+    const dialogRef = this.dialog.open(PhaseManagementComponent, {
+      width: environment.widthFormsLittleModal,
+      disableClose: true,
+      data: {   
+        idProject: this.project.id,
+        mode: 'create',
+        labelAction: 'Crear'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+        }
+      }
+    );
+  }
+
   getToStringDate(date: any): string {
     if (date == '' || date == undefined || date == null){
       return '';
@@ -637,4 +719,60 @@ export class ProjectDetailsComponent implements OnInit {
     return res;
   }
   
+
+  editInterrelation(id: number) {
+    const dialogRef = this.dialog.open(InterrelationsFormComponent, {
+      width: environment.widthFormsModal,
+      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      data: {   
+        idProject: this.project.id,
+        idInterrelation: id,
+        mode: 'edit',
+        labelAction: 'Editar'
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( data =>
+      {
+        if (data == 'close'){
+          dialogRef.close();
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  deleteInterrelation(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "¿Está seguro que desea eliminar este registro?",
+        //value: 
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.interrelationsService.deleteInterrelation(id)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            dialogRef.close();
+            window.location.reload();
+          });
+      } else {
+        dialogRef.close();
+        window.location.reload();
+      }
+    });
+  }
+
+  openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
+    var panelClass = "succes-snack-bar";
+    if(!succes){
+      panelClass  = "error-snack-bar";
+    }
+    this.snackBar.open(message, action, {
+      duration: duration,
+      panelClass: panelClass
+    });
+  }
 }

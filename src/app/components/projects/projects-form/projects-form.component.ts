@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, Form, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Form, FormGroup, Validators, FormControl } from '@angular/forms';
 import { VicePresidency } from 'src/app/models/vice-presidency';
 import {VicePresidenciesService} from '../../../services/vice-presidencies.service'
 import { AreasService } from '../../../services/areas.service'
@@ -58,6 +58,8 @@ import { StrategicGuidelinesService } from 'src/app/services/strategic-guideline
 import { StrategicGuidelines } from 'src/app/models/strategic-guidelines';
 import { PersonsService } from 'src/app/services/persons.service';
 import { Person } from 'src/app/models/person';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 export interface DialogData {
   id: number;
@@ -76,8 +78,13 @@ export class ProjectsFormComponent implements OnInit {
   @Output() emitClose: EventEmitter<string> = new EventEmitter();
 
   project!: Project;
-
-
+  filterLeads!: Observable<User[]>;
+  leadsControl = new FormControl();
+  filterPmos!: Observable<User[]>;
+  pmosControl = new FormControl();
+  filterPmosAssistant!: Observable<User[]>;
+  pmosAssistantControl = new FormControl();
+  flagPmoAssistant: boolean = false;
 
   message: string = "";
 
@@ -110,13 +117,13 @@ export class ProjectsFormComponent implements OnInit {
   isButtonReset: boolean = false;
   fButtonDisabled: boolean = false;
 
-  benefits: string[] = [];
+  benefits: any[] = [];
   benefitsObjects: Benefit[] = [];
-  highlights: string[] = [];
+  highlights: any[] = [];
   highlightsObjects: Highlight[] = [];
-  risks: string[] = [];
+  risks: any[] = [];
   risksObjects: Risk[] = [];
-  kpis: string[] = [];
+  kpis: any[] = [];
   kpisObjects: Kpi[] = [];
   applications: Application[] = [];
   applicationsObjects: ApplicationByProject[] = [];
@@ -129,6 +136,7 @@ export class ProjectsFormComponent implements OnInit {
   isComponent = false;
   sobreExcecuted: boolean = false;
   balanceStr: string = "0";
+  cargaProject!: boolean;
 
   constructor(
     private _fbG: FormBuilder,
@@ -186,8 +194,8 @@ export class ProjectsFormComponent implements OnInit {
         'pmos': [null],
         'pmoHours': [null, [Validators.max(40), Validators.min(0)]],
         'pmoAssists': [null],
-        'stages': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required]],
-        'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.required, Validators.max(40), Validators.min(0)]],
+        'stages': [{value: null, disabled: this.deshabilitarAssist}],
+        'pmoAssistHours': [{value: null, disabled: this.deshabilitarAssist}, [Validators.max(40), Validators.min(0)]],
         'budgetApproved': [null, [Validators.required]],
         'budgetExecuted': [null, [Validators.required]],
         'balance': [{value: null, disabled: true}, [Validators.required]],
@@ -232,7 +240,7 @@ export class ProjectsFormComponent implements OnInit {
 
         startDate: `Fecha de Inicio`,
         dueDate: `Fecha Final Estimada`,
-        controlDate: `Fecha control de cambios`,
+        controlDate: `Fecha Fin según control de cambios`,
         states: `Estado`,
         phases: `Fase`,
         sprint: `Sprint`,
@@ -243,17 +251,22 @@ export class ProjectsFormComponent implements OnInit {
     }
 
   async ngOnInit() {
+    this._openLeads(true);
+    this._openPMOS(true);
+    this._openPMOAssists(true);
 
     if(this.data.mode == 'edit'){
+      this.cargaProject = false;
       await this._projectsService.getProjectsId(this.data.id)
       .subscribe(project => {
         this.project = project;
         this.project.reception_date = this.project.reception_date.substr(0, 10);
-        true;//environment.consoleMessage(this.project ,"project>>>>>>>>");
+        
         this.resetformToProject(this.general);
         this.resetformToProject(this.descripcion);
         this.resetformToProject(this.seguimiento);
         this.updateChildComponents(project.id);
+        this.cargaProject = true;
       });
       await this._vicePresidenciesService.getVicePresidenciesSelect()
       .subscribe(data => this.vicePresidencies = data);
@@ -265,7 +278,10 @@ export class ProjectsFormComponent implements OnInit {
       await this._programsService.getProgramsSelect()
       .subscribe((programs: Program[]) => this.programs = programs);
       await this._personsService.getFunctionalLeaders()
-      .subscribe((leads: User[]) => this.leads = leads);
+      .subscribe((leads: User[]) => {
+        this.leads = leads;
+        this._openLeads(true);
+      });
       await this._prioritiesService.getPrioritiesSelect()
       .subscribe((priorities: Priority[]) => this.priorities = priorities);
       await  this._typificationsService.getTypificationsSelect()
@@ -273,9 +289,15 @@ export class ProjectsFormComponent implements OnInit {
       await  this._managementsService.getManagementsSelect()
       .subscribe((managements: Management[]) => this.managements = managements);
       await this._personsService.getManagers()
-      .subscribe((pmos: User[]) => this.pmos = pmos);
+      .subscribe((pmos: User[]) => {
+        this.pmos = pmos;
+        this._openPMOS(true);
+      });
       await this._personsService.getManagers()
-        .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
+        .subscribe((pmoAssists: User[]) => {
+          this.pmoAssists = pmoAssists;
+          this._openPMOAssists(true);
+        });
       await this._stagesService.getStagesSelect()
         .subscribe((stages: Stage[]) => this.stages = stages);
       await this._statesService.getStatesSelect()
@@ -290,7 +312,6 @@ export class ProjectsFormComponent implements OnInit {
         this._statesByPhasesService.getStateByPhasesSelect()
         .subscribe((stateByPhases: StateByPhase[]) =>
         {
-          true;//environment.consoleMessage(stateByPhases, "213231213231")
           this.stateByPhases = [];
           this.phases = [];
           this.stateByPhases = stateByPhases.filter(stateByPhase => stateByPhase.state!.id == this.project.states_by_phase?.state!.id);
@@ -310,8 +331,27 @@ export class ProjectsFormComponent implements OnInit {
     this.validateFormGroup(this.general)
   }
 
+  displayFn(person: Person): string {
+    return person && person.full_name ? person.full_name : '';
+  }
+
+  private _filterLeads(value: string): User[] {
+    const filterValue = value.toLowerCase();
+
+    return this.leads.filter(leads => leads.full_name!.toLowerCase().indexOf(filterValue) === 0);
+  }
+  private _filterPmos(value: string): User[] {
+    const filterValue = value.toLowerCase();
+
+    return this.pmos.filter(pmos => pmos.full_name!.toLowerCase().indexOf(filterValue) === 0);
+  }
+  private _filterPmosAssistant(value: string): User[] {
+    const filterValue = value.toLowerCase();
+
+    return this.pmoAssists.filter(pmoAssists => pmoAssists.full_name!.toLowerCase().indexOf(filterValue) === 0);
+  }
+
   resetformToProject(formGroup: FormGroup){
-    true;//environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
     if(formGroup == this.general){
       this.general.get('title')?.setValue(this.project.title);
       this.general.get('vicePresidencies')?.setValue(this.project.area!.vice_presidency!.id);
@@ -322,12 +362,20 @@ export class ProjectsFormComponent implements OnInit {
     }
     if(formGroup == this.descripcion){
       this.descripcion.get('projectDescription')?.setValue(this.project.description);
-      this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
+      if(this.project.functional_lead == null) {
+        this.descripcion.get('leads')?.setValue(null);
+      } else {
+        this.descripcion.get('leads')?.setValue(this.project.functional_lead!.id);
+      }
       this.descripcion.get('priorities')?.setValue(this.project.priority!.id);
       this.descripcion.get('typifications')?.setValue(this.project.typification!.id);
       this.descripcion.get('strategicGuidelines')?.setValue(this.project.strategic_guideline == null ? null : this.project.strategic_guideline.id);
       this.descripcion.get('managements')?.setValue(this.project.management!.id);
-      this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
+      if(this.project.pmo == null) {
+        this.descripcion.get('pmos')?.setValue(null);
+      } else {
+        this.descripcion.get('pmos')?.setValue(this.project.pmo!.id);
+      }
       this.descripcion.get('pmoHours')?.setValue(this.project.pmo_hours + (this.project.pmo_minutes / 60) );
       this.descripcion.get('pmoAssists')?.setValue(this.project.pmo_assitant == null ? null: this.project.pmo_assitant!.id);
       this.descripcion.get('stages')?.setValue(this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id);
@@ -355,8 +403,16 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Benefit[]) =>
       {
         this.benefitsObjects = data.filter(benefit => benefit.project!.id == id);
-        true;//environment.consoleMessage(this.benefitsObjects, "beneficios " );
-        this.benefits = this.benefitsObjects.map(benefit => benefit.description);
+        // this.benefits = this.benefitsObjects.map(benefit => benefit.description);
+        for (let index = 0; index < this.benefitsObjects.length; index++) {
+          let reg = {
+            id: this.benefitsObjects[index].id,
+            description: this.benefitsObjects[index].description,
+          }
+          this.benefits.push(reg);
+        }
+        // this.benefits = this.benefitsObjects;
+        // environment.consoleMessage(this.benefits, "BENEFICIOS <<<<<<<<<<<<<<");
       }
     );
 
@@ -364,8 +420,15 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Highlight[]) =>
       {
         this.highlightsObjects = data.filter(highlight => highlight.project!.id == id);
-        true;//environment.consoleMessage(this.highlightsObjects, "hitos " );
-        this.highlights = this.highlightsObjects.map(highlight => highlight.description);
+        for (let index = 0; index < this.highlightsObjects.length; index++) {
+          let reg = {
+            id: this.highlightsObjects[index].id,
+            description: this.highlightsObjects[index].description,
+          }
+          this.highlights.push(reg);
+        }
+        // this.highlights = this.highlightsObjects.map(highlight => highlight.description);
+        // this.highlights = this.highlightsObjects;
       }
     );
 
@@ -373,8 +436,15 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Risk[]) =>
       {
         this.risksObjects = data.filter(risk => risk.project!.id == id);
-        true;//environment.consoleMessage(this.risksObjects, "riesgos " );
-        this.risks = this.risksObjects.map(risk => risk.description);
+        for (let index = 0; index < this.risksObjects.length; index++) {
+          let reg = {
+            id: this.risksObjects[index].id,
+            description: this.risksObjects[index].description,
+          }
+          this.risks.push(reg);
+        }
+        // this.risks = this.risksObjects.map(risk => risk.description);
+        // this.risks = this.risksObjects;
       }
     );
 
@@ -382,8 +452,15 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((data: Kpi[]) =>
       {
         this.kpisObjects = data.filter(kpi => kpi.project!.id == id);
-        true;//environment.consoleMessage(this.risksObjects, "kpis " );
-        this.kpis = this.kpisObjects.map(kpi => kpi.description);
+        for (let index = 0; index < this.kpisObjects.length; index++) {
+          let reg = {
+            id: this.kpisObjects[index].id,
+            description: this.kpisObjects[index].description,
+          }
+          this.kpis.push(reg);
+        }
+        // this.kpis = this.kpisObjects.map(kpi => kpi.description);
+        // this.kpis = this.kpisObjects;
       }
     );
 
@@ -429,50 +506,52 @@ export class ProjectsFormComponent implements OnInit {
 
   }
 
-  onBenefits(benefits: string[]): any{
-    true;//environment.consoleMessage(this.data.mode, "mode ")
+  onBenefits(benefits: any[]): any{
     if (this.data.mode == 'create'){
       this.benefits = benefits;
-      true;//environment.consoleMessage(this.benefits, "beneficios padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(benefits.length > this.benefitsObjects.length){
         this.benefits = benefits;
         var benefit: Benefit = {
           project_id: this.project.id,
-          description: this.benefits[benefits.length - 1],
+          description: this.benefits[benefits.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._benefitsService.addBenefit(benefit).
-        subscribe(data =>
-          {
-            true;//environment.consoleMessage(data, "objeto beneficio");
-            this.benefitsObjects.push(data)
-            this.openSnackBar(true, "Beneficio creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.benefitsObjects, "benefitsObjects");
-          }
+        subscribe(data =>{
+          this.benefitsObjects.push(data)
+          this.benefits[this.benefits.length-1].id = data.id;
+          this.openSnackBar(true, "Beneficio creado satisfactoriamente", "");
+        }, (err) => {
+          this.benefits.pop();
+          this.openSnackBar(false, "La descripción ya existe", "");
+        }
         );
       }
-      //agregación
+      //eliminado
       else if(benefits.length < this.benefitsObjects.length){
         for (let index = 0; index < this.benefitsObjects.length; index++) {
-          if(!this.benefits.includes(this.benefitsObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.benefits.length; index2++) {
+            if(this.benefits[index2].id == this.benefitsObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var benefit: Benefit = this.benefitsObjects[index];
             if(benefit.id == undefined){
               benefit.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._benefitsService.deleteBenefit(benefit!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "Beneficio eliminando", "");
-                  this.benefitsObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Beneficio eliminando", "");
+                this.benefitsObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -480,8 +559,6 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   onHighlights(highlights: string[]): any{
-
-    true;//environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.highlights = highlights;
       true;//environment.consoleMessage(this.highlights, "hitos padre")
@@ -491,39 +568,44 @@ export class ProjectsFormComponent implements OnInit {
         this.highlights = highlights;
         var highlight: Highlight = {
           project_id: this.project.id,
-          description: this.highlights[highlights.length - 1],
+          description: this.highlights[highlights.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._highlightsService.addHighlight(highlight).
         subscribe(data =>
           {
-            true;//environment.consoleMessage(data, "objeto hito");
             this.highlightsObjects.push(data)
+            this.highlights[this.highlights.length-1].id = data.id;
             this.openSnackBar(true, "Hito creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.highlightsObjects, "highlightsObjects");
+          }, (err) => {
+            this.highlights.pop();
+            this.openSnackBar(false, "La descripción ya existe", "");
           }
         );
       }
-      //agregación
+      //eliminado
       else if(highlights.length < this.highlightsObjects.length){
         for (let index = 0; index < this.highlightsObjects.length; index++) {
-          if(!this.highlights.includes(this.highlightsObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.highlights.length; index2++) {
+            if(this.highlights[index2].id == this.highlightsObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var highlight: Highlight = this.highlightsObjects[index];
             if(highlight.id == undefined){
               highlight.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._highlightsService.deleteHighlight(highlight!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "Hilto eliminando", "");
-                  this.highlightsObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Hito eliminando", "");
+                this.highlightsObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -531,9 +613,6 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   onRisks(risks: string[]): any{
-
-
-    true;//environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.risks = risks;
       true;//environment.consoleMessage(this.risks, "riesgos padre")
@@ -543,39 +622,44 @@ export class ProjectsFormComponent implements OnInit {
         this.risks = risks;
         var risk: Risk = {
           project_id: this.project.id,
-          description: this.risks[risks.length - 1],
+          description: this.risks[risks.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._risksService.addRisk(risk).
         subscribe(data =>
           {
-            true;//environment.consoleMessage(data, "objeto risk");
             this.risksObjects.push(data)
+            this.risks[this.risks.length-1].id = data.id;
             this.openSnackBar(true, "Riesgo creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.risksObjects, "risksObjects");
+          }, (err) => {
+            this.risks.pop();
+            this.openSnackBar(false, "La descripción ya existe", "");
           }
         );
       }
-      //agregación
+      //eliminado
       else if(risks.length < this.risksObjects.length){
         for (let index = 0; index < this.risksObjects.length; index++) {
-          if(!this.risks.includes(this.risksObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.risks.length; index2++) {
+            if(this.risks[index2].id == this.risksObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var risk: Risk = this.risksObjects[index];
             if(risk.id == undefined){
               risk.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._risksService.deleteRisk(risk!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "Riesgo eliminando", "");
-                  this.risksObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Riesgo eliminando", "");
+                this.risksObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -583,52 +667,52 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   onKpis(kpis: string[]): any{
-
-
-
-    true;//environment.consoleMessage(this.data.mode, "mode ")
     if (this.data.mode == 'create'){
       this.kpis = kpis;
-      true;//environment.consoleMessage(this.kpis, "kpis padre")
     }else if(this.data.mode == 'edit'){
       //agregación
       if(kpis.length > this.kpisObjects.length){
         this.kpis = kpis;
         var kpi: Kpi = {
           project_id: this.project.id,
-          description: this.kpis[kpis.length - 1],
+          description: this.kpis[kpis.length - 1].description,
           user_creates_id: JSON.parse(localStorage.user).id,
         }
         this._kpisService.addKpi(kpi).
         subscribe(data =>
           {
-            true;//environment.consoleMessage(data, "objeto kpi");
             this.kpisObjects.push(data)
+            this.kpis[this.kpis.length-1].id = data.id;
             this.openSnackBar(true, "KPI creado satisfactoriamente", "");
-            true;//environment.consoleMessage(this.kpisObjects, "kpisObjects");
+          }, (err) => {
+            this.kpis.pop();
+            this.openSnackBar(false, "La descripción ya existe", "");
           }
         );
       }
       //eliminacion
       else if(kpis.length < this.kpisObjects.length){
         for (let index = 0; index < this.kpisObjects.length; index++) {
-          if(!this.kpis.includes(this.kpisObjects[index].description)) {
+          let del = false;
+          for (let index2 = 0; index2 < this.kpis.length; index2++) {
+            if(this.kpis[index2].id == this.kpisObjects[index].id) {
+              del = true;
+              break;
+            }
+          }
+          if(del == false) {
             var kpi: Kpi = this.kpisObjects[index];
             if(kpi.id == undefined){
               kpi.id = -1;
               this.openSnackBar(false, "Error eliminando", "");
-              true;//environment.consoleMessage("Error eliminando id null");
               return false;
             }
             this._kpisService.deleteKpi(kpi!.id)
-              .subscribe(data =>
-                {
-                  true;//environment.consoleMessage(data, "data eliminacion")
-                  this.openSnackBar(true, "KPI eliminando", "");
-                  this.kpisObjects.splice(index, 1);
-                  return true;
-                }
-              );
+              .subscribe(data => {
+                this.openSnackBar(true, "Kpi eliminando", "");
+                this.kpisObjects.splice(index, 1);
+                return true;
+              });
           }
         }
       }
@@ -817,7 +901,7 @@ export class ProjectsFormComponent implements OnInit {
 
     if (this.data.mode == 'create'){
       this.testUsers = testUsers;
-      true;//environment.consoleMessage(this.testUsers, "testUsers padre")
+      environment.consoleMessage(this.testUsers, "testUsers padre")
     }else if(this.data.mode == 'edit'){
         true;//environment.consoleMessage(this.testUsers, "this.testUsers antes");
         true;//environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects antes");
@@ -872,10 +956,8 @@ export class ProjectsFormComponent implements OnInit {
 
 
   validateAssist () {
-    true;//environment.consoleMessage("entro validacion");
-    true;//environment.consoleMessage(this.descripcion.get('pmoAssists')!.value);
-    var valor = this.descripcion.get('pmoAssists')!.value;
-    if( valor != "" && valor != null && valor != 0 ){
+    var valor = this.pmosAssistantControl.value;
+    if( (valor != "" && valor != null && valor != 0) || this.flagPmoAssistant != true){
       this.deshabilitarAssist = false;
       this.descripcion.get('stages')!.enable();
       this.descripcion.get('pmoAssistHours')!.enable();
@@ -930,7 +1012,14 @@ export class ProjectsFormComponent implements OnInit {
   _openLeads(ev: boolean) {
     if (ev) {
       this._usersService.getFunctionalLeaders()
-        .subscribe((leads: User[]) => this.leads = leads);
+        .subscribe((leads: User[]) => {
+          this.leads = leads
+          this.filterLeads = this.leadsControl.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value!.full_name),
+            map(name => name ? this._filterLeads(name) : this.leads.slice())
+          );
+        });
     }
   }
 
@@ -965,15 +1054,34 @@ export class ProjectsFormComponent implements OnInit {
   _openPMOS(ev: boolean) {
     if (ev) {
       this._personsService.getManagers()
-        .subscribe((pmos: User[]) => this.pmos = pmos);
+        .subscribe((pmos: User[]) => {
+          this.pmos = pmos;
+          this.filterPmos = this.pmosControl.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value!.full_name),
+            map(name => name ? this._filterPmos(name) : this.pmos.slice())
+          );
+        });
     }
+  }
+
+  _openPMOAssists2() {
+    this.flagPmoAssistant = true;
   }
 
   _openPMOAssists(ev: boolean) {
     if (ev) {
       this._personsService.getManagers()
-        .subscribe((pmoAssists: User[]) => this.pmoAssists = pmoAssists);
-    }else{
+        .subscribe((pmoAssists: User[]) => {
+          this.pmoAssists = pmoAssists;
+          this.filterPmosAssistant = this.pmosAssistantControl.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value!.full_name),
+            map(name => name ? this._filterPmos(name) : this.pmoAssists.slice())
+          );
+          this.validateAssist();
+        });
+    } else {
       this.validateAssist();
     }
   }
@@ -1043,7 +1151,6 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   async edit(){
-    true;//environment.consoleMessage("Editar");
     var valido = true;
     var message = this.validateFormGroup(this.general);
     if (message != ""){
@@ -1070,8 +1177,6 @@ export class ProjectsFormComponent implements OnInit {
 
         var editProject: any = {}
 
-        true;//environment.consoleMessage(this.project, "project >>>>>>>>>>>>>>")
-
         this.project.title != this.general.get('title')?.value ? editProject.title = this.general.get('title')!.value : true ;
         this.project.area!.id != this.general.get('areas')?.value ? editProject.area_id = this.general.get('areas')!.value : true ;
         this.project.strategic_approach!.id != this.general.get('strategicApproaches')?.value ? editProject.strategic_approach_id = this.general.get('strategicApproaches')!.value : true ;
@@ -1080,7 +1185,10 @@ export class ProjectsFormComponent implements OnInit {
 
 
         this.project.description != this.descripcion.get('projectDescription')?.value ? editProject.description = this.descripcion.get('projectDescription')!.value : true ;
-        this.project.functional_lead!.id != this.descripcion.get('leads')?.value ? editProject.functional_lead_id = this.descripcion.get('leads')!.value : true ;
+        
+        //this.project.functional_lead!.id != this.descripcion.get('leads')?.value ? editProject.functional_lead_id = this.descripcion.get('leads')!.value : true ;
+        this.leadsControl.value != null ? editProject.functional_lead_id = this.leadsControl.value.id : true;
+
         this.project.priority!.id != this.descripcion.get('priorities')?.value ? editProject.priority_id = this.descripcion.get('priorities')!.value : true ;
         this.project.typification!.id != this.descripcion.get('typifications')?.value ? editProject.typification_id = this.descripcion.get('typifications')!.value : true ;
         if (this.project.strategic_guideline != null){
@@ -1089,10 +1197,16 @@ export class ProjectsFormComponent implements OnInit {
           null != this.descripcion.get('strategicGuidelines')?.value ? editProject.strategic_guideline_id = this.descripcion.get('strategicGuidelines')!.value : true ;
         }
         this.project.management!.id != this.descripcion.get('managements')?.value ? editProject.management_id = this.descripcion.get('managements')!.value : true ;
-        this.project.pmo!.id != this.descripcion.get('pmos')?.value ? editProject.pmo_id = this.descripcion.get('pmos')!.value : true ;
+        this.pmosControl.value != null ? editProject.pmo_id = this.pmosControl.value.id : true;
+        // if(this.project.pmo == null) {
+        //   editProject.pmo_id = this.descripcion.get('pmos')!.value;
+        // } else {
+        //   this.project.pmo!.id != this.descripcion.get('pmos')?.value ? editProject.pmo_id = this.descripcion.get('pmos')!.value : true ;
+        // }
         this.project.pmo_hours != Math.trunc(this.descripcion.get('pmoHours')?.value) ? editProject.pmo_hours = Math.trunc(this.descripcion.get('pmoHours')!.value) : true ;
         this.project.pmo_minutes != ((this.descripcion.get('pmoHours')!.value! - Math.trunc(this.descripcion.get('pmoHours')!.value)) *60)  ? editProject.pmo_minutes = ((this.descripcion.get('pmoHours')!.value! - Math.trunc(this.descripcion.get('pmoHours')!.value)) *60) : true ;
-        (this.project.pmo_assitant == null ? null: this.project.pmo_assitant.id) != this.descripcion.get('pmoAssists')?.value ? editProject.pmo_assitant_id = (this.descripcion.get('pmoAssists')?.value == undefined ? null: this.descripcion.get('pmoAssists')?.value) : true ;
+        //(this.project.pmo_assitant == null ? null: this.project.pmo_assitant.id) != this.descripcion.get('pmoAssists')?.value ? editProject.pmo_assitant_id = (this.descripcion.get('pmoAssists')?.value == undefined ? null: this.descripcion.get('pmoAssists')?.value) : true ;
+        this.pmosAssistantControl.value != null ? editProject.pmo_assitant_id = this.pmosAssistantControl.value.id : true;
         (this.project.pmo_assitant_stage == null ? null: this.project.pmo_assitant_stage!.id) != this.descripcion.get('stages')?.value ? editProject.pmo_assitant_stage_id = this.descripcion.get('stages')?.value : true ;
         if (this.descripcion.get('pmoAssistHours')?.value == null){
           this.project.pmo_assistant_hours != this.descripcion.get('pmoAssistHours')?.value ? editProject.pmo_assistant_hours = this.descripcion.get('pmoAssistHours')!.value : true ;
@@ -1153,7 +1267,6 @@ export class ProjectsFormComponent implements OnInit {
   }
 
    async create(){
-    true;//environment.consoleMessage("CREATE");
     var valido = true;
     var message = this.validateFormGroup(this.general);
     if (message != ""){
@@ -1173,7 +1286,6 @@ export class ProjectsFormComponent implements OnInit {
     if (message != ""){
       this.message = message;
     } else {
-      true;//environment.consoleMessage(valido, "SIN ERROR: ");
       this.message = "";
       if (valido){
 
@@ -1184,6 +1296,7 @@ export class ProjectsFormComponent implements OnInit {
             stateByPhase.state!.id == this.seguimiento.get('states')!.value)
             && (stateByPhase.phase!.id == this.seguimiento.get('phases')!.value));
         var stateByPhase: number = stateByPhases[0].id;
+        
         var project: Project = {
           title: this.general.get('title')!.value,
           area_id: this.general.get('areas')!.value,
@@ -1192,15 +1305,18 @@ export class ProjectsFormComponent implements OnInit {
           program_id: this.general.get('programs')!.value,
 
           description: this.descripcion.get('projectDescription')!.value,
-          functional_lead_id: this.descripcion.get('leads')!.value,
+          //functional_lead_id: this.descripcion.get('leads')!.value,
+          //functional_lead_id: this.leadsControl.value.id,
           priority_id: this.descripcion.get('priorities')!.value,
           typification_id: this.descripcion.get('typifications')!.value,
           strategic_guideline_id: this.descripcion.get('strategicGuidelines')!.value,
           management_id: this.descripcion.get('managements')!.value,
-          pmo_id: this.descripcion.get('pmos')!.value,
+          //pmo_id: this.descripcion.get('pmos')!.value,
+          //pmo_id: this.pmosControl.value.id,
           pmo_hours:  Math.trunc(this.descripcion.get('pmoHours')!.value),
           pmo_minutes: ((this.descripcion.get('pmoHours')!.value! - Math.trunc(this.descripcion.get('pmoHours')!.value)) *60),
-          pmo_assitant_id: this.descripcion.get('pmoAssists')!.value,
+          //pmo_assitant_id: this.descripcion.get('pmoAssists')!.value,
+          //pmo_assitant_id: this.pmosAssistantControl.value.id,
           pmo_assitant_stage_id: this.descripcion.get('stages')!.value,
           pmo_assistant_hours: (this.descripcion.get('pmoAssistHours')!.value! == undefined ? undefined : Math.trunc(this.descripcion.get('pmoAssistHours')!.value!)),
           pmo_assistant_minutes: (this.descripcion.get('pmoAssistHours')!.value! == undefined ? undefined : ((this.descripcion.get('pmoAssistHours')!.value! - Math.trunc(this.descripcion.get('pmoAssistHours')!.value)) *60)),
@@ -1219,12 +1335,13 @@ export class ProjectsFormComponent implements OnInit {
           is_delete: false
 
         }
-
-        true;//environment.consoleMessage(project, "OBJETO: ");
-
+        
+        project.functional_lead_id = (this.leadsControl.value == null ? null : this.leadsControl.value.id);
+        project.pmo_id = (this.pmosControl.value == null ? null : this.pmosControl.value.id);
+        project.pmo_assitant_id = (this.pmosAssistantControl.value == null ? null : this.pmosAssistantControl.value.id);
+        
         this.fButtonDisabled = true;
         await this._projectsService.addProjects(project).subscribe((res) => {
-          true;//environment.consoleMessage(res, "<<<<<<<<>>>>>>");
           this.fButtonDisabled = false;
           if (res.status == 'created') {
             this.openSnackBar(true, "Registro creado satisfactoriamente", "");
@@ -1233,8 +1350,8 @@ export class ProjectsFormComponent implements OnInit {
               benefits: [],
               highlights: [],
               risks: [],
-              applications_by_projects: [],
               kpis: [],
+              applications_by_projects: [],
               areas_by_projects: [],
               test_users: [],
               companies_by_projects: [],
@@ -1242,7 +1359,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.benefits.length; index++) {
               var benefit: Benefit = {
                 project_id: id,
-                description: this.benefits[index],
+                description: this.benefits[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.benefits?.push(benefit);
@@ -1251,7 +1368,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.highlights.length; index++) {
               var highlight: Highlight = {
                 project_id: id,
-                description: this.highlights[index],
+                description: this.highlights[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.highlights?.push(highlight);
@@ -1260,7 +1377,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.risks.length; index++) {
               var risk: Risk = {
                 project_id: id,
-                description: this.risks[index],
+                description: this.risks[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.risks?.push(risk);
@@ -1269,7 +1386,7 @@ export class ProjectsFormComponent implements OnInit {
             for (let index = 0; index < this.kpis.length; index++) {
               var kpi: Kpi = {
                 project_id: id,
-                description: this.kpis[index],
+                description: this.kpis[index].description,
                 user_creates_id: JSON.parse(localStorage.user).id,
               }
               mainTable.kpis?.push(kpi);
@@ -1302,6 +1419,7 @@ export class ProjectsFormComponent implements OnInit {
               mainTable.companies_by_projects?.push(company)
             }
 
+            environment.consoleMessage(this.testUsers, "<<<<<<<<<<<<<<<       ajklsdnkajsdkasd    >>>>>>>>>>>>");
             for (let index = 0; index < this.testUsers.length; index++) {
               var testUser: any = { //borar
                 project_id: id,

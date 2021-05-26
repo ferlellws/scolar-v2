@@ -1,0 +1,179 @@
+<mat-accordion class="example-headers-align">
+  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Resumen de Proyectos
+      </mat-panel-title>
+      <mat-panel-description>
+        Resumen general de los proyectos
+        <mat-icon>list_alt</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- RESUMEN DE PROYECTOS -->
+    <tecno-summary-projects [summaryProjects]="projectsSummaryGraphs.summary_project"></tecno-summary-projects>
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  
+  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Oportunidad de Entregas
+      </mat-panel-title>
+      <mat-panel-description>
+        Graficas y tabla de oportunidad de entregas
+        <mat-icon>timeline</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="content-opportunity">
+      
+      <div style="width: 50%; padding-right: 20px;">
+        <tecno-delivery-opportunitiess
+          [multi_chart1]="deliveryOpportunityIndicators.graphic_delivery_oportunity_indicators"
+          [table1]="deliveryOpportunityIndicators.data_table_delivery_opportunity">
+        </tecno-delivery-opportunitiess>
+
+        <tecno-opportunity-behavior
+          [multi_chart1]="opportunityBehavior.management_unit_behavior_graph">
+        </tecno-opportunity-behavior>
+      </div>
+
+      <tecno-opportunitiess-by-type style="width: 50%; padding-left: 20px;"
+        [multi_chart1]="opportunityByType.graph_opportunity_by_type"
+        [table1]="opportunityByType.data_table_opportunity_by_type">
+      </tecno-opportunitiess-by-type>
+
+    </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Comparativo de Calidad
+      </mat-panel-title>
+      <mat-panel-description>
+        Graficas y tabla de Comparativo de Calidad
+        <mat-icon>fact_check</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="content-comparative" style="display: flex; width: 100%">
+      
+      <tecno-quality-graph class="graphPie" style="display: initial;"
+        [multi_chart]="qualityGraph.quality_graph">
+      </tecno-quality-graph>
+    
+      <div style="display: flex; width: 60%;">
+        <tecno-comparative-quality style="width: 100%;"
+          [multi_chart1]="comparativeQualityIndicators.graphic_comparative_quality_indicators"
+          [table1]="comparativeQualityIndicators.data_table_comparative_quality">
+        </tecno-comparative-quality>
+      </div>
+
+    </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+
+  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Evolución Indicadores de Desempeño
+      </mat-panel-title>
+      <mat-panel-description>
+        Graficas y tabla de Evolución Indicadores de Desempeño
+        <mat-icon>moving</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+      <tecno-evolution-performance-indicators
+        [multi_chart1]="evolutionPerformanceIndicators.graphic_evolution_performance_indicators"
+        [table1]="evolutionPerformanceIndicators.data_table_evolution_performance_indicators">
+      </tecno-evolution-performance-indicators>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Cantidad de Requerimientos
+      </mat-panel-title>
+      <mat-panel-description>
+        Cantidad de Requerimientos
+        <mat-icon>dynamic_feed</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div style="display: flex; width: 100%;">
+      <tecno-items-by-component style="width: 50%;" [data]=totalItemsGraph.items_by_component [template_id]=0></tecno-items-by-component>
+      <tecno-develop-complexity style="width: 50%;" [data]=totalItemsGraph.develop_complexity [template_id]=0></tecno-develop-complexity>
+    </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Complejidad por proyecto
+      </mat-panel-title>
+      <mat-panel-description>
+        Complejidad por proyecto
+        <mat-icon>psychology</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div style="display: flex; width: 100%;">
+      <tecno-project-complexity style="width: 100%;" [data]=projectComplexity [template_id]=0></tecno-project-complexity>
+    </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 6" (opened)="setStep(6)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Horas
+      </mat-panel-title>
+      <mat-panel-description>
+        Horas
+        <mat-icon>query_builder</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div style="display: flex; width: 100%;">
+      <tecno-hours-by-component style="width: 50%;" [data]=hoursGraph.hours_by_component [template_id]=0></tecno-hours-by-component>
+      <tecno-hours-by-project style="width: 50%;" [data]=hoursGraph.hours_by_project [template_id]=0></tecno-hours-by-project>
+    </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Fin</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>

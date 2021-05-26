@@ -1,0 +1,237 @@
+
+<h2 class="mat-title" style="text-align: center;">Resumen Proyectos</h2>
+
+
+<div>
+  <!--
+  <div  class="select">
+    <h3 style="padding-left: 30px;">Compañia Sponsor</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Ingrese un Sponsor</mat-label>
+      <mat-select [(value)]="selected">
+        <mat-option value="option1">Koba</mat-option>
+        <mat-option value="option2">Tecnocorp</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  -->
+    
+  <div class="date">
+    <tecno-buttons-filter-graphs
+      [buttons]="buttons"
+      [flagShowDateForm]="true"
+      (onFilterButtonEvent)="onFilterButtonEvent($event, 'graph1')"
+      (onFilterDateEvent)="onFilterDateEvent($event, 'graph1')">
+    </tecno-buttons-filter-graphs>
+  </div>
+</div>
+
+<div class="example-container mat-elevation-z5" style="width: 100%;">
+  <!-- <ul>
+    <li *ngFor="let projectName of projectsName" >--{{projectName}}--</li>
+  </ul> -->
+
+  <table mat-table [dataSource]="dataTableSummary">
+    <!-- Item Column -->
+    <ng-container matColumnDef="project">
+      <th mat-header-cell *matHeaderCellDef> Proyecto </th>
+      <td mat-cell *matCellDef="let data"> {{ data.project }} </td>
+      <td mat-footer-cell *matFooterCellDef> Total General </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <ng-container matColumnDef="closed">
+      <th mat-header-cell *matHeaderCellDef> Cerrado </th>
+      <td mat-cell *matCellDef="let data"> {{ data.closed }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[0] }} </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <ng-container matColumnDef="development">
+      <th mat-header-cell *matHeaderCellDef> Desarrollo </th>
+      <td mat-cell *matCellDef="let data"> {{ data.development }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[1] }} </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <ng-container matColumnDef="deployment">
+      <th mat-header-cell *matHeaderCellDef> Despliegue </th>
+      <td mat-cell *matCellDef="let data"> {{ data.deployment }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[2] }} </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <ng-container matColumnDef="qa_tests">
+      <th mat-header-cell *matHeaderCellDef> Pruebas QA </th>
+      <td mat-cell *matCellDef="let data"> {{ data.qa_tests }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[3] }} </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <ng-container matColumnDef="user_tests">
+      <th mat-header-cell *matHeaderCellDef> Pruebas Usuario </th>
+      <td mat-cell *matCellDef="let data"> {{ data.user_tests }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[4] }} </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <ng-container matColumnDef="grand_total">
+      <th mat-header-cell *matHeaderCellDef> Total General </th>
+      <td mat-cell *matCellDef="let data"> {{ data.grand_total }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[5] }} </td>
+    </ng-container>
+
+    <!-- Closed Column -->
+    <!-- <ng-container matColumnDef="grand_total">
+      <th mat-header-cell *matHeaderCellDef> Cerrado </th>
+      <td mat-cell *ngFor="let total in grandTotal"> {{ total }} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ grandTotal[0] }} </td>
+    </ng-container> -->
+
+    <!-- Other Column -->
+    <!-- <ng-container *ngFor="let column of displayedColumns | slice:1;" [matColumnDef]="column"> -->
+      <!-- <th mat-header-cell *matHeaderCellDef> Cost </th> -->
+      <!-- <td mat-cell *matCellDef="let transaction"> {{transaction.cost | currency}} </td> -->
+      <!-- <td mat-cell *matCellDef="let summaryProject"> {{ summaryProject.project.title }} </td> -->
+      <!-- <td mat-cell></td> -->
+      <!-- <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td> -->
+      <!-- <td mat-footer-cell *matFooterCellDef> 1 </td> -->
+    <!-- </ng-container> -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+  </table>
+</div>
+
+<div class="mt-20">
+  <h2 class="mat-title">Conclusión</h2>
+
+  <mat-grid-list cols="3" rowHeight="170px" class="mt-15 mb-15">
+    <mat-grid-tile >
+      <!-- TOTAL REQUERIMIENTOS -->
+      <mat-card class="example-card card-percentage mat-elevation-z3 ml-10 mr-10">
+        <mat-card-header>
+          <mat-card-subtitle class="title-card" class="title-card">Total Requerimientos</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h1 class="mat-h1 float-left card-value">{{ grandTotal[5] }}</h1>
+
+          <mat-progress-spinner
+            class="example-margin float-left card-graph"
+            color="primary"
+            mode="determinate"
+            diameter="50"
+            value="100">
+          </mat-progress-spinner>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-grid-tile>
+    <mat-grid-tile>
+
+      <!-- CERRADO -->
+      <mat-card class="example-card card-percentage mat-elevation-z3 ml-10 mr-10">
+        <mat-card-header>
+          <mat-card-subtitle class="title-card">Cerrado</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h1 class="mat-h1 float-left card-value">{{ grandTotal[0] / grandTotal[5] * 100 | number: '1.1-1' }}%</h1>
+
+          <mat-progress-spinner
+            class="example-margin float-left card-graph"
+            color="primary"
+            mode="determinate"
+            diameter="50"
+            [value]="grandTotal[0] / grandTotal[5] * 100">
+          </mat-progress-spinner>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-grid-tile>
+    <mat-grid-tile>
+
+      <!-- DESARROLLO -->
+      <mat-card class="example-card card-percentage mat-elevation-z3 ml-10 mr-10">
+        <mat-card-header>
+          <mat-card-subtitle class="title-card">Desarrollo</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h1 class="mat-h1 float-left card-value">{{ grandTotal[1] / grandTotal[5] * 100 | number: '1.1-1' }}%</h1>
+
+          <mat-progress-spinner
+            class="example-margin float-left card-graph"
+            color="primary"
+            mode="determinate"
+            diameter="50"
+            [value]="grandTotal[1] / grandTotal[5] * 100">
+          </mat-progress-spinner>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-grid-tile>
+    <mat-grid-tile>
+
+      <!-- DESPLIEGUE -->
+      <mat-card class="example-card card-percentage mat-elevation-z3 ml-10 mr-10">
+        <mat-card-header>
+          <mat-card-subtitle class="title-card">Despliegue</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h1 class="mat-h1 float-left card-value">{{ grandTotal[2] / grandTotal[5] * 100 | number: '1.1-1' }}%</h1>
+
+          <mat-progress-spinner
+            class="example-margin float-left card-graph"
+            color="primary"
+            mode="determinate"
+            diameter="50"
+            [value]="grandTotal[2] / grandTotal[5] * 100">
+          </mat-progress-spinner>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-grid-tile>
+    <mat-grid-tile>
+
+      <!-- PRUEBAS QA -->
+      <mat-card class="example-card card-percentage mat-elevation-z3 ml-10 mr-10">
+        <mat-card-header>
+          <mat-card-subtitle class="title-card">Pruebas QA</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h1 class="mat-h1 float-left card-value">{{ grandTotal[3] / grandTotal[5] * 100 | number: '1.1-1' }}%</h1>
+
+          <mat-progress-spinner
+            class="example-margin float-left card-graph"
+            color="primary"
+            mode="determinate"
+            diameter="50"
+            [value]="grandTotal[3] / grandTotal[5] * 100">
+          </mat-progress-spinner>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-grid-tile>
+    <mat-grid-tile>
+
+      <!-- PRUEBAS USUARIO -->
+      <mat-card class="example-card card-percentage mat-elevation-z3 ml-10 mr-10">
+        <mat-card-header>
+          <mat-card-subtitle class="title-card">Pruebas Usuario</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h1 class="mat-h1 float-left card-value">{{ grandTotal[4] / grandTotal[5] * 100 | number: '1.1-1' }}%</h1>
+
+          <mat-progress-spinner
+            class="example-margin float-left card-graph"
+            color="primary"
+            mode="determinate"
+            diameter="50"
+            [value]="grandTotal[4] / grandTotal[5] * 100">
+          </mat-progress-spinner>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

@@ -54,7 +54,6 @@ export class VicePresidenciesComponent implements OnInit {
   }
 
   onCreate() {
-    true;//environment.consoleMessage("", ">>>>>>>>>>>>>>>>> openDialog");
     const dialogRef = this.dialog.open(VicePresidenciesFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
@@ -66,7 +65,6 @@ export class VicePresidenciesComponent implements OnInit {
   }
 
   onEdit(data: number) {
-    true;//environment.consoleMessage(data, ">>>>>>>>>>>>>>>>> onEdit: ");
     const dialogRef = this.dialog.open(VicePresidenciesFormComponent, {
       width: environment.widthFormsModal,
       disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha

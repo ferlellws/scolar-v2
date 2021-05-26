@@ -6,10 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./particle-background.component.scss']
 })
 export class ParticleBackgroundComponent implements OnInit {
-
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
   width: number = 100;
   height: number = 100;
   myStyle: Object = {
@@ -129,4 +125,7 @@ export class ParticleBackgroundComponent implements OnInit {
     "retina_detect": true
   };
 
+  ngOnInit(): void {
+    // throw new Error('Method not implemented.');
+  }
 }

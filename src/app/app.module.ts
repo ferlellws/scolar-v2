@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 
 // MODULES
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -47,11 +46,15 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+// COMPONENTS
+import { AppComponent } from './app.component';
+import { LoginComponent } from './components/login/login.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ParticleBackgroundComponent } from './components/login/particle-background/particle-background.component';
+
 
 const MATERIALMODULES = [
   MatSortModule,

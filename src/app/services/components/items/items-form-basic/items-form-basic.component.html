@@ -1,0 +1,36 @@
+<form [formGroup]="basicOptions">
+
+  <mat-grid-list cols="12" rowHeight="80px" *ngIf="flagCrear">
+    <mat-grid-tile
+      class="txt-right"
+      [colspan]="2"
+      [rowspan]="1">
+      <mat-form-field
+        [hideRequiredMarker]="hideRequiredControl.value"
+        [floatLabel]="floatLabelControl.value"
+        class="field-full ml-5 mr-5">
+        <mat-select required (openedChange)="_openItemTypes($event)" formControlName="selectItemTypes">
+          <mat-select-trigger>
+            <mat-icon class="txt-{{getSelectedType().color}}">{{getSelectedType().iconName}}</mat-icon>
+            {{getSelectedType().title}}
+          </mat-select-trigger>
+          <mat-option *ngFor="let itemType of itemTypes" [value]="itemType.id" >
+            <mat-icon class="txt-{{itemType.color}}">{{itemType.iconName}}</mat-icon>
+            {{itemType.title}}
+          </mat-option>
+        </mat-select>
+        <mat-label>Tipo</mat-label>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile
+      class="txt-right"
+      [colspan]="10"
+      [rowspan]="1">
+      <mat-form-field class="field-full">
+        <mat-label>Requerimiento</mat-label>
+        <input matInput (keydown.enter)="addItemBasic()" formControlName="titleControl">
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+</form>

@@ -309,6 +309,10 @@ export class PersonsFormComponent implements OnInit {
 
     if (this.personsGroup.get('access')!.value == 1) {
       let newUser = {
+        first_name: this.personsGroup.get('first_name')!.value,
+        last_name: this.personsGroup.get('last_name')!.value,
+        //position_area_id: this.personsGroup.get('position_area_id')!.value,
+        profile_id: this.personsGroup.get('profile_id')!.value,
         email: this.personsGroup.get('email')!.value,
         password: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
         password_confirmation: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
@@ -361,7 +365,7 @@ export class PersonsFormComponent implements OnInit {
             aErrors.forEach((err) => {
             sErrors += "- " + err + "\n";
             })
-          this.openSnackBar(false, sErrors, "");
+          this.openSnackBar(false, "Este correo ya está asignado", "");
           });
       } else {
         let newPerson:any  = {
@@ -416,6 +420,10 @@ export class PersonsFormComponent implements OnInit {
 
         if (this.personsGroup.get('access')!.value == 1 && flag == false) {
           let newUser:any = {
+            first_name: this.personsGroup.get('first_name')!.value,
+            last_name: this.personsGroup.get('last_name')!.value,
+            //position_area_id: this.personsGroup.get('position_area_id')!.value,
+            profile_id: this.personsGroup.get('profile_id')!.value,
             email: this.personsGroup.get('email')!.value,
             password: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
             password_confirmation: this.personsGroup.get('first_name')!.value.split(' ')[0] + "" + this.personsGroup.get('last_name')!.value.split(' ')[0] + "Koba",
@@ -437,10 +445,7 @@ export class PersonsFormComponent implements OnInit {
                       profile_id: this.personsGroup.get('profile_id')!.value,
                       user_id: res.data.user_created_id
                     }
-                    this.personsService.updatePerson(
-                      newPerson,
-                      this.data.id
-                    )
+                    this.personsService.updatePerson(newPerson, this.data.id)
                     .subscribe((res) => {
                       this.fButtonDisabled = false;
                       if (res.status == "created") {
@@ -486,10 +491,7 @@ export class PersonsFormComponent implements OnInit {
                       profile_id: this.personsGroup.get('profile_id')!.value,
                       user_id: res.data.user_created_id
                     }
-                    this.personsService.updatePerson(
-                      newPerson,
-                      this.data.id
-                    )
+                    this.personsService.updatePerson(newPerson, this.data.id)
                     .subscribe((res) => {
                       this.fButtonDisabled = false;
                       if (res.status == "created") {
@@ -529,15 +531,22 @@ export class PersonsFormComponent implements OnInit {
           this.personsService.getPersonsId(this.data.id)
             .subscribe(p => {
               if(p.email == this.personsGroup.get('email')?.value) {
-                this.personsService.updatePerson(
-                this.personsGroup.value,
-                this.data.id
-              )
+                this.personsService.updatePerson(this.personsGroup.value, this.data.id )
                 .subscribe((res) => {
                   this.fButtonDisabled = false;
                   if (res.status == "created") {
-                    this.openSnackBar(true, "Registro Modificado", "");
-                    this.onReset();
+                    let updateUser: any = {
+                      first_name: this.personsGroup.get('first_name')!.value,
+                      last_name: this.personsGroup.get('last_name')!.value,
+                      email: this.personsGroup.get('email')!.value,
+                      //position_area_id: this.personsGroup.get('position_area_id')!.value,
+                      profile_id: this.personsGroup.get('profile_id')!.value,
+                    }
+                    this.userService.updateUser(updateUser, p.user.id)
+                    .subscribe((res: any) => {
+                      this.openSnackBar(true, "Registro Modificado", "");
+                      this.onReset();
+                    });
                   }
                 });
               } else {
@@ -556,10 +565,7 @@ export class PersonsFormComponent implements OnInit {
             profile_id: this.personsGroup.get('profile_id')!.value,
             user_id: null
           }
-          this.personsService.updatePerson(
-            newPerson,
-            this.data.id
-          )
+          this.personsService.updatePerson(newPerson, this.data.id)
           .subscribe((res) => {
             this.fButtonDisabled = false;
             if (res.status == "created") {

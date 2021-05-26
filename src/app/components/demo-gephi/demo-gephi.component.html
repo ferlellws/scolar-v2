@@ -1,2 +1,310 @@
-<p>demo-gephi works!</p>
-<div id='sigma-container'></div>
+<h2 class="txt-primary">Cantidad Total de Proyectos Activos Relacionados {{project_total}}</h2>
+
+<!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+<span class="txt-accent" style="font-size: 16px; font-weight: 500;">Filtrar por</span>
+
+<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start; margin-top: 5px;">
+    <button *ngIf="flagResource" class="buttons-options" mat-raised-button (click)="onClickResources()" color={{colorRecursos}}>
+        <span>Recursos</span>
+    </button>
+    <button *ngIf="!flagResource" class="buttons-options" mat-raised-button (click)="onClickResources()">
+        <span>Recursos</span>
+    </button>
+
+    <button *ngIf="flagCompanies" class="buttons-options" mat-raised-button (click)="onClickCompanies()" color={{colorProveedores}}>
+        <span>Proveedores</span>
+    </button>
+    <button *ngIf="!flagCompanies" class="buttons-options" mat-raised-button (click)="onClickCompanies()">
+        <span>Proveedores</span>
+    </button>
+
+    <button *ngIf="flagAreasParticipating" class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()" color={{colorAreasParticipantes}}>
+        <span>Áreas Participantes</span>
+    </button>
+    <button *ngIf="!flagAreasParticipating" class="buttons-options" mat-raised-button (click)="onClickAreasParticipating()">
+        <span>Áreas Participantes</span>
+    </button>
+
+    <button *ngIf="flagAreasBelongs" class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()" color={{colorAreasPertenecientes}}>
+        <span>Áreas Responsables de Proyectos</span>
+    </button>
+    <button *ngIf="!flagAreasBelongs" class="buttons-options" mat-raised-button (click)="onClickAreasBelongs()">
+        <span>Áreas Responsables de Proyectos</span>
+    </button>
+
+    <button *ngIf="flagApps" class="buttons-options" mat-raised-button (click)="onClickApps()" color={{colorApps}}>
+        <span>Aplicativos Impactados</span>
+    </button>
+    <button *ngIf="!flagApps" class="buttons-options" mat-raised-button (click)="onClickApps()">
+        <span>Aplicativos Impactados</span>
+    </button>
+
+    <button *ngIf="flagDefProcess" class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()" color={{colorDefProcesos}}>
+        <span>Definición de Proceso</span>
+    </button>
+    <button *ngIf="!flagDefProcess" class="buttons-options" mat-raised-button (click)="onClickDefinitionProcess()">
+        <span>Definición de Proceso</span>
+    </button>
+
+    <button *ngIf="flagVarProcess" class="buttons-options" mat-raised-button (click)="onClickVariationProcess()" color={{colorVarProcesos}}>
+        <span>Variación Alcance de Proceso</span>
+    </button>
+    <button *ngIf="!flagVarProcess" class="buttons-options" mat-raised-button (click)="onClickVariationProcess()">
+        <span>Variación Alcance de Proceso</span>
+    </button>
+</div>
+
+<div class="row col-sm-12 col-md-12" style="display: flex; flex-wrap: wrap; justify-content: flex-start; margin-top: 10px; margin-bottom: 10px;">
+    <button class="buttons-options" mat-raised-button (click)="onClickViewAll()">
+        <span>Ver Todo</span>
+    </button>
+    <button class="buttons-options" mat-raised-button (click)="onClickClearAll()">
+        <span>Limpiar</span>
+    </button>
+</div>
+
+
+<!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->        
+
+
+<div class="row contenedor">
+    <div class="col-sm-12 col-md-8">
+        <span class="txt-accent" style="font-size: 16px; font-weight: 500;">Vicepresidencias</span>
+
+        <div class="header-row" style="flex-wrap: wrap; padding-left: 10px;">
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp1}"
+                (click)="clickVicepresidency(vicepresidencies[0].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vicepresidencies[0].color}"></div>
+                    <span class="col-sm-12 col-md-10" style="font-weight: 500;" [ngStyle]="{'color': textVp1}">{{vicepresidencies[0].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp1}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp1}">{{vicepresidencies[0].total}}</span>
+                </div>
+            </div>
+        
+
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp2}"
+                (click)="clickVicepresidency(vicepresidencies[1].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-1" [ngStyle]="{'background-color': vicepresidencies[1].color}"></div>
+                    <span class="col-sm-12 col-md-11" style="font-weight: 500;" [ngStyle]="{'color': textVp2}">{{vicepresidencies[1].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp2}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp2}">{{vicepresidencies[1].total}}</span>
+                </div>
+            </div>
+
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp3}"
+                (click)="clickVicepresidency(vicepresidencies[2].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vicepresidencies[2].color}"></div>
+                    <span class="col-sm-12 col-md-10" style="font-weight: 500;" [ngStyle]="{'color': textVp3}">{{vicepresidencies[2].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp3}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp3}">{{vicepresidencies[2].total}}</span>
+                </div>
+            </div>
+
+            <div class="mat-elevation-z1 row col-sm-12 col-md-3"
+                style="border-radius: 5px; cursor: pointer;"
+                [ngStyle]="{'background-color': bttnVp4}"
+                (click)="clickVicepresidency(vicepresidencies[3].id)">
+                <div class="header-row">
+                    <div class="circle col-sm-12 col-md-2" [ngStyle]="{'background-color': vicepresidencies[3].color}"></div>
+                    <span class="col-sm-12 col-md-10" style="font-weight: 500;" [ngStyle]="{'color': textVp4}">{{vicepresidencies[3].name}} </span>
+                </div>
+                <div style="padding-left: 66px;">
+                    <span style="font-size: 13px;" [ngStyle]="{'color': textVp4}">Total Proyectos: </span>
+                    <span style="font-size: 15px; font-weight: 500;" [ngStyle]="{'color': textVp4}">{{vicepresidencies[3].total}}</span>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="col-sm-12 col-md-4">
+        <span class="row txt-accent col-sm-12 col-md-12" style="font-size: 16px; font-weight: 500;justify-content: flex-end; padding-right: 50px;">Zoom</span>
+        <div class="row col-sm-12 col-md-12" style="justify-content: flex-end;">
+            <button class="buttons-options" mat-raised-button (click)="onClickZoomMas()">
+                <span class="txt-primary">+</span>
+            </button>
+            <button class="buttons-options" mat-raised-button (click)="onClickZoomMenos()">
+                <span class="txt-primary">-</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="display: flex; justify-content: space-between;">
+
+    <tecno-gephi  *ngIf="flag == '0'" class="col-sm-12 col-md-12" style="min-height: 100vh;"
+        id="chartdiv1"
+        width="100%"
+        height="90vh"
+        [dataGraph]="dataGraph"
+        [minRadius]="minRadius"
+        [maxRadius]="maxRadius"
+        [distance]="distance"
+        [labels]="labels"
+        (emitClick)="click($event)">
+    </tecno-gephi>
+
+    <tecno-gephi  *ngIf="flag == '1'" class="col-sm-12 col-md-8" style="min-height: 90vh;"
+        id="chartdiv2"
+        width="100%"
+        height="90vh"   
+        [dataGraph]="dataGraph"
+        [minRadius]="minRadius"
+        [maxRadius]="maxRadius"
+        [distance]="distance"
+        [labels]="labels"
+        (emitClick)="click($event)">
+    </tecno-gephi>
+
+    <mat-card *ngIf="flag == '1'" class="card-content mat-elevation-z4 col-sm-12 col-md-4">
+        <mat-icon class="icons-cards txt-primary">stream</mat-icon>
+                <mat-card-header>
+                    <mat-card-title class="row contenedor">
+                        <span class="txt-accent">Interrelaciones Activas de</span>
+                        <span class="txt-primary">{{project.title}}</span>
+                        <br>
+                        <!-- <span style="font-size: 16px;">Total Proyectos Relacionados: {{interrelations.total}}</span> -->
+                    </mat-card-title>  
+                </mat-card-header>
+                
+                <div *ngFor="let interrelation of interrelations.interrelationsGeneral.data; index as i" >
+                    <mat-accordion>
+                        <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="row">
+                                    <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
+                                    <br>
+                                    <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{interrelation.total}}</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div *ngIf="interrelation.data.length != 0">
+                                <div *ngFor="let data of interrelation.data; index as j">
+                                    <div mat-line class="line-text" style="padding-left: 0px; font-weight: 500; padding-bottom: 0px;"> {{j+1}}. {{data.name}} </div>
+                                    <div *ngFor="let info of data.data; index as k">
+                                        <div mat-line class="line-text">- {{info}} </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="interrelation.data.length == 0" mat-line class="line-text-font"> {{labelTotalInterrelation}} </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+                <div *ngFor="let interrelation of interrelations.interrelationsSpecific.data; index as i" class="">
+                    <mat-accordion>
+                        <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="row">
+                                    <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
+                                    <br>
+                                    <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{interrelation.total}}</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div *ngIf="interrelation.data.length != 0">
+                                <mat-accordion *ngFor="let type of interrelation.data; index as j">
+                                    <mat-expansion-panel [expanded]="true" class="mat-elevation-z0" style="padding-bottom: 15px;">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title class="row">
+                                                <h3 class="txt-accent title-expansion">{{type.type}}</h3>
+                                                <br>
+                                                <span style="font-size: 13px; font-weight: 500;">Total Proyectos Relacionados: {{type.data.length}}</span>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div *ngIf="type.data.length != 0">
+                                            <div *ngFor="let data of type.data; index as j">
+                                                <br>
+                                                <div class="row">
+                                                    <div mat-line class="col-sm-12 col-md-9 line-text txt-primary" style="padding-left: 0px; font-weight: 500;"> {{j+1}}. {{data.projectName}} </div>
+                                                </div>
+                                                <div mat-line class="cont-inter"> Fecha de identificación:</div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.date.substring(0,10)}} </div>
+                                                <div mat-line class="cont-inter"> Impacto:</div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.impact}} </div>
+                                                <div mat-line class="cont-inter"> Elementos a tener en cuenta::</div>
+                                                <div mat-line class="line-text" style="padding-left: 15px; ">{{data.description}} </div>
+                                                <mat-divider style="margin-left: 25px;"></mat-divider>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="type.data.length == 0" mat-line class="line-text-font"> {{labelTotalInterrelation}} </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
+                            <div *ngIf="interrelation.data.length == 0" mat-line class="line-text-font"> {{labelTotalInterrelation}} </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+    </mat-card>
+</div>
+
+<div class="row col-sm-12 col-md-12" style="justify-content: flex-end;">
+    <button class="buttons-options" mat-button (click)="onClickLeyenda()">
+        <span *ngIf="labels" class="txt-primary">Ocultar Leyendas</span>
+        <span *ngIf="!labels" class="txt-primary">Mostar Leyendas</span>
+    </button>
+</div>
+
+<br><br>
+<mat-divider></mat-divider>
+<br><br>
+<h1 class="txt-primary" style="font-weight: 500;">Top 5 Interrelaciones</h1>
+
+<div *ngIf="general_top.length != 0" class="row">
+    <div *ngFor="let top of general_top.basics.data index as i" class="col-sm-12 col-md-3">
+        <mat-card class="card-content mat-elevation-z4">
+            <h2 class="txt-accent">{{top.name}}</h2>
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let data of top.data; index as i" class="mat-elevation-z0" style="padding-left: -15px;">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title class="row">
+                        <h3 class="txt-primary title-expansion">{{i+1}}. {{data.name}}</h3>
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="data.data.length != 0" >
+                        <div *ngFor="let projects of data.data; index as i" mat-line class="line-text" style="padding-left: 0px;">- {{projects}}</div>
+                    </div>
+                    <div *ngIf="data.data.length == 0" mat-line class="line-text-font"> No asignado </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-card>
+        <br>
+    </div>
+</div>
+
+<div *ngIf="general_top.length != 0" class="row">
+    <div *ngFor="let top of general_top.specifics.data index as i" class="contenedor2 col-sm-12 col-md-6">
+        <mat-card class="mat-elevation-z4 col-sm-12 col-md-12 contenedor2 row" style="margin-left: 3px;">
+            <h2 class="txt-accent" style="max-height: 32px;">{{top.name}}</h2>
+            <div *ngFor="let info of top.data as i" class="col-sm-12 col-md-6">
+                <h2 style="font-size: 16px;">{{info.name}}</h2>
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let data of info.data; index as i" class="mat-elevation-z0" style="padding-left: -15px;">
+                        <mat-expansion-panel-header *ngIf="data.data.length != 0">
+                            <mat-panel-title>
+                                <h3 class="txt-primary title-expansion">{{i+1}}. {{data.name}}</h3>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div *ngIf="data.data.length != 0">
+                            <div *ngFor="let projects of data.data; index as i" mat-line class="line-text" style="padding-left: 0px;">- {{projects}}</div>
+                        </div>
+                        <div *ngIf="data.data.length == 0" mat-line class="line-text-font"> No asignado </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </mat-card>
+    </div>
+</div>
