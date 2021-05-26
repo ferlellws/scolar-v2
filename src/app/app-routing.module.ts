@@ -64,6 +64,7 @@ import { SupportResourcesResolver } from './components/operation-resources/guard
 import { ProjectsTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/projects-time-capacity.resolver';
 import { ResourcesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/resources-time-capacity.resolver';
 import { AreasTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/areas-time-capacity.resolver';
+import { DesviationCausesTypificationsBySourcesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-typifications-by-sources.resolver';
 
 const routes: Routes = [
   {
@@ -122,7 +123,8 @@ const routes: Routes = [
       desviationCausesBySource: DesviationCausesBySourceResolver,
       desviationCausesByTypifications: DesviationCausesByTypificationsResolver,
       desviationCausesByVicepresidencies: DesviationCausesByVicepresidenciesResolver,
-      desviationCausesByAreas: DesviationCausesByAreasResolver
+      desviationCausesByAreas: DesviationCausesByAreasResolver,
+      desviationCausesTypificationsBySources: DesviationCausesTypificationsBySourcesResolver
     }
   },
   {

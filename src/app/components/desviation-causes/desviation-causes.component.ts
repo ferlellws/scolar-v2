@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -71,110 +72,6 @@ export class DesviationCausesComponent implements OnInit {
   }
   
   typificationsBySources: any;
-  // typificationsBySources = [
-  //   {
-  //     name: "Tecnología",
-  //     impacts_time: 23,
-  //     cost_variaton: "$1.456.000",
-  //     dataTable: {
-  //       headers: [
-  //         "Tipificación",
-  //         "Suma de Impacto Tiempo (Días)",
-  //         "Suma de Variación de Costos (COP)",
-  //       ],
-  //       dataTable: [
-  //         {
-  //           name: "Fallas de Calidad IT",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Fallas de Calidad Proveedor",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Falla en Especificaciones",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Atrasos en Contratación de Recursos",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     name: "Financiero",
-  //     impacts_time: 23,
-  //     cost_variaton: "$1.456.000",
-  //     dataTable: {
-  //       headers: [
-  //         "Tipificación",
-  //         "Suma de Impacto Tiempo (Días)",
-  //         "Suma de Variación de Costos (COP)",
-  //       ],
-  //       dataTable: [
-  //         {
-  //           name: "Fallas de Calidad IT",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Fallas de Calidad Proveedor",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Falla en Especificaciones",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Atrasos en Contratación de Recursos",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     name: "Gestión Humana",
-  //     impacts_time: 23,
-  //     cost_variaton: "$1.456.000",
-  //     dataTable: {
-  //       headers: [
-  //         "Tipificación",
-  //         "Suma de Impacto Tiempo (Días)",
-  //         "Suma de Variación de Costos (COP)",
-  //       ],
-  //       dataTable: [
-  //         {
-  //           name: "Fallas de Calidad IT",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Fallas de Calidad Proveedor",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Falla en Especificaciones",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //         {
-  //           name: "Atrasos en Contratación de Recursos",
-  //           impacts_time: "34",
-  //           cost_variaton: "$1.456.000",
-  //         },
-  //       ]
-  //     }
-  //   }
-  // ]
 
   constructor(
     public dialog: MatDialog, 
@@ -231,6 +128,8 @@ export class DesviationCausesComponent implements OnInit {
       this.dataTableTypification = data.desviationCausesByTypifications.data;
       this.dataGraphicTypification = VegaChartsComponent.TableToChart(this.dataTableTypification, ['sum_impacts_time']);
 
+      this.typificationsBySources = data.desviationCausesTypificationsBySources.typificationsBySource;
+ 
       this.maxScaleTypifications = Math.max.apply(null,this.dataGraphicTypification.map((data: any) => data[1])) + 10;
 
       this.projectsService.getProjectsSelect()
