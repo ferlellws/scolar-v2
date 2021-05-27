@@ -20,6 +20,6 @@ export class PersonsResolver implements Resolve<TableData> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<TableData> |Promise<any>|any{
-      return this.personsService.getTablaPeople();
+      return this.personsService.getTablaPeople(0, 10);
   }
 }

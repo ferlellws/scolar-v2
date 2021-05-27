@@ -231,7 +231,6 @@ export class ProjectProgressCreateComponent implements OnInit {
                     this.productsToBeDelivered = [];
                     for (let index = 0; index < data.ecDeliveredProducts.length; index++) {
                       if(data.ecDeliveredProducts[index].project.id == this.project.id) {
-                        //environment.consoleMessage(data.ecDeliveredProducts[index],"Productos Entregados");
                         data.ecDeliveredProducts.map((d:any) => d.date = this.getToStringDate(new Date(`${(d.date).substring(0,10)}:00:00`)));
                         this.productsDelivered.push(data.ecDeliveredProducts[index]);
                       }
@@ -248,7 +247,6 @@ export class ProjectProgressCreateComponent implements OnInit {
                         this.productsToBeDelivered.push(data.ecProductsInProgresses[index]);
                       }
                     }
-                    //environment.consoleMessage(this.productsDelivered,"Productos Entregados final");
                   });
               });
           });

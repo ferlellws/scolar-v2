@@ -106,9 +106,7 @@ export class GeneralUsersFormComponent implements OnInit {
 
               this.personsUser = res;
               this.personControl.setValue(this.personsUser.full_name);
-            });
-          
-          
+            }); 
       });
     }
   }

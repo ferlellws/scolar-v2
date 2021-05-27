@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { Actions } from 'src/app/models/actions';
 import { TableData } from 'src/app/models/table-data';
@@ -19,6 +20,11 @@ export class PersonsComponent implements OnInit {
 
   dataTable!: TableData;
   actions!: Actions;
+
+  // MatPaginator Inputs
+  length = 0;
+  pageSize = 10;
+  pageSizeOptions: number[] = [10, 50, 100];
   
   constructor(
     public dialog: MatDialog,    
@@ -35,8 +41,14 @@ export class PersonsComponent implements OnInit {
     }
     this.mainService.showLoading();
     this.route.data.subscribe((data: any) => {
-      //this.dataTable = data.people;
       this.dataTable = data.persons;
+
+      this.personsService.getPeopleCount()
+        .subscribe(res => {
+          this.length = res;
+          this.pageSizeOptions.push(this.length);
+          this.pageSizeOptions = JSON.parse(JSON.stringify(this.pageSizeOptions));
+        });
       setTimeout(() => {this.mainService.hideLoading()}, 1000);      
     });
 
@@ -48,7 +60,13 @@ export class PersonsComponent implements OnInit {
       })
   }
 
-
+  paginator(event: PageEvent) {
+    this.personsService.getTablaPeople(event.pageIndex + 1, event.pageSize)
+      .subscribe(res => {
+        this.dataTable = res;
+      });
+  }
+  
   onCreate() {
     const dialogRef = this.dialog.open(PersonsFormComponent, {
       width: environment.widthFormsModal,

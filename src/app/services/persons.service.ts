@@ -38,7 +38,18 @@ export class PersonsService {
       );
   }
 
-  getTablaPeople() {
+  getPeopleCount() {
+    return this.http.get<number>(`${this.API}/count_people`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getTablaPeople(page: number, per_page: number) {
+    this.inputParams.page = page;
+    this.inputParams.per_page = per_page;
+
     return this.http.get<Person[]>(`${this.API}/index_with_data_table`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)

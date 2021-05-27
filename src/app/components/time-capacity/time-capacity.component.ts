@@ -46,6 +46,11 @@ export class TimeCapacityComponent implements OnInit {
   }
 
   indexTab = 0;
+
+  stepOutArea = -1;
+  stepTop5Area = -1;
+  stepTop5AreaResource = -1;
+
   //Filtros Recursoso Portafolio
   filtersGroup!: FormGroup;
   projectsControl = new FormControl();
@@ -100,48 +105,6 @@ export class TimeCapacityComponent implements OnInit {
           'Rol Proyecto'
         ],
         dataTable: [
-          {
-            resource: 'David Fernando Guerrero Álvarez',
-            vicepresidency: 'Vp Comercial',
-            area: 'Ventas',
-            position: 'Analista',
-            rol: 'Pmo asignado'
-          },
-          {
-            resource: 'Denis Alexander Rodriguez Venegas',
-            vicepresidency: 'Presidencia',
-            area: 'Sistemas',
-            position: 'Gestor de Proyectos',
-            rol: 'Pmo Apoyo'
-          },
-          {
-            resource: 'Jonathan Ricardo Galvis Galvez',
-            vicepresidency: 'Presidencia',
-            area: 'Expación',
-            position: 'Gestor de Proyectos',
-            rol: 'Líder Funcional'
-          },
-          {
-            resource: 'David Fernando Guerrero Álvarez',
-            vicepresidency: 'Vp Comercial',
-            area: 'Ventas',
-            position: 'Analista',
-            rol: 'Pmo asignado'
-          },
-          {
-            resource: 'Denis Alexander Rodriguez Venegas',
-            vicepresidency: 'Presidencia',
-            area: 'Sistemas',
-            position: 'Gestor de Proyectos',
-            rol: 'Pmo Apoyo'
-          },
-          {
-            resource: 'Jonathan Ricardo Galvis Galvez',
-            vicepresidency: 'Presidencia',
-            area: 'Expación',
-            position: 'Gestor de Proyectos',
-            rol: 'Líder Funcional'
-          },
           {
             resource: 'David Fernando Guerrero Álvarez',
             vicepresidency: 'Vp Comercial',
@@ -781,6 +744,53 @@ export class TimeCapacityComponent implements OnInit {
     }
   ];
 
+  dataTop5Areas:any = [
+    {
+      infoGeneral: {
+        vicepresidency: 'Presidencia',
+        area: 'Aplicaciones',
+        resources: 2
+      },
+      infoResources: [
+        {
+          resource: 'David Fernando Guerrero Álvarez',
+          position: 'Analista',
+          total_projects: 2,
+          infoProjects: [
+            'Tiempos y Turnos Fase 1 - Líder Funcional',
+            'EDI - Pmo Asignado'
+          ]
+        },
+        {
+          resource: 'Denis Alexander Rodriguez Venegas',
+          position: 'Jefe de Zona',
+          total_projects: 1,
+          infoProjects: [
+            'Tiempos y Turnos Fase 1 - Líder Funcional',
+          ]
+        }
+      ]
+    },
+    {
+      infoGeneral: {
+        vicepresidency: 'Vp Comercial',
+        area: 'Marketiong',
+        resources: 1
+      },
+      infoResources: [
+        {
+          resource: 'David Fernando Guerrero Álvarez',
+          position: 'Analista',
+          total_projects: 2,
+          infoProjects: [
+            'Tiempos y Turnos Fase 1 - Líder Funcional',
+            'EDI - Pmo Asignado'
+          ]
+        }
+      ]
+    }
+  ];
+
   userID: any;
   profileID: any;
   actions!: Actions;
@@ -814,6 +824,17 @@ export class TimeCapacityComponent implements OnInit {
       this.vicepresidency = data.vicepresidencies;
       setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
+  }
+  
+  setStep(index: number, op: string) {
+    if(op == "out_area") {
+      this.stepOutArea = index;
+    } else if(op == "top_areas") {
+      this.stepTop5Area = index;
+      this.stepTop5AreaResource = -1;
+    } else if(op == "top_areas_resources") {
+      this.stepTop5AreaResource = index;
+    }
   }
 
   paginator(event: PageEvent) {
@@ -914,6 +935,7 @@ export class TimeCapacityComponent implements OnInit {
       map(name => name ? this._filter(name, 'area') : this.vicepresidency.slice())
     );
     this.areasControl2.reset();
+    this.projectsControl2.reset();
   }
 
   areasSelect() {
@@ -928,16 +950,16 @@ export class TimeCapacityComponent implements OnInit {
       map(value => typeof value === 'string' ||  value == null ? value : value!.title),
       map(name => name ? this._filter(name, 'area') : this.areas2.slice())
     );
+    this.projectsControl2.reset();
   }
 
   projectsSelect() {
+    this.projects2 = this.projects;
+    if(typeof this.vicepresidencyControl.value == 'object' && this.vicepresidencyControl.value != null) {
+      this.projects2 = this.projects.filter((project: any) => project.area.vice_presidency.id == this.vicepresidencyControl.value.id);
+    }
     if(typeof this.areasControl2.value == 'object' && this.areasControl2.value != null) {
-      environment.consoleMessage(this.areasControl2.value.id, "AREAS");
-      environment.consoleMessage(this.projects, "PR");
       this.projects2 = this.projects.filter((project: any) => project.area.id == this.areasControl2.value.id);
-      environment.consoleMessage(this.projects2, "Filtrado");
-    } else {
-      this.projects2 = this.projects;
     }
 
     this.filterProjects2 = this.projectsControl2.valueChanges.pipe(

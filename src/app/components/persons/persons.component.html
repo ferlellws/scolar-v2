@@ -1,15 +1,22 @@
 <div class="master-container">
-    <div class="cont-table mat-elevation-z5" style="max-width: 100%;">
-      <tecno-dynamic-table
-        style="width: 100%;"
-        [objectsData]="dataTable"
-        (emitEdit)="onEdit($event)"
-        (emitDelete)="onDelete($event)"
-        [isUserProfile]="false">
-      </tecno-dynamic-table>
-    </div>
-  
-    <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
-      <mat-icon>add</mat-icon>
-    </button>
+  <div class="cont-table mat-elevation-z5" style="max-width: 100%;">
+    <tecno-dynamic-table
+      style="width: 100%;"
+      [objectsData]="dataTable"
+      (emitEdit)="onEdit($event)"
+      (emitDelete)="onDelete($event)"
+      [isUserProfile]="false">
+    </tecno-dynamic-table>
   </div>
+  
+  <mat-paginator class="txt-primary paginator"
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="paginator($event)">
+  </mat-paginator>
+
+  <button *ngIf="actions.create" mat-fab color="accent" aria-label="Nuevo registro" (click)="onCreate()" class="btn-new mat-elevation-z2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
