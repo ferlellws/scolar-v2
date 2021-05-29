@@ -121,8 +121,24 @@ export class PersonsService {
       );
   }
 
+  getManagersSelect() {
+    return this.http.get<Person[]>(`${this.API}/managers_select`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
   getFunctionalLeaders() {
     return this.http.get<Person[]>(`${this.API}/functional_leaders`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getFunctionalLeadersSelect() {
+    return this.http.get<Person[]>(`${this.API}/functional_leaders_select`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)
@@ -139,6 +155,14 @@ export class PersonsService {
 
   getWithoutAccess() {
     return this.http.get<Person[]>(`${this.API}/without_access`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getWithoutAccessSelect() {
+    return this.http.get<Person[]>(`${this.API}/without_access_select`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)

@@ -44,7 +44,6 @@ export class ProjectsComponent implements OnInit {
     this.route.data.subscribe((data: any) => {
       this.dataTable = data.projects;
       this.dataTableOwn = data.projectsOwn;
-      environment.consoleMessage( data.projectsOwn, "l>>>>>>>>>>>>>>>>>>>>>");
       this.dashboardOwn = data.dashboardOwn;
       this.dashboard = data.dashboard;
       setTimeout(() => {this.mainService.hideLoading()}, 1000);

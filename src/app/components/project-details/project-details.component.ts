@@ -136,19 +136,18 @@ export class ProjectDetailsComponent implements OnInit {
     this.mainService.showLoading();
 
     this.route.data.subscribe((data: any) => {
-      this.interrelations = data.interrelations.interrelations;
-
+      this.project = data.project;
       this.modificationData(data.project);
+
       var desviationGeneral: any = data.desviationsByProject;
       this.desviationCausesGeneral = desviationGeneral.general_data;
       this.desviationCauses = desviationGeneral.desviation_causes;
       this.desviationId = this.desviationCauses.length - 1;
-      setTimeout(() => {this.mainService.hideLoading()}, 1000);
+      
+      this.interrelations = data.interrelations.interrelations;
 
       if (data.weeksByProject != null) {
         data.weeksByProject.map((data: any) => {
-          // var mes = new Date(data.start_date).getMonth();
-          // environment.consoleMessage(mes, "MES")
           var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]);
           
           data.month = this.meses[mes-1].mes;
@@ -182,16 +181,12 @@ export class ProjectDetailsComponent implements OnInit {
         data.date = this.getToStringDate(new Date(`${(data.date).substring(0,10)}:00:00`));
       });
 
-      this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
-        weeks.project!.id == data.project.id
-      );
+      //Semanas
+      this.weeksByProject = data.weeksByProject;
 
       this.weeksByProject.map((data: any) =>{
-        // var mes = new Date(data.start_date).getMonth();
         var mes = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[1]) - 1;
-        // environment.consoleMessage(mes, "MEEEEEEEEEEEEEEEES <<<<<<<<<<<<<");
         var año = Number(this.getToStringDate(new Date(`${(data.start_date).substring(0,10)}:00:00`)).split("-")[0]);
-        // var año = new Date(data.start_date).getFullYear();
         data.month = this.meses[mes].mes;
         data.year = año;
 
@@ -206,59 +201,33 @@ export class ProjectDetailsComponent implements OnInit {
       });
 
       this.weekId = this.weeksByProject.length-1;
-      
-      this.project = data.project;
-      // console.log("Datos Proyecto",this.project);
 
       //Aplicaciones Impactadas
-      this.applicationsByProject = data.applicationsByProject.filter((apps: ApplicationByProject) => 
-        apps.project!.id == data.project.id
-      )
+      this.applicationsByProject = data.applicationsByProject;
 
       //Areas Relacionadas
-      this.areasByProject = data.areasByProject.filter((areas: AreaByProject) => 
-        areas.project!.id == data.project.id
-      )
+      this.areasByProject = data.areasByProject;
 
       //Provedores
-      this.companiesByProject = data.companiesByProject.filter((companies: CompanyByProject) => 
-        companies.project!.id == data.project.id
-      )
+      this.companiesByProject = data.companiesByProject;
 
       //Recursos Funcionales de Prueba
-      this.testUsersByProject = data.testUsersByProject.filter((users: CompanyByProject) => 
-        users.project!.id == data.project.id
-      )
+      this.testUsersByProject = data.testUsersByProject;
 
       //Beneficios
-      this.benefitsByProject = data.benefitsByProject.filter((benefits: Benefit) => 
-        benefits.project!.id == data.project.id
-      )
+      this.benefitsByProject = data.benefitsByProject;
 
       //Hitos
-      this.highlightsByProject = data.highlightsByProject.filter((highlights: Highlight) => 
-        highlights.project!.id == data.project.id
-      )
+      this.highlightsByProject = data.highlightsByProject;
 
       //Kpis
-      this.kpisByProject = data.kpisByProject.filter((kpis: Kpi) => 
-        kpis.project!.id == data.project.id
-      )
+      this.kpisByProject = data.kpisByProject;
 
       //Riesgos
-      this.risksByProject = data.risksByProject.filter((risks: Risk) => 
-        risks.project!.id == data.project.id
-      )
-
-      //Semanas
-      this.weeksByProject = data.weeksByProject.filter((weeks: Week) => 
-        weeks.project!.id == data.project.id
-      )
+      this.risksByProject = data.risksByProject;
 
       //Logros
-      this.goalsAll = data.goalsByWeeks.filter((goals: Goal) => {
-        return goals.week!.project!.id == data.project.id
-      })
+      this.goalsAll = data.goalsByWeeks;
 
       this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
         if (this.weeksByProject.length == 0){
@@ -268,9 +237,7 @@ export class ProjectDetailsComponent implements OnInit {
       })
 
       //Prixomas Actividades
-      this.nextActivitiesAll = data.nextActivitiesByWeek.filter((next_activity: Goal) => {
-        return next_activity.week!.project!.id == data.project.id
-      })
+      this.nextActivitiesAll = data.nextActivitiesByWeek;
 
       this.nextActivitiesByWeek = data.nextActivitiesByWeek.filter((next_activity: NextActivity) => {
         if (this.weeksByProject.length == 0){
@@ -280,9 +247,7 @@ export class ProjectDetailsComponent implements OnInit {
       })
 
       //Observaciones
-      this.obseravtionsAll = data.obseravtionsByWeek.filter((observations: Goal) => {
-        return observations.week!.project!.id == data.project.id
-      })
+      this.obseravtionsAll = data.obseravtionsByWeek;
 
       this.obseravtionsByWeek = data.obseravtionsByWeek.filter((observation: Observation) => {
         if (this.weeksByProject.length == 0){
@@ -290,16 +255,9 @@ export class ProjectDetailsComponent implements OnInit {
         }
         return observation.week!.id == this.weeksByProject[this.weekId].id
       })
-
+      
+      setTimeout(() => {this.mainService.hideLoading()}, 1000);
     });
-
-    // this.projectsService.emitDataTable
-    //   .subscribe((res: any) => {
-    //     true; //environment.consoleMessage(res, "l>>>>>>>>>>>>>>>>>>>>>                                          >>>>>>>>>>>>>>>>>>");
-    //     this.modificationData(res.location);
-    //     this.project = res.location;
-    //     this.dialog.closeAll();
-    //   });
     
     this.benefitsService.emitBenefits
       .subscribe((res: any) => {
@@ -418,12 +376,10 @@ export class ProjectDetailsComponent implements OnInit {
         res.month = this.meses[mes].mes;
         res.year = año;
 
-        true; //environment.consoleMessage(this.year, "YEAR");
         if (res.year != this.meses[mes].year) {
           this.meses[mes].nReg = 0;
           this.year = res.year;
         }
-        true; //environment.consoleMessage(this.year, "YEAR");
 
         this.meses[mes].nReg++;
         res.nReg = this.meses[mes].nReg;
@@ -459,32 +415,13 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   onValorem(project_id: number){
-
-    this.router.navigate([`/project-progress-create/${project_id}`]);
-
-    // const dialogRef = this.dialog.open(ValoremFormComponent, {
-    //   width: environment.widthFormsModal,
-    //   disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
-    //   data: {
-    //     mode: 'create',
-    //     labelAction: 'Crear',
-    //     idProject: this.project.id
-    //   }
-    // });
-    // dialogRef.componentInstance.emitClose.subscribe( data =>
-    //   {
-    //     if (data == 'close'){
-    //       dialogRef.close();
-    //     }
-    //   }
-    // );
-
+    this.router.navigate([`/project-progress-create/${project_id}`])
   }
 
   onProjectEdit(){
     const dialogRef = this.dialog.open(ProjectsFormComponent, {
       width: environment.widthFormsModal,
-      disableClose: true, // Para mostrar o no el boton de cerrar (X) en la parte superior derecha
+      disableClose: true,
       data: {   
         id: this.project.id,
         mode: 'edit',
@@ -686,7 +623,6 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   modificationData(data: any) {
-    true; //environment.consoleMessage(data, "PROJ");
     data.percentage = ((((data.pmo_hours*60)+(data.pmo_minutes)) / (this.semanal_hours*60)) * 100).toFixed(2)
     data.balance = new Intl.NumberFormat('en-US').format( data.budget_approved  - data.budget_executed );
     data.budget_executed = new Intl.NumberFormat('en-US').format( data.budget_executed);

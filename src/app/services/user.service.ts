@@ -133,6 +133,22 @@ export class UserService {
       );
   }
 
+  getFunctionalLeadersSelect() {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+
+    this.httpOptions = {
+      params: this.inputParams
+    }
+    return this.http.get<User[]>(`${environment.API}/people/functional_leaders_select`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
   getFunctionalResources() {
     this.inputParams = {
       user_email: JSON.parse(localStorage.user).email,
@@ -144,6 +160,22 @@ export class UserService {
     }
     //return this.http.get<User[]>(`${this.API}/functional_resources`, this.httpOptions)
     return this.http.get<User[]>(`${environment.API}/people/functional_resources`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
+  getFunctionalResourcesSelect() {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+
+    this.httpOptions = {
+      params: this.inputParams
+    }
+    return this.http.get<User[]>(`${environment.API}/people/functional_resources_select`, this.httpOptions)
       .pipe(
         // catchError(this.handleError)
         tap(console.log)

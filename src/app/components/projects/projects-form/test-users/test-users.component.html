@@ -26,7 +26,7 @@
             *ngFor="let user of usersSelected"
             [removable]="true"
             (removed)="remove(user.id)">
-            {{user.first_name}} {{user.last_name}}
+            {{user.full_name}}
             <mat-icon matChipRemove >cancel</mat-icon>
         </mat-chip>
     </mat-chip-list>

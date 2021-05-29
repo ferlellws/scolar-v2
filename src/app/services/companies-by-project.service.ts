@@ -38,6 +38,14 @@ export class CompaniesByProjectService {
     );
   }
 
+  getCompanyByProjectsFilterProjectSpecificData(id: number) {
+    return this.http.get<CompanyByProject[]>(`${this.API}/${id}/filter_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getCompanyByProjectById(id: number) {
     return this.http.get<CompanyByProject>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

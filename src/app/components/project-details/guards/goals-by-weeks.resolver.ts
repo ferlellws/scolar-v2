@@ -20,7 +20,6 @@ export class GoalsByWeeksResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      return this.goalsService.getGoalsAll();
-      //return this.goalsService.getgoalsByWeekss(route.params.id);
+      return this.goalsService.getGoalsByProjectSpecificData(route.params.id);
   }
 }

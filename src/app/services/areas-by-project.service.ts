@@ -39,6 +39,14 @@ export class AreasByProjectService {
     );
   }
 
+  getAreaByProjectsFilterProjectSpecificData(id: number) {
+    return this.http.get<AreaByProject[]>(`${this.API}/${id}/filter_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getAreaByProjectById(id: number) {
     return this.http.get<AreaByProject>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

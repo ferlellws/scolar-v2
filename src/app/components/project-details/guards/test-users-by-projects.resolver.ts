@@ -20,8 +20,6 @@ export class TestUsersByProjectsResolver implements Resolve<boolean> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
-      console.log(route.params.id);
-      return this.testUsersService.getTestUsers();
-      //return this.testUsersService.getTestUserByProjectId(route.params.id);
+      return this.testUsersService.getTestUserByProjectIdSpecificData(route.params.id);
   }
 }

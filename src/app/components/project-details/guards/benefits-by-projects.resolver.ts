@@ -21,7 +21,6 @@ export class BenefitsByProjectsResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      return this.benefitsService.getBenefits();
-      //return this.benefitsService.getBenefitByProjectId(route.params.id);
+      return this.benefitsService.getBenefitsByProjectSpecificData(route.params.id);
   }
 }

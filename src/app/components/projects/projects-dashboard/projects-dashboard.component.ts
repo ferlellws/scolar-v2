@@ -33,13 +33,10 @@ export class ProjectsDashboardComponent implements OnInit {
 
   onVicepresindency(id: number) {
     this.router.navigate([`/projects-by-vicepresidency/${id}`]);
-    
-    true;//environment.consoleMessage(id, "vicepresidency");
   }
 
   onProject(id: number) {
     this.router.navigate([`/project-details/${id}`]);
-    true;//environment.consoleMessage(id, "project");
   }
 
 }

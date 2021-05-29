@@ -58,6 +58,16 @@ export class TestUsersService {
     );
   }
 
+  getTestUserByProjectIdSpecificData(id: number) {
+    return this.http.get<TestUser>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   addTestUser(test_user: TestUser) {
     return this.http.post<TestUser>(this.API, { test_user: test_user }, this.httpOptions)
       .pipe(

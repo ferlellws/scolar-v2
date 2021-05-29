@@ -22,7 +22,6 @@ export class HighlightsByProjectsResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      //return this.highlightsService.getHighlightByProjectId(route.params.id);
-      return this.highlightsService.getHighlights();
+      return this.highlightsService.getHighlightsByProjectSpecificData(route.params.id);
   }
 }

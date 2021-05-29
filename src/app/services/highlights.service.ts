@@ -40,6 +40,14 @@ export class HighlightsService {
     );
   }
 
+  getHighlightsByProjectSpecificData(id: number) {
+    return this.http.get<Highlight[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getHighlightById(id: number) {
     return this.http.get<Highlight>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

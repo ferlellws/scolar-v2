@@ -212,9 +212,6 @@ export class ProjectsFormComponent implements OnInit {
         'testLog': [null, [Validators.required]],
       });
 
-
-
-
       this.labels = {
         title: `Nombre del Proyecto`,
         vicePresidencies: `Vicepresidencias`,
@@ -251,9 +248,11 @@ export class ProjectsFormComponent implements OnInit {
     }
 
   async ngOnInit() {
-    this._openLeads(true);
-    this._openPMOS(true);
-    this._openPMOAssists(true);
+    if(this.data.mode == 'create'){
+      this._openLeads(true);
+      this._openPMOS(true);
+      this._openPMOAssists(true);
+    }
 
     if(this.data.mode == 'edit'){
       this.cargaProject = false;
@@ -277,27 +276,30 @@ export class ProjectsFormComponent implements OnInit {
       .subscribe((strategicApproaches: StrategicApproach[]) => this.strategicApproaches = strategicApproaches);
       await this._programsService.getProgramsSelect()
       .subscribe((programs: Program[]) => this.programs = programs);
-      await this._personsService.getFunctionalLeaders()
-      .subscribe((leads: User[]) => {
-        this.leads = leads;
-        this._openLeads(true);
-      });
+      this._openLeads(true);
+      // await this._personsService.getFunctionalLeadersSelect()
+      // .subscribe((leads: User[]) => {
+      //   this.leads = leads;
+      //   this._openLeads(true);
+      // });
       await this._prioritiesService.getPrioritiesSelect()
       .subscribe((priorities: Priority[]) => this.priorities = priorities);
       await  this._typificationsService.getTypificationsSelect()
       .subscribe((typifications: Typification[]) => this.typifications = typifications);
       await  this._managementsService.getManagementsSelect()
       .subscribe((managements: Management[]) => this.managements = managements);
-      await this._personsService.getManagers()
-      .subscribe((pmos: User[]) => {
-        this.pmos = pmos;
-        this._openPMOS(true);
-      });
-      await this._personsService.getManagers()
-        .subscribe((pmoAssists: User[]) => {
-          this.pmoAssists = pmoAssists;
-          this._openPMOAssists(true);
-        });
+      this._openPMOS(true);
+      // await this._personsService.getManagers()
+      // .subscribe((pmos: User[]) => {
+      //   this.pmos = pmos;
+      //   this._openPMOS(true);
+      // });
+      this._openPMOAssists(true);
+      // await this._personsService.getManagers()
+      //   .subscribe((pmoAssists: User[]) => {
+      //     this.pmoAssists = pmoAssists;
+      //     this._openPMOAssists(true);
+      //   });
       await this._stagesService.getStagesSelect()
         .subscribe((stages: Stage[]) => this.stages = stages);
       await this._statesService.getStatesSelect()
@@ -399,11 +401,10 @@ export class ProjectsFormComponent implements OnInit {
   }
 
   updateChildComponents(id: number){
-    this._benefitsService.getBenefits()
+    this._benefitsService.getBenefitsByProjectSpecificData(this.data.id)
       .subscribe((data: Benefit[]) =>
       {
-        this.benefitsObjects = data.filter(benefit => benefit.project!.id == id);
-        // this.benefits = this.benefitsObjects.map(benefit => benefit.description);
+        this.benefitsObjects = data;
         for (let index = 0; index < this.benefitsObjects.length; index++) {
           let reg = {
             id: this.benefitsObjects[index].id,
@@ -411,15 +412,13 @@ export class ProjectsFormComponent implements OnInit {
           }
           this.benefits.push(reg);
         }
-        // this.benefits = this.benefitsObjects;
-        // environment.consoleMessage(this.benefits, "BENEFICIOS <<<<<<<<<<<<<<");
       }
     );
 
-    this._highlightsService.getHighlights()
+    this._highlightsService.getHighlightsByProjectSpecificData(this.data.id)
       .subscribe((data: Highlight[]) =>
       {
-        this.highlightsObjects = data.filter(highlight => highlight.project!.id == id);
+        this.highlightsObjects = data;
         for (let index = 0; index < this.highlightsObjects.length; index++) {
           let reg = {
             id: this.highlightsObjects[index].id,
@@ -427,15 +426,13 @@ export class ProjectsFormComponent implements OnInit {
           }
           this.highlights.push(reg);
         }
-        // this.highlights = this.highlightsObjects.map(highlight => highlight.description);
-        // this.highlights = this.highlightsObjects;
       }
     );
 
-    this._risksService.getRisks()
+    this._risksService.getRisksByProjectSpecificData(this.data.id)
       .subscribe((data: Risk[]) =>
       {
-        this.risksObjects = data.filter(risk => risk.project!.id == id);
+        this.risksObjects = data;
         for (let index = 0; index < this.risksObjects.length; index++) {
           let reg = {
             id: this.risksObjects[index].id,
@@ -443,15 +440,13 @@ export class ProjectsFormComponent implements OnInit {
           }
           this.risks.push(reg);
         }
-        // this.risks = this.risksObjects.map(risk => risk.description);
-        // this.risks = this.risksObjects;
       }
     );
 
-    this._kpisService.getKpis()
+    this._kpisService.getKpisByProjectSpecificData(this.data.id)
       .subscribe((data: Kpi[]) =>
       {
-        this.kpisObjects = data.filter(kpi => kpi.project!.id == id);
+        this.kpisObjects = data;
         for (let index = 0; index < this.kpisObjects.length; index++) {
           let reg = {
             id: this.kpisObjects[index].id,
@@ -459,48 +454,38 @@ export class ProjectsFormComponent implements OnInit {
           }
           this.kpis.push(reg);
         }
-        // this.kpis = this.kpisObjects.map(kpi => kpi.description);
-        // this.kpis = this.kpisObjects;
       }
     );
 
-    this._applicationsByProjectsService.getApplicationByProjects()
+    this._applicationsByProjectsService.getApplicationByProjectsFilterProjectSpecificData(this.data.id)
       .subscribe((data: ApplicationByProject[]) =>
       {
-        this.applicationsObjects = data.filter(app => app.project!.id == id);
-        true;//environment.consoleMessage(this.applicationsObjects, "appsByProject " );
+        this.applicationsObjects = data;
         this.applications = this.applicationsObjects.map(app => app.application! );
-        true;//environment.consoleMessage(this.applications, "apps " );
       }
     );
 
-    this._areasByProjectsService.getAreaByProjects()
+    this._areasByProjectsService.getAreaByProjectsFilterProjectSpecificData(this.data.id)
       .subscribe((data: AreaByProject[]) =>
       {
-        this.areasByProjectObjects = data.filter(area => area.project!.id == id);
-        true;//environment.consoleMessage(this.areasByProjectObjects, "areasByProjectObjects " );
+        this.areasByProjectObjects = data;
         this.areasByProject = this.areasByProjectObjects.map(area => area.area! );
-        true;//environment.consoleMessage(this.areas, "areas " );
       }
     );
 
-    this._companiesByProjectsService.getCompanyByProjects()
+    this._companiesByProjectsService.getCompanyByProjectsFilterProjectSpecificData(this.data.id)
       .subscribe((data: CompanyByProject[]) =>
       {
-        this.companiesObjects = data.filter(company => company.project!.id == id);
-        true;//environment.consoleMessage(this.companiesObjects, "companiesObjects " );
+        this.companiesObjects = data;
         this.companies = this.companiesObjects.map(company => company.company! );
-        true;//environment.consoleMessage(this.companies, "companies " );
       }
     );
 
-    this._testUsersService.getTestUsers()
-      .subscribe((data: TestUser[]) =>
+    this._testUsersService.getTestUserByProjectIdSpecificData(this.data.id)
+      .subscribe((data: any[]) =>
       {
-        this.testUsersObjects = data.filter(user => user.project!.id == id);
-        true;//environment.consoleMessage(this.testUsersObjects, "testUsersObjects " );
+        this.testUsersObjects = data;
         this.testUsers = this.testUsersObjects.map(user => user.person! );
-        true;//environment.consoleMessage(this.testUsers, "testUsers " );
       }
     );
 
@@ -901,13 +886,8 @@ export class ProjectsFormComponent implements OnInit {
 
     if (this.data.mode == 'create'){
       this.testUsers = testUsers;
-      environment.consoleMessage(this.testUsers, "testUsers padre")
     }else if(this.data.mode == 'edit'){
-        true;//environment.consoleMessage(this.testUsers, "this.testUsers antes");
-        true;//environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects antes");
       if(testUsers.length > this.testUsersObjects.length){
-        true;//environment.consoleMessage(this.testUsers, "this.testUsers despues");
-        true;//environment.consoleMessage(this.testUsersObjects, "this.testUsersObjects despues");
         this.testUsers = testUsers;
         var testUsersIDs: number[] = testUsers.map(user => user.id!);
         var testUsersObjectsIDs: number[] = this.testUsersObjects.map(user => user.person!.id!);
@@ -921,10 +901,8 @@ export class ProjectsFormComponent implements OnInit {
             await this._testUsersService.addTestUser(user).
             subscribe(data =>
               {
-                true;//environment.consoleMessage(data, "objeto testUsersObjects");
                 this.testUsersObjects.push(data)
                 this.openSnackBar(true, "Recurso de pruebas agregado satisfactoriamente", "");
-                true;//environment.consoleMessage(this.testUsersObjects, "testUsersObjects");
               }
             );
             return true;
@@ -941,7 +919,6 @@ export class ProjectsFormComponent implements OnInit {
             await this._testUsersService.deleteTestUser(this.testUsersObjects[index].id!)//posible error por orden
               .subscribe(data =>
                 {
-                  true;//environment.consoleMessage(data, "data eliminacion")
                   this.openSnackBar(true, "Recurso de pruebas eliminando del Proyecto", "");
                   this.testUsersObjects.splice(index, 1);
                   return true;
@@ -1011,7 +988,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openLeads(ev: boolean) {
     if (ev) {
-      this._usersService.getFunctionalLeaders()
+      this._usersService.getFunctionalLeadersSelect()
         .subscribe((leads: User[]) => {
           this.leads = leads
           this.filterLeads = this.leadsControl.valueChanges.pipe(
@@ -1053,7 +1030,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openPMOS(ev: boolean) {
     if (ev) {
-      this._personsService.getManagers()
+      this._personsService.getManagersSelect()
         .subscribe((pmos: User[]) => {
           this.pmos = pmos;
           this.filterPmos = this.pmosControl.valueChanges.pipe(
@@ -1071,7 +1048,7 @@ export class ProjectsFormComponent implements OnInit {
 
   _openPMOAssists(ev: boolean) {
     if (ev) {
-      this._personsService.getManagers()
+      this._personsService.getManagersSelect()
         .subscribe((pmoAssists: User[]) => {
           this.pmoAssists = pmoAssists;
           this.filterPmosAssistant = this.pmosAssistantControl.valueChanges.pipe(

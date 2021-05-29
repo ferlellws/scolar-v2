@@ -40,6 +40,14 @@ export class KpisService {
     );
   }
 
+  getKpisByProjectSpecificData(id: number) {
+    return this.http.get<Kpi[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getKpiById(id: number) {
     return this.http.get<Kpi>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

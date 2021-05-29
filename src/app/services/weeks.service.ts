@@ -49,6 +49,16 @@ export class WeeksService {
     );
   }
 
+  getWeeksByProjectsSpecificData(id: number) {
+    return this.http.get<Week[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitWeek.emit(data);
+      })
+    );
+  }
+
   getWeeksId(id: number) {
     return this.http.get<Week>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

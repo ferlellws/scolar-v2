@@ -49,6 +49,16 @@ export class GoalsService {
     );
   }
 
+  getGoalsByProjectSpecificData(id: number) {
+    return this.http.get<Goal[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitGoal.emit(data);
+      })
+    );
+  }
+
   getGoalId(id: number) {
     return this.http.get<Goal>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

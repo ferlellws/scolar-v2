@@ -23,7 +23,6 @@ export class RisksByProjectsResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      //return this.risksService.getRiskByProjectId(route.params.id);
-      return this.risksService.getRisks();
+      return this.risksService.getRisksByProjectSpecificData(route.params.id);
   }
 }

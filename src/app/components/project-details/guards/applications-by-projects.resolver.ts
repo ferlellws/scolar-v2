@@ -19,7 +19,6 @@ export class ApplicationsByProjectsResolver implements Resolve<boolean> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
-      //this.applicationsByProjectsServices.getApplicationByProjectByProjectId(this.project.id);
-      return this.applicationsByProjectsService.getApplicationByProjects();
-  }
+      return this.applicationsByProjectsService.getApplicationByProjectsFilterProjectSpecificData(route.params.id);
+    }
 }

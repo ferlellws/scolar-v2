@@ -49,6 +49,16 @@ export class ObservationsService {
     );
   }
 
+  getObservataionsByProjectsSpecificData(id: number) {
+    return this.http.get<Observation[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitNextActivities.emit(data);
+      })
+    );
+  }
+
   getObservationId(id: number) {
     return this.http.get<Observation>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

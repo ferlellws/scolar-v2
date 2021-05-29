@@ -20,8 +20,6 @@ export class CompaniesByProjectsResolver implements Resolve<boolean> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
-      console.log(route.params.id);
-      return this.companiesByProjectService.getCompanyByProjects();
-      //return this.companiesByProjectService.getCompanyByProjectByProjectId(route.params.id);
+      return this.companiesByProjectService.getCompanyByProjectsFilterProjectSpecificData(route.params.id);
   }
 }

@@ -40,6 +40,14 @@ export class RisksService {
     );
   }
 
+  getRisksByProjectSpecificData(id: number) {
+    return this.http.get<Risk[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getRiskById(id: number) {
     return this.http.get<Risk>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

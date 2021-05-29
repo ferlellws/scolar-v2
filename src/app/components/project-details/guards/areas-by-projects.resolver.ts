@@ -20,7 +20,6 @@ export class AreasByProjectsResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      return this.areasByProjetcsService.getAreaByProjects();   
-      //return this.areasByProjetcsService.getAreaByProjectByProjectId(route.params.id);
+      return this.areasByProjetcsService.getAreaByProjectsFilterProjectSpecificData(route.params.id);   
   }
 }

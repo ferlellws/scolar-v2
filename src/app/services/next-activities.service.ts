@@ -48,6 +48,16 @@ export class NextActivitiesService {
     );
   }
 
+  getNextActivitiesByProjectsSpecificData(id: number) {
+    return this.http.get<NextActivity[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitNextActivities.emit(data);
+      })
+    );
+  }
+
   getNextActivityId(id: number) {
     return this.http.get<NextActivity>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

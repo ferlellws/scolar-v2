@@ -59,15 +59,11 @@ export class GeneralUsersFormComponent implements OnInit {
     private userService: UserService,
     private personsService: PersonsService,
     private snackBar: MatSnackBar,
-    private vicePresidenciesService: VicePresidenciesService,
-    private areasService: AreasService,
-    private positionsService:PositionsService,
-    private profilesService:ProfilesService,
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.personsService.getWithoutAccess()
-      .subscribe((person: Person[]) => {
+    this.personsService.getWithoutAccessSelect()
+      .subscribe((person: any[]) => {
         this.persons = person;
 
         this.filterPersons = this.personControl.valueChanges.pipe(
@@ -79,10 +75,10 @@ export class GeneralUsersFormComponent implements OnInit {
 
     this.usersGroup = this.fb.group({
       email: [null, [
-                    Validators.required,
-                    Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
-                    Validators.email]
-                  ],
+        Validators.required,
+        Validators.pattern("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"),
+        Validators.email]
+      ],
     });
 
     if (this.data.mode == 'edit') {

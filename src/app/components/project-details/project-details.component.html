@@ -160,7 +160,7 @@
                 </mat-card-header>
                 <div *ngIf="testUsersByProject.length != 0">
                     <div *ngFor="let testUsersProject of testUsersByProject; index as i">
-                        <div mat-line class="line-text"> {{i+1}}. {{testUsersByProject[i].person.first_name}} {{testUsersByProject[i].person.last_name}} </div>
+                        <div mat-line class="line-text"> {{i+1}}. {{testUsersByProject[i].person.full_name}} </div>
                     </div>
                 </div>
                 <div *ngIf="testUsersByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>

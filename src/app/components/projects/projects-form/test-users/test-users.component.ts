@@ -26,7 +26,7 @@ export class TestUsersComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this._usersService.getFunctionalResources()
+    await this._usersService.getFunctionalResourcesSelect()
     .subscribe(users => {
       this.users = users;
       this.filterPersons = this.personControl.valueChanges.pipe(

@@ -40,6 +40,14 @@ export class BenefitsService {
     );
   }
 
+  getBenefitsByProjectSpecificData(id: number) {
+    return this.http.get<Benefit[]>(`${this.API}/${id}/by_project_specific_data`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getBenefitById(id: number) {
     return this.http.get<Benefit>(`${this.API}/${id}`, this.httpOptions)
     .pipe(

@@ -20,7 +20,6 @@ export class NextActivitiesByWeeksResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      return this.nextActivitiesService.getNextActivitiesAll();
-      //return this.nextActivitiesService.getWeeksByProjects(route.params.id);
+      return this.nextActivitiesService.getNextActivitiesByProjectsSpecificData(route.params.id);
   }
 }

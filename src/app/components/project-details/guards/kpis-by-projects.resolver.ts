@@ -22,7 +22,6 @@ export class KpisByProjectsResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      //return this.kpisByProjectsResolver.getKpiByProjectId(route.params.id);
-      return this.kpisByProjectsResolver.getKpis();
+      return this.kpisByProjectsResolver.getKpisByProjectSpecificData(route.params.id);
   }
 }

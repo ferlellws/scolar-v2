@@ -20,7 +20,6 @@ export class WeeksByProjectsResolver implements Resolve<boolean> {
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
       console.log(route.params.id);
-      return this.weeksService.getWeeksAll();
-      //return this.weeksService.getWeeksByProjects(route.params.id);
+      return this.weeksService.getWeeksByProjectsSpecificData(route.params.id);
   }
 }
