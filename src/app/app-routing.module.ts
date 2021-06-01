@@ -66,6 +66,7 @@ import { ResourcesTimeCapacityResolver } from './components/time-capacity/guards
 import { AreasTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/areas-time-capacity.resolver';
 import { DesviationCausesTypificationsBySourcesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-typifications-by-sources.resolver';
 import { VicepresidenciesTimeCapcityResolver } from './components/time-capacity/guards-time-capacity/vicepresidencies-time-capcity.resolver';
+import { PhasesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/phases-time-capacity.resolver';
 
 const routes: Routes = [
   {
@@ -227,7 +228,7 @@ const routes: Routes = [
       projects: ProjectsResolver,
       dashboard: DashboardProjectsResolver,
       dashboardOwn: ProjectsDashboardOwnResolver,
-      projectsOwn: ProjectsOwnResolver,
+      projectsOwn: ProjectsOwnResolver,      
     }
   },
   {
@@ -360,7 +361,8 @@ const routes: Routes = [
       projects: ProjectsTimeCapacityResolver,
       // resources: ResourcesTimeCapacityResolver,
       areas: AreasTimeCapacityResolver,
-      vicepresidencies: VicepresidenciesTimeCapcityResolver
+      vicepresidencies: VicepresidenciesTimeCapcityResolver,
+      phases: PhasesTimeCapacityResolver
     }
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from 'src/app/components/shared/confirm-dialog/confirm-dialog.component';
 import { PhaseByProjectsService } from 'src/app/services/phase-by-projects.service';
 import { environment } from 'src/environments/environment';
 
@@ -84,6 +85,33 @@ export class DateRangeComponent implements OnInit {
         });
       }
     }
+  }
+
+  delete() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "400px",
+      data: {
+        title: "Confirmación para eliminar registro",
+        info: "Se eliminará la fase para este proyecto y los registros de asignación de tiempos de recursos asociados. ¿Desea continuar?",
+        // value: 
+      }
+    });
+    dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
+      if (data == 'si') {
+        this.phaseByProjectsService.deletePhaseByProjectAssociatesRecords(this.idEdit)
+          .subscribe(res => {
+            this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
+            
+            this.group.reset();
+            this.flagDate = "asignar";
+          }, (err) => {
+            this.openSnackBar(false, "No se ha podido eliminar la fase", "");
+          });
+          dialogRef.close();
+      } else {
+        dialogRef.close();
+      }
+    });
   }
 
   openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {

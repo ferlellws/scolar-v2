@@ -1,7 +1,7 @@
 <form [formGroup]="group">   
     <div class="row phases-content">
-        <span class="col-sm-12 col-md-2 txt-primary title-phase">{{title}}</span>
-        <div class="col-sm-12 col-md-4">
+        <span class="col-sm-12 col-md-3 txt-primary title-phase">{{title}}</span>
+        <div class="col-sm-12 col-md-3">
             <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
                 <mat-label>Fecha de Inicio</mat-label>
                 <input required matInput [matDatepicker]="picker1" formControlName="start_date">
@@ -12,7 +12,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="col-sm-12 col-md-4">
+        <div class="col-sm-12 col-md-3">
             <mat-form-field appearance="legacy" class="full-width" style="width: 100%;">
                 <mat-label>Fecha de Finalización</mat-label>
                 <input required matInput [matDatepicker]="picker2" formControlName="end_date">
@@ -23,12 +23,19 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="buttons col-sm-12 col-md-2">
+        <div class="buttons col-sm-12 col-md-3">
             <button
                 (click)="add()"
                 mat-button color="primary"
                 [disabled]="group.invalid">
                 {{ flagDate == 'asignar' ? 'Asignar' : 'Editar'}}
+            </button>
+
+            <button *ngIf="flagDate != 'asignar'" style="width: auto;"
+                (click)="delete()"
+                mat-button color="warn"
+                [disabled]="group.invalid">
+                Eliminar
             </button>
         </div>
     </div>

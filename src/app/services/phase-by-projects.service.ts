@@ -75,4 +75,13 @@ export class PhaseByProjectsService {
         })
       );
   }
+
+  deletePhaseByProjectAssociatesRecords(id: number) {
+    return this.http.delete<PhaseByProject>(`${this.API}/${id}/delete_associated_records`, this.httpOptions)
+      .pipe(
+        tap((data: any) => {
+          this.emitPhaseByProjectDelete.emit(data);
+        })
+      );
+  }
 }

@@ -5,19 +5,19 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { PersonsService } from 'src/app/services/persons.service';
+import { PhasesService } from 'src/app/services/phases.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ResourcesTimeCapacityResolver implements Resolve<boolean> {
+export class PhasesTimeCapacityResolver implements Resolve<boolean> {
   constructor(
-    private personsService: PersonsService
+    private phasesService: PhasesService
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
-    return this.personsService.getPeopleSelect();
+    return this.phasesService.getPhaseColor();
   }
 }

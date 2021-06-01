@@ -318,6 +318,7 @@ export class OperationResourcesComponent implements OnInit {
   }
 
   onPhaseManagements(id: any) {
+    this.emptyPhases = true;
     const dialogRef = this.dialog.open(PhaseManagementComponent, {
       width: environment.widthFormsLittleModal,
       disableClose: true,

@@ -38,6 +38,14 @@ export class PersonsService {
       );
   }
 
+  getPeopleSelect() {
+    return this.http.get<Person[]>(`${this.API}/all_people_select`, this.httpOptions)
+      .pipe(
+        // catchError(this.handleError)
+        tap(console.log)
+      );
+  }
+
   getPeopleCount() {
     return this.http.get<number>(`${this.API}/count_people`, this.httpOptions)
       .pipe(

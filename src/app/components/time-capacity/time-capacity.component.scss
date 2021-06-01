@@ -41,7 +41,13 @@
 .filter-content {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin-bottom: 20px;
+}
+
+.buttons-content {
+  display: flex;
+  flex-direction: row;
 }
 
 .button-filter{
@@ -49,8 +55,6 @@
   max-height: 35px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
   margin-left: 10px;
   align-items: center;
 }
@@ -58,14 +62,10 @@
 .filters {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin-left: 5px;
-  width: 100%;
 }
 
-.buttons-content {
-  display: flex;
-  flex-direction: row;
-}
 
 .table-time-line {
   width: 100%;

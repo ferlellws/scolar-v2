@@ -48,6 +48,14 @@ export class PhasesService {
     );
   }
 
+  getPhaseColor() {
+    return this.http.get<Phase[]>(`${this.API}/phases_colors`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   getPhasesId(id: number) {
     return this.http.get<Phase>(`${this.API}/${id}`, this.httpOptions)
     .pipe(
