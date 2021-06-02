@@ -44,7 +44,7 @@ export class TimeCapacityComponent implements OnInit {
   }
 
   labelButton = {
-    remove: "Limpiar Filtros",
+    remove: "Ver Todo",
     filter: "Filtrar"
   }
   
@@ -821,6 +821,8 @@ export class TimeCapacityComponent implements OnInit {
   profileID: any;
   actions!: Actions;
 
+  flagLabel: boolean = true;
+
   ngOnInit(): void {
     this.actions = JSON.parse(localStorage.access_to_accions);
     if (this.actions == null){
@@ -848,11 +850,12 @@ export class TimeCapacityComponent implements OnInit {
           );
         });
 
-      this.timeCapacityService.getTimeLineResourcesCapacity("", "", "", "", "", "","", "")
-        .subscribe(res => {
-          this.tableTimeLine = res.generalData;
-          this.cargaProject = true;
-        });
+      // this.timeCapacityService.getTimeLineResourcesCapacity("", "", "", "", "", "","", "")
+      //   .subscribe(res => {
+      //     this.tableTimeLine = res.generalData;
+      //     this.cargaProject = true;
+      //   });
+      this.cargaProject = true;
 
       this.filters();
 
@@ -947,6 +950,7 @@ export class TimeCapacityComponent implements OnInit {
   
   filterResorucePortfolio() {
     this.cargaProject = false;
+    this.flagLabel = false;
     this.vice_presidency_filter1 = "";
     this.area__filter1 = ""
     this.project_filter1 = "";
@@ -988,6 +992,8 @@ export class TimeCapacityComponent implements OnInit {
   }
 
   removeFilterResourcePortfolio() {
+    this.cargaProject = false;
+    this.flagLabel = false;
     this.projectsControl.reset();
     this.vicepresidencyControl.reset();
     this.areasControl.reset();
@@ -999,6 +1005,7 @@ export class TimeCapacityComponent implements OnInit {
     this.timeCapacityService.getTimeLineResourcesCapacity("","", "", "", "", "", "", "")
       .subscribe(res => {
         this.tableTimeLine = res.generalData;
+        this.cargaProject = true;
       });
   }
 

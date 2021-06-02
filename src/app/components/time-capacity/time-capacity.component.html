@@ -70,6 +70,8 @@
             <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
         </div>
 
+        <h2 *ngIf="flagLabel" class="txt-primary">Por favor seleccione un criterio de búsqueda</h2>
+
         <div class="table-time-line" *ngFor="let data of tableTimeLine">
             <tecno-table-time-line
                 [generalData]=data
