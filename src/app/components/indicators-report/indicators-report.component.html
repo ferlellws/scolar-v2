@@ -300,7 +300,7 @@
                                         </mat-expansion-panel-header>
                                         <mat-accordion>
                                             <mat-expansion-panel *ngFor="let area of vp.areas[0]" class="row mat-elevation-z0 card-expansion">
-                                                <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 5px !important;">
+                                                <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding: 5px !important;" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                                     <mat-panel-title class="col-sm-12 col-md-2">
                                                         <h3 class="txt-primary title-expansion ">{{area.name}}</h3>
                                                     </mat-panel-title>

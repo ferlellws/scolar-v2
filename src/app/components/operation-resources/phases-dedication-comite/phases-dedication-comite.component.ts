@@ -25,9 +25,10 @@ export class PhasesDedicationComiteComponent implements OnInit {
   @Input() phaseTitle!: any;
   @Input() flagMode: any = "create";
   @Input() dedication!: any;
-  @Input() type_resource!: string;
+  @Input() type_resource!: string;  
 
   disabled: boolean = false;
+  flagBttn!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -45,6 +46,11 @@ export class PhasesDedicationComiteComponent implements OnInit {
       dedication: [null, Validators.required],
     });
     this.group.get('dedication')?.setValue(this.dedication);
+    if(this.dedication == ""){
+      this.flagBttn = 'asignar'
+    } else {
+      this.flagBttn = 'editar'
+    }
   }
 
   add() {
@@ -57,6 +63,7 @@ export class PhasesDedicationComiteComponent implements OnInit {
       this.sponsorByPhasesService.addSponsorByPhase(newSponsorByPhase)
         .subscribe(res => {
           this.openSnackBar(true, "Tiempo de dedicación asignado correctamente", "");
+          this.flagBttn = 'editar'
         } , (err) => {
           this.openSnackBar(false, "No se ha podido hacer la asignación correctamente", "");
         });
@@ -69,6 +76,7 @@ export class PhasesDedicationComiteComponent implements OnInit {
       this.leaderByPhasesService.addLeaderByPhase(newLeaderByPhase)
         .subscribe(res => {
           this.openSnackBar(true, "Tiempo de dedicación asignado correctamente", "");
+          this.flagBttn = 'editar'
         }, (err) => {
           this.openSnackBar(false, "No se ha podido hacer la asignación correctamente", "");
         });
@@ -81,6 +89,7 @@ export class PhasesDedicationComiteComponent implements OnInit {
       this.pmoAssignedByPhasesService.addPmoAssignedByPhaseByPhase(newPmoByPhase)
         .subscribe(res => {
           this.openSnackBar(true, "Tiempo de dedicación asignado correctamente", "");
+          this.flagBttn = 'editar'
         }, (err) => {
           this.openSnackBar(false, "No se ha podido hacer la asignación correctamente", "");
         });
@@ -93,6 +102,7 @@ export class PhasesDedicationComiteComponent implements OnInit {
       this.pmoAssistantByPhasesService.addPmoAssistantByPhaseByPhase(newPmoByPhase)
         .subscribe(res => {
           this.openSnackBar(true, "Tiempo de dedicación asignado correctamente", "");
+          this.flagBttn = 'editar'
         }, (err) => {
           this.openSnackBar(false, "No se ha podido hacer la asignación correctamente", "");
         });

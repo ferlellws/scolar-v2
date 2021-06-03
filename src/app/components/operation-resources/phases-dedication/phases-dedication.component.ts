@@ -30,12 +30,14 @@ export class PhasesDedicationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    environment.consoleMessage(this.idResource, "ID RESOURCE <<<<<<<<<<<<<");
     this.group = this.fb.group({
       dedication: [null, Validators.required],
       description: [null, Validators.required],
     });
     this.group.get('dedication')?.setValue(this.dedication);
     this.group.get('description')?.setValue(this.description);
+
   }
 
   add() {

@@ -407,8 +407,8 @@
                 
                 <div *ngFor="let interrelation of interrelations.interrelationsGeneral.data; index as i" >
                     <mat-accordion>
-                        <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
-                            <mat-expansion-panel-header>
+                        <mat-expansion-panel class="mat-elevation-z0">
+                            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                 <mat-panel-title class="row">
                                     <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
                                     <br>
@@ -430,8 +430,8 @@
 
                 <div *ngFor="let interrelation of interrelations.interrelationsSpecific.data; index as i" class="">
                     <mat-accordion>
-                        <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
-                            <mat-expansion-panel-header>
+                        <mat-expansion-panel class="mat-elevation-z0">
+                            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                 <mat-panel-title class="row">
                                     <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
                                     <br>
@@ -441,7 +441,7 @@
                             <div *ngIf="interrelation.data.length != 0">
                                 <mat-accordion *ngFor="let type of interrelation.data; index as j">
                                     <mat-expansion-panel [expanded]="true" class="mat-elevation-z0" style="padding-bottom: 15px;">
-                                        <mat-expansion-panel-header>
+                                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                             <mat-panel-title class="row">
                                                 <h3 class="txt-accent title-expansion">{{type.type}}</h3>
                                                 <br>

@@ -185,7 +185,7 @@
                 <div *ngFor="let interrelation of interrelations.interrelationsGeneral.data; index as i" >
                     <mat-accordion>
                         <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
-                            <mat-expansion-panel-header>
+                            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                 <mat-panel-title class="row">
                                     <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
                                     <br>
@@ -208,7 +208,7 @@
                 <div *ngFor="let interrelation of interrelations.interrelationsSpecific.data; index as i" class="">
                     <mat-accordion>
                         <mat-expansion-panel class="mat-elevation-z0" style="padding-bottom: 15px;">
-                            <mat-expansion-panel-header>
+                            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                 <mat-panel-title class="row">
                                     <h3 class="txt-primary title-expansion">{{interrelation.title}}</h3>
                                     <br>
@@ -218,7 +218,7 @@
                             <div *ngIf="interrelation.data.length != 0">
                                 <mat-accordion *ngFor="let type of interrelation.data; index as j">
                                     <mat-expansion-panel [expanded]="true" class="mat-elevation-z0" style="padding-bottom: 15px;">
-                                        <mat-expansion-panel-header>
+                                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                             <mat-panel-title class="row">
                                                 <h3 class="txt-accent title-expansion">{{type.type}}</h3>
                                                 <br>
@@ -269,7 +269,7 @@
             <h2 class="txt-accent">{{top.name}}</h2>
             <mat-accordion>
                 <mat-expansion-panel *ngFor="let data of top.data; index as i" class="mat-elevation-z0" style="padding-left: -15px;">
-                    <mat-expansion-panel-header>
+                    <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                     <mat-panel-title class="row">
                         <h3 class="txt-primary title-expansion">{{i+1}}. {{data.name}}</h3>
                     </mat-panel-title>
@@ -293,7 +293,7 @@
                 <h2 style="font-size: 16px;">{{info.name}}</h2>
                 <mat-accordion>
                     <mat-expansion-panel *ngFor="let data of info.data; index as i" class="mat-elevation-z0" style="padding-left: -15px;">
-                        <mat-expansion-panel-header *ngIf="data.data.length != 0">
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'" *ngIf="data.data.length != 0">
                             <mat-panel-title>
                                 <h3 class="txt-primary title-expansion">{{i+1}}. {{data.name}}</h3>
                             </mat-panel-title>

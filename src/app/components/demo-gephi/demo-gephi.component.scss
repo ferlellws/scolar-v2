@@ -53,6 +53,9 @@
     margin: 0px;
     font-weight: 500;
     font-size: 15px;
+    min-height: auto;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .indicator-container{
@@ -116,7 +119,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap; 
- }
+}
 
  .buttons-zoom {
     justify-content: center;
@@ -127,4 +130,4 @@
     font-size: 15px;
     width: 28px;
     height: 28px;
- }
+}
