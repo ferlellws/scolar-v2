@@ -65,6 +65,14 @@ export class ProjectsService {
     );
   }
 
+  getDedicationResoruces(id: number) {
+    return this.http.get<Project[]>(`${this.API}/${id}/dedication_resources`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );
+  }
+
   updateProjectsId(project: Project, id: number) {
     return this.http.put<Project>(`${this.API}/${id}`, project, this.httpOptions)
       .pipe(

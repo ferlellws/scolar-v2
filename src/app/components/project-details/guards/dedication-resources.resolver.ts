@@ -6,20 +6,19 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ProjectsService } from 'src/app/services/projects.service';
-import { TestUsersService } from 'src/app/services/test-users.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TestUsersByProjectsResolver implements Resolve<boolean> {
+export class DedicationResourcesResolver implements Resolve<boolean> {
   constructor(
-    private testUsersService: TestUsersService
+    private projectsService: ProjectsService
   ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
     ): Observable<any> |Promise<any>|any{
-      return this.testUsersService.getTestUserByProjectIdWithDedication(route.params.id);
+      return this.projectsService.getDedicationResoruces(route.params.id);
   }
 }

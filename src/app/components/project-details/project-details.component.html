@@ -156,14 +156,87 @@
             <mat-card class="card-content mat-elevation-z4">
                 <mat-icon class="icons-cards txt-primary">supervisor_account</mat-icon>
                 <mat-card-header>
-                    <mat-card-title class="txt-accent">Recursos Funcionales de Prueba</mat-card-title>  
+                    <mat-card-title class="txt-accent">Equipo de Proyecto</mat-card-title>  
                 </mat-card-header>
-                <div *ngIf="testUsersByProject.length != 0">
-                    <div *ngFor="let testUsersProject of testUsersByProject; index as i">
-                        <div mat-line class="line-text"> {{i+1}}. {{testUsersByProject[i].person.full_name}} </div>
+
+                <div class="content-resource">
+                    <h3 class="h3-subtitle txt-primary title-expansion">Sponsors</h3>
+                    <div *ngIf="sponsorsByProject.length != 0">
+                        <div *ngFor="let testUsersProject of sponsorsByProject; index as i" style="margin-bottom: 15px;">
+                            <div class="header-row">
+                                <span mat-line class="resource-name"> {{i+1}}. {{sponsorsByProject[i].person.full_name}} </span>
+                                <mat-chip-list>
+                                    <!-- <mat-chip *ngIf="sponsorsByProject[i].total_dedication < 60" style="background-color: white" matTooltip="Ocupación actual" selected>{{sponsorsByProject[i].total_dedication}}%</mat-chip> -->
+                                    <mat-chip *ngIf="sponsorsByProject[i].total_dedication >=60" style="background-color: #FDD835; color:black" matTooltip="Ocupación actual" selected>{{sponsorsByProject[i].total_dedication}}%</mat-chip>
+                                    <mat-chip matTooltip="Ocupación actual" selected>{{sponsorsByProject[i].dedication}}%</mat-chip>
+                                </mat-chip-list>
+                            </div>
+                            <span class="line-text">Área: {{sponsorsByProject[i].area}} - {{sponsorsByProject[i].vice_presidency}}</span>
+                        </div>
                     </div>
+                    <div *ngIf="sponsorsByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
                 </div>
-                <div *ngIf="testUsersByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+
+                <div class="content-resource">
+                    <h3 class="h3-subtitle txt-primary title-expansion">Líder Funcional</h3>
+                    <div mat-line class="header-row" *ngIf="project.functional_lead != null">
+                        <span class="resource-name">{{dedicationResources.lead.name}}</span>
+                        <mat-chip-list>
+                            <!-- <mat-chip *ngIf="dedicationResources.lead.total_dedication < 60" style="background-color: white" matTooltip="Ocupación actual" selected>{{dedicationResources.lead.total_dedication}}%</mat-chip> -->
+                            <mat-chip *ngIf="dedicationResources.lead.total_dedication >= 60" style="background-color: #FDD835; color:black" matTooltip="Ocupación actual" selected>{{dedicationResources.lead.total_dedication}}%</mat-chip>
+                            <mat-chip matTooltip="Ocupación actual" selected>{{dedicationResources.lead.dedication}}%</mat-chip>
+                        </mat-chip-list>
+                    </div>
+                    <span *ngIf="project.functional_lead != null"class="line-text">Área: {{dedicationResources.lead.area}}</span>
+                    <div mat-line class="line-text-font" *ngIf="project.functional_lead == null"> {{labelAssignment}}</div>
+                </div>
+
+                <div class="content-resource">
+                    <h3 class="h3-subtitle txt-primary title-expansion">PMO asignado</h3>
+                    <div mat-line class="header-row" *ngIf="project.pmo != null">
+                        <span class="resource-name">{{dedicationResources.pmo_assigned.name}}</span>
+                        <mat-chip-list>
+                            <!-- <mat-chip *ngIf="dedicationResources.pmo_assigned.total_dedication < 60" style="background-color: white" matTooltip="Ocupación actual" selected>{{dedicationResources.pmo_assigned.total_dedication}}%</mat-chip> -->
+                            <mat-chip *ngIf="dedicationResources.pmo_assigned.total_dedication >= 60" style="background-color: #FDD835; color:black" matTooltip="Ocupación actual" selected>{{dedicationResources.pmo_assigned.total_dedication}}%</mat-chip>
+                            <mat-chip matTooltip="Ocupación actual" selected>{{dedicationResources.pmo_assigned.dedication}}%</mat-chip>
+                        </mat-chip-list>
+                    </div>
+                    <div mat-line class="line-text-font" *ngIf="project.functional_lead == null"> {{labelAssignment}}</div>
+                    <span *ngIf="project.functional_lead != null" class="line-text">Área: {{dedicationResources.pmo_assigned.area}}</span>
+                </div>
+
+                <div class="content-resource">
+                    <h3 class="h3-subtitle txt-primary title-expansion">PMO de apoyo asignado</h3>
+                    <div mat-line class="header-row" *ngIf="project.pmo_assitant != null">
+                        <span class="resource-name"> {{dedicationResources.pmo_assistant.name}}</span>
+                        <mat-chip-list>
+                            <!-- <mat-chip *ngIf="dedicationResources.pmo_assistant.total_dedication < 60" style="background-color: white" matTooltip="Ocupación actual" selected>{{dedicationResources.pmo_assistant.total_dedication}}%</mat-chip> -->
+                            <mat-chip *ngIf="dedicationResources.pmo_assistant.total_dedication >= 60" style="background-color: #FDD835; color:black" matTooltip="Ocupación actual" selected>{{dedicationResources.pmo_assistant.total_dedication}}%</mat-chip>
+                            <mat-chip matTooltip="Ocupación actual" selected>{{dedicationResources.pmo_assistant.dedication}}%</mat-chip>
+                        </mat-chip-list>
+                    </div>
+                    <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> {{labelAssignment}}</div>
+                    <span *ngIf="project.pmo_assitant != null" class="line-text">Área: {{dedicationResources.pmo_assigned.area}}</span>
+                    <div *ngIf="project.pmo_assitant_stage != null" class="line-text" style="padding-bottom: 0px;">Etapa de apoyo: {{project.pmo_assitant_stage.title}}</div>
+                </div>
+
+                <div class="content-resource">
+                    <h3 class="h3-subtitle txt-primary title-expansion">Recursos Funcionales</h3>
+                    <div *ngIf="testUsersByProject.length != 0">
+                        <div *ngFor="let testUsersProject of testUsersByProject; index as i" style="margin-bottom: 15px;">
+                            <div class="header-row">
+                                <span mat-line class="resource-name"> {{i+1}}. {{testUsersByProject[i].person.full_name}} </span>
+                                <mat-chip-list>
+                                    <!-- <mat-chip *ngIf="testUsersByProject[i].total_dedication < 60" style="background-color: white" matTooltip="Ocupación actual" selected>{{testUsersByProject[i].total_dedication}}%</mat-chip> -->
+                                    <mat-chip *ngIf="testUsersByProject[i].total_dedication >=60" style="background-color: #FDD835; color:black" matTooltip="Ocupación actual" selected>{{testUsersByProject[i].total_dedication}}%</mat-chip>
+                                    <mat-chip matTooltip="Ocupación actual" selected>{{testUsersByProject[i].dedication}}%</mat-chip>
+                                </mat-chip-list>
+                            </div>
+                            <span class="line-text">Área: {{testUsersByProject[i].area}} - {{testUsersByProject[i].vice_presidency}}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="testUsersByProject.length == 0" mat-line class="line-text-font"> {{labelAssignment}} </div>
+                </div>
             </mat-card>
 
             <mat-card class="card-content mat-elevation-z4">
@@ -299,11 +372,7 @@
                 
                 <h3 class="h3-subtitle txt-primary">Descripción</h3>
                 <div mat-line class="line-text"> {{project.description}} </div>
-                
-                <h3 class="h3-subtitle txt-primary">Líder Funcional</h3>
-                <div mat-line class="line-text" *ngIf="project.functional_lead != null"> {{project.functional_lead.first_name}} {{project.functional_lead.last_name}} </div>
-                <div mat-line class="line-text-font" *ngIf="project.functional_lead == null"> {{labelAssignment}} </div>
-                
+            
                 <h3 class="h3-subtitle txt-primary">Prioridad</h3>
                 <div mat-line class="line-text"> {{project.priority.title}} </div>
                 
@@ -317,24 +386,13 @@
                 <div mat-line class="line-text" *ngIf="project.strategic_guideline != null"> {{project.strategic_guideline.name}} </div>
                 <div mat-line class="line-text-font" *ngIf="project.strategic_guideline == null"> {{labelAssignment}} </div>
                 
-                <h3 class="h3-subtitle txt-primary">PMO asignado</h3>
-                <div mat-line class="line-text" *ngIf="project.pmo != null"> {{project.pmo.first_name}} {{project.pmo.last_name}} </div>
-                <div mat-line class="line-text-font" *ngIf="project.pmo == null"> {{labelAssignment}} </div>
-                
-                <h3 class="h3-subtitle txt-primary">Ocupación semanal PMO asignado</h3>
+                <!-- <h3 class="h3-subtitle txt-primary">Ocupación semanal PMO asignado</h3>
                 <div mat-line class="line-text"> {{project.percentage}} %</div>
-                
-                <h3 class="h3-subtitle txt-primary">PMO de apoyo asignado</h3>
-                <div mat-line *ngIf="project.pmo_assitant != null" class="line-text"> {{project.pmo_assitant.first_name}} {{project.pmo_assitant.last_name}} </div>
-                <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> {{labelAssignment}} </div>
                 
                 <h3 class="h3-subtitle txt-primary">Ocupación semanal PMO apoyo</h3>
                 <div mat-line *ngIf="project.pmo_assitant != null" class="line-text"> {{project.percentageAssistant}} %</div>
-                <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> {{labelAssignment}} </div>
+                <div mat-line *ngIf="project.pmo_assitant == null" class="line-text-font"> {{labelAssignment}} </div> -->
                 
-                <h3 class="h3-subtitle txt-primary">Etapa de apoyo PMO de apoyo</h3>
-                <div mat-line *ngIf="project.pmo_assitant_stage != null" class="line-text"> {{project.pmo_assitant_stage.title}} </div>
-                <div mat-line *ngIf="project.pmo_assitant_stage == null" class="line-text-font"> {{labelAssignment}} </div>
             </mat-card>
 
             <mat-card class="card-content mat-elevation-z4">

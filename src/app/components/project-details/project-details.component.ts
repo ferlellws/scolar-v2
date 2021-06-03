@@ -54,6 +54,7 @@ export class ProjectDetailsComponent implements OnInit {
   areasByProject: any[] = [];
   companiesByProject: any[] = [];
   testUsersByProject: any[] = [];
+  sponsorsByProject: any[] = [];
   benefitsByProject: any[] = [];
   highlightsByProject: any[] = [];
   kpisByProject: any[] = [];
@@ -68,6 +69,7 @@ export class ProjectDetailsComponent implements OnInit {
   year: number = -1;
   desviationCausesGeneral: any;
   desviationCauses: DesviationCause [] =[];
+  dedicationResources: any;
   
   meses = [
     {mes: "Enero", nReg: 0, year: -1},
@@ -214,6 +216,9 @@ export class ProjectDetailsComponent implements OnInit {
       //Recursos Funcionales de Prueba
       this.testUsersByProject = data.testUsersByProject;
 
+      //Sponsors
+      this.sponsorsByProject = data.sponsors;
+
       //Beneficios
       this.benefitsByProject = data.benefitsByProject;
 
@@ -228,6 +233,9 @@ export class ProjectDetailsComponent implements OnInit {
 
       //Logros
       this.goalsAll = data.goalsByWeeks;
+
+      //Dedicación Recursos Comité sin Sponsors
+      this.dedicationResources = data.dedicationResources;
 
       this.goalsByWeeks = this.goalsAll.filter((goals: Goal) => {
         if (this.weeksByProject.length == 0){

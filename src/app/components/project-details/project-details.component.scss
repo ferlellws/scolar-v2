@@ -108,3 +108,24 @@
     padding-left: 15px;
     padding-right: 40px;
 }
+
+.warning-icon {
+    color: #FDD835;
+    align-self: flex-start;
+}
+
+.content-resource {
+    margin-bottom: 30px;
+}
+
+.resource-name {
+    padding-left: 16px;
+    font-weight: 500;
+}
+
+mat-chip {
+    min-height: 24px;
+    min-width: 60px !important;
+    justify-content: center;
+    font-weight: 400;
+}

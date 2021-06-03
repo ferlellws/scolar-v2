@@ -56,6 +56,16 @@ export class OperationSponsorsService {
     );
   }
 
+  getOperationSponsorByProjectIdWithDedication(id: number) {
+    return this.http.get<any>(`${this.API}/${id}/by_project_with_dedication`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap((data: any) => {
+        // this.emitDataTable.emit(data);
+      })
+    );
+  }
+
   getOperationSponsorProjectIdActive(id_project: any) {
     return this.http.get<OperationSponsor[]>(`${this.API}/${id_project}/by_project_sponsor_active`, this.httpOptions)
     .pipe(
