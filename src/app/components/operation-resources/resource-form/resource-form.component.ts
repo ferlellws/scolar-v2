@@ -157,6 +157,9 @@ export class ResourceFormComponent implements OnInit {
     this.disablePhases = false;
     this.fButtonDisabled = false;
     this.disablePerson = !this.disablePerson;
+    this.ngZone.run( () => {
+      this.flagModeGeneral = "create";
+    })
   }
 
   createRegister() {

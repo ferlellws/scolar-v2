@@ -67,6 +67,8 @@ import { AreasTimeCapacityResolver } from './components/time-capacity/guards-tim
 import { DesviationCausesTypificationsBySourcesResolver } from './components/desviation-causes/guards-desviation-causes/desviation-causes-typifications-by-sources.resolver';
 import { VicepresidenciesTimeCapcityResolver } from './components/time-capacity/guards-time-capacity/vicepresidencies-time-capcity.resolver';
 import { PhasesTimeCapacityResolver } from './components/time-capacity/guards-time-capacity/phases-time-capacity.resolver';
+import { SponsorsByProjectsResolver } from './components/project-details/guards/sponsors-by-projects.resolver';
+import { DedicationResourcesResolver } from './components/project-details/guards/dedication-resources.resolver';
 
 const routes: Routes = [
   {
@@ -209,7 +211,9 @@ const routes: Routes = [
       nextActivitiesByWeek: NextActivitiesByWeeksResolver,
       obseravtionsByWeek: ObseravtionsByWeeksResolver,
       desviationsByProject: DesviationByProjectResolver,
-      interrelations: InterrelationsResolver
+      interrelations: InterrelationsResolver,
+      sponsors: SponsorsByProjectsResolver,
+      dedicationResources: DedicationResourcesResolver
     }
   },
   {

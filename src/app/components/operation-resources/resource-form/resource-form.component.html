@@ -45,9 +45,9 @@
             <!-- <button class="button" mat-button color="primary" (click)="onReset()">Limpiar</button> -->
             <button class="button"
                 mat-button color="primary"
-                (click)="data.mode == 'create' && flagModeGeneral == 'create' ? createRegister() : updateRegister()"
+                (click)="flagModeGeneral == 'create' ? createRegister() : updateRegister()"
                 [disabled]="resourcesGroup.invalid || fButtonDisabled && personControl.value != null">
-                {{ data.mode == 'create' && flagModeGeneral == 'create' ? 'Crear Recurso' : 'Editar Recurso'}}
+                {{flagModeGeneral == 'create' ? 'Crear Recurso' : 'Editar Recurso'}}
             </button>
         </div>
     </form>
@@ -66,9 +66,9 @@
         </tecno-phases-dedication>
     </div>
 
-    <div class="row" style="padding-bottom: 20px;" *ngIf="disablePhases && data.mode == 'create'">
+    <!-- <div class="row" style="padding-bottom: 20px;" *ngIf="disablePhases && data.mode == 'create'">
         <button mat-button color="accent" (click)="onReset()">Parametrizar nuevo recurso</button>
-    </div>
+    </div> -->
 
     <ng-template #loadingBlock>
         <div class="row">
