@@ -80,14 +80,14 @@ export class TimeCapacityComponent implements OnInit {
   resources: any[] = [];
 
   vice_presidency_filter1 = "";
-  area__filter1 = ""
+  area_filter1 = ""
   project_filter1 = "";
   resource_filter1 = "";
   start_date_filter1 = "";
   end_date_filter1 = "";
 
   vice_presidency_filter2 = "";
-  area__filter2 = ""
+  area_filter2 = ""
   project_filter2 = "";
 
   //Filtros Analítica
@@ -423,7 +423,7 @@ export class TimeCapacityComponent implements OnInit {
   paginatorAnalitycs(event: PageEvent) {
     this.cargaAnalitycs = false;
 
-    this.timeCapacityService.getDatResourcesOutArea(event.pageIndex + 1, event.pageSize,  this.vice_presidency_filter2,this.area__filter2, this.project_filter2)
+    this.timeCapacityService.getDatResourcesOutArea(event.pageIndex + 1, event.pageSize,  this.vice_presidency_filter2,this.area_filter2, this.project_filter2)
     .subscribe(res => {
       this.dataResourceOutArea = res.dataResourceOutArea;
       this.cargaAnalitycs= true;
@@ -437,7 +437,7 @@ export class TimeCapacityComponent implements OnInit {
     // this.pageIndexResourcePortafolio = event.pageIndex + 1;
     // this.filterResorucePortfolio();
 
-    this.timeCapacityService.getTimeLineResourcesCapacity(event.pageIndex + 1, event.pageSize, this.vice_presidency_filter1,this.area__filter1, this.project_filter1, this.resource_filter1, this.start_date_filter1, this.end_date_filter1)
+    this.timeCapacityService.getTimeLineResourcesCapacity(event.pageIndex + 1, event.pageSize, this.vice_presidency_filter1,this.area_filter1, this.project_filter1, this.resource_filter1, this.start_date_filter1, this.end_date_filter1)
       .subscribe(res => {
         this.tableTimeLine = res.generalData;
         this.cargaProject = true;
@@ -503,7 +503,7 @@ export class TimeCapacityComponent implements OnInit {
     this.cargaProject = false;
     this.flagLabel = false;
     this.vice_presidency_filter1 = "";
-    this.area__filter1 = ""
+    this.area_filter1 = ""
     this.project_filter1 = "";
     this.resource_filter1 = "";
     this.start_date_filter1 = "";
@@ -515,7 +515,7 @@ export class TimeCapacityComponent implements OnInit {
     }
     
     if(typeof this.areasControl.value == 'object' && this.areasControl.value != null) {
-      this.area__filter1 = this.areasControl.value.id;
+      this.area_filter1 = this.areasControl.value.id;
     }
     
     if(typeof this.projectsControl.value == 'object' && this.projectsControl.value != null) {
@@ -534,7 +534,7 @@ export class TimeCapacityComponent implements OnInit {
       this.end_date_filter1 = this.parseDate(this.filtersGroup.get('end_date')?.value);
     }
 
-    this.timeCapacityService.getTimeLineResourcesCapacity("", "", this.vice_presidency_filter1,this.area__filter1, this.project_filter1, this.resource_filter1, this.start_date_filter1, this.end_date_filter1)
+    this.timeCapacityService.getTimeLineResourcesCapacity("", "", this.vice_presidency_filter1,this.area_filter1, this.project_filter1, this.resource_filter1, this.start_date_filter1, this.end_date_filter1)
       .subscribe(res => {
         this.tableTimeLine = res.generalData;
         this.cargaProject = true;
@@ -650,33 +650,39 @@ export class TimeCapacityComponent implements OnInit {
   filterAnalitycs() {
     this.cargaAnalitycs = false;
     this.vice_presidency_filter2 = "";
-    this.area__filter2 = ""
+    this.area_filter2 = "";
     this.project_filter2 = "";
 
-    if(typeof this.vicepresidencyControl.value == 'object' && this.vicepresidencyControl.value != null) {
-      this.vice_presidency_filter2 = this.vicepresidencyControl.value.id;
+    if(typeof this.vicepresidencyControl2.value == 'object' && this.vicepresidencyControl2.value != null) {
+      this.vice_presidency_filter2 = this.vicepresidencyControl2.value.id;
     }
 
     if(typeof this.areasControl2.value == 'object' && this.areasControl2.value != null) {
-      this.area__filter2 = this.areasControl2.value.id;
+      this.area_filter2 = this.areasControl2.value.id;
     }
 
     if(typeof this.projectsControl2.value == 'object' && this.projectsControl2.value != null) {
       this.project_filter2 = this.projectsControl2.value.id;
     }
 
-    this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, this.vicepresidency2, this.area__filter2, this.project_filter2)
+    // this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+    this.timeCapacityService.getDatResourcesOutArea("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
         this.cargaAnalitycs = true;
       });
 
+    this.timeCapacityService.getTopAreaResources("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+      .subscribe(res => {
+        this.dataTop5Areas = res.dataTop5Areas;
+        // this.cargaAnalitycs = true;
+      });
   }
 
   removeFilterAnalitycs() {
     this.cargaAnalitycs = false;
     this.vice_presidency_filter2 = "";
-    this.area__filter2 = ""
+    this.area_filter2 = ""
     this.project_filter2 = "";
 
     this.vicepresidencyControl.reset();
@@ -698,7 +704,8 @@ export class TimeCapacityComponent implements OnInit {
       map(name => name ? this._filter(name, 'project') : this.projects2.slice())
     );
 
-    this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, this.vicepresidency2, this.area__filter2, this.project_filter2)
+    // this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, this.vicepresidency2, this.area_filter2, this.project_filter2)
+    this.timeCapacityService.getDatResourcesOutArea("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
         this.cargaAnalitycs = true;
@@ -717,10 +724,17 @@ export class TimeCapacityComponent implements OnInit {
   openAnalytics() {
     this.tabAnalitycs = true;
 
-    this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, "", "", "")
+    // this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, "", "", "")
+    this.timeCapacityService.getDatResourcesOutArea("", "", "", "", "")
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
         this.cargaAnalitycs = true;
+      });
+
+    this.timeCapacityService.getTopAreaResources("", "", "", "", "")
+      .subscribe(res => {
+        this.dataTop5Areas = res.dataTop5Areas;
+        // this.cargaAnalitycs = true;
       });
   }
 
