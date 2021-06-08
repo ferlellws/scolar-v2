@@ -68,5 +68,34 @@ export class TimeCapacityService {
     );
   }
 
+  getDatResourcesOutArea(page: any, per_page: any, vice_presidency_id: any, area_id: any, project_id: any) {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+
+    this.httpOptions.params = this.inputParams;
+
+    if(page != "" && per_page != "") {
+      this.inputParams.page = page;
+      this.inputParams.per_page = per_page;
+    }
+
+    if(vice_presidency_id != "") {
+      this.inputParams.vice_presidency_id = vice_presidency_id;
+    }
+    if(area_id != "") {
+      this.inputParams.area_id = area_id;
+    }
+    if(project_id != ""){
+      this.inputParams.project_id = project_id;
+    }
+
+    return this.http.get<any[]>(`${this.API}/data_resources_out_area`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );    
+  }
 
 }

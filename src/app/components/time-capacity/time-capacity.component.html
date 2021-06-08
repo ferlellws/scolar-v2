@@ -8,7 +8,7 @@
             </div>
         </div>
         
-        <div class="filter-content">
+        <div class="row filter-content">
             <span class="text-sub">Filtros:</span>
             <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
             <form [formGroup]="filtersGroup" class="row filters">                
@@ -90,12 +90,11 @@
 
     </mat-tab>
 
-<!-- 
     <mat-tab label="Analítica">
-        <div class="filter-content-analitycs">
+        <div class="row filter-content-analitycs">
             <span class="text-sub">Filtros:</span>
             <div class="row filters">
-                <mat-form-field class="col-sm-12 col-md-2" (click)="viceSelect(2)">
+                <mat-form-field class="col-sm-12 col-md-3" (click)="viceSelect(2)">
                     <mat-label>Vicepresidencia</mat-label>
                     <input type="text" matInput [formControl]="vicepresidencyControl2" [matAutocomplete]="vicepresidency2">
                     <mat-autocomplete #vicepresidency2="matAutocomplete" [displayWith]="displayVicepresidency">
@@ -105,7 +104,7 @@
                     </mat-autocomplete>
                 </mat-form-field>
 
-                <mat-form-field class="col-sm-12 col-md-2" (click)="areasSelect(2)">
+                <mat-form-field class="col-sm-12 col-md-3" (click)="areasSelect(2)">
                     <mat-label>Área</mat-label>
                     <input type="text" matInput [formControl]="areasControl2" [matAutocomplete]="areas2">
                     <mat-autocomplete #areas2="matAutocomplete" [displayWith]="displayAreas">
@@ -115,7 +114,7 @@
                     </mat-autocomplete>
                 </mat-form-field>
 
-                <mat-form-field class="col-sm-12 col-md-2" (click)="projectsSelect(2)">
+                <mat-form-field class="col-sm-12 col-md-3" (click)="projectsSelect(2)">
                     <mat-label>Proyecto</mat-label>
                     <input type="text" matInput [formControl]="projectsControl2" [matAutocomplete]="projects2">
                     <mat-autocomplete #projects2="matAutocomplete" [displayWith]="displayProject">
@@ -126,13 +125,14 @@
                 </mat-form-field>
                 
         
-                <div class="buttons-content col-sm-12 col-md-2">
+                <div class="buttons-content col-sm-12 col-md-3">
                     <button mat-raised-button class="button-filter" color="primary" (click)="filterAnalitycs()">{{labelButton.filter}}</button>
                     <button mat-raised-button class="button-filter" color="accent" (click)="removeFilterAnalitycs()">{{labelButton.remove}}</button>
                 </div>
             </div>    
         </div>
 
+        <mat-spinner *ngIf="!cargaAnalitycs" color="accent" class="content-center"></mat-spinner>
 
         <div style="padding-top: 40px;">
             <span class="title-analitycs txt-accent">Ocupación de recursos fuera del área encargada del proyecto</span>
@@ -147,8 +147,8 @@
             <div class="mat-elevation-z1 content-info-out-area">
                 <div *ngFor="let data of dataResourceOutArea; index as i ">
                     <mat-expansion-panel [expanded]="stepOutArea == i" (opened)="setStep(i, 'out_area')" class="mat-elevation-z0" style="border-radius: 0px;">
-                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding-left: 0px;">
-                            <mat-panel-title class="col-sm-12 col-md-3 title-panel">{{data.infoGeneral.projectName}}</mat-panel-title>
+                        <mat-expansion-panel-header class="col-sm-12 col-md-12 expansion-header" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                            <mat-panel-title class="col-sm-12 col-md-3 title-panel" style="padding-right: 10px;">{{data.infoGeneral.projectName}}</mat-panel-title>
         
                             <mat-panel-description class="col-sm-12 col-md-9">
                                 <span class="col-sm-12 col-md-4" style="color: black">{{data.infoGeneral.vicepresidency}}</span>
@@ -237,5 +237,4 @@
             </div>
         </div>
     </mat-tab>
-     -->
 </mat-tab-group>

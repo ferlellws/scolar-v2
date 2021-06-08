@@ -49,6 +49,7 @@ export class TimeCapacityComponent implements OnInit {
   }
   
   cargaProject: boolean = false;
+  cargaAnalitycs: boolean = false;
 
   indexTab = 0;
 
@@ -85,6 +86,10 @@ export class TimeCapacityComponent implements OnInit {
   start_date_filter1 = "";
   end_date_filter1 = "";
 
+  vice_presidency_filter2 = "";
+  area__filter2 = ""
+  project_filter2 = "";
+
   //Filtros Analítica
   projectsControl2 = new FormControl();
   filterProjects2!: Observable<Project[]>;
@@ -109,8 +114,8 @@ export class TimeCapacityComponent implements OnInit {
 
   // MatPaginator Inputs Analitycs
   lengthAnalitycs = 100;
-  pageSizeAnalitycs = 10;
-  pageSizeOptionsAnalitycs: number[] = [10, 50, 100];
+  pageSizeAnalitycs = 5;
+  pageSizeOptionsAnalitycs: number[] = [5, 10, 20, 50, 100];
 
   dataResourceOutArea:any = [
     {
@@ -189,468 +194,8 @@ export class TimeCapacityComponent implements OnInit {
   ];
 
   tableTimeLine = [];
-  // tableTimeLine:any = [
-  //   {
-  //     project_name: 'Tiempos y Turnos Fase 1', 
-  //     months: {
-  //       month_1: 'Ene-21',
-  //       month_2: 'Feb-21',
-  //       month_3: 'Mar-21',
-  //       month_4: 'Abr-21',
-  //       month_5: 'May-21',
-  //       month_6: 'Jun-21',
-  //     },
-  //     dataSource: [
-  //       {
-  //         name: 'David Fernando Guerrero Alvarez',
-  //         position: 'Director Logística',
-  //         profile: 'Sponsor',
-  //         month_1: {
-  //           sem2: { dedication: '25%', color: '#4285F4' },
-  //           sem4: { dedication: '25%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '25%', color: '#02B7AC' },
-  //           sem4: { dedication: '25%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '25%', color: '#02B7AC' },
-  //           sem4: { dedication: '25%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '27%', color: '#02B7AC' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'Denis Alexander Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Líder Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '30%', color: '#4285F4' },
-  //           sem4: { dedication: '30%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '35%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '35%', color: '#02B7AC' },
-  //           sem4: { dedication: '40%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '25%', color: '#02B7AC' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Pmo Asignado',
-  //         month_1: {
-  //           sem2: { dedication: '', color: '' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '', color: '' },
-  //           sem4: { dedication: '', color: '' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Pmo Apoyo',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Recurso Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'Gabriel Enrique Cardenas Santana',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Recurso Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Recurso Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Recurso Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     project_name: 'EDI', 
-  //     months: {
-  //       month_1: 'Ene-21',
-  //       month_2: 'Feb-21',
-  //       month_3: 'Mar-21',
-  //       month_4: 'Abr-21',
-  //       month_5: 'May-21',
-  //       month_6: 'Jun-21'
-  //     },
-  //     dataSource: [
-  //       {
-  //         name: 'David Fernando Guerrero Alvarez',
-  //         position: 'Director Logística',
-  //         profile: 'Sponsor',
-  //         month_1: {
-  //           sem2: { dedication: '25%', color: '#4285F4' },
-  //           sem4: { dedication: '25%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '25%', color: '#02B7AC' },
-  //           sem4: { dedication: '25%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '25%', color: '#02B7AC' },
-  //           sem4: { dedication: '25%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '27%', color: '#02B7AC' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'Denis Alexander Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Líder Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '30%', color: '#4285F4' },
-  //           sem4: { dedication: '30%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '35%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '35%', color: '#02B7AC' },
-  //           sem4: { dedication: '40%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '25%', color: '#02B7AC' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '27%', color: '#F4B400' },
-  //           sem4: { dedication: '27%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Pmo Asignado',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Pmo Apoyo',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Recurso Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       },
-  //       {
-  //         name: 'Gabriel Enrique Cardenas Santana',
-  //         position: 'Gestor de Proyectos',
-  //         profile: 'Recurso Funcional',
-  //         month_1: {
-  //           sem2: { dedication: '0%', color: '#4285F4' },
-  //           sem4: { dedication: '0%', color: '#4285F4' }
-  //         },
-  //         month_2: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_3: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '30%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           sem2: { dedication: '30%', color: '#02B7AC' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_5: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         },
-  //         month_6: {
-  //           sem2: { dedication: '0%', color: '#F4B400' },
-  //           sem4: { dedication: '0%', color: '#F4B400' }
-  //         }
-  //       }
-  //     ]
-  //   },
-  // ]
 
   phases: any = []
-  // phases: any = [
-  //   {
-  //     name: 'Factibilidad',
-  //     color: '#4285F4'
-  //   },
-  //   {
-  //     name: 'Inicio',
-  //     color: '#02B7AC'
-  //   },
-  //   {
-  //     name: 'Planeación',
-  //     color: '#F4B400'
-  //   },
-  //   {
-  //     name: 'Ejecución',
-  //     color: '#04C200'
-  //   },
-  //   {
-  //     name: 'Cierre',
-  //     color: '#E1675D'
-  //   },
-  //   {
-  //     name: 'BAU',
-  //     color: '#EB8E01'
-  //   },
-  // ]
 
   conventions: any = [
     {
@@ -671,6 +216,7 @@ export class TimeCapacityComponent implements OnInit {
     }
   ]
 
+  // tableTop10Ocupation: any = [];
   tableTop10Ocupation:any = [
     {
       months: {
@@ -875,8 +421,13 @@ export class TimeCapacityComponent implements OnInit {
   }
 
   paginatorAnalitycs(event: PageEvent) {
-    environment.consoleMessage(event.pageSize, "Size");
-    environment.consoleMessage(event.pageIndex, "Index");
+    this.cargaAnalitycs = false;
+
+    this.timeCapacityService.getDatResourcesOutArea(event.pageIndex + 1, event.pageSize,  this.vice_presidency_filter2,this.area__filter2, this.project_filter2)
+    .subscribe(res => {
+      this.dataResourceOutArea = res.dataResourceOutArea;
+      this.cargaAnalitycs= true;
+    });    
   }
 
   paginatorResourcesPortafolio(event: PageEvent) {
@@ -1097,24 +648,37 @@ export class TimeCapacityComponent implements OnInit {
   }
 
   filterAnalitycs() {
-    let vicepresidency = ""
-    let area = ""
-    let project = "";
+    this.cargaAnalitycs = false;
+    this.vice_presidency_filter2 = "";
+    this.area__filter2 = ""
+    this.project_filter2 = "";
 
     if(typeof this.vicepresidencyControl.value == 'object' && this.vicepresidencyControl.value != null) {
-      vicepresidency = this.vicepresidencyControl.value.id;
+      this.vice_presidency_filter2 = this.vicepresidencyControl.value.id;
     }
 
     if(typeof this.areasControl2.value == 'object' && this.areasControl2.value != null) {
-      area = this.areasControl2.value.id;
+      this.area__filter2 = this.areasControl2.value.id;
     }
 
     if(typeof this.projectsControl2.value == 'object' && this.projectsControl2.value != null) {
-      project = this.projectsControl2.value.id;
+      this.project_filter2 = this.projectsControl2.value.id;
     }
+
+    this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, this.vicepresidency2, this.area__filter2, this.project_filter2)
+      .subscribe(res => {
+        this.dataResourceOutArea = res.dataResourceOutArea;
+        this.cargaAnalitycs = true;
+      });
+
   }
 
   removeFilterAnalitycs() {
+    this.cargaAnalitycs = false;
+    this.vice_presidency_filter2 = "";
+    this.area__filter2 = ""
+    this.project_filter2 = "";
+
     this.vicepresidencyControl.reset();
     this.filterVicepresidency = this.vicepresidencyControl.valueChanges.pipe(
       startWith(''),
@@ -1133,6 +697,12 @@ export class TimeCapacityComponent implements OnInit {
       map(value => typeof value === 'string' ||  value == null? value : value!.title),
       map(name => name ? this._filter(name, 'project') : this.projects2.slice())
     );
+
+    this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, this.vicepresidency2, this.area__filter2, this.project_filter2)
+      .subscribe(res => {
+        this.dataResourceOutArea = res.dataResourceOutArea;
+        this.cargaAnalitycs = true;
+      });
   }
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
@@ -1140,17 +710,18 @@ export class TimeCapacityComponent implements OnInit {
     if(this.indexTab == 1) {
       if(!this.tabAnalitycs){
         this.openAnalytics();
-      } else {
-        environment.consoleMessage("ya hice peticiones");
       }
     }
   }
   
   openAnalytics() {
-    environment.consoleMessage("Estoy en el 2do TAB haciendo peticiones");
     this.tabAnalitycs = true;
 
-    
+    this.timeCapacityService.getDatResourcesOutArea(1, this.pageSizeAnalitycs, "", "", "")
+      .subscribe(res => {
+        this.dataResourceOutArea = res.dataResourceOutArea;
+        this.cargaAnalitycs = true;
+      });
   }
 
   //................................................................................................................................
