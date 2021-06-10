@@ -117,81 +117,7 @@ export class TimeCapacityComponent implements OnInit {
   pageSizeAnalitycs = 5;
   pageSizeOptionsAnalitycs: number[] = [5, 10, 20, 50, 100];
 
-  dataResourceOutArea:any = [
-    {
-      infoGeneral: {
-        projectName: 'Tiempos y Turnos Fase 1',
-        vicepresidency: 'Presidencia',
-        area: 'Aplicaciones',
-        resources: 3
-      },
-      infoTable: {
-        headers: [
-          'Recurso',
-          'Vicepresidencia',
-          'Área',
-          'Cargo',
-          'Rol Proyecto'
-        ],
-        dataTable: [
-          {
-            resource: 'David Fernando Guerrero Álvarez',
-            vicepresidency: 'Vp Comercial',
-            area: 'Ventas',
-            position: 'Analista',
-            rol: 'Pmo asignado'
-          },
-          {
-            resource: 'Denis Alexander Rodriguez Venegas',
-            vicepresidency: 'Presidencia',
-            area: 'Sistemas',
-            position: 'Gestor de Proyectos',
-            rol: 'Pmo Apoyo'
-          },
-          {
-            resource: 'Jonathan Ricardo Galvis Galvez',
-            vicepresidency: 'Presidencia',
-            area: 'Expación',
-            position: 'Gestor de Proyectos',
-            rol: 'Líder Funcional'
-          }
-        ]
-      }
-    },
-    {
-      infoGeneral: {
-        projectName: 'EDI',
-        vicepresidency: 'Vp Comercial',
-        area: 'Calidad',
-        resources: 2
-      },
-      infoTable: {
-        headers: [
-          'Recurso',
-          'Vicepresidencia',
-          'Área',
-          'Cargo',
-          'Rol Proyecto'
-        ],
-        dataTable: [
-          {
-            resource: 'Julian Felipe Martinez Ocampo',
-            vicepresidency: 'Vp Comercial',
-            area: 'Marketing',
-            position: 'Analista',
-            rol: 'Recurso Funcional'
-          },
-          {
-            resource: 'Javier Andres Valencia Ortiz',
-            vicepresidency: 'Presidencia',
-            area: 'Fonkoba',
-            position: 'Gestor de Proyectos',
-            rol: 'Recurso Funcional'
-          }
-        ]
-      }
-    }
-  ];
+  dataResourceOutArea:any = [];
 
   tableTimeLine = [];
 
@@ -216,105 +142,105 @@ export class TimeCapacityComponent implements OnInit {
     }
   ]
 
-  // tableTop10Ocupation: any = [];
-  tableTop10Ocupation:any = [
-    {
-      months: {
-        month_1: 'Ene-21',
-        month_2: 'Feb-21',
-        month_3: 'Mar-21',
-        month_4: 'Abr-21',
-        month_5: 'May-21',
-        month_6: 'Jun-21',
-      },
-      dataSource: [
-        {
-          name: 'David Fernando Guerrero Alvarez',
-          position: 'Director Logística',
-          month_1: {
-            block_1: { dedication: '39%', color: '#04C200' },
-            block_2: { dedication: '62%', color: '#EB8E01' }
-          },
-          month_2: {
-            block_1: { dedication: '68%', color: '#EB8E01' },
-            block_2: { dedication: '68%', color: '#EB8E01' }
-          },
-          month_3: {
-            block_1: { dedication: '85%', color: '#E1675D' },
-            block_2: { dedication: '85%', color: '#E1675D' }
-          },
-          month_4: {
-            block_1: { dedication: '27%', color: '#04C200' },
-            block_2: { dedication: '27%', color: '#04C200' }
-          },
-          month_5: {
-            block_1: { dedication: '27%', color: '#04C200' },
-            block_2: { dedication: '27%', color: '#04C200' }
-          },
-          month_6: {
-            block_1: { dedication: '27%', color: '#04C200' },
-            block_2: { dedication: '27%', color: '#04C200' }
-          }
-        },
-        {
-          name: 'Denis Alexander Rodriguez Venegas',
-          position: 'Gestor de Proyectos',
-          month_1: {
-            block_1: { dedication: '30%', color: '#04C200' },
-            block_2: { dedication: '30%', color: '#04C200' }
-          },
-          month_2: {
-            block_1: { dedication: '30%', color: '#04C200' },
-            block_2: { dedication: '35%', color: '#04C200' }
-          },
-          month_3: {
-            block_1: { dedication: '35%', color: '#04C200' },
-            block_2: { dedication: '40%', color: '#02B7AC' }
-          },
-          month_4: {
-            block_1: { dedication: '25%', color: '#04C200' },
-            block_2: { dedication: '27%', color: '#04C200' }
-          },
-          month_5: {
-            block_1: { dedication: '27%', color: '#04C200' },
-            block_2: { dedication: '27%', color: '#04C200' }
-          },
-          month_6: {
-            block_1: { dedication: '27%', color: '#04C200' },
-            block_2: { dedication: '27%', color: '#04C200' }
-          }
-        },
-        {
-          name: 'David Humberto Rodriguez Venegas',
-          position: 'Gestor de Proyectos',
-          month_1: {
-            block_1: { dedication: '0%', color: '#04C200' },
-            block_2: { dedication: '0%', color: '#04C200' }
-          },
-          month_2: {
-            block_1: { dedication: '30%', color: '#04C200' },
-            block_2: { dedication: '30%', color: '#04C200' }
-          },
-          month_3: {
-            block_1: { dedication: '30%', color: '#04C200' },
-            block_2: { dedication: '30%', color: '#04C200' }
-          },
-          month_4: {
-            block_1: { dedication: '30%', color: '#04C200' },
-            block_2: { dedication: '0%', color: '#04C200' }
-          },
-          month_5: {
-            block_1: { dedication: '0%', color: '#04C200' },
-            block_2: { dedication: '0%', color: '#04C200' }
-          },
-          month_6: {
-            block_1: { dedication: '0%', color: '#04C200' },
-            block_2: { dedication: '0%', color: '#04C200' }
-          }
-        }
-      ]
-    }
-  ];
+  tableTop10Ocupation: any = [];
+  // tableTop10Ocupation:any = [
+  //   {
+  //     months: {
+  //       month_1: 'Ene-21',
+  //       month_2: 'Feb-21',
+  //       month_3: 'Mar-21',
+  //       month_4: 'Abr-21',
+  //       month_5: 'May-21',
+  //       month_6: 'Jun-21',
+  //     },
+  //     dataSource: [
+  //       {
+  //         name: 'David Fernando Guerrero Alvarez',
+  //         position: 'Director Logística',
+  //         month_1: {
+  //           block_1: { dedication: '39%', color: '#04C200' },
+  //           block_2: { dedication: '62%', color: '#EB8E01' }
+  //         },
+  //         month_2: {
+  //           block_1: { dedication: '68%', color: '#EB8E01' },
+  //           block_2: { dedication: '68%', color: '#EB8E01' }
+  //         },
+  //         month_3: {
+  //           block_1: { dedication: '85%', color: '#E1675D' },
+  //           block_2: { dedication: '85%', color: '#E1675D' }
+  //         },
+  //         month_4: {
+  //           block_1: { dedication: '27%', color: '#04C200' },
+  //           block_2: { dedication: '27%', color: '#04C200' }
+  //         },
+  //         month_5: {
+  //           block_1: { dedication: '27%', color: '#04C200' },
+  //           block_2: { dedication: '27%', color: '#04C200' }
+  //         },
+  //         month_6: {
+  //           block_1: { dedication: '27%', color: '#04C200' },
+  //           block_2: { dedication: '27%', color: '#04C200' }
+  //         }
+  //       },
+  //       {
+  //         name: 'Denis Alexander Rodriguez Venegas',
+  //         position: 'Gestor de Proyectos',
+  //         month_1: {
+  //           block_1: { dedication: '30%', color: '#04C200' },
+  //           block_2: { dedication: '30%', color: '#04C200' }
+  //         },
+  //         month_2: {
+  //           block_1: { dedication: '30%', color: '#04C200' },
+  //           block_2: { dedication: '35%', color: '#04C200' }
+  //         },
+  //         month_3: {
+  //           block_1: { dedication: '35%', color: '#04C200' },
+  //           block_2: { dedication: '40%', color: '#02B7AC' }
+  //         },
+  //         month_4: {
+  //           block_1: { dedication: '25%', color: '#04C200' },
+  //           block_2: { dedication: '27%', color: '#04C200' }
+  //         },
+  //         month_5: {
+  //           block_1: { dedication: '27%', color: '#04C200' },
+  //           block_2: { dedication: '27%', color: '#04C200' }
+  //         },
+  //         month_6: {
+  //           block_1: { dedication: '27%', color: '#04C200' },
+  //           block_2: { dedication: '27%', color: '#04C200' }
+  //         }
+  //       },
+  //       {
+  //         name: 'David Humberto Rodriguez Venegas',
+  //         position: 'Gestor de Proyectos',
+  //         month_1: {
+  //           block_1: { dedication: '0%', color: '#04C200' },
+  //           block_2: { dedication: '0%', color: '#04C200' }
+  //         },
+  //         month_2: {
+  //           block_1: { dedication: '30%', color: '#04C200' },
+  //           block_2: { dedication: '30%', color: '#04C200' }
+  //         },
+  //         month_3: {
+  //           block_1: { dedication: '30%', color: '#04C200' },
+  //           block_2: { dedication: '30%', color: '#04C200' }
+  //         },
+  //         month_4: {
+  //           block_1: { dedication: '30%', color: '#04C200' },
+  //           block_2: { dedication: '0%', color: '#04C200' }
+  //         },
+  //         month_5: {
+  //           block_1: { dedication: '0%', color: '#04C200' },
+  //           block_2: { dedication: '0%', color: '#04C200' }
+  //         },
+  //         month_6: {
+  //           block_1: { dedication: '0%', color: '#04C200' },
+  //           block_2: { dedication: '0%', color: '#04C200' }
+  //         }
+  //       }
+  //     ]
+  //   }
+  // ];
 
   dataTop5Areas:any = [
     {
@@ -685,11 +611,11 @@ export class TimeCapacityComponent implements OnInit {
     this.area_filter2 = ""
     this.project_filter2 = "";
 
-    this.vicepresidencyControl.reset();
-    this.filterVicepresidency = this.vicepresidencyControl.valueChanges.pipe(
+    this.vicepresidencyControl2.reset();
+    this.filterVicepresidency2 = this.vicepresidencyControl2.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ||  value == null ? value : value!.title),
-      map(name => name ? this._filter(name, 'area') : this.vicepresidency.slice())
+      map(name => name ? this._filter(name, 'area') : this.vicepresidency2.slice())
     );
     this.areasControl2.reset();
     this.filterAreas2 = this.areasControl2.valueChanges.pipe(
@@ -728,13 +654,19 @@ export class TimeCapacityComponent implements OnInit {
     this.timeCapacityService.getDatResourcesOutArea("", "", "", "", "")
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
-        this.cargaAnalitycs = true;
+        // this.cargaAnalitycs = true;
       });
 
     this.timeCapacityService.getTopAreaResources("", "", "", "", "")
       .subscribe(res => {
         this.dataTop5Areas = res.dataTop5Areas;
         // this.cargaAnalitycs = true;
+      });
+
+    this.timeCapacityService.getTopOccupationResource()
+      .subscribe(res => {
+        this.tableTop10Ocupation = res.tableTop10Ocupation;
+        this.cargaAnalitycs = true;
       });
   }
 

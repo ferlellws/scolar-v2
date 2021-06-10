@@ -38,6 +38,7 @@ export class OperationResourcesComponent implements OnInit {
   project!: Project;
   sponsors: OperationSponsor[] = [];
   persons!: any;
+  availableSponsor!: any;
   fronts!: any;
   filterPersons!: Observable<Person[]>;
   personControl = new FormControl();
@@ -85,11 +86,12 @@ export class OperationResourcesComponent implements OnInit {
       this.usersService.getFunctionalResources()
         .subscribe(res => {
           this.persons = res;
-
+          this.availableSponsor = res.filter((p: any) => !this.sponsors.map((s: any) => s.person.id).includes(p.id))
+          
           this.filterPersons = this.personControl.valueChanges.pipe(
             startWith(''),
             map(value => typeof value === 'string' ? value : value!.full_name),
-            map(name => name ? this._filter(name) : this.persons.slice())
+            map(name => name ? this._filter(name) : this.availableSponsor.slice())
           );
         });
 
@@ -113,7 +115,7 @@ export class OperationResourcesComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.persons.filter((person :any) => person.full_name.toLowerCase().indexOf(filterValue) === 0);
+    return this.availableSponsor.filter((person :any) => person.full_name.toLowerCase().indexOf(filterValue) === 0);
   }
 
 
@@ -146,7 +148,7 @@ export class OperationResourcesComponent implements OnInit {
 
             this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
             .subscribe(res => {
-              this.sponsors = res.filter((f :any) => f.is_active == true);;
+              this.sponsors = res.filter((f :any) => f.is_active == true);
             });
           }      
       });
@@ -199,26 +201,33 @@ export class OperationResourcesComponent implements OnInit {
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'si') {
-        // this.operationSponsorsService.deleteOperationSponsor(id)
-        // .subscribe(res => {
-        //   this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");
-        //   dialogRef.close();
-        //   this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
-        //     .subscribe(res => {
-        //       this.sponsors = res;
-        //     });
-        // });
-        let updateState = {
-          is_active: false
-        }
-        this.operationSponsorsService.updateOperationSponsor(updateState, id)
-          .subscribe(res => {
-            this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
-              .subscribe(res => {
-                this.sponsors = res.filter((f :any) => f.is_active == true);
-                dialogRef.close();
-              });
-          });
+        this.sponsorByPhasesService.getSponsorByPhasesByProjectBySponsor(Number(this.project.id), id)
+        .subscribe(res => {
+          this.sponsorByPhasesService.deleteSponsorByPhase(res.data_by_resource[0].id_reg)
+            .subscribe(res => {
+              this.operationSponsorsService.deleteOperationSponsor(id)
+                .subscribe(res => {
+                  this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
+                    .subscribe(res => {
+                      this.sponsors = res;
+                      this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");                  
+                      dialogRef.close();
+                    });
+                });
+            });
+        });
+
+        // let updateState = {
+        //   is_active: false
+        // }
+        // this.operationSponsorsService.updateOperationSponsor(updateState, id)
+        //   .subscribe(res => {
+        //     this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
+        //       .subscribe(res => {
+        //         this.sponsors = res.filter((f :any) => f.is_active == true);
+        //         dialogRef.close();
+        //       });
+        //   });
       } else {
         dialogRef.close();
       }

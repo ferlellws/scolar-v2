@@ -98,6 +98,14 @@ export class TimeCapacityService {
     );    
   }
 
+  getTopOccupationResource() {
+    return this.http.get<any[]>(`${this.API}/top_occupation_resources`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );  
+  }
+
   getTopAreaResources(page: any, per_page: any, vice_presidency_id: any, area_id: any, project_id: any){
     this.inputParams = {
       user_email: JSON.parse(localStorage.user).email,
