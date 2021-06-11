@@ -26,9 +26,16 @@
                     <mat-label>Área</mat-label>
                     <input type="text" matInput [formControl]="areasControl" [matAutocomplete]="areas">
                     <mat-autocomplete #areas="matAutocomplete" [displayWith]="displayAreas">
-                        <mat-option *ngFor="let area of filterAreas | async" [value]="area">
-                        {{area.title}}
-                        </mat-option>
+                        <div *ngIf="projects1.length != 0">
+                            <mat-option *ngFor="let area of filterAreas | async" [value]="area">
+                                {{area.title}}
+                            </mat-option>
+                        </div>
+                        <div *ngIf="projects1.length == 0">
+                            <mat-option class="label-no-projects">
+                                {{labelNoProjects}}
+                            </mat-option>
+                        </div>
                     </mat-autocomplete>
                 </mat-form-field>
 
@@ -36,19 +43,37 @@
                     <mat-label>Proyecto</mat-label>
                     <input type="text" matInput [formControl]="projectsControl" [matAutocomplete]="projects">
                     <mat-autocomplete #projects="matAutocomplete" [displayWith]="displayProject">
-                        <mat-option *ngFor="let project of filterProjects | async" [value]="project">
-                        {{project.title}}
-                        </mat-option>
+                        <div *ngIf="projects1.length != 0">
+                            <mat-option *ngFor="let project of filterProjects | async" [value]="project">
+                                {{project.title}}
+                            </mat-option>
+                        </div>
+                        <div *ngIf="projects1.length == 0">
+                            <mat-option class="label-no-projects">
+                                {{labelNoProjects}}
+                            </mat-option>
+                        </div>
                     </mat-autocomplete>
+                    <!-- <mat-error *ngIf="projects1.length == 0">
+                        No hay proyectos inscritos en esta Vicepresidencia
+                    </mat-error> -->
+                    <!-- <span *ngIf="projects1.length == 0">No hay proyectos inscritos en esta Vicepresidencia</span> -->
                 </mat-form-field>
         
-                <mat-form-field class="col-sm-12 col-md-2">
+                <mat-form-field class="col-sm-12 col-md-2" (click)="resourcesSelect()">
                     <mat-label>Recurso</mat-label>
-                    <input type="text" matInput [formControl]="resourcesControl" [matAutocomplete]="resources">
-                    <mat-autocomplete #resources="matAutocomplete" [displayWith]="displayResources">
-                        <mat-option *ngFor="let resource of filterResources | async" [value]="resource">
-                        {{resource.full_name}}
-                        </mat-option>
+                    <input type="text" matInput [formControl]="resourcesControl" [matAutocomplete]="resources" [disabled]=true>
+                    <mat-autocomplete #resources="matAutocomplete" [displayWith]="displayResources" disable="true">
+                        <div *ngIf="projects1.length != 0">
+                            <mat-option *ngFor="let resource of filterResources | async" [value]="resource">
+                                {{resource.full_name}}
+                            </mat-option>
+                        </div>
+                        <div *ngIf="projects1.length == 0">
+                            <mat-option class="label-no-projects">
+                                {{labelNoProjects}}
+                            </mat-option>
+                        </div>
                     </mat-autocomplete>
                 </mat-form-field>
         

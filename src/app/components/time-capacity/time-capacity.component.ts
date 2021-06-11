@@ -47,6 +47,8 @@ export class TimeCapacityComponent implements OnInit {
     remove: "Ver Todo",
     filter: "Filtrar"
   }
+
+  labelNoProjects = "No hay proyectos para esta selección"
   
   cargaProject: boolean = false;
   cargaAnalitycs: boolean = false;
@@ -511,8 +513,10 @@ export class TimeCapacityComponent implements OnInit {
 
   areasSelect(op: number) {
     if(op == 1) {
+      this.projects1 = this.projects
       if(typeof this.vicepresidencyControl.value == 'object' && this.vicepresidencyControl.value != null) {
         this.areas1 = this.areas.filter((area: any) => area.vice_presidency.id == this.vicepresidencyControl.value.id);
+        this.projects1 = this.projects.filter((project: any) => project.area.vice_presidency.id == this.vicepresidencyControl.value.id);
       } else {
         this.areas1 = this.areas;
       }
@@ -571,6 +575,16 @@ export class TimeCapacityComponent implements OnInit {
         map(name => name ? this._filter(name, 'project') : this.projects2.slice())
       );
     }
+  }
+
+  resourcesSelect() {
+    this.projects1 = this.projects;
+      if(typeof this.vicepresidencyControl.value == 'object' && this.vicepresidencyControl.value != null) {
+        this.projects1 = this.projects.filter((project: any) => project.area.vice_presidency.id == this.vicepresidencyControl.value.id);
+      }
+      if(typeof this.areasControl.value == 'object' && this.areasControl.value != null) {
+        this.projects1 = this.projects.filter((project: any) => project.area.id == this.areasControl.value.id);
+      }
   }
 
   filterAnalitycs() {
