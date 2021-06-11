@@ -196,26 +196,23 @@ export class OperationResourcesComponent implements OnInit {
       width: "400px",
       data: {
         title: "Confirmación para eliminar registro",
-        info: "¿Está seguro que desea eliminar este registro?",
+        info: "¿Está seguro que desea eliminar este registro? Se eliminará el Sponsor y su asignación de tiempos",
       }
     });
     dialogRef.componentInstance.emitClose.subscribe( (data: any) => {
       if (data == 'si') {
-        this.sponsorByPhasesService.getSponsorByPhasesByProjectBySponsor(Number(this.project.id), id)
-        .subscribe(res => {
-          this.sponsorByPhasesService.deleteSponsorByPhase(res.data_by_resource[0].id_reg)
-            .subscribe(res => {
-              this.operationSponsorsService.deleteOperationSponsor(id)
-                .subscribe(res => {
-                  this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
-                    .subscribe(res => {
-                      this.sponsors = res;
-                      this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");                  
-                      dialogRef.close();
-                    });
-                });
-            });
-        });
+        this.sponsorByPhasesService.deleteDataSponsorByProject(Number(this.project.id), id)
+          .subscribe(res => {
+            this.operationSponsorsService.deleteOperationSponsor(id)
+              .subscribe(res => {
+                this.operationSponsorsService.getOperationSponsorProjectId(this.project.id)
+                  .subscribe(res => {
+                    this.sponsors = res;
+                    this.openSnackBar(true, "Registro eliminado satisfactoriamente", "");                  
+                    dialogRef.close();
+                  });
+              });
+          });
 
         // let updateState = {
         //   is_active: false

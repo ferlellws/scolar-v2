@@ -83,4 +83,13 @@ export class SponsorByPhasesService {
         })
       );
   }
+
+  deleteDataSponsorByProject(id_project: number, id_sponsor: number){
+    return this.http.delete<SponsorByPhase>(`${this.API}/${id_project}/${id_sponsor}/delete_data_sponsor_by_project`, this.httpOptions)
+    .pipe(
+      tap((data: any) => {
+        this.emitSponsorByPhaseDelete.emit(data);
+      })
+    );
+  }
 }
