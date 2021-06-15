@@ -269,5 +269,23 @@
                 </div>    
             </div>
         </div> 
+
+        <div *ngIf="cargaAnalitycs" style="padding-top: 40px;">
+            <span class="title-analitycs txt-accent">Top 10 recursos más ocupados en Fase BAU</span>
+            <div class="phases-content" style="margin-top: 20px;">
+                <span class="text-sub">Convenciones porcentaje de ocupación:</span>
+                <div *ngFor="let convention of conventions" class="label-rect-content-phase">
+                    <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
+                    <span class="phases-name">{{convention.name}}</span>    
+                </div>
+            </div>
+
+            <div class="table-occupation-resource" *ngFor="let data of tableTop10Ocupation">
+                <tecno-table-time-line
+                    [generalData]=data
+                    [tab]=2
+                ></tecno-table-time-line>
+            </div>
+        </div>
     </mat-tab>
 </mat-tab-group>
