@@ -97,7 +97,7 @@
 
         <h2 *ngIf="flagLabel" class="txt-primary">Por favor seleccione un criterio de búsqueda</h2>
 
-        <h2 *ngIf="tableTimeLine.length == 0 && !flagLabel" class="txt-primary">No hay coincidencias para los filtros seleccionados</h2>
+        <h3 *ngIf="tableTimeLine.length == 0 && !flagLabel" class="txt-primary">{{notInformationLabel}}</h3>
         <div class="table-time-line" *ngFor="let data of tableTimeLine">
             <tecno-table-time-line
                 [generalData]=data
@@ -119,6 +119,7 @@
     </mat-tab>
 
     <mat-tab label="Analítica">
+        <h3 *ngIf="!cargaAnalitycs" class="txt-primary" style="margin-top: 20px;">Cargando información, por favor espere un momento...</h3>
         <mat-spinner *ngIf="!cargaAnalitycs" color="accent" class="content-center spinner"></mat-spinner>
         
         <div *ngIf="cargaAnalitycs" class="row filter-content-analitycs">
@@ -165,14 +166,15 @@
         <div *ngIf="cargaAnalitycs" class="sections-content">
             <span class="title-analitycs txt-accent">Ocupación de recursos fuera del área encargada del proyecto</span>
             
-            <mat-card class="general-content" style="margin-top: 20px;">
+            <h3 *ngIf="dataResourceOutArea.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+            <mat-card *ngIf="dataResourceOutArea.length != 0" class="general-content" style="margin-top: 20px;">
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Proyecto</span>
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Vicepresidencia</span>
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Área</span>
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Recursos fuera del área encargada</span>
             </mat-card>
 
-            <div class="mat-elevation-z1 content-info-out-area">
+            <div *ngIf="dataResourceOutArea.length != 0" class="mat-elevation-z1 content-info-out-area">
                 <div *ngFor="let data of dataResourceOutArea; index as i ">
                     <mat-expansion-panel [expanded]="stepOutArea == i" (opened)="setStep(i, 'out_area')" class="mat-elevation-z0" style="border-radius: 0px;">
                         <mat-expansion-panel-header class="col-sm-12 col-md-12 expansion-header" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
@@ -205,34 +207,39 @@
 
         <div *ngIf="cargaAnalitycs" class="sections-content">
             <span class="title-analitycs txt-accent">Top 10 recursos más ocupados al día actual</span>
-            <div class="phases-content" style="margin-top: 20px;">
-                <span class="text-sub">Convenciones porcentaje de ocupación:</span>
-                <div *ngFor="let convention of conventions" class="label-rect-content-phase">
-                    <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
-                    <span class="phases-name">{{convention.name}}</span>    
+            
+            <h3 *ngIf="tableTop10Ocupation[0].dataSource.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+            <div *ngIf="tableTop10Ocupation[0].dataSource.length != 0">
+                <div class="phases-content" style="margin-top: 20px;">
+                    <span class="text-sub">Convenciones porcentaje de ocupación:</span>
+                    <div *ngFor="let convention of conventions" class="label-rect-content-phase">
+                        <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
+                        <span class="phases-name">{{convention.name}}</span>    
+                    </div>
                 </div>
-            </div>
 
-            <div class="table-occupation-resource" *ngFor="let data of tableTop10Ocupation">
-                <tecno-table-time-line
-                    [generalData]=data
-                    [tab]=2
-                    [opColums]=1
-                    [viewZero]=true
-                ></tecno-table-time-line>
+                <div class="table-occupation-resource" *ngFor="let data of tableTop10Ocupation">
+                    <tecno-table-time-line
+                        [generalData]=data
+                        [tab]=2
+                        [opColums]=1
+                        [viewZero]=true
+                    ></tecno-table-time-line>
+                </div>
             </div>
         </div>
         
         <div *ngIf="cargaAnalitycs" class="sections-content">
             <span class="title-analitycs txt-accent">Top 5 áreas con más recursos involucrados</span>
 
-            <mat-card class="general-content" style="margin-top: 20px;">
+            <h3 *ngIf="dataTop5Areas.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+            <mat-card *ngIf="dataTop5Areas.length != 0" class="general-content" style="margin-top: 20px;">
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Vicepresidencia</span>
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Área</span>
                 <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Recursos involucrados</span>
             </mat-card>
 
-            <div class="mat-elevation-z1 content-info-out-area" style="margin-bottom: 20px;">
+            <div *ngIf="dataTop5Areas.length != 0" class="mat-elevation-z1 content-info-out-area" style="margin-bottom: 20px;">
                 <div *ngFor="let data of dataTop5Areas; index as i ">
                     <mat-expansion-panel [expanded]="stepTop5Area == i" (opened)="setStep(i, 'top_areas')" class="mat-elevation-z0" style="border-radius: 0px;">
                         <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding-left: 0px;">
@@ -276,21 +283,25 @@
 
         <div *ngIf="cargaAnalitycs" class="sections-content">
             <span class="title-analitycs txt-accent">Top 10 recursos más ocupados en Fase BAU</span>
-            <div class="phases-content" style="margin-top: 20px;">
-                <span class="text-sub">Convenciones porcentaje de ocupación:</span>
-                <div *ngFor="let convention of conventions" class="label-rect-content-phase">
-                    <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
-                    <span class="phases-name">{{convention.name}}</span>    
+            
+            <h3 *ngIf="tableTop10OcupationBAU[0].dataSource.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+            <div *ngIf="tableTop10OcupationBAU[0].dataSource.length != 0">
+                <div class="phases-content" style="margin-top: 20px;">
+                    <span class="text-sub">Convenciones porcentaje de ocupación:</span>
+                    <div *ngFor="let convention of conventions" class="label-rect-content-phase">
+                        <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
+                        <span class="phases-name">{{convention.name}}</span>    
+                    </div>
                 </div>
-            </div>
 
-            <div class="table-occupation-resource" *ngFor="let data of tableTop10OcupationBAU">
-                <tecno-table-time-line
-                    [generalData]=data
-                    [tab]=2
-                    [opColums]=1
-                    [viewZero]=false
-                ></tecno-table-time-line>
+                <div class="table-occupation-resource" *ngFor="let data of tableTop10OcupationBAU">
+                    <tecno-table-time-line
+                        [generalData]=data
+                        [tab]=2
+                        [opColums]=1
+                        [viewZero]=false
+                    ></tecno-table-time-line>
+                </div>
             </div>
         </div>
     </mat-tab>

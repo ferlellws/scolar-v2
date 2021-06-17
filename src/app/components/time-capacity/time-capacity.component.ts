@@ -107,6 +107,8 @@ export class TimeCapacityComponent implements OnInit {
 
   tabAnalitycs: boolean = false;
 
+  notInformationLabel = "No hay coincidencias para los filtros seleccionados"
+
   // MatPaginator Inputs Resources Portafolio
   length = 100;
   pageSize = 5;
