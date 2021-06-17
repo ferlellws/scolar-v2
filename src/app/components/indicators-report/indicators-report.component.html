@@ -414,7 +414,7 @@
                                 <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
                                 <mat-accordion>
                                     <mat-expansion-panel *ngFor="let program of programs" class="row mat-elevation-z1 card-expansion" >
-                                        <mat-expansion-panel-header class="col-sm-12 col-md-12 exp" style="padding-left: 60px; padding-right: 60px; align-items: center;">
+                                        <mat-expansion-panel-header class="col-sm-12 col-md-12 expand-header" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
                                             <mat-panel-title class="col-sm-12 col-md-1">
                                                 <h3 class="title-expansion-program">
                                                     <span class="txt-accent">{{program.name}}</span>

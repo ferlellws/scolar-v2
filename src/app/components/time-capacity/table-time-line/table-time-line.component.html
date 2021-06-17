@@ -75,28 +75,44 @@
 
                     <td mat-cell *matCellDef="let element">
                     <div class="dedication">
+                        <!-- Bloque Uno -->
                         <div
-                        *ngIf="(element[data].block_1.dedication != 0 && tab == 1) || tab == 2"
-                        class="rect"
-                        [ngStyle]="{'background-color': element[data].block_1.color}"
+                            *ngIf="element[data].block_1.dedication != 0"
+                            class="rect"
+                            [ngStyle]="{'background-color': element[data].block_1.color}"
                         >
-                        {{element[data].block_1.dedication}}%
+                            {{element[data].block_1.dedication}}%
                         </div>
                         <div
-                        *ngIf="element[data].block_1.dedication == 0 && tab == 1"
-                        class="rect"
+                            *ngIf="element[data].block_1.dedication == 0 && viewZero"
+                            class="rect"
+                            [ngStyle]="{'background-color': element[data].block_1.color}"
+                        >
+                            {{element[data].block_1.dedication}}%
+                        </div>
+                        <div
+                            *ngIf="element[data].block_1.dedication == 0 && !viewZero"
+                            class="rect"
                         ></div>
 
+                        <!-- Bloque Dos -->
                         <div
-                        *ngIf="(element[data].block_2.dedication != 0 && tab == 1) || tab == 2"
-                        class="rect"
-                        [ngStyle]="{'background-color': element[data].block_2.color}"
+                            *ngIf="element[data].block_2.dedication != 0"
+                            class="rect"
+                            [ngStyle]="{'background-color': element[data].block_2.color}"
                         >
-                        {{element[data].block_2.dedication}}%
+                            {{element[data].block_2.dedication}}%
                         </div>
                         <div
-                        *ngIf="element[data].block_2.dedication == 0 && tab == 1"
-                        class="rect"
+                            *ngIf="element[data].block_2.dedication == 0 && viewZero"
+                            class="rect"
+                            [ngStyle]="{'background-color': element[data].block_2.color}"
+                        >
+                            {{element[data].block_2.dedication}}%
+                        </div>
+                        <div
+                            *ngIf="element[data].block_2.dedication == 0 && !viewZero"
+                            class="rect"
                         ></div>
                     </div>
                     </td>

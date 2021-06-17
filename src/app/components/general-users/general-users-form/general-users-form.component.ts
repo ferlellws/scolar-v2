@@ -141,10 +141,14 @@ export class GeneralUsersFormComponent implements OnInit {
   createRegister() {
 
     if (typeof this.personControl.value == 'object') {
+
+      let name = this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0]
+      let id_person = this.personControl.value.id
+
       let newUser:any = {
         email: this.usersGroup.get('email')!.value,
-        password: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
-        password_confirmation: this.personControl.value.first_name.split(' ')[0] + "" + this.personControl.value.last_name.split(' ')[0] + "Koba",
+        password: name + "Koba",
+        password_confirmation: name + "Koba",
       }
 
       this.userService.addUser(newUser)
@@ -158,7 +162,8 @@ export class GeneralUsersFormComponent implements OnInit {
               email: newUser.email,
               user_id: res.data.user_created_id
             }
-            this.personsService.updatePerson(person, this.personControl.value.id)
+            
+            this.personsService.updatePerson(person, id_person)
             .subscribe(p => {
               this.fButtonDisabled = false;
               if (res.status == "created") {

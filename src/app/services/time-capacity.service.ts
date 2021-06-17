@@ -98,8 +98,45 @@ export class TimeCapacityService {
     );    
   }
 
-  getTopOccupationResource() {
+  getTopOccupationResource(vice_presidency_id: any, area_id: any, project_id: any) {
+    this.httpOptions.params = this.inputParams;
+
+    if(vice_presidency_id != "") {
+      this.inputParams.vice_presidency_id = vice_presidency_id;
+    }
+    if(area_id != "") {
+      this.inputParams.area_id = area_id;
+    }
+    if(project_id != ""){
+      this.inputParams.project_id = project_id;
+    }
+
     return this.http.get<any[]>(`${this.API}/top_occupation_resources`, this.httpOptions)
+    .pipe(
+      // catchError(this.handleError)
+      tap(console.log)
+    );  
+  }
+
+  getTopOccupationResourceBAU(vice_presidency_id: any, area_id: any, project_id: any) {
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+
+    this.httpOptions.params = this.inputParams;
+
+    if(vice_presidency_id != "") {
+      this.inputParams.vice_presidency_id = vice_presidency_id;
+    }
+    if(area_id != "") {
+      this.inputParams.area_id = area_id;
+    }
+    if(project_id != ""){
+      this.inputParams.project_id = project_id;
+    }
+    
+    return this.http.get<any[]>(`${this.API}/top_occupation_resources_bau`, this.httpOptions)
     .pipe(
       // catchError(this.handleError)
       tap(console.log)

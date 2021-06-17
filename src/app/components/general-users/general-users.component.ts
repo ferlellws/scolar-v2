@@ -16,6 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 //MATERIAL
 import { MatDialog } from '@angular/material/dialog';
 import { Actions } from 'src/app/models/actions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class GeneralUsersComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private mainService: MainService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -48,9 +50,13 @@ export class GeneralUsersComponent implements OnInit {
     // SE REVISAN CAMBIOS DEL DATATABLE USANDO UN EMISOR
     this.userService.emitDataTable
       .subscribe((res: any) => {
-        this.dataTable = res.data;
+        // this.dataTable = res.data;
+        this.userService.getUsersTable()
+          .subscribe(res => {
+            this.dataTable = res;
+          })
         this.dialog.closeAll();
-      })
+      });
   }
 
   onCreate() {
@@ -95,11 +101,22 @@ export class GeneralUsersComponent implements OnInit {
           if (result) {
             this.userService.deleteUser(data)
               .subscribe(res => {
-                true;//environment.consoleMessage(res, 'res: ');
+                this.openSnackBar(true, "Se ha eliminado el usuario satisfactoriamente", "");
               })
           }
         });
       })
+  }
+
+  openSnackBar(succes: boolean, message: string, action: string, duration: number = 3000) {
+    var panelClass = "succes-snack-bar";
+    if(!succes){
+      panelClass  = "error-snack-bar";
+    }
+    this.snackBar.open(message, action, {
+      duration: duration,
+      panelClass: panelClass
+    });
   }
 
 }

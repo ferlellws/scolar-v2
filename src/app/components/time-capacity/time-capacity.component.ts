@@ -121,10 +121,7 @@ export class TimeCapacityComponent implements OnInit {
 
   dataResourceOutArea:any = [];
 
-  tableTimeLine = [];
-
   phases: any = []
-
   conventions: any = [
     {
       name: '0% a 39%',
@@ -142,154 +139,12 @@ export class TimeCapacityComponent implements OnInit {
       name: '70% en adelante',
       color: '#E1675D'
     }
-  ]
-
-  tableTop10Ocupation: any = [];
-  // tableTop10Ocupation:any = [
-  //   {
-  //     months: {
-  //       month_1: 'Ene-21',
-  //       month_2: 'Feb-21',
-  //       month_3: 'Mar-21',
-  //       month_4: 'Abr-21',
-  //       month_5: 'May-21',
-  //       month_6: 'Jun-21',
-  //     },
-  //     dataSource: [
-  //       {
-  //         name: 'David Fernando Guerrero Alvarez',
-  //         position: 'Director Logística',
-  //         month_1: {
-  //           block_1: { dedication: '39%', color: '#04C200' },
-  //           block_2: { dedication: '62%', color: '#EB8E01' }
-  //         },
-  //         month_2: {
-  //           block_1: { dedication: '68%', color: '#EB8E01' },
-  //           block_2: { dedication: '68%', color: '#EB8E01' }
-  //         },
-  //         month_3: {
-  //           block_1: { dedication: '85%', color: '#E1675D' },
-  //           block_2: { dedication: '85%', color: '#E1675D' }
-  //         },
-  //         month_4: {
-  //           block_1: { dedication: '27%', color: '#04C200' },
-  //           block_2: { dedication: '27%', color: '#04C200' }
-  //         },
-  //         month_5: {
-  //           block_1: { dedication: '27%', color: '#04C200' },
-  //           block_2: { dedication: '27%', color: '#04C200' }
-  //         },
-  //         month_6: {
-  //           block_1: { dedication: '27%', color: '#04C200' },
-  //           block_2: { dedication: '27%', color: '#04C200' }
-  //         }
-  //       },
-  //       {
-  //         name: 'Denis Alexander Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         month_1: {
-  //           block_1: { dedication: '30%', color: '#04C200' },
-  //           block_2: { dedication: '30%', color: '#04C200' }
-  //         },
-  //         month_2: {
-  //           block_1: { dedication: '30%', color: '#04C200' },
-  //           block_2: { dedication: '35%', color: '#04C200' }
-  //         },
-  //         month_3: {
-  //           block_1: { dedication: '35%', color: '#04C200' },
-  //           block_2: { dedication: '40%', color: '#02B7AC' }
-  //         },
-  //         month_4: {
-  //           block_1: { dedication: '25%', color: '#04C200' },
-  //           block_2: { dedication: '27%', color: '#04C200' }
-  //         },
-  //         month_5: {
-  //           block_1: { dedication: '27%', color: '#04C200' },
-  //           block_2: { dedication: '27%', color: '#04C200' }
-  //         },
-  //         month_6: {
-  //           block_1: { dedication: '27%', color: '#04C200' },
-  //           block_2: { dedication: '27%', color: '#04C200' }
-  //         }
-  //       },
-  //       {
-  //         name: 'David Humberto Rodriguez Venegas',
-  //         position: 'Gestor de Proyectos',
-  //         month_1: {
-  //           block_1: { dedication: '0%', color: '#04C200' },
-  //           block_2: { dedication: '0%', color: '#04C200' }
-  //         },
-  //         month_2: {
-  //           block_1: { dedication: '30%', color: '#04C200' },
-  //           block_2: { dedication: '30%', color: '#04C200' }
-  //         },
-  //         month_3: {
-  //           block_1: { dedication: '30%', color: '#04C200' },
-  //           block_2: { dedication: '30%', color: '#04C200' }
-  //         },
-  //         month_4: {
-  //           block_1: { dedication: '30%', color: '#04C200' },
-  //           block_2: { dedication: '0%', color: '#04C200' }
-  //         },
-  //         month_5: {
-  //           block_1: { dedication: '0%', color: '#04C200' },
-  //           block_2: { dedication: '0%', color: '#04C200' }
-  //         },
-  //         month_6: {
-  //           block_1: { dedication: '0%', color: '#04C200' },
-  //           block_2: { dedication: '0%', color: '#04C200' }
-  //         }
-  //       }
-  //     ]
-  //   }
-  // ];
-
-  dataTop5Areas:any = [
-    {
-      infoGeneral: {
-        vicepresidency: 'Presidencia',
-        area: 'Aplicaciones',
-        resources: 2
-      },
-      infoResources: [
-        {
-          resource: 'David Fernando Guerrero Álvarez',
-          position: 'Analista',
-          total_projects: 2,
-          infoProjects: [
-            'Tiempos y Turnos Fase 1 - Líder Funcional',
-            'EDI - Pmo Asignado'
-          ]
-        },
-        {
-          resource: 'Denis Alexander Rodriguez Venegas',
-          position: 'Jefe de Zona',
-          total_projects: 1,
-          infoProjects: [
-            'Tiempos y Turnos Fase 1 - Líder Funcional',
-          ]
-        }
-      ]
-    },
-    {
-      infoGeneral: {
-        vicepresidency: 'Vp Comercial',
-        area: 'Marketiong',
-        resources: 1
-      },
-      infoResources: [
-        {
-          resource: 'David Fernando Guerrero Álvarez',
-          position: 'Analista',
-          total_projects: 2,
-          infoProjects: [
-            'Tiempos y Turnos Fase 1 - Líder Funcional',
-            'EDI - Pmo Asignado'
-          ]
-        }
-      ]
-    }
   ];
+
+  tableTimeLine:any = [];
+  tableTop10Ocupation: any = [];
+  dataTop5Areas:any = [];
+  tableTop10OcupationBAU: any = [];
 
   userID: any;
   profileID: any;
@@ -562,12 +417,12 @@ export class TimeCapacityComponent implements OnInit {
 
     } else {
       this.projects2 = this.projects;
-      if(typeof this.vicepresidencyControl2.value == 'object' && this.vicepresidencyControl2.value != null) {
-        this.projects2 = this.projects.filter((project: any) => project.area.vice_presidency.id == this.vicepresidencyControl2.value.id);
-      }
-      if(typeof this.areasControl2.value == 'object' && this.areasControl2.value != null) {
-        this.projects2 = this.projects.filter((project: any) => project.area.id == this.areasControl2.value.id);
-      }
+      // if(typeof this.vicepresidencyControl2.value == 'object' && this.vicepresidencyControl2.value != null) {
+      //   this.projects2 = this.projects.filter((project: any) => project.area.vice_presidency.id == this.vicepresidencyControl2.value.id);
+      // }
+      // if(typeof this.areasControl2.value == 'object' && this.areasControl2.value != null) {
+      //   this.projects2 = this.projects.filter((project: any) => project.area.id == this.areasControl2.value.id);
+      // }
 
       this.filterProjects2 = this.projectsControl2.valueChanges.pipe(
         startWith(''),
@@ -609,13 +464,22 @@ export class TimeCapacityComponent implements OnInit {
     this.timeCapacityService.getDatResourcesOutArea("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
-        this.cargaAnalitycs = true;
-      });
 
-    this.timeCapacityService.getTopAreaResources("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
-      .subscribe(res => {
-        this.dataTop5Areas = res.dataTop5Areas;
-        // this.cargaAnalitycs = true;
+        this.timeCapacityService.getTopAreaResources("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+          .subscribe(res => {
+            this.dataTop5Areas = res.dataTop5Areas;
+
+            this.timeCapacityService.getTopOccupationResource(this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+              .subscribe(res => {
+                this.tableTop10Ocupation = res.tableTop10Ocupation;
+
+                this.timeCapacityService.getTopOccupationResourceBAU(this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+                  .subscribe(res => {
+                    this.tableTop10OcupationBAU = res.tableTop10OcupationBAU;
+                    this.cargaAnalitycs = true;
+                  });
+              });
+          });
       });
   }
 
@@ -648,7 +512,22 @@ export class TimeCapacityComponent implements OnInit {
     this.timeCapacityService.getDatResourcesOutArea("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
-        this.cargaAnalitycs = true;
+
+        this.timeCapacityService.getTopAreaResources("", "", this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+          .subscribe(res => {
+            this.dataTop5Areas = res.dataTop5Areas;
+
+            this.timeCapacityService.getTopOccupationResource(this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+              .subscribe(res => {
+                this.tableTop10Ocupation = res.tableTop10Ocupation;
+
+                this.timeCapacityService.getTopOccupationResourceBAU(this.vice_presidency_filter2, this.area_filter2, this.project_filter2)
+                  .subscribe(res => {
+                    this.tableTop10OcupationBAU = res.tableTop10OcupationBAU;
+                    this.cargaAnalitycs = true;
+                  });
+              });
+          });
       });
   }
 
@@ -668,20 +547,23 @@ export class TimeCapacityComponent implements OnInit {
     this.timeCapacityService.getDatResourcesOutArea("", "", "", "", "")
       .subscribe(res => {
         this.dataResourceOutArea = res.dataResourceOutArea;
-        // this.cargaAnalitycs = true;
-      });
 
-    this.timeCapacityService.getTopAreaResources("", "", "", "", "")
-      .subscribe(res => {
-        this.dataTop5Areas = res.dataTop5Areas;
-        // this.cargaAnalitycs = true;
-      });
+        this.timeCapacityService.getTopAreaResources("", "", "", "", "")
+          .subscribe(res => {
+            this.dataTop5Areas = res.dataTop5Areas;
 
-    this.timeCapacityService.getTopOccupationResource()
-      .subscribe(res => {
-        this.tableTop10Ocupation = res.tableTop10Ocupation;
-        this.cargaAnalitycs = true;
-      });
+            this.timeCapacityService.getTopOccupationResource("", "", "")
+              .subscribe(res => {
+                this.tableTop10Ocupation = res.tableTop10Ocupation;
+
+                this.timeCapacityService.getTopOccupationResourceBAU("", "", "")
+                  .subscribe(res => {
+                    this.tableTop10OcupationBAU = res.tableTop10OcupationBAU;
+                    this.cargaAnalitycs = true;
+                  });
+                });
+              });
+            });
   }
 
   //................................................................................................................................
