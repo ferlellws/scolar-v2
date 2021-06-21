@@ -7,7 +7,18 @@
     min-width: 230px;
 }
 .top-buttons{
-    display: flex;
-    justify-content: flex-start;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
     margin-top: 15px;
 }
+.download-button {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 5px;
+}
+.buttons-options {
+    width: auto;
+    text-align: center;
+    border-radius: 5px;
+ }

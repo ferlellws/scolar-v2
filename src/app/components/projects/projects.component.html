@@ -2,25 +2,30 @@
   <mat-tab-group>
     <mat-tab *ngIf="user.profile_id != 4" label="Mis Proyectos">
       <div class="top-buttons">
-        <p>
-          <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">
-            <mat-button-toggle value="dashboard" (click)="modeOwn = 'dashboard'">Tablero</mat-button-toggle>
-            <mat-button-toggle value="table" (click)="modeOwn = 'table'">Tabla</mat-button-toggle>
-          </mat-button-toggle-group>
-        </p>
+        <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">
+          <mat-button-toggle value="dashboard" (click)="modeOwn = 'dashboard'">Tablero</mat-button-toggle>
+          <mat-button-toggle value="table" (click)="modeOwn = 'table'">Tabla</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <button *ngIf="actions.update" class="buttons-options" mat-menu-item (click)="download(true, 'Mis Proyectos ')">
+          <mat-icon>get_app</mat-icon>
+          <span>Descargar Excel</span>
+        </button>
       </div>
       
-      <div class="cont-table mat-elevation-z5" *ngIf="modeOwn == 'table'">
-        <tecno-dynamic-table
-          style="width: 100%;"
-          [objectsData]="dataTableOwn"
-          (emitEdit)="onEdit($event)"
-          (emitStatusChange)="onStatusChange($event)"
-          (emitDelete)="onDelete($event)"
-          (emitDeleteLogic)="onDeleteLogic($event)"
-          [isUserProfile]="false"
-          >
-        </tecno-dynamic-table>
+      <div *ngIf="modeOwn == 'table'">
+        <div class="cont-table mat-elevation-z5">
+          <tecno-dynamic-table
+            style="width: 100%;"
+            [objectsData]="dataTableOwn"
+            (emitEdit)="onEdit($event)"
+            (emitStatusChange)="onStatusChange($event)"
+            (emitDelete)="onDelete($event)"
+            (emitDeleteLogic)="onDeleteLogic($event)"
+            [isUserProfile]="false"
+            >
+          </tecno-dynamic-table>
+        </div>
       </div>
       
       <tecno-projects-dashboard *ngIf="modeOwn == 'dashboard'" [dashboard]="dashboardOwn" ></tecno-projects-dashboard>
@@ -30,26 +35,32 @@
   
     <mat-tab label="Todos los proyectos"> 
       <div class="top-buttons">
-        <p>
-          <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">
-            <mat-button-toggle value="dashboard" (click)="mode = 'dashboard'">Tablero</mat-button-toggle>
-            <mat-button-toggle value="table" (click)="mode = 'table'">Tabla</mat-button-toggle>
-          </mat-button-toggle-group>
-        </p>
+        <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" value="dashboard">
+          <mat-button-toggle value="dashboard" (click)="mode = 'dashboard'">Tablero</mat-button-toggle>
+          <mat-button-toggle value="table" (click)="mode = 'table'">Tabla</mat-button-toggle>
+        </mat-button-toggle-group>
+        
+        <button *ngIf="actions.update" class="buttons-options" mat-menu-item (click)="download(false, 'Todos los proyectos ')">
+          <mat-icon>get_app</mat-icon>
+          <span>Descargar Excel</span>
+        </button>
       </div>
       
-      <div class="cont-table mat-elevation-z5" *ngIf="mode == 'table'">
-        <tecno-dynamic-table
-          style="width: 100%;"
-          [objectsData]="dataTable"
-          (emitEdit)="onEdit($event)"
-          (emitStatusChange)="onStatusChange($event)"
-          (emitDelete)="onDelete($event)"
-          (emitDeleteLogic)="onDeleteLogic($event)"
-          [isUserProfile]="false"
-          >
-        </tecno-dynamic-table>
+      <div *ngIf="mode == 'table'">
+        <div class="cont-table mat-elevation-z5" >
+          <tecno-dynamic-table
+            style="width: 100%;"
+            [objectsData]="dataTable"
+            (emitEdit)="onEdit($event)"
+            (emitStatusChange)="onStatusChange($event)"
+            (emitDelete)="onDelete($event)"
+            (emitDeleteLogic)="onDeleteLogic($event)"
+            [isUserProfile]="false"
+            >
+          </tecno-dynamic-table>
+        </div>
       </div>
+      
       <div class="cont-table" *ngIf="mode == 'dashboard'">
         <tecno-projects-dashboard [dashboard]="dashboard" ></tecno-projects-dashboard>
       </div>

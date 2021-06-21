@@ -188,8 +188,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   changeMode(mode: string) {
-    true;//environment.consoleMessage(mode);
     this.mode = mode;
+  }
+
+  download(own: boolean, name: string) {
+    this.projectService.downloadExcel(own, name);
   }
 
 }

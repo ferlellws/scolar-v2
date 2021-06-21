@@ -83,7 +83,6 @@ export class ProjectsService {
   }
 
   addProjects(project: Project) {
-    
     return this.http.post<Project>(this.API, { project: project }, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -93,7 +92,6 @@ export class ProjectsService {
   }
 
   updateStatusProject(is_active: number, id: number) {
-
     return this.http.put<Project>(`${this.API}/${id}/change_status`,
       {is_active: is_active},
       this.httpOptions)
@@ -105,7 +103,6 @@ export class ProjectsService {
   }
 
   logicalDeleteProject(id: number) {
-
     return this.http.put<Project>(`${this.API}/${id}/logical_delete`, null, this.httpOptions)
       .pipe(
         tap((data: any) => {
@@ -123,4 +120,37 @@ export class ProjectsService {
       );
   }
 
+  downloadExcel(own: boolean, name: string) {
+
+    this.inputParams = {
+      user_email: JSON.parse(localStorage.user).email,
+      user_token: JSON.parse(localStorage.user).authentication_token
+    };
+    
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bareer ${localStorage.token}`
+      }),
+      params: this.inputParams
+    };
+
+    if (own) {
+      this.httpOptions.params.own = own;
+    }
+
+    this.httpOptions.responseType = 'blob' as 'json'
+
+    return this.http.get(`${this.API}/download_report`, this.httpOptions)
+      .subscribe(
+        (response: any) =>{
+          let dataType = response.type;
+          let binaryData = [];
+          binaryData.push(response);
+          let downloadLink = document.createElement('a');
+          downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+          downloadLink.setAttribute('download', "Reporte "+ name + new Date());
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+        })
+  }
 }
