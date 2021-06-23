@@ -7,7 +7,7 @@
           <mat-button-toggle value="table" (click)="modeOwn = 'table'">Tabla</mat-button-toggle>
         </mat-button-toggle-group>
 
-        <button *ngIf="actions.update" class="buttons-options" mat-menu-item (click)="download(true, 'Mis Proyectos ')">
+        <button *ngIf="actions.read" class="buttons-options my-2" mat-menu-item (click)="download(true, 'Mis Proyectos ')">
           <mat-icon>get_app</mat-icon>
           <span>Descargar Excel</span>
         </button>
@@ -40,7 +40,7 @@
           <mat-button-toggle value="table" (click)="mode = 'table'">Tabla</mat-button-toggle>
         </mat-button-toggle-group>
         
-        <button *ngIf="actions.update" class="buttons-options" mat-menu-item (click)="download(false, 'Todos los proyectos ')">
+        <button *ngIf="actions.read" class="buttons-options my-2" mat-menu-item (click)="download(false, 'Todos los proyectos ')">
           <mat-icon>get_app</mat-icon>
           <span>Descargar Excel</span>
         </button>

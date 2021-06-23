@@ -1,308 +1,314 @@
-<mat-tab-group (selectedTabChange)="tabChanged($event)" style="overflow-x: hidden !important;">
-    <mat-tab label="Recursos Portafolio" style="overflow-x: hidden !important;">
-        <div class="phases-content">
-            <span class="text-sub">Fases:</span>
-            <div *ngFor="let phase of phases" class="label-rect-content-phase">
-                <div class="phases-rect" [ngStyle]="{'background-color': phase.color}"></div>
-                <span class="phases-name">{{phase.title}}</span>    
-            </div>
-        </div>
-        
-        <div class="row filter-content">
-            <span class="text-sub">Filtros:</span>
-            <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
-            <form [formGroup]="filtersGroup" class="row filters">                
-                <mat-form-field class="col-sm-12 col-md-2" (click)="viceSelect(1)">
-                    <mat-label>Vicepresidencia</mat-label>
-                    <input type="text" matInput [formControl]="vicepresidencyControl" [matAutocomplete]="vicepresidency">
-                    <mat-autocomplete #vicepresidency="matAutocomplete" [displayWith]="displayVicepresidency">
-                        <mat-option *ngFor="let vicepresidency of filterVicepresidency | async" [value]="vicepresidency">
-                        {{vicepresidency.title}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-
-                <mat-form-field class="col-sm-12 col-md-2" (click)="areasSelect(1)">
-                    <mat-label>Área</mat-label>
-                    <input type="text" matInput [formControl]="areasControl" [matAutocomplete]="areas">
-                    <mat-autocomplete #areas="matAutocomplete" [displayWith]="displayAreas">
-                        <div *ngIf="projects1.length != 0">
-                            <mat-option *ngFor="let area of filterAreas | async" [value]="area">
-                                {{area.title}}
-                            </mat-option>
-                        </div>
-                        <div *ngIf="projects1.length == 0">
-                            <mat-option class="label-no-projects">
-                                {{labelNoProjects}}
-                            </mat-option>
-                        </div>
-                    </mat-autocomplete>
-                </mat-form-field>
-
-                <mat-form-field class="col-sm-12 col-md-2" (click)="projectsSelect(1)">
-                    <mat-label>Proyecto</mat-label>
-                    <input type="text" matInput [formControl]="projectsControl" [matAutocomplete]="projects">
-                    <mat-autocomplete #projects="matAutocomplete" [displayWith]="displayProject">
-                        <div *ngIf="projects1.length != 0">
-                            <mat-option *ngFor="let project of filterProjects | async" [value]="project">
-                                {{project.title}}
-                            </mat-option>
-                        </div>
-                        <div *ngIf="projects1.length == 0">
-                            <mat-option class="label-no-projects">
-                                {{labelNoProjects}}
-                            </mat-option>
-                        </div>
-                    </mat-autocomplete>
-                    <!-- <mat-error *ngIf="projects1.length == 0">
-                        No hay proyectos inscritos en esta Vicepresidencia
-                    </mat-error> -->
-                    <!-- <span *ngIf="projects1.length == 0">No hay proyectos inscritos en esta Vicepresidencia</span> -->
-                </mat-form-field>
-        
-                <mat-form-field class="col-sm-12 col-md-2" (click)="resourcesSelect()">
-                    <mat-label>Recurso</mat-label>
-                    <input type="text" matInput [formControl]="resourcesControl" [matAutocomplete]="resources" [disabled]=true>
-                    <mat-autocomplete #resources="matAutocomplete" [displayWith]="displayResources" disable="true">
-                        <div *ngIf="projects1.length != 0">
-                            <mat-option *ngFor="let resource of filterResources | async" [value]="resource">
-                                {{resource.full_name}}
-                            </mat-option>
-                        </div>
-                        <div *ngIf="projects1.length == 0">
-                            <mat-option class="label-no-projects">
-                                {{labelNoProjects}}
-                            </mat-option>
-                        </div>
-                    </mat-autocomplete>
-                </mat-form-field>
-        
-                <!-- <mat-form-field appearance="legacy" class="col-sm-12 col-md-2">
-                    <mat-label>Rango de fecha</mat-label>
-                    <mat-date-range-input [rangePicker]="picker">
-                        <input matStartDate formControlName="start_date" placeholder="Fecha Inicio">
-                        <input matEndDate formControlName="end_date" placeholder="Fecah Fin">
-                    </mat-date-range-input>
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #picker></mat-date-range-picker>
-                </mat-form-field> -->
-        
-                <div class="buttons-content col-sm-12 col-md-2">
-                    <button mat-raised-button class="button-filter" color="primary" (click)="filterResorucePortfolio()">{{labelButton.filter}}</button>
-                    <button mat-raised-button class="button-filter" color="accent" (click)="removeFilterResourcePortfolio()">{{labelButton.remove}}</button>
-                </div>
-            </form>    
-            <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
-        </div>
-
-        <h2 *ngIf="flagLabel" class="txt-primary">Por favor seleccione un criterio de búsqueda</h2>
-
-        <h3 *ngIf="tableTimeLine.length == 0 && !flagLabel" class="txt-primary">{{notInformationLabel}}</h3>
-        <div class="table-time-line" *ngFor="let data of tableTimeLine">
-            <tecno-table-time-line
-                [generalData]=data
-                [tab]=1
-                [opColums]=2
-                [viewZero]=false
-            ></tecno-table-time-line>
-        </div>
-
-        <!-- <mat-paginator *ngIf="cargaProject" class="txt-primary paginator"
-            [length]="length"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="pageSizeOptions"
-            (page)="paginatorResourcesPortafolio($event)">
-        </mat-paginator> -->
-
-        <mat-spinner *ngIf="!cargaProject" color="accent" class="content-center spinner"></mat-spinner>
-
-    </mat-tab>
-
-    <mat-tab label="Analítica">
-        <h3 *ngIf="!cargaAnalitycs" class="txt-primary" style="margin-top: 20px;">Cargando información, por favor espere un momento...</h3>
-        <mat-spinner *ngIf="!cargaAnalitycs" color="accent" class="content-center spinner"></mat-spinner>
-        
-        <div *ngIf="cargaAnalitycs" class="row filter-content-analitycs">
-            <span class="text-sub">Filtros:</span>
-            <div class="row filters">
-                <mat-form-field class="col-sm-12 col-md-3" (click)="viceSelect(2)">
-                    <mat-label>Vicepresidencia</mat-label>
-                    <input type="text" matInput [formControl]="vicepresidencyControl2" [matAutocomplete]="vicepresidency2">
-                    <mat-autocomplete #vicepresidency2="matAutocomplete" [displayWith]="displayVicepresidency">
-                        <mat-option *ngFor="let vicepresidency of filterVicepresidency2 | async" [value]="vicepresidency">
-                        {{vicepresidency.title}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-
-                <mat-form-field class="col-sm-12 col-md-3" (click)="areasSelect(2)">
-                    <mat-label>Área</mat-label>
-                    <input type="text" matInput [formControl]="areasControl2" [matAutocomplete]="areas2">
-                    <mat-autocomplete #areas2="matAutocomplete" [displayWith]="displayAreas">
-                        <mat-option *ngFor="let area of filterAreas2 | async" [value]="area">
-                        {{area.title}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-
-                <mat-form-field class="col-sm-12 col-md-3" (click)="projectsSelect(2)">
-                    <mat-label>Proyecto</mat-label>
-                    <input type="text" matInput [formControl]="projectsControl2" [matAutocomplete]="projects2">
-                    <mat-autocomplete #projects2="matAutocomplete" [displayWith]="displayProject">
-                        <mat-option *ngFor="let project of filterProjects2 | async" [value]="project">
-                        {{project.title}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                
-        
-                <div class="buttons-content col-sm-12 col-md-3">
-                    <button mat-raised-button class="button-filter" color="primary" (click)="filterAnalitycs()">{{labelButton.filter}}</button>
-                    <button mat-raised-button class="button-filter" color="accent" (click)="removeFilterAnalitycs()">{{labelButton.remove}}</button>
-                </div>
-            </div>    
-        </div>
-
-        <div *ngIf="cargaAnalitycs" class="sections-content">
-            <span class="title-analitycs txt-accent">Ocupación de recursos fuera del área encargada del proyecto</span>
-            
-            <h3 *ngIf="dataResourceOutArea.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
-            <mat-card *ngIf="dataResourceOutArea.length != 0" class="general-content" style="margin-top: 20px;">
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Proyecto</span>
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Vicepresidencia</span>
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Área</span>
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Recursos fuera del área encargada</span>
-            </mat-card>
-
-            <div *ngIf="dataResourceOutArea.length != 0" class="mat-elevation-z1 content-info-out-area">
-                <div *ngFor="let data of dataResourceOutArea; index as i ">
-                    <mat-expansion-panel [expanded]="stepOutArea == i" (opened)="setStep(i, 'out_area')" class="mat-elevation-z0" style="border-radius: 0px;">
-                        <mat-expansion-panel-header class="col-sm-12 col-md-12 expansion-header" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
-                            <mat-panel-title class="col-sm-12 col-md-3 title-panel" style="padding-right: 10px;">{{data.infoGeneral.projectName}}</mat-panel-title>
-        
-                            <mat-panel-description class="col-sm-12 col-md-9">
-                                <span class="col-sm-12 col-md-4" style="color: black">{{data.infoGeneral.vicepresidency}}</span>
-                                <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.area}}</span>
-                                <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.resources}}</span>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-        
-                        <div style="overflow-y: auto; margin-bottom: 20px;">
-                            <tecno-dynamic-table style="width: 50% !important;"
-                                [objectsData]="data.infoTable"
-                                emptyText="Ingrese datos">
-                            </tecno-dynamic-table>
-                        </div>
-                    </mat-expansion-panel>
+<div *ngIf="actions.read">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)" style="overflow-x: hidden !important;">
+        <mat-tab label="Recursos Portafolio" style="overflow-x: hidden !important;">
+            <div class="phases-content">
+                <span class="text-sub">Fases:</span>
+                <div *ngFor="let phase of phases" class="label-rect-content-phase">
+                    <div class="phases-rect" [ngStyle]="{'background-color': phase.color}"></div>
+                    <span class="phases-name">{{phase.title}}</span>    
                 </div>
             </div>
-
-            <!-- <mat-paginator class="txt-primary paginator"
-                [length]="lengthAnalitycs"
-                [pageSize]="pageSizeAnalitycs"
-                [pageSizeOptions]="pageSizeOptionsAnalitycs"
-                (page)="paginatorAnalitycs($event)">
-            </mat-paginator> -->
-        </div>
-
-        <div *ngIf="cargaAnalitycs" class="sections-content">
-            <span class="title-analitycs txt-accent">Top 10 recursos más ocupados al día actual</span>
             
-            <h3 *ngIf="tableTop10Ocupation[0].dataSource.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
-            <div *ngIf="tableTop10Ocupation[0].dataSource.length != 0">
-                <div class="phases-content" style="margin-top: 20px;">
-                    <span class="text-sub">Convenciones porcentaje de ocupación:</span>
-                    <div *ngFor="let convention of conventions" class="label-rect-content-phase">
-                        <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
-                        <span class="phases-name">{{convention.name}}</span>    
+            <div class="row filter-content">
+                <span class="text-sub">Filtros:</span>
+                <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
+                <form [formGroup]="filtersGroup" class="row filters">                
+                    <mat-form-field class="col-sm-12 col-md-2" (click)="viceSelect(1)">
+                        <mat-label>Vicepresidencia</mat-label>
+                        <input type="text" matInput [formControl]="vicepresidencyControl" [matAutocomplete]="vicepresidency">
+                        <mat-autocomplete #vicepresidency="matAutocomplete" [displayWith]="displayVicepresidency">
+                            <mat-option *ngFor="let vicepresidency of filterVicepresidency | async" [value]="vicepresidency">
+                            {{vicepresidency.title}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-sm-12 col-md-2" (click)="areasSelect(1)">
+                        <mat-label>Área</mat-label>
+                        <input type="text" matInput [formControl]="areasControl" [matAutocomplete]="areas">
+                        <mat-autocomplete #areas="matAutocomplete" [displayWith]="displayAreas">
+                            <div *ngIf="projects1.length != 0">
+                                <mat-option *ngFor="let area of filterAreas | async" [value]="area">
+                                    {{area.title}}
+                                </mat-option>
+                            </div>
+                            <div *ngIf="projects1.length == 0">
+                                <mat-option class="label-no-projects">
+                                    {{labelNoProjects}}
+                                </mat-option>
+                            </div>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-sm-12 col-md-2" (click)="projectsSelect(1)">
+                        <mat-label>Proyecto</mat-label>
+                        <input type="text" matInput [formControl]="projectsControl" [matAutocomplete]="projects">
+                        <mat-autocomplete #projects="matAutocomplete" [displayWith]="displayProject">
+                            <div *ngIf="projects1.length != 0">
+                                <mat-option *ngFor="let project of filterProjects | async" [value]="project">
+                                    {{project.title}}
+                                </mat-option>
+                            </div>
+                            <div *ngIf="projects1.length == 0">
+                                <mat-option class="label-no-projects">
+                                    {{labelNoProjects}}
+                                </mat-option>
+                            </div>
+                        </mat-autocomplete>
+                        <!-- <mat-error *ngIf="projects1.length == 0">
+                            No hay proyectos inscritos en esta Vicepresidencia
+                        </mat-error> -->
+                        <!-- <span *ngIf="projects1.length == 0">No hay proyectos inscritos en esta Vicepresidencia</span> -->
+                    </mat-form-field>
+            
+                    <mat-form-field class="col-sm-12 col-md-2" (click)="resourcesSelect()">
+                        <mat-label>Recurso</mat-label>
+                        <input type="text" matInput [formControl]="resourcesControl" [matAutocomplete]="resources" [disabled]=true>
+                        <mat-autocomplete #resources="matAutocomplete" [displayWith]="displayResources" disable="true">
+                            <div *ngIf="projects1.length != 0">
+                                <mat-option *ngFor="let resource of filterResources | async" [value]="resource">
+                                    {{resource.full_name}}
+                                </mat-option>
+                            </div>
+                            <div *ngIf="projects1.length == 0">
+                                <mat-option class="label-no-projects">
+                                    {{labelNoProjects}}
+                                </mat-option>
+                            </div>
+                        </mat-autocomplete>
+                    </mat-form-field>
+            
+                    <!-- <mat-form-field appearance="legacy" class="col-sm-12 col-md-2">
+                        <mat-label>Rango de fecha</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate formControlName="start_date" placeholder="Fecha Inicio">
+                            <input matEndDate formControlName="end_date" placeholder="Fecah Fin">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field> -->
+            
+                    <div class="buttons-content col-sm-12 col-md-2">
+                        <button mat-raised-button class="button-filter" color="primary" (click)="filterResorucePortfolio()">{{labelButton.filter}}</button>
+                        <button mat-raised-button class="button-filter" color="accent" (click)="removeFilterResourcePortfolio()">{{labelButton.remove}}</button>
                     </div>
-                </div>
-
-                <div class="table-occupation-resource" *ngFor="let data of tableTop10Ocupation">
-                    <tecno-table-time-line
-                        [generalData]=data
-                        [tab]=2
-                        [opColums]=1
-                        [viewZero]=true
-                    ></tecno-table-time-line>
-                </div>
+                </form>    
+                <!-- <<<<<<<<<<< FILTROS >>>>>>>>>>> -->
             </div>
-        </div>
-        
-        <div *ngIf="cargaAnalitycs" class="sections-content">
-            <span class="title-analitycs txt-accent">Top 5 áreas con más recursos involucrados</span>
 
-            <h3 *ngIf="dataTop5Areas.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
-            <mat-card *ngIf="dataTop5Areas.length != 0" class="general-content" style="margin-top: 20px;">
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Vicepresidencia</span>
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Área</span>
-                <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Recursos involucrados</span>
-            </mat-card>
+            <h2 *ngIf="flagLabel" class="txt-primary">Por favor seleccione un criterio de búsqueda</h2>
 
-            <div *ngIf="dataTop5Areas.length != 0" class="mat-elevation-z1 content-info-out-area" style="margin-bottom: 20px;">
-                <div *ngFor="let data of dataTop5Areas; index as i ">
-                    <mat-expansion-panel [expanded]="stepTop5Area == i" (opened)="setStep(i, 'top_areas')" class="mat-elevation-z0" style="border-radius: 0px;">
-                        <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding-left: 0px;">
-                            <mat-panel-title class="col-sm-12 col-md-3 title-panel">{{data.infoGeneral.vicepresidency}}</mat-panel-title>
-        
-                            <mat-panel-description class="col-sm-12 col-md-9">
-                                <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.area}}</span>
-                                <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.resources}}</span>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-        
-                        <mat-card class="general-content header-top-areas-resources">
-                            <span class="col-sm-12 col-md-4 txt-primary title-out-areas">Recurso</span>
-                            <span class="col-sm-12 col-md-4 txt-primary title-out-areas">Cargo</span>
-                            <span class="col-sm-12 col-md-4 txt-primary title-out-areas">Proyectos en los que está asignado dentro del área</span>
-                        </mat-card>
-                        <div class="mat-elevation-z1 content-info-out-area" style="margin-top: 0px !important;">
-                            <div *ngFor="let data of data.infoResources; index as i ">
-                                <mat-expansion-panel [expanded]="stepTop5AreaResource == i" (opened)="setStep(i, 'top_areas_resources')" class="mat-elevation-z0">
-                                    <mat-expansion-panel-header class="col-sm-12 col-md-12">
-                                        <mat-panel-title class="col-sm-12 col-md-4 title-panel">{{i+1}}. {{data.resource}}</mat-panel-title>
+            <h3 *ngIf="tableTimeLine.length == 0 && !flagLabel" class="txt-primary">{{notInformationLabel}}</h3>
+            <div class="table-time-line" *ngFor="let data of tableTimeLine">
+                <tecno-table-time-line
+                    [generalData]=data
+                    [tab]=1
+                    [opColums]=2
+                    [viewZero]=false
+                ></tecno-table-time-line>
+            </div>
+
+            <!-- <mat-paginator *ngIf="cargaProject" class="txt-primary paginator"
+                [length]="length"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="pageSizeOptions"
+                (page)="paginatorResourcesPortafolio($event)">
+            </mat-paginator> -->
+
+            <mat-spinner *ngIf="!cargaProject" color="accent" class="content-center spinner"></mat-spinner>
+
+        </mat-tab>
+
+        <mat-tab label="Analítica">
+            <h3 *ngIf="!cargaAnalitycs" class="txt-primary" style="margin-top: 20px;">Cargando información, por favor espere un momento...</h3>
+            <mat-spinner *ngIf="!cargaAnalitycs" color="accent" class="content-center spinner"></mat-spinner>
+            
+            <div *ngIf="cargaAnalitycs" class="row filter-content-analitycs">
+                <span class="text-sub">Filtros:</span>
+                <div class="row filters">
+                    <mat-form-field class="col-sm-12 col-md-3" (click)="viceSelect(2)">
+                        <mat-label>Vicepresidencia</mat-label>
+                        <input type="text" matInput [formControl]="vicepresidencyControl2" [matAutocomplete]="vicepresidency2">
+                        <mat-autocomplete #vicepresidency2="matAutocomplete" [displayWith]="displayVicepresidency">
+                            <mat-option *ngFor="let vicepresidency of filterVicepresidency2 | async" [value]="vicepresidency">
+                            {{vicepresidency.title}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-sm-12 col-md-3" (click)="areasSelect(2)">
+                        <mat-label>Área</mat-label>
+                        <input type="text" matInput [formControl]="areasControl2" [matAutocomplete]="areas2">
+                        <mat-autocomplete #areas2="matAutocomplete" [displayWith]="displayAreas">
+                            <mat-option *ngFor="let area of filterAreas2 | async" [value]="area">
+                            {{area.title}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-sm-12 col-md-3" (click)="projectsSelect(2)">
+                        <mat-label>Proyecto</mat-label>
+                        <input type="text" matInput [formControl]="projectsControl2" [matAutocomplete]="projects2">
+                        <mat-autocomplete #projects2="matAutocomplete" [displayWith]="displayProject">
+                            <mat-option *ngFor="let project of filterProjects2 | async" [value]="project">
+                            {{project.title}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
                     
-                                        <mat-panel-description class="col-sm-12 col-md-8">
-                                            <span class="col-sm-12 col-md-6" style="color: black;">{{data.position}}</span>
-                                            <span class="col-sm-12 col-md-6" style="color: black;">{{data.total_projects}}</span>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                    
-                                    <div style="margin-left: 20px; margin-right: 20px;">
-                                        <mat-chip-list aria-label="Fish selection">
-                                            <mat-chip *ngFor="let projects of data.infoProjects">{{projects}}</mat-chip>
-                                        </mat-chip-list>
-                                    </div>
-                                </mat-expansion-panel>
-                            </div>    
-                        </div>
-                    </mat-expansion-panel>
+            
+                    <div class="buttons-content col-sm-12 col-md-3">
+                        <button mat-raised-button class="button-filter" color="primary" (click)="filterAnalitycs()">{{labelButton.filter}}</button>
+                        <button mat-raised-button class="button-filter" color="accent" (click)="removeFilterAnalitycs()">{{labelButton.remove}}</button>
+                    </div>
                 </div>    
             </div>
-        </div> 
 
-        <div *ngIf="cargaAnalitycs" class="sections-content">
-            <span class="title-analitycs txt-accent">Top 10 recursos más ocupados en Fase BAU</span>
+            <div *ngIf="cargaAnalitycs" class="sections-content">
+                <span class="title-analitycs txt-accent">Ocupación de recursos fuera del área encargada del proyecto</span>
+                
+                <h3 *ngIf="dataResourceOutArea.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+                <mat-card *ngIf="dataResourceOutArea.length != 0" class="general-content" style="margin-top: 20px;">
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Proyecto</span>
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Vicepresidencia</span>
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Área</span>
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Recursos fuera del área encargada</span>
+                </mat-card>
+
+                <div *ngIf="dataResourceOutArea.length != 0" class="mat-elevation-z1 content-info-out-area">
+                    <div *ngFor="let data of dataResourceOutArea; index as i ">
+                        <mat-expansion-panel [expanded]="stepOutArea == i" (opened)="setStep(i, 'out_area')" class="mat-elevation-z0" style="border-radius: 0px;">
+                            <mat-expansion-panel-header class="col-sm-12 col-md-12 expansion-header" [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                                <mat-panel-title class="col-sm-12 col-md-3 title-panel" style="padding-right: 10px;">{{data.infoGeneral.projectName}}</mat-panel-title>
             
-            <h3 *ngIf="tableTop10OcupationBAU[0].dataSource.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
-            <div *ngIf="tableTop10OcupationBAU[0].dataSource.length != 0">
-                <div class="phases-content" style="margin-top: 20px;">
-                    <span class="text-sub">Convenciones porcentaje de ocupación:</span>
-                    <div *ngFor="let convention of conventions" class="label-rect-content-phase">
-                        <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
-                        <span class="phases-name">{{convention.name}}</span>    
+                                <mat-panel-description class="col-sm-12 col-md-9">
+                                    <span class="col-sm-12 col-md-4" style="color: black">{{data.infoGeneral.vicepresidency}}</span>
+                                    <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.area}}</span>
+                                    <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.resources}}</span>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+            
+                            <div style="overflow-y: auto; margin-bottom: 20px;">
+                                <tecno-dynamic-table style="width: 50% !important;"
+                                    [objectsData]="data.infoTable"
+                                    emptyText="Ingrese datos">
+                                </tecno-dynamic-table>
+                            </div>
+                        </mat-expansion-panel>
                     </div>
                 </div>
 
-                <div class="table-occupation-resource" *ngFor="let data of tableTop10OcupationBAU">
-                    <tecno-table-time-line
-                        [generalData]=data
-                        [tab]=2
-                        [opColums]=1
-                        [viewZero]=false
-                    ></tecno-table-time-line>
+                <!-- <mat-paginator class="txt-primary paginator"
+                    [length]="lengthAnalitycs"
+                    [pageSize]="pageSizeAnalitycs"
+                    [pageSizeOptions]="pageSizeOptionsAnalitycs"
+                    (page)="paginatorAnalitycs($event)">
+                </mat-paginator> -->
+            </div>
+
+            <div *ngIf="cargaAnalitycs" class="sections-content">
+                <span class="title-analitycs txt-accent">Top 10 recursos más ocupados al día actual</span>
+                
+                <h3 *ngIf="tableTop10Ocupation[0].dataSource.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+                <div *ngIf="tableTop10Ocupation[0].dataSource.length != 0">
+                    <div class="phases-content" style="margin-top: 20px;">
+                        <span class="text-sub">Convenciones porcentaje de ocupación:</span>
+                        <div *ngFor="let convention of conventions" class="label-rect-content-phase">
+                            <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
+                            <span class="phases-name">{{convention.name}}</span>    
+                        </div>
+                    </div>
+
+                    <div class="table-occupation-resource" *ngFor="let data of tableTop10Ocupation">
+                        <tecno-table-time-line
+                            [generalData]=data
+                            [tab]=2
+                            [opColums]=1
+                            [viewZero]=true
+                        ></tecno-table-time-line>
+                    </div>
                 </div>
             </div>
-        </div>
-    </mat-tab>
-</mat-tab-group>
+            
+            <div *ngIf="cargaAnalitycs" class="sections-content">
+                <span class="title-analitycs txt-accent">Top 5 áreas con más recursos involucrados</span>
+
+                <h3 *ngIf="dataTop5Areas.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+                <mat-card *ngIf="dataTop5Areas.length != 0" class="general-content" style="margin-top: 20px;">
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Vicepresidencia</span>
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Área</span>
+                    <span class="col-sm-12 col-md-3 txt-primary title-out-areas">Recursos involucrados</span>
+                </mat-card>
+
+                <div *ngIf="dataTop5Areas.length != 0" class="mat-elevation-z1 content-info-out-area" style="margin-bottom: 20px;">
+                    <div *ngFor="let data of dataTop5Areas; index as i ">
+                        <mat-expansion-panel [expanded]="stepTop5Area == i" (opened)="setStep(i, 'top_areas')" class="mat-elevation-z0" style="border-radius: 0px;">
+                            <mat-expansion-panel-header class="col-sm-12 col-md-12" style="padding-left: 0px;">
+                                <mat-panel-title class="col-sm-12 col-md-3 title-panel">{{data.infoGeneral.vicepresidency}}</mat-panel-title>
+            
+                                <mat-panel-description class="col-sm-12 col-md-9">
+                                    <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.area}}</span>
+                                    <span class="col-sm-12 col-md-4" style="color: black;">{{data.infoGeneral.resources}}</span>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+            
+                            <mat-card class="general-content header-top-areas-resources">
+                                <span class="col-sm-12 col-md-4 txt-primary title-out-areas">Recurso</span>
+                                <span class="col-sm-12 col-md-4 txt-primary title-out-areas">Cargo</span>
+                                <span class="col-sm-12 col-md-4 txt-primary title-out-areas">Proyectos en los que está asignado dentro del área</span>
+                            </mat-card>
+                            <div class="mat-elevation-z1 content-info-out-area" style="margin-top: 0px !important;">
+                                <div *ngFor="let data of data.infoResources; index as i ">
+                                    <mat-expansion-panel [expanded]="stepTop5AreaResource == i" (opened)="setStep(i, 'top_areas_resources')" class="mat-elevation-z0">
+                                        <mat-expansion-panel-header class="col-sm-12 col-md-12">
+                                            <mat-panel-title class="col-sm-12 col-md-4 title-panel">{{i+1}}. {{data.resource}}</mat-panel-title>
+                        
+                                            <mat-panel-description class="col-sm-12 col-md-8">
+                                                <span class="col-sm-12 col-md-6" style="color: black;">{{data.position}}</span>
+                                                <span class="col-sm-12 col-md-6" style="color: black;">{{data.total_projects}}</span>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                        
+                                        <div style="margin-left: 20px; margin-right: 20px;">
+                                            <mat-chip-list aria-label="Fish selection">
+                                                <mat-chip *ngFor="let projects of data.infoProjects">{{projects}}</mat-chip>
+                                            </mat-chip-list>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </div>    
+                            </div>
+                        </mat-expansion-panel>
+                    </div>    
+                </div>
+            </div> 
+
+            <div *ngIf="cargaAnalitycs" class="sections-content">
+                <span class="title-analitycs txt-accent">Top 10 recursos más ocupados en Fase BAU</span>
+                
+                <h3 *ngIf="tableTop10OcupationBAU[0].dataSource.length == 0" class="txt-primary">{{notInformationLabel}}</h3>
+                <div *ngIf="tableTop10OcupationBAU[0].dataSource.length != 0">
+                    <div class="phases-content" style="margin-top: 20px;">
+                        <span class="text-sub">Convenciones porcentaje de ocupación:</span>
+                        <div *ngFor="let convention of conventions" class="label-rect-content-phase">
+                            <div class="phases-rect" [ngStyle]="{'background-color': convention.color}"></div>
+                            <span class="phases-name">{{convention.name}}</span>    
+                        </div>
+                    </div>
+
+                    <div class="table-occupation-resource" *ngFor="let data of tableTop10OcupationBAU">
+                        <tecno-table-time-line
+                            [generalData]=data
+                            [tab]=2
+                            [opColums]=1
+                            [viewZero]=false
+                        ></tecno-table-time-line>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<div *ngIf="!actions.read">
+    <tecno-unauthorized></tecno-unauthorized>
+</div>
