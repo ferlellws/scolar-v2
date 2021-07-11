@@ -1,41 +1,41 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 // @use "sass:map";
-@include mat-core();
+@include mat.core();
 // @use 'sass:map';
 
 $theme-colors: (
-  "red": mat-color($mat-red, 500),
-  "pink": mat-color($mat-pink, 500),
-  "purple": mat-color($mat-purple, 500),
-  "deep-purple": mat-color($mat-deep-purple, 500),
-  "indigo": mat-color($mat-indigo, 500),
-  "blue": mat-color($mat-blue, 500),
-  "light-blue": mat-color($mat-light-blue, 500),
-  "cyan": mat-color($mat-cyan, 500),
-  "teal": mat-color($mat-teal, 500),
-  "green": mat-color($mat-green, 500),
-  "light-green": mat-color($mat-light-green, 500),
-  "lime": mat-color($mat-lime, 500),
-  "yellow": mat-color($mat-yellow, 500),
-  "amber": mat-color($mat-amber, 500),
-  "orange": mat-color($mat-orange, 500),
-  "deep-orange": mat-color($mat-deep-orange, 500),
-  "brown": mat-color($mat-brown, 500),
-  "grey": mat-color($mat-grey, 500),
-  "blue-grey": mat-color($mat-blue-grey, 500),
+  "red": mat.get-color-from-palette(mat.$red-palette, 500),
+  "pink": mat.get-color-from-palette(mat.$pink-palette, 500),
+  "purple": mat.get-color-from-palette(mat.$purple-palette, 500),
+  "deep-purple": mat.get-color-from-palette(mat.$deep-purple-palette, 500),
+  "indigo": mat.get-color-from-palette(mat.$indigo-palette, 500),
+  "blue": mat.get-color-from-palette(mat.$blue-palette, 500),
+  "light-blue": mat.get-color-from-palette(mat.$light-blue-palette, 500),
+  "cyan": mat.get-color-from-palette(mat.$cyan-palette, 500),
+  "teal": mat.get-color-from-palette(mat.$teal-palette, 500),
+  "green": mat.get-color-from-palette(mat.$green-palette, 500),
+  "light-green": mat.get-color-from-palette(mat.$light-green-palette, 500),
+  "lime": mat.get-color-from-palette(mat.$lime-palette, 500),
+  "yellow": mat.get-color-from-palette(mat.$yellow-palette, 500),
+  "amber": mat.get-color-from-palette(mat.$amber-palette, 500),
+  "orange": mat.get-color-from-palette(mat.$orange-palette, 500),
+  "deep-orange": mat.get-color-from-palette(mat.$deep-orange-palette, 500),
+  "brown": mat.get-color-from-palette(mat.$brown-palette, 500),
+  "grey": mat.get-color-from-palette(mat.$grey-palette, 500),
+  "blue-grey": mat.get-color-from-palette(mat.$blue-grey-palette, 500),
   "white": #fff,
   "black": #000
 );
 
 $colors: "red", "pink", "purple", "deep-purple", "indigo", "blue", "light-blue", "cyan", "teal", "green", "light-green", "lime", "yellow", "amber", "orange", "deep-orange", "brown", "grey", "blue-grey", "white", "black";
 
-// $candy-app-theme:   mat-light-theme((
+// $candy-app-theme:   mat.define-light-theme((
 //   color: (
 //     title: $color-title,
 //   )
 // ));
 
-// @include angular-material-theme($candy-app-theme);
+// @include mat.all-component-themes($candy-app-theme);
 
 .mat-title {
   color: map_get($theme-colors, "grey") !important;

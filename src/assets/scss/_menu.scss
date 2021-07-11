@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 .menu-container {
   width: 100%;
   // & .mat-expansion-panel-header {
@@ -45,7 +46,7 @@
             padding: 6px 0;
             color: #757575;
             // &:hover {
-            //   background: mat-color($tecno-project-portfolio-primary, 50) !important;
+            //   background: mat.get-color-from-palette($tecno-project-portfolio-primary, 50) !important;
             //   color: #757575;
             // }
             &[aria-selected="true"]::after {
@@ -54,7 +55,7 @@
               top: 0;
               width: 5px;
               height: 100%;
-              background: mat-color($tecno-project-portfolio-primary, 400);
+              background: mat.get-color-from-palette($tecno-project-portfolio-primary, 400);
               // color: #fff;
             }
             & .mat-icon {

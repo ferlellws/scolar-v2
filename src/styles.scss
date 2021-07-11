@@ -1,7 +1,7 @@
+@use '~@angular/material' as mat;
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 @import './assets/scss/theming_tecno';
 @import './assets/scss/grid';
 @import './assets/scss/buttons';
@@ -29,20 +29,20 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$tecno-project-portfolio-primary: mat-palette($mat-indigo);
-$tecno-project-portfolio-accent: mat-palette($mat-pink, A200, A100, A400);
+$tecno-project-portfolio-primary: mat.define-palette(mat.$indigo-palette);
+$tecno-project-portfolio-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$tecno-project-portfolio-warn: mat-palette($mat-red);
+$tecno-project-portfolio-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$tecno-project-portfolio-theme: mat-light-theme((
+$tecno-project-portfolio-theme: mat.define-light-theme((
   color: (
     primary: $tecno-project-portfolio-primary,
     accent: $tecno-project-portfolio-accent,
@@ -53,7 +53,7 @@ $tecno-project-portfolio-theme: mat-light-theme((
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($tecno-project-portfolio-theme);
+@include mat.all-component-themes($tecno-project-portfolio-theme);
 
 /* You can add global styles to this file, and also import other style files */
 @import './assets/scss/menu';
@@ -200,7 +200,7 @@ $width-field-1: 220px;
 }
 
 .mat-table-sticky, .mat-header-cell {
-  background: mat-color($tecno-project-portfolio-primary, 500);
+  background: mat.get-color-from-palette($tecno-project-portfolio-primary, 500);
   color: #fff;
 }
 
@@ -231,7 +231,7 @@ $width-field-1: 220px;
 }
 
 .bg-primary {
-  background-color: mat-color($tecno-project-portfolio-primary, 500) !important;
+  background-color: mat.get-color-from-palette($tecno-project-portfolio-primary, 500) !important;
 }
 
 .bg-accent {
@@ -256,7 +256,7 @@ $width-field-1: 220px;
     color: #9E9E9E;
     text-decoration: none;
     &:hover {
-      color: mat-color($tecno-project-portfolio-accent, 500);
+      color: mat.get-color-from-palette($tecno-project-portfolio-accent, 500);
     }
   }
 }
@@ -294,11 +294,11 @@ $width-field-1: 220px;
 }
 
 .txt-primary {
-  color: mat-color($tecno-project-portfolio-primary, 500) !important;
+  color: mat.get-color-from-palette($tecno-project-portfolio-primary, 500) !important;
 }
 
 .txt-accent {
-  color: mat-color($tecno-project-portfolio-accent, 500) !important;
+  color: mat.get-color-from-palette($tecno-project-portfolio-accent, 500) !important;
 }
 
 .master-container{

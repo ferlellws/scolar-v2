@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @use "sass:math";
 
 $heigth-header: 300;
@@ -7,7 +8,7 @@ $heigth-header: 300;
   left: 0;
   width: 100%;
   height: #{$heigth-header}px;
-  background-color: mat-color($tecno-project-portfolio-primary, 500);
+  background-color: mat.get-color-from-palette($tecno-project-portfolio-primary, 500);
   align-items: flex-start;
   box-sizing: border-box;
   color: #fff;
@@ -57,7 +58,7 @@ $heigth-header: 300;
         }
         & .buttons-container {
           & .mat-icon {
-            color: mat-color($tecno-project-portfolio-primary, 500);
+            color: mat.get-color-from-palette($tecno-project-portfolio-primary, 500);
           }
         }
       }
